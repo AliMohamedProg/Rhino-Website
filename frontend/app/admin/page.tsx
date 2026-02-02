@@ -94,7 +94,7 @@ export default function AdminDashboardPage() {
         <RevenueChart
           title={t("dashboard.revenueChart")}
           data={mockRevenueByDayData}
-          className="lg:col-span-2"
+          className="lg:col-span-2 -mt-6 lg:-mt-8"
         />
       </div>
 

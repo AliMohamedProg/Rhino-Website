@@ -13,11 +13,18 @@ import { useWishlist } from "@/context/wishlist-context"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getProductById, products, formatPrice } from "@/lib/products"
+import dynamic from "next/dynamic"
+
+const ReviewsWrapper = dynamic(() => import("@/components/product/reviews").then((m) => {
+  const Reviews = m.default
+  return ({ initialReviews }: any) => <Reviews initialReviews={initialReviews} />
+}), { ssr: false })
 
 export default function ProductPage() {
   const params = useParams()
   const product = getProductById(params.id as string)
   const { language, t, dir } = useLanguage()
+  const isRTL = dir === "rtl"
   const { addItem } = useCart()
   const { isInWishlist, toggleItem } = useWishlist()
   const [selectedImage, setSelectedImage] = useState(0)
@@ -82,12 +89,12 @@ export default function ProductPage() {
           <div className="grid md:grid-cols-2 gap-8 mb-12">
             {/* Image Gallery */}
             <div className="space-y-4">
-              <div className="relative aspect-square bg-secondary rounded-lg overflow-hidden">
+              <div className="relative w-full h-96 md:h-[600px] bg-secondary rounded-lg overflow-hidden">
                 <Image
                   src={allImages[selectedImage] || "/placeholder.svg"}
                   alt={product.name[language]}
                   fill
-                  className="object-cover"
+                  className="object-contain"
                 />
                 {product.discount && (
                   <span className="absolute top-4 start-4 bg-accent text-accent-foreground text-sm font-medium px-3 py-1 rounded">
@@ -203,26 +210,57 @@ export default function ProductPage() {
                 </Button>
               </div>
 
-              {/* Tabs */}
+              {/* Tabs: Description + Reviews */}
               <Tabs defaultValue="description" className="mt-8">
                 <TabsList className="w-full justify-start">
                   <TabsTrigger value="description">{t("products.description")}</TabsTrigger>
-                  <TabsTrigger value="specifications">{t("products.specifications")}</TabsTrigger>
+                  <TabsTrigger value="reviews">{isRTL ? "التعليقات" : "Reviews"}</TabsTrigger>
                 </TabsList>
                 <TabsContent value="description" className="mt-4">
                   <p className="text-muted-foreground leading-relaxed">{product.description[language]}</p>
                 </TabsContent>
-                <TabsContent value="specifications" className="mt-4">
-                  <table className="w-full text-sm">
-                    <tbody>
-                      {product.specifications.map((spec, index) => (
-                        <tr key={index} className="border-b border-border">
-                          <td className="py-3 font-medium text-foreground w-1/3">{spec.key}</td>
-                          <td className="py-3 text-muted-foreground">{spec.value[language]}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+
+                <TabsContent value="reviews" className="mt-4">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-1">
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <Star
+                              key={i}
+                              size={16}
+                              className={i < Math.round(product.rating) ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"}
+                            />
+                          ))}
+                        </div>
+                        <span className="font-medium">{product.rating.toFixed(1)}</span>
+                        <span className="text-sm text-muted-foreground">• {product.reviews} {t("products.reviews")}</span>
+                      </div>
+                    </div>
+
+                    {/* Sample reviews (mock) */}
+                        {/* Reviews carousel + add-review form */}
+                        {product.reviews > 0 ? (
+                          <div>
+                            {/* import ReviewsCarousel lazily */}
+                            {/* Keep initial mock reviews for demonstration */}
+                            {/* generate small set of mock reviews to pass as initialReviews */}
+                            {/* @ts-ignore */}
+                            <ReviewsWrapper
+                              initialReviews={Array.from({ length: Math.min(product.reviews, 6) }).map((_, i) => ({
+                                id: Number(`${product.id}${i}`),
+                                author: `${product.name[language]} ${i + 1}`,
+                                rating: Math.max(1, Math.round(product.rating) - (i % 3)),
+                                date: new Date(Date.now() - i * 86400000).toISOString().split("T")[0],
+                                textEn: `Great product! ${i + 1}`,
+                                textAr: `منتج رائع! ${i + 1}`,
+                              }))}
+                            />
+                          </div>
+                        ) : (
+                          <div className="text-muted-foreground">{t("common.noData")}</div>
+                        )}
+                  </div>
                 </TabsContent>
               </Tabs>
             </div>

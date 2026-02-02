@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useAdminLanguage } from "@/context/admin-language-context"
+import { useTheme } from "@/context/theme-context"
 import { cn } from "@/lib/utils"
 import {
   AreaChart,
@@ -43,6 +44,10 @@ export function AreaChartCard({
   color = "hsl(var(--primary))",
 }: AreaChartCardProps) {
   const { dir } = useAdminLanguage()
+  const { theme } = useTheme()
+  const isDark = theme === "dark"
+  const strokeColor = isDark ? "#ffffff" : color
+  const tickColor = isDark ? "#ffffff" : "hsl(var(--muted-foreground))"
 
   return (
     <Card className={cn("overflow-hidden", className)}>
@@ -69,7 +74,7 @@ export function AreaChartCard({
                 dataKey="name"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
+                tick={{ fill: tickColor, fontSize: 12 }}
                 dy={10}
               />
               <YAxis
@@ -86,13 +91,14 @@ export function AreaChartCard({
                   borderRadius: "8px",
                   boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
                 }}
+               wrapperStyle={{ top: -8, left: "50%", transform: "translateX(-50%)" }}
                 labelStyle={{ color: "hsl(var(--foreground))" }}
                 formatter={(value: number) => [`${value.toLocaleString()} EGP`, "Revenue"]}
               />
               <Area
                 type="monotone"
                 dataKey={dataKey}
-                stroke={color}
+                stroke={strokeColor}
                 strokeWidth={2}
                 fill="url(#colorValue)"
               />
@@ -120,6 +126,10 @@ export function BarChartCard({
   color = "hsl(var(--primary))",
 }: BarChartCardProps) {
   const { dir } = useAdminLanguage()
+  const { theme } = useTheme()
+  const isDark = theme === "dark"
+  const tickColor = isDark ? "#ffffff" : "hsl(var(--muted-foreground))"
+  const barColor = isDark ? "#ffffff" : color
 
   return (
     <Card className={cn("overflow-hidden", className)}>
@@ -137,7 +147,7 @@ export function BarChartCard({
                 dataKey="name"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
+                tick={{ fill: tickColor, fontSize: 12 }}
                 dy={10}
               />
               <YAxis
@@ -153,10 +163,11 @@ export function BarChartCard({
                   borderRadius: "8px",
                   boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
                 }}
+                wrapperStyle={{ top: -80, left: "50%", transform: "translateX(-50%)" }}
                 labelStyle={{ color: "hsl(var(--foreground))" }}
                 formatter={(value: number) => [value.toLocaleString(), "Orders"]}
               />
-              <Bar dataKey={dataKey} fill={color} radius={[4, 4, 0, 0]} />
+              <Bar dataKey={dataKey} fill={barColor} radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -173,6 +184,9 @@ interface PieChartCardProps {
 
 export function PieChartCard({ title, data, className }: PieChartCardProps) {
   const { dir } = useAdminLanguage()
+  const { theme } = useTheme()
+  const isDark = theme === "dark"
+  const legendColor = isDark ? "#ffffff" : "hsl(var(--foreground))"
 
   return (
     <Card className={cn("overflow-hidden", className)}>
@@ -205,6 +219,7 @@ export function PieChartCard({ title, data, className }: PieChartCardProps) {
                   borderRadius: "8px",
                   boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
                 }}
+                 wrapperStyle={{ top: 8, left: "50%", transform: "translateX(-50%)" }}
                 labelStyle={{ color: "hsl(var(--foreground))" }}
                 formatter={(value: number) => [`${value}%`, "Share"]}
               />
@@ -212,7 +227,7 @@ export function PieChartCard({ title, data, className }: PieChartCardProps) {
                 verticalAlign="bottom"
                 height={36}
                 formatter={(value) => (
-                  <span style={{ color: "hsl(var(--foreground))", fontSize: "12px" }}>
+                  <span style={{ color: legendColor, fontSize: "12px" }}>
                     {value}
                   </span>
                 )}
@@ -233,6 +248,10 @@ interface RevenueChartProps {
 
 export function RevenueChart({ title, data, className }: RevenueChartProps) {
   const { dir } = useAdminLanguage()
+    const { theme } = useTheme()
+    const isDark = theme === "dark"
+    const tickColor = isDark ? "#ffffff" : "hsl(var(--muted-foreground))"
+    const barColor = isDark ? "#ffffff" : "hsl(var(--primary))"
 
   return (
     <Card className={cn("overflow-hidden", className)}>
@@ -244,19 +263,19 @@ export function RevenueChart({ title, data, className }: RevenueChartProps) {
       <CardContent className="pb-4">
         <div className="h-[200px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+            <BarChart data={data} margin={{ top: -10, right: 10, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
               <XAxis
                 dataKey="name"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
+                  tick={{ fill: tickColor, fontSize: 12 }}
                 dy={10}
               />
               <YAxis
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
+                  tick={{ fill: tickColor, fontSize: 12 }}
                 dx={-10}
                 tickFormatter={(value) => `${(value / 1000).toFixed(0)}K`}
               />
@@ -267,10 +286,11 @@ export function RevenueChart({ title, data, className }: RevenueChartProps) {
                   borderRadius: "8px",
                   boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
                 }}
+                 wrapperStyle={{ top: -80, left: "50%", transform: "translateX(-50%)" }}
                 labelStyle={{ color: "hsl(var(--foreground))" }}
                 formatter={(value: number) => [`${value.toLocaleString()} EGP`, "Revenue"]}
               />
-              <Bar dataKey="value" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="value" fill={barColor} radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

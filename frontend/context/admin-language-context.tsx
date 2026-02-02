@@ -263,6 +263,7 @@ interface AdminLanguageContextType {
   setLanguage: (lang: Language) => void
   t: (key: string) => string
   dir: "ltr" | "rtl"
+  isRTL: boolean
 }
 
 const AdminLanguageContext = createContext<AdminLanguageContextType | undefined>(undefined)
@@ -290,9 +291,10 @@ export function AdminLanguageProvider({ children }: { children: ReactNode }) {
   }
 
   const dir = language === "ar" ? "rtl" : "ltr"
+  const isRTL = language === "ar"
 
   return (
-    <AdminLanguageContext.Provider value={{ language, setLanguage, t, dir }}>
+    <AdminLanguageContext.Provider value={{ language, setLanguage, t, dir, isRTL }}>
       {children}
     </AdminLanguageContext.Provider>
   )

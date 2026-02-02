@@ -15,7 +15,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" dir={dir}>
       {/* Desktop Sidebar */}
       <div className="hidden md:block">
         <AdminSidebar />

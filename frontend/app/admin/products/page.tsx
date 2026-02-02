@@ -93,9 +93,16 @@ export default function ProductsPage() {
     {
       key: "category",
       header: t("products.category"),
-      render: (product: Product) => (
-        <span className="text-muted-foreground">{product.category}</span>
-      ),
+      render: (product: Product) => {
+        const categoryMap: Record<string, { en: string; ar: string }> = {
+          "Living Room": { en: "Living Room", ar: "غرفة المعيشة" },
+          Bedroom: { en: "Bedroom", ar: "غرفة النوم" },
+          Office: { en: "Office", ar: "مكتب" },
+          Kids: { en: "Kids", ar: "أطفال" },
+        }
+        const cat = categoryMap[product.category]
+        return <span className="text-muted-foreground">{language === "ar" ? (cat ? cat.ar : product.category) : product.category}</span>
+      },
     },
     {
       key: "price",

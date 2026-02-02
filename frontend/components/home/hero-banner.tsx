@@ -61,8 +61,8 @@ export function HeroBanner() {
         <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-transparent" />
 
         <div className="absolute inset-0 flex items-center">
-          <div className="container mx-auto px-4">
-            <div className={`max-w-lg ${dir === "rtl" ? "ms-auto text-right" : ""}`}>
+          <div className={`container mx-auto px-4 ${dir === "rtl" ? "flex justify-start" : ""}`}>
+            <div className={`max-w-lg ${dir === "rtl" ? "pr-8 md:pr-12 text-right" : "pl-8 md:pl-12"}`}>
               <p className="text-primary-foreground/90 text-sm md:text-base mb-2">{banner.subtitle[language]}</p>
               <h1 className="text-3xl md:text-5xl font-bold text-primary-foreground mb-6 text-balance">
                 {banner.title[language]}
