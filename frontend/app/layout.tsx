@@ -17,7 +17,9 @@ const _cairo = Cairo({ subsets: ["arabic", "latin"], weight: ["400", "500", "600
 export const metadata: Metadata = {
   title: "Wood Decor - Your Home, Your Style",
   description: "Shop furniture and home décor online. Transform your living space with quality products.",
-    generator: 'v0.app'
+    icons: {
+    icon: "/images/logo-websait.png",
+    }
 }
 
 export default function RootLayout({

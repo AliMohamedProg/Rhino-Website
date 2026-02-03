@@ -53,18 +53,7 @@ export default function CategoriesPage() {
   const [editingCategory, setEditingCategory] = useState<Category | null>(null)
   const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null)
 
-  const getStatusBadge = (status: Category["status"]) => {
-    const statusConfig = {
-      active: { variant: "default" as const, labelEn: "Active", labelAr: "نشط", className: "bg-emerald-500" },
-      inactive: { variant: "secondary" as const, labelEn: "Inactive", labelAr: "غير نشط", className: "" },
-    }
-    const config = statusConfig[status]
-    return (
-      <Badge variant={config.variant} className={config.className}>
-        {language === "ar" ? config.labelAr : config.labelEn}
-      </Badge>
-    )
-  }
+
 
   const handleDelete = (category: Category) => {
     setCategoryToDelete(category)
@@ -88,30 +77,16 @@ export default function CategoriesPage() {
           <p className="font-medium">
             {language === "ar" ? category.nameAr : category.nameEn}
           </p>
-          <p className="text-sm text-muted-foreground">/{category.slug}</p>
         </div>
       ),
     },
-    {
-      key: "description",
-      header: t("categories.description"),
-      render: (category: Category) => (
-        <p className="text-muted-foreground max-w-[200px] truncate">
-          {language === "ar" ? category.descriptionAr : category.descriptionEn}
-        </p>
-      ),
-    },
+ 
     {
       key: "products",
       header: t("categories.products"),
       render: (category: Category) => (
         <span className="font-medium">{category.productsCount}</span>
       ),
-    },
-    {
-      key: "status",
-      header: t("categories.status"),
-      render: (category: Category) => getStatusBadge(category.status),
     },
     {
       key: "createdAt",
@@ -222,40 +197,8 @@ export default function CategoriesPage() {
                 <Input id="nameAr" defaultValue={editingCategory?.nameAr || ""} dir="rtl" />
               </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="slug">{t("categories.slug")}</Label>
-              <Input id="slug" defaultValue={editingCategory?.slug || ""} placeholder="category-slug" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="descriptionEn">{language === "ar" ? "الوصف (إنجليزي)" : "Description (English)"}</Label>
-              <Textarea id="descriptionEn" defaultValue={editingCategory?.descriptionEn || ""} rows={2} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="descriptionAr">{language === "ar" ? "الوصف (عربي)" : "Description (Arabic)"}</Label>
-              <Textarea id="descriptionAr" defaultValue={editingCategory?.descriptionAr || ""} dir="rtl" rows={2} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="parent">{t("categories.parent")}</Label>
-              <Select defaultValue={editingCategory?.parentId || "none"}>
-                <SelectTrigger>
-                  <SelectValue placeholder={language === "ar" ? "بدون فئة رئيسية" : "No parent"} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">{language === "ar" ? "بدون" : "None"}</SelectItem>
-                  {categories
-                    .filter((c) => c.id !== editingCategory?.id)
-                    .map((category) => (
-                      <SelectItem key={category.id} value={category.id}>
-                        {language === "ar" ? category.nameAr : category.nameEn}
-                      </SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className={cn("flex items-center justify-between", dir === "rtl" && "flex-row-reverse")}>
-              <Label htmlFor="active">{t("categories.status")}</Label>
-              <Switch id="active" defaultChecked={editingCategory?.status === "active"} />
-            </div>
+
+
           </div>
           <DialogFooter className={cn(dir === "rtl" && "flex-row-reverse")}>
             <Button variant="outline" onClick={() => setDialogOpen(false)}>

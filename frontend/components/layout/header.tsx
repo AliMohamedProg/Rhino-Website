@@ -82,14 +82,8 @@ export function Header() {
           <div className="flex items-center justify-between h-20 gap-4">
             {/* Logo - Left side */}
             <Link href="/" className="flex-shrink-0">
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                  <span className="text-primary-foreground font-bold text-xl">W</span>
-                </div>
-                <div className="hidden sm:block">
-                  <span className="text-xl font-bold text-primary">{language === "ar" ? "وود" : "Wood"}</span>
-                  <span className="text-xl font-bold text-accent ms-1">{language === "ar" ? "ديكور" : "Decor"}</span>
-                </div>
+              <div className="flex items-center gap-3">
+                <img src="/images/logo-websait.png" alt="WoodDecor" className="w-10 h-10 object-contain" />
               </div>
             </Link>
 

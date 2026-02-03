@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Bl/Bl.csproj" Id="7a06a914-9a1a-4e6e-bc7f-613753f7bb11" />
+  <Project Path="DAL/DAL.csproj" Id="3da4b342-6b5f-4637-a300-bef886de6ada" />
+  <Project Path="Domains/Domains.csproj" Id="227e46cb-5e84-423f-a20f-caba16737f37" />
+  <Project Path="WoodDecorBackend/Apis.csproj" />
+</Solution>

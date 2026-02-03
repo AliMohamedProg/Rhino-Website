@@ -1,0 +1,6 @@
+@WoodDecorBackend_HostAddress = http://localhost:5213
+
+GET {{WoodDecorBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
