@@ -7,19 +7,39 @@ import { Footer } from "@/components/layout/footer"
 import { useLanguage } from "@/context/language-context"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
 
 export default function LoginPage() {
   const { language } = useLanguage()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // TODO: hook up real auth
-    alert(language === "ar" ? "تم تسجيل الدخول (محاكاة)" : "Logged in (demo)")
-  }
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault() // مهم جدًا لمنع إعادة تحميل الصفحة
 
+    try {
+      const res = await fetch("https://localhost:7282/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // 🔥 مهم جدًا عشان الكوكي يتحفظ
+        body: JSON.stringify({ email, password }),
+      })
+
+      if (!res.ok) {
+        throw new Error(language === "ar" ? "فشل تسجيل الدخول" : "Login failed")
+      }
+
+      const data = await res.json()
+      console.log("Logged in user:", data)
+
+      // ممكن تعمل redirect بعد تسجيل الدخول
+      // window.location.href = "/dashboard"
+
+    } catch (err: any) {
+      alert(err.message)
+    }
+  }
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -30,13 +50,13 @@ export default function LoginPage() {
           <div className="bg-card rounded-lg border border-border p-6">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label htmlFor="email">{language === "ar" ? "البريد الإلكتروني" : "Email"}</Label>
-                <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required
+                placeholder={language === "ar" ? "البريد الإلكتروني" : "Email"} />
               </div>
 
               <div>
-                <Label htmlFor="password">{language === "ar" ? "كلمة المرور" : "Password"}</Label>
-                <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required 
+                placeholder={language === "ar" ? "كلمة المرور" : "Password"}/>
               </div>
 
               <Button type="submit" className="w-full">

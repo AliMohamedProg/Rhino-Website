@@ -34,6 +34,7 @@ public partial class WoodDecorContext : IdentityDbContext<ApplicationUser>
     public virtual DbSet<TbSetting> TbSettings { get; set; }
 
     public virtual DbSet<TbSlider> TbSliders { get; set; }
+    public virtual DbSet<TbRefreshTokens> TbRefreshTokens { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -117,6 +118,25 @@ public partial class WoodDecorContext : IdentityDbContext<ApplicationUser>
             entity.Property(e => e.TitleAr).HasMaxLength(50);
             entity.Property(e => e.TitleEn).HasMaxLength(50);
             entity.Property(e => e.ImageUrl).HasMaxLength(500);
+        });
+
+        modelBuilder.Entity<TbRefreshTokens>(entity =>
+        {
+            // Set Id as Guid and configure it as the primary key
+            entity.HasKey(e => e.Id);
+
+            // Set default value for Id as Guid
+            entity.Property(e => e.Id).HasDefaultValueSql("NEWID()");
+
+            // Configure CurrentState as an integer (e.g., 0 = Active, 1 = Revoked)
+            entity.Property(e => e.CurrentState)
+                .HasDefaultValue(1) // Set default value to 0 (active)
+                .IsRequired();
+
+            // Configure CreatedBy, CreatedDate, UpdatedBy, and UpdatedDate
+            entity.Property(e => e.CreatedBy).IsRequired();
+            entity.Property(e => e.CreatedDate).IsRequired().HasDefaultValueSql("GETDATE()");
+            entity.Property(e => e.UpdatedDate).HasDefaultValueSql("GETDATE()");
         });
 
         OnModelCreatingPartial(modelBuilder);

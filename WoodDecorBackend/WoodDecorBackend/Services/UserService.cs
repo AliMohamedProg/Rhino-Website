@@ -6,14 +6,14 @@ using DAL.UserModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Ui.Services
+namespace Apis.Services
 {
     public class UserService : IUserService
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public UserService(UserManager<ApplicationUser> _userManager,SignInManager<ApplicationUser> _signInManager,
+        public UserService(UserManager<ApplicationUser> _userManager, SignInManager<ApplicationUser> _signInManager,
                           IHttpContextAccessor httpContextAccessor)
         {
             this._userManager = _userManager;
@@ -91,7 +91,7 @@ namespace Ui.Services
 
 
             // Generate token (if needed) or return success
-            return new UserResultDto { Success = true, Token = "DummyTokenForNow" };
+            return new UserResultDto { Success = true};
         }
 
         public async Task LogoutAsync()
@@ -101,6 +101,7 @@ namespace Ui.Services
 
         public async Task<UserResultDto> RegisterAsync(UserDto registerDto)
         {
+            // 1. التأكد من تطابق كلمة المرور
             if (registerDto.Password != registerDto.ConfirmPassword)
             {
                 return new UserResultDto { Success = false, Errors = new[] { "Passwords do not match." } };
@@ -114,23 +115,35 @@ namespace Ui.Services
                 LastName = registerDto.LastName,
                 PhoneNumber = registerDto.PhoneNumber
             };
+
+            // 2. محاولة إنشاء المستخدم أولاً
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
-            var registerName = (string.IsNullOrEmpty(registerDto.Role)) ? "User" : registerDto.Role;
-            var roleResult = await _userManager.AddToRoleAsync(user, registerName);
-
-            if (!roleResult.Succeeded)
+            if (result.Succeeded)
             {
-                return new UserResultDto
+                // 3. لن يتم الدخول هنا إلا إذا أصبح للمستخدم ID حقيقي في الداتابيز
+                var registerName = (string.IsNullOrEmpty(registerDto.Role)) ? "User" : registerDto.Role;
+
+                // تأكد من أن الـ Role موجودة أصلاً (كما فعلنا في الـ Seed)
+                var roleResult = await _userManager.AddToRoleAsync(user, registerName);
+
+                if (!roleResult.Succeeded)
                 {
-                    Success = false,
-                    Errors = result.Errors?.Select(e => e.Description)
-                };
+                    return new UserResultDto
+                    {
+                        Success = false,
+                        Errors = roleResult.Errors.Select(e => e.Description)
+                    };
+                }
+
+                return new UserResultDto { Success = true };
             }
+
+            // 4. في حال فشل الـ CreateAsync (مثلاً Password Validation)
             return new UserResultDto
             {
-                Success = result.Succeeded,
-                Errors = result.Errors?.Select(e => e.Description)
+                Success = false,
+                Errors = result.Errors.Select(e => e.Description)
             };
         }
     }

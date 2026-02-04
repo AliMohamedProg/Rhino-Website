@@ -109,18 +109,16 @@ export function Header() {
 
             {/* Actions - Right side */}
             <div className="flex items-center gap-2">
-              <Link href="/wishlist">
-                <Button variant="ghost" size="icon" className="relative">
-                  <Heart size={22} />
-                  {wishlistItems.length > 0 && (
-                    <span className="absolute -top-1 -end-1 w-5 h-5 bg-accent text-accent-foreground text-xs rounded-full flex items-center justify-center">
-                      {wishlistItems.length}
-                    </span>
-                  )}
-                  <span className="sr-only">{t("header.wishlist")}</span>
+              <Link href="/login" className="inline-flex">
+                <Button variant="outline" size="sm">
+                  {language === "ar" ? "تسجيل الدخول" : "Login"}
                 </Button>
               </Link>
-              <Link href="/cart">
+              <Link href="/register" className="inline-flex">
+                <Button size="sm">{language === "ar" ? "إنشاء حساب" : "Sign Up"}</Button>
+              </Link>
+
+              {/* <Link href="/cart">
                 <Button variant="ghost" size="icon" className="relative">
                   <ShoppingCart size={22} />
                   {itemCount > 0 && (
@@ -136,7 +134,7 @@ export function Header() {
                   <User size={22} />
                   <span className="sr-only">{t("header.account")}</span>
                 </Button>
-              </Link>
+              </Link> */}
               <Button
                 variant="ghost"
                 size="icon"

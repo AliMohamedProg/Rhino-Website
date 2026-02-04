@@ -22,6 +22,7 @@ namespace Bl.Mapping
             CreateMap<TbReview, ReviewDto>().ReverseMap();
             CreateMap<TbSetting, SettingDto>().ReverseMap();
             CreateMap<TbSlider, SliderDto>().ReverseMap();
+            CreateMap<TbRefreshTokens, RefreshTokensDto>().ReverseMap();
         }
     }
 }

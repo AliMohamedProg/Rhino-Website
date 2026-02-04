@@ -1,3 +1,5 @@
+﻿using System.Text;
+using Apis.Services;
 using AutoMapper;
 using Bl.Contracts;
 using Bl.Mapping;
@@ -8,18 +10,34 @@ using DAL.Contracts;
 using DAL.Repositories;
 using DAL.UserModel;
 using Domains;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Serilog; // Add this at the top with other using statements
 
 var builder = WebApplication.CreateBuilder(args);
-
+// إضافة CORS service
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:3000") // رابط الNext.js local dev
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials(); // مهم لو بتستخدم cookies
+    });
+});
+//********************************************************************
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddSwaggerGen();
+
 // Register AutoMapper and your mapping profile(s)
 builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>()); // registers profiles from Bl.Mapping
 
@@ -41,6 +59,54 @@ Log.Logger = new LoggerConfiguration().WriteTo.Console().WriteTo.MSSqlServer(
     autoCreateSqlTable: true
 ).CreateLogger();
 
+builder.Services.AddHttpContextAccessor();
+
+//**************************************************************************************************************************************
+
+// JWT Authentication Setup
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    // Token validation
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
+
+    // Read token from cookie if not in header
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            if (string.IsNullOrEmpty(context.Token))
+            {
+                // اسم الكوكي لازم يطابق اللي انت مخزنه في Login API
+                var accessToken = context.Request.Cookies["AccessToken"];
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+                    context.Token = accessToken;
+                }
+            }
+            return Task.CompletedTask;
+        }
+    };
+});
+
+
+
+//**************************************************************************************************************************************
+
 //Dependency Injection
 builder.Services.AddScoped(typeof(ITableRepository<>), typeof(TableRepository<>));
 builder.Services.AddScoped<ICategory, CategoryService>();
@@ -51,10 +117,10 @@ builder.Services.AddScoped<IReview, ReviewService>();
 builder.Services.AddScoped<ISetting, SettingService>();
 builder.Services.AddScoped<ISlider, SliderService>();
 builder.Services.AddScoped<IImage, ImageService>();
-
-
-
-
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRefreshTokens, RefreshTokensService>();
+builder.Services.AddSingleton<TokenService>();
+//**************************************************************************************************************************************
 
 builder.Host.UseSerilog();
 
@@ -67,9 +133,27 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("AllowFrontend");
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseSwagger();
+app.UseSwaggerUI();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var dbContext = services.GetRequiredService<WoodDecorContext>();
+
+    // Apply migrations
+    await dbContext.Database.MigrateAsync();
+
+    // Seed data
+    await ContextConfig.seedDataAsync(dbContext, userManager, roleManager);
+}
 
 app.Run();
+
