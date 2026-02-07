@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/footer"
 import { useLanguage } from "@/context/language-context"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
 
 export default function LoginPage() {
   const { language } = useLanguage()
@@ -34,9 +35,9 @@ export default function LoginPage() {
       console.log("Logged in user:", data)
 
       // ممكن تعمل redirect بعد تسجيل الدخول
-      // window.location.href = "/dashboard"
+      window.location.href = "/"
 
-    } catch (err: any) {
+    } catch (err: any) {  
       alert(err.message)
     }
   }

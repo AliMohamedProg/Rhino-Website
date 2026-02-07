@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link"
-import { User, Package, Heart, Settings, LogOut, Moon, Sun, Globe } from "lucide-react"
+import { User, Package, Heart, Settings, LogOut, Moon, Sun, Globe, Route } from "lucide-react"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { useLanguage } from "@/context/language-context"
@@ -8,6 +8,8 @@ import { useTheme } from "@/context/theme-context"
 import { useWishlist } from "@/context/wishlist-context"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
+import { useAuth } from "../Context/auth-context"
+import { useRouter } from "next/router"
 
 const menuItems = [
   { key: "profile.orders", icon: Package, href: "/profile/orders" },
@@ -19,6 +21,7 @@ export default function ProfilePage() {
   const { language, setLanguage, t } = useLanguage()
   const { theme, toggleTheme } = useTheme()
   const { items: wishlistItems } = useWishlist()
+  const { logout } = useAuth()
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -58,7 +61,10 @@ export default function ProfilePage() {
                     )}
                   </Link>
                 ))}
-                <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-destructive hover:bg-secondary transition-colors">
+                <button  onClick={async () => {
+        await logout()
+        window.location.href = "/"
+      }} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-destructive hover:bg-secondary transition-colors">
                   <LogOut size={20} />
                   <span>{t("profile.logout")}</span>
                 </button>

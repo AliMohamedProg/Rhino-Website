@@ -3,8 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\controllers\\categorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\controllers\\categorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -13,10 +21,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\services\\refreshtokensservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\services\\refreshtokensservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\services\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -42,7 +46,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -54,20 +58,32 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Apis",
+              "DocumentIndex": 0,
+              "Title": "CategoryController.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Controllers\\CategoryController.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Controllers\\CategoryController.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Controllers\\CategoryController.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Controllers\\CategoryController.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAqwBUAAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-07T14:11:51.626Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Apis.csproj",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Apis.csproj",
               "RelativeDocumentMoniker": "WoodDecorBackend\\Apis.csproj",
               "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Apis.csproj",
               "RelativeToolTip": "WoodDecorBackend\\Apis.csproj",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAAAkAAABMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-02-04T05:16:13.391Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-04T05:16:13.391Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "TokenService.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Services\\TokenService.cs",
               "RelativeDocumentMoniker": "WoodDecorBackend\\Services\\TokenService.cs",
@@ -75,12 +91,11 @@
               "RelativeToolTip": "WoodDecorBackend\\Services\\TokenService.cs",
               "ViewState": "AgIAAAwAAAAAAAAAAAAswCAAAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-04T05:15:38.036Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-04T05:15:38.036Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "RefreshTokensService.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\RefreshTokensService.cs",
               "RelativeDocumentMoniker": "Bl\\Services\\RefreshTokensService.cs",
@@ -88,12 +103,11 @@
               "RelativeToolTip": "Bl\\Services\\RefreshTokensService.cs",
               "ViewState": "AgIAABcAAAAAAAAAAAAuwB4AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-04T03:29:50.359Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-04T03:29:50.359Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\appsettings.json",
               "RelativeDocumentMoniker": "WoodDecorBackend\\appsettings.json",
@@ -101,38 +115,35 @@
               "RelativeToolTip": "WoodDecorBackend\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAB8AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-02-04T01:54:14.602Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-04T01:54:14.602Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "UserService.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Services\\UserService.cs",
               "RelativeDocumentMoniker": "WoodDecorBackend\\Services\\UserService.cs",
               "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Services\\UserService.cs",
               "RelativeToolTip": "WoodDecorBackend\\Services\\UserService.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAewBUAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAFgAAAAAAAAAAADwv2AAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-03T10:24:05.732Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-03T10:24:05.732Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "WoodDecorBackend\\Controllers\\AuthController.cs",
               "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Controllers\\AuthController.cs",
               "RelativeToolTip": "WoodDecorBackend\\Controllers\\AuthController.cs",
-              "ViewState": "AgIAAGAAAAAAAAAAAAAwwHEAAABlAAAAAAAAAA==",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAgwBAAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-03T09:32:10.774Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-03T09:32:10.774Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Program.cs",
               "RelativeDocumentMoniker": "WoodDecorBackend\\Program.cs",
@@ -140,12 +151,11 @@
               "RelativeToolTip": "WoodDecorBackend\\Program.cs",
               "ViewState": "AgIAACIAAAAAAAAAAADwvy0AAAAHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-03T09:31:38.78Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-03T09:31:38.78Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "UserDto.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\UserDto.cs",
               "RelativeDocumentMoniker": "Bl\\DTOs\\UserDto.cs",

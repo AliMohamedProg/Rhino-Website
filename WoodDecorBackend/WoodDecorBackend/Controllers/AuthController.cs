@@ -92,6 +92,19 @@ namespace Apis.Controllers
         public async Task<IActionResult> Logout()
         {
             await _userService.LogoutAsync();
+
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None
+            };
+
+            Response.Cookies.Delete("AccessToken", cookieOptions);
+            Response.Cookies.Delete("RefreshToken", cookieOptions);
+
+            return Ok(new { Message = "Logged out successfully" });
+
             return Ok(new { Message = "Logged out successfully" });
         }
 
