@@ -1,4 +1,5 @@
 ﻿using Bl.DTOs;
+using Bl.Services;
 using BusinessLayer.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +12,11 @@ namespace Apis.Controllers
     public class CategoryController : ControllerBase
     {
         ICategory _categoryService;
-        public CategoryController(ICategory categoryService)
+        IItem _itemService;
+        public CategoryController(ICategory categoryService , IItem itemService)
         {
             _categoryService = categoryService;
+            _itemService = itemService;
         }
         // GET: api/<CategoryController>
         [HttpGet]
@@ -21,6 +24,13 @@ namespace Apis.Controllers
         {
             var categories = _categoryService.GetAll();
             return categories;
+        }
+        // GET api/<CategoryController>/5
+        [HttpGet("{id}")]
+        public List<ItemDto> GetCategoryItems(Guid id)
+        {
+            var itemsCategory = _itemService.GetAll().Where(a => a.CategoryId == id).ToList();
+            return itemsCategory;
         }
     }
 }

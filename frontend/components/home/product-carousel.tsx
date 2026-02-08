@@ -35,7 +35,7 @@ export function ProductCarousel() {
           <div>
             <h2 className="text-xl md:text-2xl font-bold text-foreground">{t("products.deals")}</h2>
           </div>
-          <Link href="/products" className="text-sm font-medium text-primary hover:underline">
+          <Link href="/product" className="text-sm font-medium text-primary hover:underline">
             {t("products.viewMore")}
           </Link>
         </div>

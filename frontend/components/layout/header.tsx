@@ -58,6 +58,7 @@ export function Header() {
      Fetch Categories
   ======================= */
 
+  useEffect(() => {
     const fetchCategories = async () => {
       try {
         const res = await fetch("https://localhost:7282/api/category")
@@ -71,7 +72,7 @@ export function Header() {
     }
 
     fetchCategories()
-
+  }, [])
   /* =======================
      Handlers
   ======================= */

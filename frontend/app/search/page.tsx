@@ -3,14 +3,15 @@
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
+import { useState, useEffect } from "react"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { useLanguage } from "@/context/language-context"
 import { useCart } from "@/context/cart-context"
-import { products, formatPrice } from "@/lib/products"
+import { useWishlist } from "@/context/wishlist-context"
 import { Button } from "@/components/ui/button"
 import { ShoppingCart, Heart, Search } from "lucide-react"
-import { useWishlist } from "@/context/wishlist-context"
+import { formatPrice } from "@/lib/products"
 
 export default function SearchPage() {
   const searchParams = useSearchParams()
@@ -19,38 +20,61 @@ export default function SearchPage() {
   const { addItem } = useCart()
   const { addItem: addToWishlist, isInWishlist, removeItem: removeFromWishlist } = useWishlist()
 
+  const [products, setProducts] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  // Fetch products from API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch("https://localhost:7282/api/items")
+        if (!res.ok) throw new Error("Failed to fetch products")
+        const data = await res.json()
+        setProducts(data)
+      } catch (err: any) {
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProducts()
+  }, [])
+
+  if (loading) return <p className="text-center py-20">Loading...</p>
+  if (error) return <p className="text-center py-20 text-red-500">{error}</p>
+
   // Filter products based on search query
   const filteredProducts = products.filter((product) => {
     const searchLower = query.toLowerCase()
+    const name = language === "ar" ? product.nameAr : product.nameEn
+    const description = language === "ar" ? product.descriptionAr : product.descriptionEn
     return (
-      product.name.en.toLowerCase().includes(searchLower) ||
-      product.name.ar.includes(query) ||
-      product.description.en.toLowerCase().includes(searchLower) ||
-      product.description.ar.includes(query) ||
-      product.category.toLowerCase().includes(searchLower)
+      (name && name.toLowerCase().includes(searchLower)) ||
+      (description && description.toLowerCase().includes(searchLower))
     )
   })
 
-  const handleAddToCart = (product: (typeof products)[0]) => {
+  const handleAddToCart = (product: any) => {
     addItem({
       id: product.id,
-      name: product.name,
+      name: language === "ar" ? product.nameAr : product.nameEn,
       price: product.price,
-      image: product.image,
-      quantity: 1,
+      image: product.image || "/placeholder.svg",
+      // quantity: 1,
     })
   }
 
-  const handleWishlistToggle = (product: (typeof products)[0]) => {
+  const handleWishlistToggle = (product: any) => {
     if (isInWishlist(product.id)) {
       removeFromWishlist(product.id)
     } else {
       addToWishlist({
         id: product.id,
-        name: product.name,
+        name: language === "ar" ? product.nameAr : product.nameEn,
         price: product.price,
-        originalPrice: product.originalPrice,
-        image: product.image,
+        image: product.image || "/placeholder.svg",
       })
     }
   }
@@ -85,23 +109,11 @@ export default function SearchPage() {
                     <div className="relative h-48 md:h-56">
                       <Image
                         src={product.image || "/placeholder.svg"}
-                        alt={product.name[language]}
+                        alt={language === "ar" ? product.nameAr : product.nameEn}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
                       />
-                      {/* Badges */}
-                      <div className="absolute top-2 start-2 flex flex-col gap-1">
-                        {product.discount && (
-                          <span className="bg-destructive text-destructive-foreground text-xs px-2 py-1 rounded">
-                            -{product.discount}%
-                          </span>
-                        )}
-                        {product.isNew && (
-                          <span className="bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded">
-                            {t("products.new")}
-                          </span>
-                        )}
-                      </div>
+
                       {/* Wishlist Button */}
                       <button
                         onClick={(e) => {
@@ -114,7 +126,10 @@ export default function SearchPage() {
                             : "bg-card/80 text-foreground hover:bg-card"
                         }`}
                       >
-                        <Heart size={16} fill={isInWishlist(product.id) ? "currentColor" : "none"} />
+                        <Heart
+                          size={16}
+                          fill={isInWishlist(product.id) ? "currentColor" : "none"}
+                        />
                       </button>
                     </div>
                   </Link>
@@ -123,20 +138,15 @@ export default function SearchPage() {
                   <div className="p-3 md:p-4">
                     <Link href={`/product/${product.id}`}>
                       <h3 className="font-medium text-foreground text-sm md:text-base line-clamp-2 mb-2 hover:text-secondary transition-colors">
-                        {product.name[language]}
+                        {language === "ar" ? product.nameAr : product.nameEn}
                       </h3>
                     </Link>
 
                     {/* Price */}
                     <div className="flex items-center gap-2 mb-3">
                       <span className="text-lg font-bold text-secondary">
-                        {formatPrice(product.price)} {t("products.price")}
+                        {formatPrice(product.price)}
                       </span>
-                      {product.originalPrice && (
-                        <span className="text-sm text-muted-foreground line-through">
-                          {formatPrice(product.originalPrice)}
-                        </span>
-                      )}
                     </div>
 
                     {/* Add to Cart Button */}
