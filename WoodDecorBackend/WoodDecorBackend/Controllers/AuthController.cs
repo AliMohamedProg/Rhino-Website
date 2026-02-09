@@ -32,7 +32,7 @@ namespace Apis.Controllers
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserDto request)
-       {
+        {
             var result = await _userService.RegisterAsync(request);
 
             if (!result.Success)
@@ -70,7 +70,7 @@ namespace Apis.Controllers
             Response.Cookies.Append("AccessToken", accessToken, new CookieOptions
             {
                 HttpOnly = true,
-                Secure =true,
+                Secure = true,
                 SameSite = SameSiteMode.None,
                 Path = "/",
                 Expires = DateTimeOffset.UtcNow.AddMinutes(15)
@@ -111,7 +111,7 @@ namespace Apis.Controllers
         //[Authorize]
         [HttpGet("me")]
         public async Task<IActionResult> Me()
-         {
+        {
             // Get the username (Name claim)
             var userName = User.Identity.Name;
 
@@ -124,13 +124,15 @@ namespace Apis.Controllers
             // Check if the user is authenticated
             if (User.Identity.IsAuthenticated)
             {
-                return Ok(new { UserId = userId, UserName = userName, IsAuthenticated = true , IsUser});
+                return Ok(new { UserId = userId, UserName = userName, IsAuthenticated = true, IsUser });
             }
             else
             {
                 return Unauthorized();
             }
         }
+
+
 
         [HttpPost("RefreshAccessToken")]
         public async Task<IActionResult> RefreshAccessToken()

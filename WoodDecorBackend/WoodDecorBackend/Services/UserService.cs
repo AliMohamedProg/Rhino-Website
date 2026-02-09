@@ -32,9 +32,17 @@ namespace Apis.Services
 
         public Guid GetLoggedInUser()
         {
-            var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            return Guid.Parse(userId);
+            try
+            {
+                var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+                return Guid.Parse(userId);
+            }
+            catch
+            {
+                return Guid.Empty; // or throw an exception, depending on your needs
+            }
         }
+
 
         public async Task<UserDto> GetUserByEmailAsync(string Email)
         {

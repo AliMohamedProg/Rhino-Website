@@ -77,6 +77,7 @@ const translations: Translations = {
   // Profile
   "profile.title": { en: "My Account", ar: "حسابي" },
   "profile.orders": { en: "My Orders", ar: "طلباتي" },
+  "profile.info": { en: "Account Information", ar: "معلومات الحساب" },
   "profile.wishlist": { en: "My Wishlist", ar: "المفضلة" },
   "profile.settings": { en: "Settings", ar: "الإعدادات" },
   "profile.logout": { en: "Logout", ar: "تسجيل الخروج" },

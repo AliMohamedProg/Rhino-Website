@@ -41,8 +41,12 @@ export function Footer() {
           {/* Logo & Description */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 bg-primary-foreground rounded-lg flex items-center justify-center">
-                <span className="text-primary font-bold text-xl">W</span>
+              <div className=" bg-primary-foreground rounded-lg flex items-center justify-center">
+                <img 
+                  src="/images/logo-websait.png"
+                  alt="Logo"
+                  className="w-14 h-14 p-1.5"
+                />
               </div>
               <span className="text-xl font-bold">{language === "ar" ? "وود ديكور" : "Wood Decor"}</span>
             </div>

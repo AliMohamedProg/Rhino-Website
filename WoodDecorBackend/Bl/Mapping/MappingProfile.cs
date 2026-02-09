@@ -23,6 +23,8 @@ namespace Bl.Mapping
             CreateMap<TbSetting, SettingDto>().ReverseMap();
             CreateMap<TbSlider, SliderDto>().ReverseMap();
             CreateMap<TbRefreshTokens, RefreshTokensDto>().ReverseMap();
+            CreateMap<TbCart, CartDto>().ReverseMap();
+            CreateMap<TbCartItem, CartItemDto>().ReverseMap();
         }
     }
 }

@@ -1,302 +1,335 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Image from "next/image"
-import Link from "next/link"
-import { Heart, ShoppingCart, Star, Minus, Plus } from "lucide-react"
-import { Header } from "@/components/layout/header"
-import { Footer } from "@/components/layout/footer"
+import { ShoppingCart, Heart, Star, ArrowLeft, ArrowRight } from "lucide-react"
+
 import { useLanguage } from "@/context/language-context"
 import { useCart } from "@/context/cart-context"
 import { useWishlist } from "@/context/wishlist-context"
 import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { getProductById, products, formatPrice } from "@/lib/products"
-import dynamic from "next/dynamic"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
+import { formatPrice } from "@/lib/products"
+import { Header } from "@/components/layout/header"
+import { Footer } from "@/components/layout/footer"
 
-const ReviewsWrapper = dynamic(() => import("@/components/product/reviews").then((m) => {
-  const Reviews = m.default
-  return ({ initialReviews }: any) => <Reviews initialReviews={initialReviews} />
-}), { ssr: false })
+type Product = {
+  id: string
+  nameAr: string
+  nameEn: string
+  descriptionAr: string
+  descriptionEn: string
+  price: number
+  discountAmount: number
+  stockNumber: number
+  colors: string
+  overallRating: number
+}
 
-export default function ProductPage() {
-  const params = useParams()
-  const product = getProductById(params.id as string)
-  const { language, t, dir } = useLanguage()
-  const isRTL = dir === "rtl"
+type Review = {
+  id: string
+  title: string
+  date: string
+  rating: number
+  text: string
+}
+
+export default function ProductDetailsPage() {
+  const { id } = useParams<{ id: string }>()
+  const { language, t } = useLanguage()
   const { addItem } = useCart()
-  const { isInWishlist, toggleItem } = useWishlist()
-  const [selectedImage, setSelectedImage] = useState(0)
+  const { toggleItem, isInWishlist } = useWishlist()
+
+  const [product, setProduct] = useState<Product | null>(null)
+  const [loading, setLoading] = useState(true)
   const [quantity, setQuantity] = useState(1)
 
-  if (!product) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <Header />
-        <main className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold mb-4">Product not found</h1>
-            <Link href="/">
-              <Button>Go Home</Button>
-            </Link>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    )
+  const [reviews, setReviews] = useState<Review[]>([])
+  const [currentReviewIndex, setCurrentReviewIndex] = useState(0)
+
+  const [showReviewForm, setShowReviewForm] = useState(false)
+  const [reviewText, setReviewText] = useState("")
+  const [reviewRating, setReviewRating] = useState(5)
+
+  // Fetch product
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await fetch(`https://localhost:7282/api/Items/${id}`)
+        const data = await res.json()
+        setProduct(data)
+      } catch (err) {
+        console.error(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProduct()
+  }, [id])
+
+  // Dummy reviews
+  useEffect(() => {
+    setReviews([
+      { id: "1", title: "Elegant Dining Set", date: "2026-02-07", rating: 4, text: "Great product!" },
+      { id: "2", title: "Modern Chair", date: "2026-02-06", rating: 5, text: "Excellent quality and design." },
+      { id: "3", title: "Wooden Table", date: "2026-02-05", rating: 3, text: "Good, but a bit heavy." },
+      { id: "4", title: "Luxury Sofa", date: "2026-02-04", rating: 5, text: "Super comfy and stylish!" },
+    ])
+  }, [])
+
+  if (loading) return null
+  if (!product) return null
+
+  const originalPrice = product.price + product.discountAmount
+  const colorsArray = product.colors
+    ? product.colors.split(",").map(c => c.trim())
+    : []
+
+  const increment = () => setQuantity(q => q + 1)
+  const decrement = () => setQuantity(q => (q > 1 ? q - 1 : 1))
+
+  const submitReview = () => {
+    const newReview: Review = {
+      id: (reviews.length + 1).toString(),
+      title: "New Review",
+      date: new Date().toISOString().split("T")[0],
+      rating: reviewRating,
+      text: reviewText,
+    }
+    setReviews([newReview, ...reviews])
+    setShowReviewForm(false)
+    setReviewText("")
+    setReviewRating(5)
+    setCurrentReviewIndex(0)
   }
 
-  const allImages = [product.image, ...product.images]
-  const relatedProducts = products.filter((p) => p.category === product.category && p.id !== product.id).slice(0, 4)
-
-  const handleAddToCart = () => {
-    for (let i = 0; i < quantity; i++) {
-      addItem({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        originalPrice: product.originalPrice,
-        image: product.image,
-      })
-    }
+  const nextReview = () => {
+    if (currentReviewIndex < reviews.length - 1) setCurrentReviewIndex(i => i + 1)
+  }
+  const prevReview = () => {
+    if (currentReviewIndex > 0) setCurrentReviewIndex(i => i - 1)
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50">
       <Header />
-      <main className="flex-1 bg-background">
-        <div className="container mx-auto px-4 py-8">
-          {/* Breadcrumb */}
-          <nav className="text-sm mb-6">
-            <ol className="flex items-center gap-2 text-muted-foreground">
-              <li>
-                <Link href="/" className="hover:text-primary">
-                  {t("nav.home")}
-                </Link>
-              </li>
-              <li>/</li>
-              <li>
-                <Link href={`/category/${product.category}`} className="hover:text-primary capitalize">
-                  {product.category}
-                </Link>
-              </li>
-              <li>/</li>
-              <li className="text-foreground">{product.name[language]}</li>
-            </ol>
-          </nav>
 
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            {/* Image Gallery */}
-            <div className="space-y-4">
-              <div className="relative w-full h-96 md:h-[600px] bg-secondary rounded-lg overflow-hidden">
-                <Image
-                  src={allImages[selectedImage] || "/placeholder.svg"}
-                  alt={product.name[language]}
-                  fill
-                  className="object-contain"
-                />
-                {product.discount && (
-                  <span className="absolute top-4 start-4 bg-accent text-accent-foreground text-sm font-medium px-3 py-1 rounded">
-                    -{product.discount}% {t("products.off")}
-                  </span>
-                )}
-              </div>
-              <div className="flex gap-2 overflow-x-auto pb-2">
-                {allImages.map((img, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-colors ${
-                      selectedImage === index ? "border-primary" : "border-border"
-                    }`}
-                  >
-                    <Image
-                      src={img || "/placeholder.svg"}
-                      alt=""
-                      width={80}
-                      height={80}
-                      className="object-cover w-full h-full"
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
+      <section className="container mx-auto px-4 py-12">
+        <div className="grid md:grid-cols-2 gap-12">
 
-            {/* Product Info */}
-            <div className="space-y-6">
-              <div>
-                <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">{product.name[language]}</h1>
-                <div className="flex items-center gap-2 text-sm">
-                  <div className="flex items-center gap-1">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star
-                        key={i}
-                        size={16}
-                        className={
-                          i < Math.floor(product.rating) ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"
-                        }
-                      />
-                    ))}
-                  </div>
-                  <span className="text-muted-foreground">
-                    ({product.reviews} {t("products.reviews")})
-                  </span>
-                </div>
-              </div>
-
-              {/* Price */}
-              <div className="flex items-baseline gap-3">
-                <span className="text-3xl font-bold text-foreground">
-                  {formatPrice(product.price)} {t("products.price")}
-                </span>
-                {product.originalPrice && (
-                  <span className="text-lg text-muted-foreground line-through">
-                    {formatPrice(product.originalPrice)} {t("products.price")}
-                  </span>
-                )}
-              </div>
-
-              {/* Stock Status */}
-              <div className={`text-sm font-medium ${product.inStock ? "text-green-600" : "text-destructive"}`}>
-                {product.inStock ? t("products.inStock") : t("products.outOfStock")}
-              </div>
-
-              {/* Quantity */}
-              <div className="flex items-center gap-4">
-                <span className="text-sm font-medium">{t("cart.quantity")}:</span>
-                <div className="flex items-center border border-border rounded-lg">
-                  <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-10 h-10 flex items-center justify-center hover:bg-secondary transition-colors"
-                  >
-                    <Minus size={16} />
-                  </button>
-                  <span className="w-12 text-center font-medium">{quantity}</span>
-                  <button
-                    onClick={() => setQuantity(quantity + 1)}
-                    className="w-10 h-10 flex items-center justify-center hover:bg-secondary transition-colors"
-                  >
-                    <Plus size={16} />
-                  </button>
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div className="flex gap-3">
-                <Button
-                  size="lg"
-                  className="flex-1 bg-accent hover:bg-accent/90 text-accent-foreground"
-                  onClick={handleAddToCart}
-                  disabled={!product.inStock}
-                >
-                  <ShoppingCart size={20} className="me-2" />
-                  {t("products.addToCart")}
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  onClick={() =>
-                    toggleItem({
-                      id: product.id,
-                      name: product.name,
-                      price: product.price,
-                      originalPrice: product.originalPrice,
-                      image: product.image,
-                    })
-                  }
-                >
-                  <Heart size={20} className={isInWishlist(product.id) ? "fill-accent text-accent" : ""} />
-                </Button>
-              </div>
-
-              {/* Tabs: Description + Reviews */}
-              <Tabs defaultValue="description" className="mt-8">
-                <TabsList className="w-full justify-start">
-                  <TabsTrigger value="description">{t("products.description")}</TabsTrigger>
-                  <TabsTrigger value="reviews">{isRTL ? "التعليقات" : "Reviews"}</TabsTrigger>
-                </TabsList>
-                <TabsContent value="description" className="mt-4">
-                  <p className="text-muted-foreground leading-relaxed">{product.description[language]}</p>
-                </TabsContent>
-
-                <TabsContent value="reviews" className="mt-4">
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-1">
-                          {Array.from({ length: 5 }).map((_, i) => (
-                            <Star
-                              key={i}
-                              size={16}
-                              className={i < Math.round(product.rating) ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"}
-                            />
-                          ))}
-                        </div>
-                        <span className="font-medium">{product.rating.toFixed(1)}</span>
-                        <span className="text-sm text-muted-foreground">• {product.reviews} {t("products.reviews")}</span>
-                      </div>
-                    </div>
-
-                    {/* Sample reviews (mock) */}
-                        {/* Reviews carousel + add-review form */}
-                        {product.reviews > 0 ? (
-                          <div>
-                            {/* import ReviewsCarousel lazily */}
-                            {/* Keep initial mock reviews for demonstration */}
-                            {/* generate small set of mock reviews to pass as initialReviews */}
-                            {/* @ts-ignore */}
-                            <ReviewsWrapper
-                              initialReviews={Array.from({ length: Math.min(product.reviews, 6) }).map((_, i) => ({
-                                id: Number(`${product.id}${i}`),
-                                author: `${product.name[language]} ${i + 1}`,
-                                rating: Math.max(1, Math.round(product.rating) - (i % 3)),
-                                date: new Date(Date.now() - i * 86400000).toISOString().split("T")[0],
-                                textEn: `Great product! ${i + 1}`,
-                                textAr: `منتج رائع! ${i + 1}`,
-                              }))}
-                            />
-                          </div>
-                        ) : (
-                          <div className="text-muted-foreground">{t("common.noData")}</div>
-                        )}
-                  </div>
-                </TabsContent>
-              </Tabs>
-            </div>
+          {/* Product Image */}
+          <div className="relative h-[450px] bg-white rounded-xl shadow-md overflow-hidden flex items-center justify-center">
+            <Image
+              src="/placeholder.svg"
+              alt={language === "ar" ? product.nameAr : product.nameEn}
+              fill
+              className="object-cover"
+            />
+            {product.discountAmount > 0 && (
+              <span className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-lg font-medium text-sm shadow">
+                -{product.discountAmount}
+              </span>
+            )}
           </div>
 
-          {/* Related Products */}
-          {relatedProducts.length > 0 && (
-            <section>
-              <h2 className="text-xl font-bold text-foreground mb-6">{t("products.related")}</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {relatedProducts.map((p) => (
-                  <Link key={p.id} href={`/product/${p.id}`} className="group">
-                    <div className="bg-card rounded-lg border border-border overflow-hidden">
-                      <div className="relative h-40 bg-secondary">
-                        <Image
-                          src={p.image || "/placeholder.svg"}
-                          alt={p.name[language]}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform"
-                        />
+          {/* Product Info */}
+          <div className="flex flex-col justify-between">
+            {/* Title */}
+            <h1 className="text-3xl font-extrabold mb-4">
+              {language === "ar" ? product.nameAr : product.nameEn}
+            </h1>
+
+            {/* Review Summary */}
+            <div className="flex items-center mb-4 gap-2">
+              <Stars value={product.overallRating} />
+              <span className="text-gray-600">{product.overallRating} / 5</span>
+              <span className="text-gray-400">· {reviews.length} Reviews</span>
+            </div>
+
+            {/* Price */}
+            <div className="flex items-center gap-4 mb-4">
+              <span className="text-3xl font-bold text-gray-900">{formatPrice(product.price)}</span>
+              {product.discountAmount > 0 && (
+                <span className="line-through text-gray-400">{formatPrice(originalPrice)}</span>
+              )}
+            </div>
+
+            {/* Stock */}
+            <div className="mb-4">
+              <span className="text-gray-500">{language === "ar" ? "الكمية المتوفرة:" : "Stock:"} </span>
+              <span className="font-medium">{product.stockNumber}</span>
+            </div>
+
+            {/* Quantity Selector */}
+            <div className="flex items-center gap-2 mb-6">
+              <span className="text-gray-500">{language === "ar" ? "الكمية:" : "Quantity:"}</span>
+              <Button variant="outline" onClick={decrement}>-</Button>
+              <span className="w-10 text-center font-medium">{quantity}</span>
+              <Button variant="outline" onClick={increment}>+</Button>
+            </div>
+
+            {/* Add to Cart & Wishlist */}
+            <div className="flex gap-3 mb-8">
+              <Button
+                className="flex-1 bg-red-600 hover:bg-red-700 text-white shadow-md flex items-center justify-center gap-2"
+                onClick={() =>
+                  addItem({
+                    id: product.id,
+                    name: { ar: product.nameAr, en: product.nameEn },
+                    price: product.price,
+                    originalPrice,
+                    image: "/placeholder.svg",
+                    quantity,
+                  })
+                }
+              >
+                <ShoppingCart size={20} />
+                {t("products.addToCart")}
+              </Button>
+
+              <Button
+                variant="outline"
+                className="flex items-center justify-center"
+                onClick={() =>
+                  toggleItem({
+                    id: product.id,
+                    name: { ar: product.nameAr, en: product.nameEn },
+                    price: product.price,
+                    originalPrice,
+                    image: "/placeholder.svg",
+                  })
+                }
+              >
+                <Heart
+                  size={20}
+                  className={isInWishlist(product.id) ? "fill-red-500 text-red-500" : ""}
+                />
+              </Button>
+            </div>
+
+            {/* Tabs */}
+            <Tabs defaultValue="description" className="w-full">
+              <TabsList className="w-full justify-start border-b rounded-none mb-6">
+                <TabsTrigger value="description">{t("products.description")}</TabsTrigger>
+                <TabsTrigger value="specification">{language === "ar" ? "المواصفات" : "Specification"}</TabsTrigger>
+                <TabsTrigger value="reviews">{language === "ar" ? "التقييمات" : "Reviews"}</TabsTrigger>
+              </TabsList>
+
+              {/* Description */}
+              <TabsContent value="description" className="pt-4">
+                <p className="text-gray-700 leading-relaxed">{language === "ar" ? product.descriptionAr : product.descriptionEn}</p>
+              </TabsContent>
+
+              {/* Specification */}
+              <TabsContent value="specification" className="pt-4 space-y-4">
+                <div className="flex justify-between">
+                  <span className="text-gray-500">{language === "ar" ? "الكمية المتوفرة" : "Stock Available"}</span>
+                  <span className="font-medium">{product.stockNumber}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-500">{language === "ar" ? "التقييم" : "Rating"}</span>
+                  <span className="font-medium">{product.overallRating} / 5</span>
+                </div>
+                <div className="flex justify-between items-start">
+                  <span className="text-gray-500">{language === "ar" ? "الألوان المتاحة" : "Available Colors"}</span>
+                  <div className="flex flex-wrap gap-2">
+                    {colorsArray.map(color => (
+                      <span key={color} className="px-3 py-1 border rounded-full text-sm bg-gray-100">{color}</span>
+                    ))}
+                  </div>
+                </div>
+              </TabsContent>
+
+              {/* Reviews */}
+              <TabsContent value="reviews" className="pt-4">
+                <div className="space-y-4">
+
+                  {/* Add Review */}
+                  <Button className="mb-4 w-full" onClick={() => setShowReviewForm(prev => !prev)}>
+                    {language === "ar" ? "إضافة تقييم" : "Add Review"}
+                  </Button>
+
+                  {showReviewForm && (
+                    <div className="border p-4 rounded-lg space-y-2 mb-4">
+                      <div className="flex items-center gap-2">
+                        <span>Rating:</span>
+                        <select
+                          value={reviewRating}
+                          onChange={e => setReviewRating(Number(e.target.value))}
+                          className="border p-1 rounded"
+                        >
+                          {[1,2,3,4,5].map(i => <option key={i} value={i}>{i}</option>)}
+                        </select>
                       </div>
-                      <div className="p-3">
-                        <h3 className="font-medium text-foreground text-sm line-clamp-2 mb-2">{p.name[language]}</h3>
-                        <span className="font-bold text-foreground">
-                          {formatPrice(p.price)} {t("products.price")}
-                        </span>
+                      <textarea
+                        className="w-full border p-2 rounded"
+                        rows={3}
+                        placeholder="Your review"
+                        value={reviewText}
+                        onChange={e => setReviewText(e.target.value)}
+                      />
+                      <Button onClick={submitReview}>{language === "ar" ? "إرسال" : "Submit"}</Button>
+                    </div>
+                  )}
+
+                  {/* Carousel */}
+                  {reviews.length > 0 && (
+                    <div className="relative">
+                      <div className="overflow-hidden">
+                        <div className="flex transition-transform duration-300" style={{ transform: `translateX(-${currentReviewIndex * 100}%)` }}>
+                          {reviews.map(r => (
+                            <div key={r.id} className="min-w-full p-4">
+                              <div className="border rounded-lg p-4 shadow-sm bg-white">
+                                <h4 className="font-semibold text-lg mb-2">{r.title}</h4>
+                                <div className="flex items-center gap-2 mb-2">
+                                  <Stars value={r.rating} />
+                                  <span className="text-gray-400 text-sm">{r.date}</span>
+                                </div>
+                                <p className="text-gray-700">{r.text}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Arrows */}
+                      <div className="absolute top-1/2 left-2 -translate-y-1/2">
+                        <Button variant="outline" onClick={prevReview}><ArrowLeft /></Button>
+                      </div>
+                      <div className="absolute top-1/2 right-2 -translate-y-1/2">
+                        <Button variant="outline" onClick={nextReview}><ArrowRight /></Button>
                       </div>
                     </div>
-                  </Link>
-                ))}
-              </div>
-            </section>
-          )}
+                  )}
+
+                </div>
+              </TabsContent>
+
+            </Tabs>
+
+          </div>
         </div>
-      </main>
+      </section>
+
       <Footer />
+    </div>
+  )
+}
+
+// Stars Component
+function Stars({ value }: { value: number }) {
+  return (
+    <div className="flex gap-1">
+      {[1,2,3,4,5].map(i => (
+        <Star key={i} size={16} className={i <= value ? "fill-yellow-400 text-yellow-400" : "text-gray-300"} />
+      ))}
     </div>
   )
 }

@@ -30,6 +30,13 @@ namespace Apis.Controllers
             var item = _itemService.GetById(id);
             return item;
         }
+        // GET: api/<ItemsController>/GetTheBestItemsDiscounts
+        [HttpGet("best-discounts")]
+        public List<ItemDto> GetTheBestItemsDiscounts()
+        {
+            var items = _itemService.GetAll().Where(a => a.DiscountAmount > 1 && a.DiscountAmount < 100).ToList();
+            return items;
+        }
 
     }
 }

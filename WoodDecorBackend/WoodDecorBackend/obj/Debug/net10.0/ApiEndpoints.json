@@ -1,6 +1,32 @@
 [
   {
     "ContainingType": "Apis.Controllers.AuthController",
+    "Method": "GetUserData",
+    "RelativePath": "api/auth/get-user-data",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Id",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Bl.DTOs.UserDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Apis.Controllers.AuthController",
     "Method": "Login",
     "RelativePath": "api/auth/login",
     "HttpMethod": "POST",
@@ -154,6 +180,26 @@
     "ReturnTypes": [
       {
         "Type": "Bl.DTOs.ItemDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Apis.Controllers.ItemsController",
+    "Method": "GetTheBestItemsDiscounts",
+    "RelativePath": "api/Items/best-discounts",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[Bl.DTOs.ItemDto, Bl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

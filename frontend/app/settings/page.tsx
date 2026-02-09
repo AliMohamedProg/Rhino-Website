@@ -97,57 +97,6 @@ export default function SettingsPage() {
               </CardContent>
             </Card>
 
-            {/* Notification Settings */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Bell size={20} className="text-secondary" />
-                  {language === "ar" ? "الإشعارات" : "Notifications"}
-                </CardTitle>
-                <CardDescription>
-                  {language === "ar" ? "إدارة تفضيلات الإشعارات" : "Manage your notification preferences"}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="order-updates">{language === "ar" ? "تحديثات الطلبات" : "Order updates"}</Label>
-                  <Switch id="order-updates" defaultChecked />
-                </div>
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="promotions">{language === "ar" ? "العروض والتخفيضات" : "Promotions and deals"}</Label>
-                  <Switch id="promotions" defaultChecked />
-                </div>
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="newsletter">{language === "ar" ? "النشرة الإخبارية" : "Newsletter"}</Label>
-                  <Switch id="newsletter" />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Privacy Settings */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Shield size={20} className="text-secondary" />
-                  {language === "ar" ? "الخصوصية والأمان" : "Privacy & Security"}
-                </CardTitle>
-                <CardDescription>
-                  {language === "ar" ? "إدارة إعدادات الخصوصية والأمان" : "Manage your privacy and security settings"}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="two-factor">
-                    {language === "ar" ? "التحقق بخطوتين" : "Two-factor authentication"}
-                  </Label>
-                  <Switch id="two-factor" />
-                </div>
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="activity-log">{language === "ar" ? "سجل النشاط" : "Activity log"}</Label>
-                  <Switch id="activity-log" defaultChecked />
-                </div>
-              </CardContent>
-            </Card>
 
             {/* Back to Profile */}
             <div className="flex justify-center pt-4">

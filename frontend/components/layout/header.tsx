@@ -179,7 +179,7 @@ export function Header() {
                     <Button variant="ghost" size="icon" className="relative">
                       <ShoppingCart size={22} />
                       {itemCount > 0 && (
-                        <span className="absolute -top-1 -end-1 w-5 h-5 bg-accent text-xs rounded-full flex items-center justify-center">
+                        <span className="absolute -top-1 -end-1 w-5 h-5 bg-accent text-xs rounded-full flex items-center justify-center text-white">
                           {itemCount}
                         </span>
                       )}

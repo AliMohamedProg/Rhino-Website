@@ -5,6 +5,8 @@ namespace Domains;
 
 public partial class TbItem : BaseTable
 {
+
+    public string MainImage { get; set; } = null!;
     public string NameAr { get; set; } = null!;
 
     public string NameEn { get; set; } = null!;

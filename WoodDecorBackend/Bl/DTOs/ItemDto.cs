@@ -8,6 +8,7 @@ namespace Bl.DTOs
     {
         public string NameAr { get; set; } = null!;
 
+        public string MainImage { get; set; } = null!;
         public string NameEn { get; set; } = null!;
 
         public string DescriptionAr { get; set; } = null!;

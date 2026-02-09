@@ -109,6 +109,7 @@ builder.Services.AddAuthentication(options =>
 
 //Dependency Injection
 builder.Services.AddScoped(typeof(ITableRepository<>), typeof(TableRepository<>));
+builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<ICategory, CategoryService>();
 builder.Services.AddScoped<IItem, ItemService>();
 builder.Services.AddScoped<IOrder, OrderService>();
@@ -117,6 +118,7 @@ builder.Services.AddScoped<IReview, ReviewService>();
 builder.Services.AddScoped<ISetting, SettingService>();
 builder.Services.AddScoped<ISlider, SliderService>();
 builder.Services.AddScoped<IImage, ImageService>();
+builder.Services.AddScoped<ICart, CartService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRefreshTokens, RefreshTokensService>();
 builder.Services.AddSingleton<TokenService>();
