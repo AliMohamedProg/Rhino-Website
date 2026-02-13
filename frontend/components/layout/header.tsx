@@ -2,6 +2,7 @@
 
 import type React from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import {
@@ -128,11 +129,15 @@ export function Header() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-20 gap-4">
             {/* Logo */}
-            <Link href="/">
-              <img
+            <Link href="/" className="block relative w-10 h-10">
+              <Image
                 src="/images/logo-websait.png"
-                alt="Logo"
-                className="w-10 h-10"
+                alt="Wood Decor Logo"
+                width={40}
+                height={40}
+                sizes="40px"
+                className="object-contain"
+                priority
               />
             </Link>
 

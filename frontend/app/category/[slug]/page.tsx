@@ -2,18 +2,18 @@
 
 import { useState, useEffect, useMemo } from "react"
 import { useParams } from "next/navigation"
+import Link from "next/link"
 import Image from "next/image"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { useLanguage } from "@/context/language-context"
 import { useCart } from "@/context/cart-context"
-import { useWishlist } from "@/context/wishlist-context"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Slider } from "@/components/ui/slider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { ShoppingCart, Heart, ChevronUp, ChevronDown, Filter, Star } from "lucide-react"
+import { ShoppingCart, ChevronUp, ChevronDown, Filter, Star } from "lucide-react"
 import { formatPrice } from "@/lib/products"
 
 interface Item {
@@ -40,11 +40,9 @@ export default function CategoryPage() {
 
   const { language } = useLanguage()
   const { addItem } = useCart()
-  const { addItem: addToWishlist, removeItem, isInWishlist } = useWishlist()
 
   const [products, setProducts] = useState<Item[]>([])
   const [categories, setCategories] = useState<Category[]>([])
-  const [loading, setLoading] = useState(true)
   const [hideOutOfStock, setHideOutOfStock] = useState(false)
   const [priceRange, setPriceRange] = useState([0, 50000])
   const [sortBy, setSortBy] = useState("featured")
@@ -65,9 +63,7 @@ export default function CategoryPage() {
        
       } catch (err) {
         console.error(err)
-      } finally {
-        setLoading(false)
-      }
+      } 
     }
     fetchData()
   }, [categoryId])
@@ -96,7 +92,6 @@ export default function CategoryPage() {
     setSelectedCategories([])
   }
 
-  if (loading) return <p className="text-center py-20">Loading...</p>
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -168,7 +163,7 @@ export default function CategoryPage() {
 
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredProducts.map(product => (
-                  <div key={product.id} className="border rounded-lg overflow-hidden group relative">
+                  <Link key={product.id} href={`/product/${product.id}`} className="block border rounded-lg overflow-hidden group hover:shadow-lg transition-shadow">
                     <div className="relative h-56">
                       <Image
                         src={product.image || "/placeholder.png"}
@@ -176,10 +171,12 @@ export default function CategoryPage() {
                         fill
                         className="object-cover group-hover:scale-105 transition"
                       />
+                    </div>
 
-                      {/* In Stock / Out of Stock */}
+                    {/* Stock Badge - Below image */}
+                    <div className="absolute bottom-20 left-2">
                       <span
-                        className={`absolute top-2 left-2 px-2 py-1 text-xs rounded ${
+                        className={`px-2 py-1 text-xs rounded font-medium ${
                           product.stockNumber > 0 ? "bg-green-500 text-white" : "bg-gray-500 text-white"
                         }`}
                       >
@@ -187,22 +184,6 @@ export default function CategoryPage() {
                           ? language === "ar" ? "متاح" : "In Stock"
                           : language === "ar" ? "غير متاح" : "Out of Stock"}
                       </span>
-
-                      <button
-                        onClick={() =>
-                          isInWishlist(product.id)
-                            ? removeItem(product.id)
-                            : addToWishlist({
-                                id: product.id,
-                                name: language === "ar" ? product.nameAr : product.nameEn,
-                                price: product.price,
-                                image: product.image || "/placeholder.png"
-                              })
-                        }
-                        className="absolute top-2 right-2 bg-white rounded-full p-2"
-                      >
-                        <Heart size={16} fill={isInWishlist(product.id) ? "red" : "none"} />
-                      </button>
                     </div>
 
                     <div className="p-4">
@@ -215,20 +196,21 @@ export default function CategoryPage() {
                       </div>
 
                       <Button
-                        onClick={() =>
+                        onClick={(e) => {
+                          e.preventDefault()
                           addItem({
                             id: product.id,
                             name: language === "ar" ? product.nameAr : product.nameEn,
                             price: product.price,
                             image: product.image || "/placeholder.png"
                           })
-                        }
+                        }}
                         className="w-full"
                       >
                         <ShoppingCart size={16} className="mr-2" /> Add to Cart
                       </Button>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </div>

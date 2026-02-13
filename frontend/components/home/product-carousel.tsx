@@ -3,10 +3,9 @@
 import { useRef, useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { ChevronLeft, ChevronRight, Heart, ShoppingCart } from "lucide-react"
+import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react"
 import { useLanguage } from "@/context/language-context"
 import { useCart } from "@/context/cart-context"
-import { useWishlist } from "@/context/wishlist-context"
 import { Button } from "@/components/ui/button"
 import { formatPrice } from "@/lib/products"
 
@@ -16,12 +15,12 @@ type ApiItem = {
   nameEn: string
   price: number
   discountAmount: number
+  stockNumber: number
 }
 
 export function ProductCarousel() {
   const { language, t, dir } = useLanguage()
   const { addItem } = useCart()
-  const { isInWishlist, toggleItem } = useWishlist()
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const [products, setProducts] = useState<ApiItem[]>([])
@@ -91,63 +90,44 @@ export function ProductCarousel() {
                 product.price + product.discountAmount
 
               return (
-                <div
+                <Link
                   key={product.id}
-                  className="flex-shrink-0 w-[280px] bg-card rounded-lg border overflow-hidden"
+                  href={`/product/${product.id}`}
+                  className="flex-shrink-0 w-[280px] bg-card rounded-lg border overflow-hidden hover:shadow-lg transition-shadow"
                 >
                   {/* Image */}
                   <div className="relative h-[200px] bg-secondary">
-                    <Link href={`/product/${product.id}`}>
-                      <Image
-                        src="/placeholder.svg"
-                        alt={language === "ar" ? product.nameAr : product.nameEn}
-                        fill
-                        className="object-cover"
-                      />
-                    </Link>
+                    <Image
+                      src="/placeholder.svg"
+                      alt={language === "ar" ? product.nameAr : product.nameEn}
+                      fill
+                      className="object-cover"
+                    />
 
                     {/* Discount Badge */}
                     {product.discountAmount > 0 && (
-                      <span className="absolute top-2 start-2 bg-accent text-xs px-2 py-1 rounded text-white">
+                      <span className="absolute top-2 start-2 bg-red-600 text-xs px-2 py-1 rounded text-white font-medium">
                         {language === "ar" ? `${product.discountAmount}%-` : `-${product.discountAmount}%` }
                       </span>
                     )}
 
-                    {/* Wishlist */}
-                    <button
-                      onClick={() =>
-                        toggleItem({
-                          id: product.id,
-                          name: {
-                            ar: product.nameAr,
-                            en: product.nameEn,
-                          },
-                          price: product.price,
-                          originalPrice,
-                          image: "/placeholder.svg",
-                        })
+                    {/* Stock Badge - Below discount */}
+                    <span className={`absolute bottom-2 start-2 px-2 py-1 text-xs rounded font-medium ${product.stockNumber > 0 ? "bg-green-500 text-white" : "bg-gray-500 text-white"}`}>
+                      {product.stockNumber > 0 
+                        ? (language === "ar" ? "متاح" : "In Stock") 
+                        : (language === "ar" ? "غير متاح" : "Out of Stock")
                       }
-                      className="absolute top-2 end-2 w-8 h-8 rounded-full bg-card/80 flex items-center justify-center"
-                    >
-                      <Heart
-                        size={18}
-                        className={
-                          isInWishlist(product.id)
-                            ? "fill-accent text-accent"
-                            : "text-muted-foreground"
-                        }
-                      />
-                    </button>
+                    </span>
                   </div>
 
                   {/* Info */}
                   <div className="p-4">
-                    <h3 className="font-medium mb-2">
+                    <h3 className="font-medium mb-2 line-clamp-2">
                       {language === "ar" ? product.nameAr : product.nameEn}
                     </h3>
 
                     <div className="flex gap-2 mb-3">
-                      <span className="font-bold">
+                      <span className="font-bold text-foreground">
                         {formatPrice(product.price)} {t("products.price")}
                       </span>
                       <span className="line-through text-sm text-muted-foreground">
@@ -176,7 +156,7 @@ export function ProductCarousel() {
                       {t("products.addToCart")}
                     </Button>
                   </div>
-                </div>
+                </Link>
               )
             })}
           </div>
@@ -192,3 +172,4 @@ export function ProductCarousel() {
     </section>
   )
 }
+

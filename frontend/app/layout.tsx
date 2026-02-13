@@ -4,13 +4,8 @@ import { Geist, Geist_Mono } from "next/font/google"
 import { Cairo } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
-import { LanguageProvider } from "@/context/language-context"
-import { LanguageFontWrapper } from "@/components/language-font-wrapper"
-import { ThemeProvider } from "@/context/theme-context"
-import { CartProvider } from "@/context/cart-context"
-import { WishlistProvider } from "@/context/wishlist-context"
-import { AuthProvider } from "./Context/auth-context"
-import AuthWrapper from "../components/auth-wrapper" // استيراد Wrapper
+import { themeScript } from "@/lib/theme-script"
+import { AppProviders } from "@/providers"
 
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
@@ -33,22 +28,13 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="antialiased" suppressHydrationWarning>
-        <ThemeProvider>
-          <LanguageProvider>
-            <LanguageFontWrapper geistClass={_geist.className} cairoClass={_cairo.className}>
-              <CartProvider>
-                <WishlistProvider>
-                  <AuthProvider>
-                    <AuthWrapper>
-                      {children}
-                    </AuthWrapper>
-                  </AuthProvider>
-                </WishlistProvider>
-              </CartProvider>
-            </LanguageFontWrapper>
-          </LanguageProvider>
-        </ThemeProvider>
+        <AppProviders geistClass={_geist.className} cairoClass={_cairo.className}>
+          {children}
+        </AppProviders>
         <Analytics />
       </body>
     </html>

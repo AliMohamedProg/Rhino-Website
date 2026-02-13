@@ -119,6 +119,10 @@
   * {
     @apply border-border outline-ring/50;
   }
+  /* Smooth theme transition without flash */
+  html {
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
   body {
     @apply bg-background text-foreground;
   }

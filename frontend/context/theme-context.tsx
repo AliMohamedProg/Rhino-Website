@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import { createContext, useContext, useState, useLayoutEffect, useCallback, type ReactNode } from "react"
 
 type Theme = "light" | "dark"
 
@@ -12,27 +12,39 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("light")
+/** Sync React state with class on <html> (set by theme-script before paint). Prevents hydration mismatch. */
+function getThemeFromDom(): Theme {
+  if (typeof document === "undefined") return "light"
+  return document.documentElement.classList.contains("dark") ? "dark" : "light"
+}
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") as Theme
-    if (savedTheme && (savedTheme === "light" || savedTheme === "dark")) {
-      setTheme(savedTheme)
-    }
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const [theme, setThemeState] = useState<Theme>("light")
+
+  // Sync from DOM on mount (script already set class; avoids flash and mismatch)
+  useLayoutEffect(() => {
+    setThemeState(getThemeFromDom())
   }, [])
 
-  useEffect(() => {
-    localStorage.setItem("theme", theme)
+  const setTheme = useCallback((next: Theme) => {
+    setThemeState(next)
+  }, [])
+
+  useLayoutEffect(() => {
     document.documentElement.classList.remove("light", "dark")
     document.documentElement.classList.add(theme)
+    localStorage.setItem("theme", theme)
   }, [theme])
 
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"))
-  }
+  const toggleTheme = useCallback(() => {
+    setTheme(theme === "light" ? "dark" : "light")
+  }, [theme, setTheme])
 
-  return <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>{children}</ThemeContext.Provider>
+  return (
+    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  )
 }
 
 export function useTheme() {

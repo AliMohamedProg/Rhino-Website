@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useAdminLanguage } from "@/context/admin-language-context";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -265,9 +266,12 @@ export default function ReviewsPage() {
 
               <div className="mt-4 rounded-lg bg-muted/50 p-4">
                 <div className="flex items-center gap-3 mb-2">
-                  <img 
+                  <Image 
                     src={review.product.image || "/placeholder.svg"} 
                     alt={review.product.name}
+                    width={48}
+                    height={48}
+                    sizes="48px"
                     className="h-12 w-12 rounded object-cover"
                   />
                   <span className="text-sm font-medium">{review.product.name}</span>

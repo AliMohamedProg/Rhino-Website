@@ -1,8 +1,8 @@
 "use client"
 
+import dynamic from "next/dynamic"
 import { useAdminLanguage } from "@/context/admin-language-context"
 import { StatsCard } from "@/components/admin/stats-card"
-import { AreaChartCard, BarChartCard, PieChartCard, RevenueChart } from "@/components/admin/admin-charts"
 import { RecentOrdersTable } from "@/components/admin/recent-orders-table"
 import { TopProductsCard } from "@/components/admin/top-products-card"
 import {
@@ -16,6 +16,24 @@ import {
 } from "@/lib/admin-data"
 import { DollarSign, ShoppingCart, Package, Users } from "lucide-react"
 import { cn } from "@/lib/utils"
+
+// Lazy load chart components (recharts) for better initial bundle size
+const AreaChartCard = dynamic(
+  () => import("@/components/admin/admin-charts").then((m) => ({ default: m.AreaChartCard })),
+  { ssr: false, loading: () => <div className="h-[300px] rounded-lg border bg-muted/30 animate-pulse" /> },
+)
+const BarChartCard = dynamic(
+  () => import("@/components/admin/admin-charts").then((m) => ({ default: m.BarChartCard })),
+  { ssr: false, loading: () => <div className="h-[300px] rounded-lg border bg-muted/30 animate-pulse" /> },
+)
+const PieChartCard = dynamic(
+  () => import("@/components/admin/admin-charts").then((m) => ({ default: m.PieChartCard })),
+  { ssr: false, loading: () => <div className="h-[300px] rounded-lg border bg-muted/30 animate-pulse" /> },
+)
+const RevenueChart = dynamic(
+  () => import("@/components/admin/admin-charts").then((m) => ({ default: m.RevenueChart })),
+  { ssr: false, loading: () => <div className="h-[300px] rounded-lg border bg-muted/30 animate-pulse" /> },
+)
 
 export default function AdminDashboardPage() {
   const { t, language, dir } = useAdminLanguage()

@@ -19,7 +19,9 @@ public class TbCartItem : BaseTable
     public string NameAr { get; set; }
     public string NameEn { get; set; }
     public string Image { get; set; }
+    public string Color { get; set; }
     public decimal Price { get; set; }
+    public Guid UserId { get; set; }
 
     // Navigation
     [ForeignKey(nameof(CartId))]

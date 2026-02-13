@@ -2,12 +2,12 @@
 
 import { useState, useEffect, useMemo } from "react"
 import { useParams } from "next/navigation"
+import Link from "next/link"
 import Image from "next/image"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { useLanguage } from "@/context/language-context"
 import { useCart } from "@/context/cart-context"
-import { useWishlist } from "@/context/wishlist-context"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Slider } from "@/components/ui/slider"
@@ -57,7 +57,6 @@ export default function CategoryPage() {
 
   const { language } = useLanguage()
   const { addItem } = useCart()
-  const { addItem: addToWishlist, removeItem, isInWishlist } = useWishlist()
 
   const [products, setProducts] = useState<Item[]>([])
   const [categories, setCategories] = useState<Category[]>([])
@@ -215,7 +214,7 @@ export default function CategoryPage() {
                 : product.price
 
                   return (
-                    <div key={product.id} className="border rounded-lg overflow-hidden">
+                    <Link key={product.id} href={`/product/${product.id}`} className="block border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
                       <div className="relative h-56">
                         <Image
                           src={product.image || "/placeholder.png"}
@@ -225,10 +224,18 @@ export default function CategoryPage() {
                         />
 
                         {hasDiscount && (
-                          <span className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded">
+                          <span className="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded font-medium">
                             -{discountPercent}%
                           </span>
                         )}
+
+                        {/* Stock Badge - Below discount */}
+                        <span className={`absolute bottom-2 left-2 px-2 py-1 text-xs rounded font-medium ${product.stockNumber > 0 ? "bg-green-500 text-white" : "bg-gray-500 text-white"}`}>
+                          {product.stockNumber > 0 
+                            ? (language === "ar" ? "متاح" : "In Stock") 
+                            : (language === "ar" ? "غير متاح" : "Out of Stock")
+                          }
+                        </span>
                       </div>
 
                       <div className="p-4">
@@ -237,34 +244,35 @@ export default function CategoryPage() {
                         </h3>
 
                         <div className="flex items-center gap-2 my-2">
-                          <span className="font-bold text-black-600">
+                          <span className="font-bold text-foreground">
                             {formatPrice(finalPrice)}
                           </span>
                           {hasDiscount && (
-                            <span className="text-sm text-gray-400 line-through">
+                            <span className="text-sm text-muted-foreground line-through">
                               {formatPrice(product.price)}
                             </span>
                           )}
-                          <Star size={14} className="text-yellow-400 ml-2" />
+                          <Star size={14} className="text-yellow-400 ml-auto" />
                           <span className="text-sm">{product.overallRating}</span>
                         </div>
 
                         <Button
                           className="w-full"
-                          onClick={() =>
+                          onClick={(e) => {
+                            e.preventDefault()
                             addItem({
                               id: product.id,
                               name: language === "ar" ? product.nameAr : product.nameEn,
                               price: finalPrice,
                               image: product.image || "/placeholder.png"
                             })
-                          }
+                          }}
                         >
                           <ShoppingCart size={16} className="mr-2" />
                           Add to Cart
                         </Button>
                       </div>
-                    </div>
+                    </Link>
                   )
                 })}
               </div>
@@ -278,3 +286,4 @@ export default function CategoryPage() {
     </div>
   )
 }
+
