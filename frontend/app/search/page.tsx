@@ -7,7 +7,6 @@ import { useState, useEffect } from "react"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { useLanguage } from "@/context/language-context"
-import { useCart } from "@/context/cart-context"
 import { useWishlist } from "@/context/wishlist-context"
 import { Button } from "@/components/ui/button"
 import { ShoppingCart, Heart, Search } from "lucide-react"
@@ -17,7 +16,6 @@ export default function SearchPage() {
   const searchParams = useSearchParams()
   const query = searchParams.get("q") || ""
   const { language, t } = useLanguage()
-  const { addItem } = useCart()
   const { addItem: addToWishlist, isInWishlist, removeItem: removeFromWishlist } = useWishlist()
 
   const [products, setProducts] = useState<any[]>([])
@@ -56,14 +54,23 @@ export default function SearchPage() {
     )
   })
 
-  const handleAddToCart = (product: any) => {
-    addItem({
-      id: product.id,
-      name: language === "ar" ? product.nameAr : product.nameEn,
-      price: product.price,
-      image: product.image || "/placeholder.svg",
-      // quantity: 1,
-    })
+  const handleAddToCart = async (product: any) => {
+    try {
+      const res = await fetch("https://localhost:7282/api/Cart/add-to-cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ productId: product.id, quantity: 1 })
+      })
+      
+      if (res.ok) {
+        window.location.href = "/cart"
+      } else if (res.status === 401) {
+        window.location.href = "/login"
+      }
+    } catch (error) {
+      console.error("Failed to add to cart:", error)
+    }
   }
 
   const handleWishlistToggle = (product: any) => {

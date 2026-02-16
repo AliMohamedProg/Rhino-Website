@@ -144,7 +144,7 @@
         }
       }
     },
-    "/api/Cart/item/{productId}": {
+    "/api/Cart/items/{productId}": {
       "get": {
         "tags": [
           "Cart"
@@ -183,7 +183,7 @@
           }
         }
       },
-      "put": {
+      "patch": {
         "tags": [
           "Cart"
         ],
@@ -223,17 +223,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/CartDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/CartDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/CartDto"
                 }
               }
             }
@@ -241,7 +241,7 @@
         }
       }
     },
-    "/api/Cart/item": {
+    "/api/Cart/add-to-cart": {
       "post": {
         "tags": [
           "Cart"
@@ -271,20 +271,43 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/CartDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/CartDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/CartDto"
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/Cart/item/delete/{productId}": {
+      "delete": {
+        "tags": [
+          "Cart"
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -505,6 +528,10 @@
           "quantity": {
             "type": "integer",
             "format": "int32"
+          },
+          "color": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -576,6 +603,10 @@
           "userId": {
             "type": "string",
             "format": "uuid"
+          },
+          "color": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

@@ -4,10 +4,11 @@ import type { ReactNode } from "react"
 import { ThemeProvider } from "@/context/theme-context"
 import { LanguageProvider } from "@/context/language-context"
 import { LanguageFontWrapper } from "@/components/language-font-wrapper"
-import { CartProvider } from "@/context/cart-context"
 import { WishlistProvider } from "@/context/wishlist-context"
+import { CartProvider } from "@/context/cart-context"
 import { AuthProvider } from "@/app/Context/auth-context"
 import AuthWrapper from "@/components/auth-wrapper"
+import { Toaster } from "@/components/ui/sonner"
 
 /** Font class names passed from root layout (server). */
 interface AppProvidersProps {
@@ -28,7 +29,10 @@ export function AppProviders({ children, geistClass = "", cairoClass = "" }: App
           <CartProvider>
             <WishlistProvider>
               <AuthProvider>
-                <AuthWrapper>{children}</AuthWrapper>
+                <AuthWrapper>
+                  {children}
+                  <Toaster richColors position="top-center" />
+                </AuthWrapper>
               </AuthProvider>
             </WishlistProvider>
           </CartProvider>

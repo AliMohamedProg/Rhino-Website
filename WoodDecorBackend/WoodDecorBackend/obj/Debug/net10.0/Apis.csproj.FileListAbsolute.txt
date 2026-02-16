@@ -173,10 +173,10 @@ C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\WoodDecorBacken
 C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\WoodDecorBackend\obj\Debug\net10.0\staticwebassets.development.json
 C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\WoodDecorBackend\obj\Debug\net10.0\staticwebassets.build.endpoints.json
 C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\WoodDecorBackend\obj\Debug\net10.0\swae.build.ex.cache
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\WoodDecorBackend\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
 C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\WoodDecorBackend\obj\Debug\net10.0\Apis.csproj.Up2Date
 C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\WoodDecorBackend\obj\Debug\net10.0\Apis.dll
 C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\WoodDecorBackend\obj\Debug\net10.0\refint\Apis.dll
 C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\WoodDecorBackend\obj\Debug\net10.0\Apis.pdb
 C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\WoodDecorBackend\obj\Debug\net10.0\Apis.genruntimeconfig.cache
 C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\WoodDecorBackend\obj\Debug\net10.0\ref\Apis.dll
+C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\WoodDecorBackend\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt

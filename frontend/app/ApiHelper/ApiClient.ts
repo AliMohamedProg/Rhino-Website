@@ -1,7 +1,7 @@
 // app/helpers/ApiClient.ts
 const BASE_URL = "https://localhost:7282/";
 
-async function request(method: "GET" | "POST", url: string, body?: any): Promise<any> {
+async function request(method: "GET" | "POST" | "PATCH" | "DELETE", url: string, body?: any): Promise<any> {
   const options: RequestInit = {
     method,
     headers: { "Content-Type": "application/json" },
@@ -40,4 +40,6 @@ async function request(method: "GET" | "POST", url: string, body?: any): Promise
 export const ApiClient = {
   get: (url: string) => request("GET", url),
   post: (url: string, body: any) => request("POST", url, body),
+  patch: (url: string, body: any) => request("PATCH", url, body),
+  delete: (url: string) => request("DELETE", url),
 };

@@ -1,3 +1,344 @@
+// "use client"
+
+// import { useEffect, useState } from "react"
+// import { useParams } from "next/navigation"
+// import Image from "next/image"
+// import { ShoppingCart, Heart, Star, ArrowLeft, ArrowRight, Share2, Check, X } from "lucide-react"
+
+// import { useLanguage } from "@/context/language-context"
+// import { useWishlist } from "@/context/wishlist-context"
+// import { Button } from "@/components/ui/button"
+// import {
+//   Tabs,
+//   TabsContent,
+//   TabsList,
+//   TabsTrigger,
+// } from "@/components/ui/tabs"
+// import { formatPrice } from "@/lib/products"
+// import { Header } from "@/components/layout/header"
+// import { Footer } from "@/components/layout/footer"
+
+// type Product = {
+//   id: string
+//   nameAr: string
+//   nameEn: string
+//   descriptionAr: string
+//   descriptionEn: string
+//   price: number
+//   discountAmount: number
+//   stockNumber: number
+//   colors: string
+//   overallRating: number
+//   images?: string[]
+// }
+
+// type Review = {
+//   id: string
+//   title: string
+//   date: string
+//   rating: number
+//   text: string
+//   userName: string
+// }
+
+// export default function ProductDetailsPage() {
+//   const { id } = useParams<{ id: string }>()
+//   const { language, t } = useLanguage()
+//   const { toggleItem, isInWishlist } = useWishlist()
+
+//   const [product, setProduct] = useState<Product | null>(null)
+//   const [loading, setLoading] = useState(true)
+//   const [quantity, setQuantity] = useState(1)
+//   const [selectedColor, setSelectedColor] = useState<string>("")
+//   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+//   const [isZoomed, setIsZoomed] = useState(false)
+//   const [showCopied, setShowCopied] = useState(false)
+
+//   const [reviews, setReviews] = useState<Review[]>([])
+//   const [currentReviewIndex, setCurrentReviewIndex] = useState(0)
+
+//   const [showReviewForm, setShowReviewForm] = useState(false)
+//   const [reviewText, setReviewText] = useState("")
+//   const [reviewTitle, setReviewTitle] = useState("")
+//   const [reviewRating, setReviewRating] = useState(5)
+
+//   // Fetch product
+//   useEffect(() => {
+//     const fetchProduct = async () => {
+//       try {
+//         const res = await fetch(`https://localhost:7282/api/Items/${id}`)
+//         const data = await res.json()
+//         setProduct(data)
+//         if (data.colors) {
+//           const colorsArray = data.colors.split(",").map((c: string) => c.trim())
+//           if (colorsArray.length > 0) {
+//             setSelectedColor(colorsArray[0]) // أول لون افتراضي
+//           }
+//         }
+//       } catch (err) {
+//         console.error(err)
+//       } finally {
+//         setLoading(false)
+//       }
+//     }
+
+//     fetchProduct()
+//   }, [id])
+
+//   // Dummy reviews
+//   useEffect(() => {
+//     setReviews([
+//       { id: "1", title: "Elegant Dining Set", date: "2026-02-07", rating: 5, text: "Great product! Exactly as described. Fast shipping and excellent packaging.", userName: "Ahmed M." },
+//       { id: "2", title: "Modern Chair", date: "2026-02-06", rating: 5, text: "Excellent quality and design. Very comfortable and sturdy.", userName: "Sarah K." },
+//       { id: "3", title: "Wooden Table", date: "2026-02-05", rating: 4, text: "Good, but a bit heavy. Otherwise perfect!", userName: "Omar R." },
+//       { id: "4", title: "Luxury Sofa", date: "2026-02-04", rating: 5, text: "Super comfy and stylish! Worth every penny.", userName: "Fatima H." },
+//     ])
+//   }, [])
+
+//   const handleShare = async () => {
+//     if (navigator.share) {
+//       try {
+//         await navigator.share({
+//           title: language === "ar" ? product?.nameAr : product?.nameEn,
+//           text: language === "ar" ? product?.descriptionAr : product?.descriptionEn,
+//           url: window.location.href,
+//         })
+//       } catch (err) {
+//         console.log("Share cancelled")
+//       }
+//     } else {
+//       navigator.clipboard.writeText(window.location.href)
+//       setShowCopied(true)
+//       setTimeout(() => setShowCopied(false), 2000)
+//     }
+//   }
+
+//   if (loading) {
+//     return (
+//       <div className="min-h-screen flex flex-col bg-background">
+//         <Header />
+//         <div className="flex-1 flex items-center justify-center">
+//           <div className="flex flex-col items-center gap-4">
+//             <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+//             <p className="text-lg text-muted-foreground">{language === "ar" ? "جاري التحميل..." : "Loading..."}</p>
+//           </div>
+//         </div>
+//         <Footer />
+//       </div>
+//     )
+//   }
+
+//   if (!product) {
+//     return (
+//       <div className="min-h-screen flex flex-col bg-background">
+//         <Header />
+//         <div className="flex-1 flex items-center justify-center">
+//           <div className="text-center">
+//             <h2 className="text-2xl font-bold text-foreground mb-2">{language === "ar" ? "المنتج غير موجود" : "Product Not Found"}</h2>
+//             <p className="text-muted-foreground">{language === "ar" ? "عذراً، لم نتمكن من العثور على هذا المنتج" : "Sorry, we couldn't find this product"}</p>
+//           </div>
+//         </div>
+//         <Footer />
+//       </div>
+//     )
+//   }
+
+//   const originalPrice = product.price + product.discountAmount
+//   const colorsArray = product.colors
+//     ? product.colors.split(",").map(c => c.trim())
+//     : []
+
+//   const increment = () => setQuantity(q => q + 1)
+//   const decrement = () => setQuantity(q => (q > 1 ? q - 1 : 1))
+//   const isInStock = product.stockNumber > 0
+
+//   const productImages = product.images && product.images.length > 0 ? product.images : ["/placeholder.svg"]
+
+//   return (
+//     <div className="min-h-screen flex flex-col bg-background">
+//       <Header />
+
+//       <section className="container mx-auto px-4 py-12">
+//         <div className="mb-6 text-sm text-muted-foreground">
+//           <span>{language === "ar" ? "الرئيسية" : "Home"}</span>
+//           <span className="mx-2">/</span>
+//           <span>{language === "ar" ? "المنتجات" : "Products"}</span>
+//           <span className="mx-2">/</span>
+//           <span className="text-gray-900">{language === "ar" ? product.nameAr : product.nameEn}</span>
+//         </div>
+
+//         <div className="grid md:grid-cols-2 gap-12">
+
+//           {/* Product Image Gallery */}
+//           <div className="space-y-4">
+//             <div
+//               className="relative h-[450px] bg-card rounded-xl shadow-md overflow-hidden flex items-center justify-center cursor-zoom-in"
+//               onClick={() => setIsZoomed(!isZoomed)}
+//             >
+//               <Image
+//                 src={productImages[selectedImageIndex]}
+//                 alt={language === "ar" ? product.nameAr : product.nameEn}
+//                 fill
+//                 className={`object-cover transition-transform duration-300 ${isZoomed ? "scale-150" : "scale-100"}`}
+//               />
+//               {product.discountAmount > 0 && (
+//                 <span className="absolute top-4 left-4 bg-red-500 text-white px-4 py-1.5 rounded-lg font-medium text-sm shadow-lg">
+//                   {language === "ar" ? `خصم ${product.discountAmount}` : `-${product.discountAmount}`}
+//                 </span>
+//               )}
+//               <div className={`absolute top-4 right-4 px-3 py-1.5 rounded-lg font-medium text-sm shadow-lg flex items-center gap-1.5 ${isInStock ? "bg-green-500 text-white" : "bg-red-500 text-white"}`}>
+//                 {isInStock ? <Check size={14} /> : <X size={14} />}
+//                 {isInStock ? (language === "ar" ? "متوفر" : "In Stock") : (language === "ar" ? "غير متوفر" : "Out of Stock")}
+//               </div>
+//             </div>
+
+//             {/* Thumbnail Gallery */}
+//             <div className="flex gap-3 overflow-x-auto pb-2">
+//               {productImages.map((img, index) => (
+//                 <button
+//                   key={index}
+//                   onClick={() => setSelectedImageIndex(index)}
+//                   className={`relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${selectedImageIndex === index ? "border-primary ring-2 ring-primary/30" : "border-gray-200 hover:border-gray-300"}`}
+//                 >
+//                   <Image
+//                     src={img}
+//                     alt={`${language === "ar" ? product.nameAr : product.nameEn} ${index + 1}`}
+//                     fill
+//                     className="object-cover"
+//                   />
+//                 </button>
+//               ))}
+//             </div>
+//           </div>
+
+//           {/* Product Info */}
+//           <div className="flex flex-col justify-between">
+//             <div>
+//               <h1 className="text-3xl md:text-4xl font-extrabold mb-4 text-gray-900">
+//                 {language === "ar" ? product.nameAr : product.nameEn}
+//               </h1>
+
+//               <div className="flex items-center mb-4 gap-3">
+//                 <Stars value={product.overallRating} />
+//                 <span className="text-foreground font-medium">{product.overallRating} / 5</span>
+//                 <span className="text-muted-foreground">·</span>
+//                 <span className="text-blue-600 hover:underline cursor-pointer">{reviews.length} {language === "ar" ? "تقييم" : "Reviews"}</span>
+//               </div>
+
+//               <div className="flex items-center gap-4 mb-6">
+//                 <span className="text-4xl font-bold text-foreground">{formatPrice(product.price)}</span>
+//                 {product.discountAmount > 0 && (
+//                   <span className="text-xl line-through text-gray-400">{formatPrice(originalPrice)}</span>
+//                 )}
+//               </div>
+
+//               {/* Colors */}
+//               {colorsArray.length > 0 && (
+//                 <div className="mb-6">
+//                   <span className="text-gray-500 block mb-2">{language === "ar" ? "الألوان المتاحة:" : "Available Colors:"}</span>
+//                   <div className="flex flex-wrap gap-2">
+//                     {colorsArray.map((color, index) => (
+//                       <button
+//                         key={index}
+//                         onClick={() => setSelectedColor(color)}
+//                         className={`px-4 py-2 border rounded-full text-sm font-medium transition-all ${selectedColor === color ? "border-primary bg-primary text-white" : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"}`}
+//                       >
+//                         {color}
+//                       </button>
+//                     ))}
+//                   </div>
+//                 </div>
+//               )}
+
+//               {/* Quantity */}
+//               <div className="flex items-center gap-3 mb-6">
+//                 <span className="text-gray-500">{language === "ar" ? "الكمية:" : "Quantity:"}</span>
+//                 <div className="flex items-center border rounded-lg">
+//                   <Button variant="ghost" onClick={decrement} className="px-4 h-10" disabled={quantity <= 1}>-</Button>
+//                   <span className="w-14 text-center font-semibold text-lg">{quantity}</span>
+//                   <Button variant="ghost" onClick={increment} className="px-4 h-10" disabled={quantity >= product.stockNumber}>+</Button>
+//                 </div>
+//               </div>
+
+//               {/* Add to Cart */}
+//               <div className="flex gap-3 mb-6">
+//                 <Button
+//                   className="flex-1 bg-red-600 hover:bg-red-700 text-white shadow-md flex items-center justify-center gap-2 h-12 text-lg"
+//                   onClick={async () => {
+//                     try {
+//                       console.log("Adding to cart - productId:", product.id, "quantity:", quantity)
+//                       const res = await fetch("https://localhost:7282/api/Cart/add-to-cart", {
+//                         method: "POST",
+//                         headers: { "Content-Type": "application/json" },
+//                         credentials: "include",
+//                         body: JSON.stringify({
+//                           productId: product.id,
+//                           quantity,
+//                           color: selectedColor || "Default"
+//                         })
+//                       })
+//                       console.log("Add to cart response status:", res.status)
+//                       if (res.ok) {
+//                         console.log("Item added successfully, redirecting to cart")
+//                         window.location.href = "/cart"
+//                       }
+//                       else if (res.status === 401) window.location.href = "/login"
+//                       else console.error("Failed to add to cart:", await res.text())
+//                     } catch (error) {
+//                       console.error("Failed to add to cart:", error)
+//                     }
+//                   }}
+//                   disabled={!isInStock}
+//                 >
+//                   <ShoppingCart size={22} />
+//                   {t("products.addToCart")}
+//                 </Button>
+
+//                 <Button
+//                   variant="outline"
+//                   className="flex items-center justify-center h-12 px-4"
+//                   onClick={() =>
+//                     toggleItem({
+//                       id: product.id,
+//                       name: { ar: product.nameAr, en: product.nameEn },
+//                       price: product.price,
+//                       originalPrice,
+//                       image: "/placeholder.svg",
+//                     })
+//                   }
+//                 >
+//                   <Heart size={22} className={isInWishlist(product.id) ? "fill-red-500 text-red-500" : ""} />
+//                 </Button>
+
+//                 <Button
+//                   variant="outline"
+//                   className="flex items-center justify-center h-12 px-4"
+//                   onClick={handleShare}
+//                 >
+//                   {showCopied ? <Check size={22} className="text-green-500" /> : <Share2 size={22} />}
+//                 </Button>
+//               </div>
+
+//             </div>
+//           </div>
+//         </div>
+//       </section>
+
+//       <Footer />
+//     </div>
+//   )
+// }
+
+// // Stars Component
+// function Stars({ value }: { value: number }) {
+//   return (
+//     <div className="flex gap-0.5">
+//       {[1, 2, 3, 4, 5].map(i => (
+//         <Star key={i} size={18} className={i <= value ? "fill-yellow-400 text-yellow-400" : "text-gray-300"} />
+//       ))}
+//     </div>
+//   )
+// }
 "use client"
 
 import { useEffect, useState } from "react"
@@ -163,7 +504,7 @@ export default function ProductDetailsPage() {
 
   const submitReview = () => {
     if (!reviewText.trim() || !reviewTitle.trim()) return
-    
+
     const newReview: Review = {
       id: (reviews.length + 1).toString(),
       title: reviewTitle,
@@ -208,7 +549,7 @@ export default function ProductDetailsPage() {
           {/* Product Image Gallery */}
           <div className="space-y-4">
             {/* Main Image */}
-            <div 
+            <div
               className="relative h-[450px] bg-card rounded-xl shadow-md overflow-hidden flex items-center justify-center cursor-zoom-in"
               onClick={() => setIsZoomed(!isZoomed)}
             >
@@ -236,9 +577,8 @@ export default function ProductDetailsPage() {
                 <button
                   key={index}
                   onClick={() => setSelectedImageIndex(index)}
-                  className={`relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${
-                    selectedImageIndex === index ? "border-primary ring-2 ring-primary/30" : "border-gray-200 hover:border-gray-300"
-                  }`}
+                  className={`relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${selectedImageIndex === index ? "border-primary ring-2 ring-primary/30" : "border-gray-200 hover:border-gray-300"
+                    }`}
                 >
                   <Image
                     src={img}
@@ -297,11 +637,10 @@ export default function ProductDetailsPage() {
                       <button
                         key={index}
                         onClick={() => setSelectedColor(color)}
-                        className={`px-4 py-2 border rounded-full text-sm font-medium transition-all ${
-                          selectedColor === color 
-                            ? "border-primary bg-primary text-white" 
+                        className={`px-4 py-2 border rounded-full text-sm font-medium transition-all ${selectedColor === color
+                            ? "border-primary bg-primary text-white"
                             : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
-                        }`}
+                          }`}
                       >
                         {color}
                       </button>
@@ -314,8 +653,8 @@ export default function ProductDetailsPage() {
               <div className="flex items-center gap-3 mb-6">
                 <span className="text-gray-500">{language === "ar" ? "الكمية:" : "Quantity:"}</span>
                 <div className="flex items-center border rounded-lg">
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     onClick={decrement}
                     className="px-4 h-10"
                     disabled={quantity <= 1}
@@ -323,8 +662,8 @@ export default function ProductDetailsPage() {
                     -
                   </Button>
                   <span className="w-14 text-center font-semibold text-lg">{quantity}</span>
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     onClick={increment}
                     className="px-4 h-10"
                     disabled={quantity >= product.stockNumber}
@@ -336,17 +675,31 @@ export default function ProductDetailsPage() {
 
               {/* Add to Cart & Wishlist */}
               <div className="flex gap-3 mb-6">
-                <Button
-                  className="flex-1 bg-red-600 hover:bg-red-700 text-white shadow-md flex items-center justify-center gap-2 h-12 text-lg"
-                  onClick={() =>
-                    addItem({
-                      id: product.id,
-                      name: { ar: product.nameAr, en: product.nameEn },
-                      price: product.price,
-                      originalPrice,
-                      image: "/placeholder.svg",
-                    })
-                  }
+                <Button className="flex-1 bg-red-600 hover:bg-red-700 text-white shadow-md flex items-center justify-center gap-2 h-12 text-lg"
+                  onClick={async () => {
+                    try {
+                      console.log("Adding to cart - productId:", product.id, "quantity:", quantity)
+                      const res = await fetch("https://localhost:7282/api/Cart/add-to-cart", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        credentials: "include",
+                        body: JSON.stringify({
+                          productId: product.id,
+                          quantity,
+                          color: selectedColor || "Default"
+                        })
+                      })
+                      console.log("Add to cart response status:", res.status)
+                      if (res.ok) {
+                        console.log("Item added successfully, redirecting to cart")
+                        window.location.href = "/cart"
+                      }
+                      else if (res.status === 401) window.location.href = "/login"
+                      else console.error("Failed to add to cart:", await res.text())
+                    } catch (error) {
+                      console.error("Failed to add to cart:", error)
+                    }
+                  }}
                   disabled={!isInStock}
                 >
                   <ShoppingCart size={22} />
@@ -389,19 +742,19 @@ export default function ProductDetailsPage() {
             {/* Tabs */}
             <Tabs defaultValue="description" className="w-full mt-4">
               <TabsList className="w-full justify-start border-b rounded-none mb-4 h-auto p-0 bg-transparent">
-                <TabsTrigger 
+                <TabsTrigger
                   value="description"
                   className="rounded-t-lg border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-2"
                 >
                   {t("products.description")}
                 </TabsTrigger>
-                <TabsTrigger 
+                <TabsTrigger
                   value="specification"
                   className="rounded-t-lg border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-2"
                 >
                   {language === "ar" ? "المواصفات" : "Specification"}
                 </TabsTrigger>
-                <TabsTrigger 
+                <TabsTrigger
                   value="reviews"
                   className="rounded-t-lg border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-2"
                 >
@@ -448,8 +801,8 @@ export default function ProductDetailsPage() {
                 <div className="space-y-4">
 
                   {/* Add Review */}
-                  <Button 
-                    className="w-full mb-4 bg-blue-600 hover:bg-blue-700" 
+                  <Button
+                    className="w-full mb-4 bg-blue-600 hover:bg-blue-700"
                     onClick={() => setShowReviewForm(prev => !prev)}
                   >
                     {language === "ar" ? "إضافة تقييم" : "Add Review"}
@@ -470,7 +823,7 @@ export default function ProductDetailsPage() {
                       <div className="flex items-center gap-2">
                         <span>{language === "ar" ? "التقييم:" : "Rating:"}</span>
                         <div className="flex gap-1">
-                          {[1,2,3,4,5].map(i => (
+                          {[1, 2, 3, 4, 5].map(i => (
                             <button key={i} onClick={() => setReviewRating(i)}>
                               <Star size={24} className={i <= reviewRating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"} />
                             </button>
@@ -498,8 +851,8 @@ export default function ProductDetailsPage() {
                   {reviews.length > 0 && (
                     <div className="relative bg-white rounded-xl p-6 shadow-sm border border-gray-100">
                       <div className="overflow-hidden">
-                        <div 
-                          className="flex transition-transform duration-300" 
+                        <div
+                          className="flex transition-transform duration-300"
                           style={{ transform: `translateX(-${currentReviewIndex * 100}%)` }}
                         >
                           {reviews.map(r => (
@@ -522,14 +875,14 @@ export default function ProductDetailsPage() {
                       {/* Arrows */}
                       {reviews.length > 1 && (
                         <>
-                          <button 
+                          <button
                             onClick={prevReview}
                             disabled={currentReviewIndex === 0}
                             className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white shadow-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             <ArrowLeft size={20} />
                           </button>
-                          <button 
+                          <button
                             onClick={nextReview}
                             disabled={currentReviewIndex === reviews.length - 1}
                             className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white shadow-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -545,9 +898,8 @@ export default function ProductDetailsPage() {
                           <button
                             key={index}
                             onClick={() => setCurrentReviewIndex(index)}
-                            className={`w-2 h-2 rounded-full transition-all ${
-                              currentReviewIndex === index ? "bg-primary w-4" : "bg-gray-300"
-                            }`}
+                            className={`w-2 h-2 rounded-full transition-all ${currentReviewIndex === index ? "bg-primary w-4" : "bg-gray-300"
+                              }`}
                           />
                         ))}
                       </div>
@@ -572,11 +924,11 @@ export default function ProductDetailsPage() {
 function Stars({ value }: { value: number }) {
   return (
     <div className="flex gap-0.5">
-      {[1,2,3,4,5].map(i => (
-        <Star 
-          key={i} 
-          size={18} 
-          className={i <= value ? "fill-yellow-400 text-yellow-400" : "text-gray-300"} 
+      {[1, 2, 3, 4, 5].map(i => (
+        <Star
+          key={i}
+          size={18}
+          className={i <= value ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}
         />
       ))}
     </div>

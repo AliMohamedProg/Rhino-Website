@@ -11,9 +11,10 @@ namespace Bl.DTOs
         public string NameEn { get; set; }
         public string Image { get; set; }
         public decimal Price { get; set; }
-        public int Quantity { get; set; }
+        public int Quantity { get; set; } = 1;
         public decimal Total { get; set; }
         public Guid UserId { get; set; }
+        public string Color { get; set; }
 
     }
 }

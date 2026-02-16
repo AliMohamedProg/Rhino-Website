@@ -7,7 +7,6 @@ import Image from "next/image"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { useLanguage } from "@/context/language-context"
-import { useCart } from "@/context/cart-context"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Slider } from "@/components/ui/slider"
@@ -39,7 +38,6 @@ export default function CategoryPage() {
   const categoryId = params.slug as string
 
   const { language } = useLanguage()
-  const { addItem } = useCart()
 
   const [products, setProducts] = useState<Item[]>([])
   const [categories, setCategories] = useState<Category[]>([])
@@ -196,14 +194,24 @@ export default function CategoryPage() {
                       </div>
 
                       <Button
-                        onClick={(e) => {
+                        onClick={async (e) => {
                           e.preventDefault()
-                          addItem({
-                            id: product.id,
-                            name: language === "ar" ? product.nameAr : product.nameEn,
-                            price: product.price,
-                            image: product.image || "/placeholder.png"
-                          })
+                          try {
+                            const res = await fetch("https://localhost:7282/api/Cart/add-to-cart", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              credentials: "include",
+                              body: JSON.stringify({ productId: product.id, quantity: 1 })
+                            })
+                            
+                            if (res.ok) {
+                              window.location.href = "/cart"
+                            } else if (res.status === 401) {
+                              window.location.href = "/login"
+                            }
+                          } catch (error) {
+                            console.error("Failed to add to cart:", error)
+                          }
                         }}
                         className="w-full"
                       >

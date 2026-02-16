@@ -7,7 +7,6 @@ import Image from "next/image"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { useLanguage } from "@/context/language-context"
-import { useCart } from "@/context/cart-context"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Slider } from "@/components/ui/slider"
@@ -56,7 +55,6 @@ export default function CategoryPage() {
   const categoryId = params.slug as string
 
   const { language } = useLanguage()
-  const { addItem } = useCart()
 
   const [products, setProducts] = useState<Item[]>([])
   const [categories, setCategories] = useState<Category[]>([])
@@ -205,13 +203,13 @@ export default function CategoryPage() {
             <div className="flex-1">
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredProducts.map(product => {
-                const hasDiscount = product.discountAmount > 0
+                  const hasDiscount = product.discountAmount > 0
 
-                const discountPercent = product.discountAmount
+                  const discountPercent = product.discountAmount
 
-                const finalPrice = hasDiscount
-                ? Math.round(product.price * (1 - product.discountAmount / 100))
-                : product.price
+                  const finalPrice = hasDiscount
+                    ? Math.round(product.price * (1 - product.discountAmount / 100))
+                    : product.price
 
                   return (
                     <Link key={product.id} href={`/product/${product.id}`} className="block border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
@@ -231,8 +229,8 @@ export default function CategoryPage() {
 
                         {/* Stock Badge - Below discount */}
                         <span className={`absolute bottom-2 left-2 px-2 py-1 text-xs rounded font-medium ${product.stockNumber > 0 ? "bg-green-500 text-white" : "bg-gray-500 text-white"}`}>
-                          {product.stockNumber > 0 
-                            ? (language === "ar" ? "متاح" : "In Stock") 
+                          {product.stockNumber > 0
+                            ? (language === "ar" ? "متاح" : "In Stock")
                             : (language === "ar" ? "غير متاح" : "Out of Stock")
                           }
                         </span>
@@ -258,14 +256,31 @@ export default function CategoryPage() {
 
                         <Button
                           className="w-full"
-                          onClick={(e) => {
+                          onClick={async (e) => {
                             e.preventDefault()
-                            addItem({
-                              id: product.id,
-                              name: language === "ar" ? product.nameAr : product.nameEn,
-                              price: finalPrice,
-                              image: product.image || "/placeholder.png"
-                            })
+                            try {
+                              const checkRes = await fetch(`https://localhost:7282/api/cart/items/${product.id}`, {
+                                credentials: "include"
+                              })
+                              if (checkRes.ok) {
+                                console.log("Item already in cart:", await checkRes.json())
+                              }
+
+                              const res = await fetch("https://localhost:7282/api/Cart/add-to-cart", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                credentials: "include",
+                                body: JSON.stringify({ productId: product.id, quantity: 1 })
+                              })
+
+                              if (res.ok) {
+                                window.location.href = "/cart"
+                              } else if (res.status === 401) {
+                                window.location.href = "/login"
+                              }
+                            } catch (error) {
+                              console.error("Failed to add to cart:", error)
+                            }
                           }}
                         >
                           <ShoppingCart size={16} className="mr-2" />

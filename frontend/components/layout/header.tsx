@@ -18,8 +18,9 @@ import {
 
 import { useLanguage } from "@/context/language-context"
 import { useTheme } from "@/context/theme-context"
-import { useCart } from "@/context/cart-context"
 import { useAuth } from "@/app/Context/auth-context"
+
+import { useCart } from "@/context/cart-context"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -46,8 +47,8 @@ interface Category {
 export function Header() {
   const { language, setLanguage, t, dir } = useLanguage()
   const { theme, toggleTheme } = useTheme()
-  const { itemCount } = useCart()
   const { user, loading } = useAuth()
+  const { itemCount } = useCart()
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
@@ -184,7 +185,7 @@ export function Header() {
                     <Button variant="ghost" size="icon" className="relative">
                       <ShoppingCart size={22} />
                       {itemCount > 0 && (
-                        <span className="absolute -top-1 -end-1 w-5 h-5 bg-accent text-xs rounded-full flex items-center justify-center text-white">
+                        <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs text-white">
                           {itemCount}
                         </span>
                       )}

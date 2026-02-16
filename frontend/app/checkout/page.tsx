@@ -10,7 +10,6 @@ import { CreditCard, Truck } from "lucide-react"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { useLanguage } from "@/context/language-context"
-import { useCart } from "@/context/cart-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -18,7 +17,6 @@ import { formatPrice } from "@/lib/products"
 
 export default function CheckoutPage() {
   const { language, t } = useLanguage()
-  const { items, total, clearCart } = useCart()
   const router = useRouter()
   const [paymentMethod, setPaymentMethod] = useState<"cod" | "card">("cod")
   const [isSubmitting, setIsSubmitting] = useState(false)

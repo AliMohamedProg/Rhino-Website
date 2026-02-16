@@ -6,48 +6,62 @@ using DAL.Contracts;
 using Domains;
 using Microsoft.EntityFrameworkCore;
 
-public class CartService : BaseService<TbCart, CartDto> , ICart
+public class CartService : BaseService<TbCart, CartDto>, ICart
 {
     ICartRepository _cartRepository;
-    public CartService(ITableRepository<TbCart> _repository, IMapper _Mapper, IUserService userService , ICartRepository cartRepository)
+    public CartService(ITableRepository<TbCart> _repository, IMapper _Mapper, IUserService userService, ICartRepository cartRepository)
             : base(_repository, _Mapper, userService)
     {
         _cartRepository = cartRepository;
     }
 
-    public async Task<bool> AddToCart(Guid userId, Guid productId, int quantity)
+    public async Task<bool> AddToCart(Guid userId, Guid productId, int quantity, string color)
     {
-        try
-        {
-            var existingItem = await _cartRepository.GetCartItem(userId, productId);
+        var cart = await _cartRepository.GetActiveCartWithItemsAsync(userId);
 
-            if (existingItem != null)
-            {
-                existingItem.Quantity += quantity;
-                existingItem.Total = existingItem.Price * existingItem.Quantity;
-                await _cartRepository.UpdateCartItem(existingItem);
-            }
-            else
-            {
-                var cartItem = new TbCartItem
-                {
-                    Id = Guid.NewGuid(),
-                    UserId = userId,
-                    ItemId = productId,
-                    Quantity = quantity,
-                    CurrentState = 1,
-                    CreatedBy = userId,
-                    CreatedDate = DateTime.UtcNow
-                };
-                await _cartRepository.AddCartItem(cartItem);
-            }
-            return true;
-        }
-        catch
+        if (cart == null)
         {
-            return false;
+            // لو مفيش كارت، اعمل واحد جديد
+            cart = new TbCart
+            {
+                Id = Guid.NewGuid(),
+                UserId = userId,
+                CurrentState = 1,
+                Items = new List<TbCartItem>()
+            };
+            await _cartRepository.AddCart(cart);
         }
+
+        var existingItem = cart.Items.FirstOrDefault(i => i.ItemId == productId && i.Color == color);
+
+        if (existingItem != null)
+        {
+            existingItem.Quantity += quantity;
+            existingItem.Total = existingItem.Price * existingItem.Quantity;
+            await _cartRepository.UpdateCartItem(existingItem);
+        }
+        else
+        {
+            var newItem = new TbCartItem
+            {
+                Id = Guid.NewGuid(),
+                ItemId = productId,
+                Quantity = quantity,
+                Color = color,
+                Cart = cart, // 🔑 ربط العنصر بالكارت
+                Price = await _cartRepository.GetProductPrice(productId),
+                Total = await _cartRepository.GetProductPrice(productId) * quantity,
+                UserId = userId,
+                CreatedBy = userId,
+                CurrentState =1,
+            };
+            cart.Items.Add(newItem);
+            await _cartRepository.AddCartItem(newItem);
+        }
+
+        return true;
     }
+                        
 
     public async Task<CartItemDto?> GetCartItem(Guid userId, Guid productId)
     {
@@ -63,7 +77,8 @@ public class CartService : BaseService<TbCart, CartDto> , ICart
             Price = item.Price,
             Quantity = item.Quantity,
             Total = item.Total,
-            UserId = item.UserId
+            UserId = item.UserId,
+            Color = item.Color
         };
     }
 
@@ -93,10 +108,12 @@ public class CartService : BaseService<TbCart, CartDto> , ICart
         {
             ItemId = i.ItemId,
             NameEn = i.Item.NameEn,
+            NameAr = i.Item.NameAr,
             Image = i.Item.MainImage,
             Price = i.Total,
             Quantity = i.Quantity,
-            Total = i.Total * i.Quantity
+            Total = i.Total * i.Quantity,
+            Color = i.Color
         }).ToList();
 
         return new CartDto
@@ -107,5 +124,30 @@ public class CartService : BaseService<TbCart, CartDto> , ICart
         };
     }
 
+    public async Task<bool> DeleteCart(Guid userId)
+    {
+        try
+        {
+            return await _cartRepository.DeleteCart(userId);
+        }
+        catch
+        {
+            return false;
+
+        }
+    }
+    public async Task<bool> DeleteCartItem(Guid userId, Guid itemId)
+    {
+        try
+        {
+            await _cartRepository.DeleteCartItem(userId, itemId);
+            return true;
+        }
+        catch
+        {
+            return false;
+
+        }
+    }
 
 }

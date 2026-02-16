@@ -13,15 +13,15 @@ import { useAuth } from "../Context/auth-context"
 import { useEffect, useState } from "react"
 
 const menuItems = [
-  { key: "profile.orders", icon: Package, href: "/profile/orders" },
-  { key: "profile.settings", icon: Settings, href: "/settings" },
+  { key: "profile.orders", icon: Package },
+  { key: "profile.settings", icon: Settings },
 ]
 
 export default function ProfilePage() {
   const { language, setLanguage, t } = useLanguage()
   const { theme, toggleTheme } = useTheme()
   const { user, logout } = useAuth()
-  
+
   const [activeTab, setActiveTab] = useState("profile.orders")
   const [orderCount, setOrderCount] = useState(0)
   const [wishlistCount, setWishlistCount] = useState(0)
@@ -45,14 +45,14 @@ export default function ProfilePage() {
             <div className="bg-card rounded-xl shadow-md p-6 border border-border">
               {/* Avatar Section */}
               <div className="flex flex-col items-center text-center mb-6">
-                <div className="relative w-24 h-24 mb-4">
+                {/* <div className="relative w-24 h-24 mb-4">
                   <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-3xl font-bold">
                     {user?.userName ? user.userName.charAt(0).toUpperCase() : "G"}
                   </div>
                   <button className="absolute bottom-0 right-0 bg-primary text-white p-1.5 rounded-full shadow-md hover:bg-primary/90 transition-colors">
                     <Settings size={14} />
                   </button>
-                </div>
+                </div> */}
                 <h2 className="text-xl font-semibold text-foreground">{user?.userName || "Guest User"}</h2>
                 <p className="text-sm text-muted-foreground">{user?.email || "guest@example.com"}</p>
                 <div className="flex items-center gap-2 mt-2">
@@ -77,19 +77,17 @@ export default function ProfilePage() {
               {/* Navigation Menu */}
               <nav className="space-y-1">
                 {menuItems.map((item) => (
-                  <Link
+                  <button
                     key={item.key}
-                    href={item.href}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg w-full text-left transition-colors ${
-                      activeTab === item.key 
-                        ? "bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-100 font-medium" 
-                        : "text-foreground hover:bg-muted"
-                    }`}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg w-full text-left transition-colors ${activeTab === item.key
+                      ? "bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-100 font-medium"
+                      : "text-foreground hover:bg-muted"
+                      }`}
                     onClick={() => setActiveTab(item.key)}
                   >
                     <item.icon size={20} className={activeTab === item.key ? "text-blue-600 dark:text-blue-300" : "text-muted-foreground"} />
                     <span>{t(item.key) || (language === "ar" ? getArabicLabel(item.key) : item.key)}</span>
-                  </Link>
+                  </button>
                 ))}
                 <button
                   onClick={async () => {
@@ -170,7 +168,7 @@ export default function ProfilePage() {
                     </Button>
                     <Button
                       variant={language === "ar" ? "default" : "outline"}
-                      onClick={() => setLanguage("ar")} 
+                      onClick={() => setLanguage("ar")}
                       className={`flex-1 py-6 text-lg ${language === "ar" ? "bg-blue-600 text-white" : ""}`}
                     >
                       🇪🇬 العربية

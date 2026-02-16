@@ -94,20 +94,20 @@
   {
     "ContainingType": "Apis.Controllers.CartController",
     "Method": "AddCartItem",
-    "RelativePath": "api/Cart/item",
+    "RelativePath": "api/Cart/add-to-cart",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Apis.Controllers.AddCartItemRequest",
+        "Type": "Apis.Models.AddCartItemRequest",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Boolean",
+        "Type": "Bl.DTOs.CartDto",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -119,8 +119,24 @@
   },
   {
     "ContainingType": "Apis.Controllers.CartController",
+    "Method": "RemoveCartItem",
+    "RelativePath": "api/Cart/item/delete/{productId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "productId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Apis.Controllers.CartController",
     "Method": "GetCartItem",
-    "RelativePath": "api/Cart/item/{productId}",
+    "RelativePath": "api/Cart/items/{productId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -146,8 +162,8 @@
   {
     "ContainingType": "Apis.Controllers.CartController",
     "Method": "UpdateCartItem",
-    "RelativePath": "api/Cart/item/{productId}",
-    "HttpMethod": "PUT",
+    "RelativePath": "api/Cart/items/{productId}",
+    "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -158,13 +174,13 @@
       },
       {
         "Name": "request",
-        "Type": "Apis.Controllers.UpdateCartItemRequest",
+        "Type": "Apis.Models.UpdateCartItemRequest",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Boolean",
+        "Type": "Bl.DTOs.CartDto",
         "MediaTypes": [
           "text/plain",
           "application/json",
