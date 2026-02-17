@@ -61,7 +61,7 @@ export default function CategoryPage() {
   const [loading, setLoading] = useState(true)
 
   const [hideOutOfStock, setHideOutOfStock] = useState(false)
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 50000])
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 500000])
   const [sortBy, setSortBy] = useState("featured")
 
   const [availabilityOpen, setAvailabilityOpen] = useState(true)
@@ -165,10 +165,14 @@ export default function CategoryPage() {
                   <CollapsibleContent className="py-2">
                     <Slider
                       value={priceRange}
-                      onValueChange={setPriceRange}
-                      max={50000}
+                      onValueChange={(v) => setPriceRange(v as [number, number])}
+                      max={500000}
                       step={500}
                     />
+                    <div className="flex justify-between mt-2 text-sm text-muted-foreground">
+                      <span>{formatPrice(priceRange[0])}</span>
+                      <span>{formatPrice(priceRange[1])}</span>
+                    </div>
                   </CollapsibleContent>
                 </Collapsible>
 
