@@ -7,12 +7,35 @@ import { ThemeProvider } from "@/context/theme-context"
 import { AdminSidebar } from "@/components/admin/admin-sidebar"
 import { AdminHeader } from "@/components/admin/admin-header"
 import { cn } from "@/lib/utils"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
+import { useAuth } from "@/app/Context/auth-context"
+import { useRouter } from "next/navigation"
+import Loading from "@/app/loading"
 
 function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const { dir } = useAdminLanguage()
+  const { user, loading } = useAuth()
+  const router = useRouter()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  useEffect(() => {
+    if (!loading) {
+      if (!user) {
+        router.push("/login")
+      } else if (user.role?.toLowerCase() !== "admin") {
+        router.push("/access-denied")
+      }
+    }
+  }, [user, loading, router])
+
+  if (loading) {
+    return <Loading />
+  }
+
+  if (!user || user.role?.toLowerCase() !== "admin") {
+    return null
+  }
 
   return (
     <div className="min-h-screen bg-background" dir={dir}>

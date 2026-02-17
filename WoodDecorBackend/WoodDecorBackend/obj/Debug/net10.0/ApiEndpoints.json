@@ -1,5 +1,25 @@
 [
   {
+    "ContainingType": "Apis.Areas.Admin.Controllers.CategoriesController",
+    "Method": "Get",
+    "RelativePath": "api/admin/Categories",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[Bl.DTOs.CategoryDto, Bl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "Apis.Controllers.AuthController",
     "Method": "Login",
     "RelativePath": "api/auth/login",

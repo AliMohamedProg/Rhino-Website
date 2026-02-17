@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { ApiClient } from "@/app/ApiHelper/ApiClient"
 import { useAdminLanguage } from "@/context/admin-language-context"
 import { cn } from "@/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
@@ -47,11 +48,33 @@ import { Plus, MoreHorizontal, Pencil, Trash2 } from "lucide-react"
 
 export default function CategoriesPage() {
   const { t, language, dir } = useAdminLanguage()
-  const [categories, setCategories] = useState(mockCategories)
+  const [categories, setCategories] = useState<Category[]>([])
+  const [loading, setLoading] = useState(true)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [editingCategory, setEditingCategory] = useState<Category | null>(null)
   const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null)
+
+  const fetchCategories = async () => {
+    try {
+      setLoading(true)
+
+      // Debug: Fetch 'me' endpoint to see current user permissions
+      const me = await ApiClient.get("api/auth/me")
+      console.log("Current Auth State:", me)
+
+      const data = await ApiClient.get("api/admin/Categories")
+      setCategories(data)
+    } catch (err) {
+      console.error("Failed to fetch categories:", err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchCategories()
+  }, [])
 
 
 
@@ -80,7 +103,7 @@ export default function CategoriesPage() {
         </div>
       ),
     },
- 
+
     {
       key: "products",
       header: t("categories.products"),
@@ -160,12 +183,18 @@ export default function CategoriesPage() {
       {/* Categories Table */}
       <Card>
         <CardContent className="pt-6">
-          <DataTable
-            data={categories}
-            columns={columns}
-            searchPlaceholder={language === "ar" ? "البحث عن فئة..." : "Search categories..."}
-            searchKey="nameEn"
-          />
+          {loading ? (
+            <div className="flex justify-center items-center h-48 text-muted-foreground animate-pulse">
+              {language === "ar" ? "جاري التحميل..." : "Loading categories..."}
+            </div>
+          ) : (
+            <DataTable
+              data={categories}
+              columns={columns}
+              searchPlaceholder={language === "ar" ? "البحث عن فئة..." : "Search categories..."}
+              searchKey="nameEn"
+            />
+          )}
         </CardContent>
       </Card>
 
@@ -182,8 +211,8 @@ export default function CategoriesPage() {
                   ? "تعديل بيانات الفئة"
                   : "Edit category details"
                 : language === "ar"
-                ? "إضافة فئة جديدة"
-                : "Add a new category to the store"}
+                  ? "إضافة فئة جديدة"
+                  : "Add a new category to the store"}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">

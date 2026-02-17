@@ -109,6 +109,7 @@ export default function RegisterPage() {
         })
 
         const data = await res.json()
+        window.location.href = "/login"
 
         if (!res.ok) {
           const errorMsg = data.errors

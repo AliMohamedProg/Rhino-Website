@@ -50,7 +50,6 @@ namespace Apis.Controllers
                 return Unauthorized("Invalid credentials");
             }
 
-
             var userData = await GetClims(request.Email);
             var claims = userData.Item1;
             UserDto user = userData.Item2;
@@ -104,32 +103,30 @@ namespace Apis.Controllers
             Response.Cookies.Delete("RefreshToken", cookieOptions);
 
             return Ok(new { Message = "Logged out successfully" });
-
-            return Ok(new { Message = "Logged out successfully" });
         }
 
         //[Authorize]
         [HttpGet("me")]
         public async Task<IActionResult> Me()
         {
-            // Get the username (Name claim)
-            var userName = User.Identity.Name;
-
-            // Get the user ID (NameIdentifier claim)
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            // Get the user role
-            var IsUser = User.IsInRole("User");
-
-            // Check if the user is authenticated
-            if (User.Identity.IsAuthenticated)
-            {
-                return Ok(new { UserId = userId, UserName = userName, IsAuthenticated = true, IsUser });
-            }
-            else
+            if (!User.Identity.IsAuthenticated)
             {
                 return Unauthorized();
             }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var email = User.FindFirstValue(ClaimTypes.Name);
+            var role = User.FindFirstValue(ClaimTypes.Role);
+
+            return Ok(new
+            {
+                UserId = userId,
+                UserName = email,
+                Email = email,
+                IsAuthenticated = true,
+                Role = role,
+                IsAdmin = string.Equals(role, "Admin", StringComparison.OrdinalIgnoreCase)
+            });
         }
 
 
@@ -208,7 +205,7 @@ namespace Apis.Controllers
             var claims = new[] {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Email),
-                new Claim(ClaimTypes.Role, "User")
+                new Claim(ClaimTypes.Role, user.Role ?? "User")
             };
 
             return (claims, user);
@@ -221,7 +218,7 @@ namespace Apis.Controllers
             var claims = new[] {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Email),
-                new Claim(ClaimTypes.Role, "User")
+                new Claim(ClaimTypes.Role, user.Role ?? "User")
             };
 
             return claims;

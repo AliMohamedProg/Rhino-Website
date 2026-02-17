@@ -1,13 +1,14 @@
 "use client"
 
 import { createContext, useContext, useEffect, useState } from "react"
-import {ApiClient} from "@/app/ApiHelper/ApiClient"
+import { ApiClient } from "@/app/ApiHelper/ApiClient"
 
 type User = {
   id: string
-  email: string
   userName: string
+  email: string
   role?: string
+  isAdmin?: boolean
 }
 
 type AuthContextType = {
@@ -26,7 +27,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const fetchUser = async () => {
     try {
       const data = await ApiClient.get("api/auth/me")
-      setUser(data)
+      // Map backend response to user object
+      // Falling back to "Admin" role if the email matches the seed admin
+      const isAdminEmail = data.userName === "admin@gmail.com" || data.email === "admin@gmail.com";
+
+      setUser({
+        id: data.userId,
+        userName: data.userName,
+        email: data.email || data.userName,
+        role: data.role || (isAdminEmail ? "Admin" : "User"),
+        isAdmin: data.isAdmin || isAdminEmail
+      })
     } catch {
       setUser(null)
     } finally {
@@ -38,10 +49,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     fetchUser()
   }, [])
 
-const logout = async () => {
-  await ApiClient.post("api/auth/logout", {})
-  setUser(null)
-}
+  const logout = async () => {
+    await ApiClient.post("api/auth/logout", {})
+    setUser(null)
+  }
   return (
     <AuthContext.Provider
       value={{
