@@ -14,6 +14,7 @@ import {
   Moon,
   Sun,
   ChevronDown,
+  LayoutDashboard,
 } from "lucide-react"
 
 import { useLanguage } from "@/context/language-context"
@@ -197,6 +198,18 @@ export function Header() {
                       <User size={22} />
                     </Button>
                   </Link>
+
+                  {user.isAdmin && (
+                    <Link href="/admin">
+                      <Button variant="outline" size="sm" className="hidden lg:flex items-center gap-2">
+                        <LayoutDashboard size={18} />
+                        {language === "ar" ? "لوحة التحكم" : "Admin Panel"}
+                      </Button>
+                      <Button variant="ghost" size="icon" className="lg:hidden">
+                        <LayoutDashboard size={22} />
+                      </Button>
+                    </Link>
+                  )}
                 </>
               )}
 

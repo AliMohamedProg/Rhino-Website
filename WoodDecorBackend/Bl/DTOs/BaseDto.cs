@@ -10,6 +10,7 @@ namespace Bl.DTOs
     {
         public Guid Id { get; set; }
         public int CurrentState { get; set; }
+        public DateTime? CreatedDate { get; set; }
 
     }
 }

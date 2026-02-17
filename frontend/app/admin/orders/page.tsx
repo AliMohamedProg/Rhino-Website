@@ -114,7 +114,7 @@ export default function OrdersPage() {
       header: t("orders.date"),
       render: (order: Order) => (
         <span className="text-muted-foreground">
-          {new Date(order.createdAt).toLocaleDateString(
+          {new Date(order.createdDate).toLocaleDateString(
             language === "ar" ? "ar-EG" : "en-US"
           )}
         </span>

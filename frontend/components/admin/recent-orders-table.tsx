@@ -133,7 +133,7 @@ export function RecentOrdersTable({ orders, className }: RecentOrdersTableProps)
                     {getStatusBadge(order.status)}
                   </td>
                   <td className={cn("px-4 py-3 text-muted-foreground", dir === "rtl" ? "text-right" : "text-left")}>
-                    {new Date(order.createdAt).toLocaleDateString(language === "ar" ? "ar-EG" : "en-US")}
+                    {new Date(order.createdDate).toLocaleDateString(language === "ar" ? "ar-EG" : "en-US")}
                   </td>
                 </tr>
               ))}

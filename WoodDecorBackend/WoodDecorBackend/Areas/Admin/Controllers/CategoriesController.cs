@@ -1,5 +1,6 @@
 ﻿using Bl.DTOs;
 using BusinessLayer.Contracts;
+using Domains;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,5 +26,58 @@ namespace Apis.Areas.Admin.Controllers
             return categories;
         }
 
+        [HttpPost("add-category")]
+        public async Task<bool> Add(CategoryDto categoryDto)
+        {
+            try
+            {
+                var category = new CategoryDto()
+                {
+                    NameAr = categoryDto.NameAr,
+                    NameEn = categoryDto.NameEn,
+                    ImageUrl = categoryDto.ImageUrl,
+                    CurrentState =1,
+                    Id = Guid.NewGuid(),
+
+                };
+                _categoryService.Add(category);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        [HttpPost("edit-category")]
+        public async Task<bool> Edit(CategoryDto categoryDto)
+        {
+            try
+            {
+                _categoryService.Update(categoryDto);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        [HttpPost("delete-category/{categoryId}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid categoryId)
+        {
+            try
+            {
+                var result = _categoryService.MarkAsDeleted(categoryId, 0); // Soft delete
+                if (result)
+                    return Ok(new { success = true, message = "Category deleted successfully" });
+                
+                return NotFound(new { success = false, message = "Category not found in database" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, error = ex.Message });
+            }
+        }
     }
 }

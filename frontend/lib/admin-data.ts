@@ -16,7 +16,7 @@ export interface Product {
   onSale: boolean
   images: string[]
   sku: string
-  createdAt: string
+  createdDate: string
   updatedAt: string
 }
 
@@ -49,7 +49,7 @@ export interface Order {
     country: string
     postalCode: string
   }
-  createdAt: string
+  createdDate: string
   updatedAt: string
 }
 
@@ -75,10 +75,10 @@ export interface Category {
   descriptionEn?: string
   descriptionAr?: string
   parentId?: string
-  image?: string
+  imageUrl?: string
   productsCount: number
   status: "active" | "inactive"
-  createdAt: string
+  createdDate: string
 }
 
 export interface DashboardStats {
@@ -116,7 +116,7 @@ export const mockProducts: Product[] = [
     onSale: true,
     images: ["/l-shaped-sofa-living-room.jpg"],
     sku: "SOF-001",
-    createdAt: "2025-01-15",
+    createdDate: "2025-01-15",
     updatedAt: "2025-01-28",
   },
   {
@@ -135,7 +135,7 @@ export const mockProducts: Product[] = [
     onSale: true,
     images: ["/modern-bedroom-furniture-set-front-view.jpg"],
     sku: "BED-001",
-    createdAt: "2025-01-10",
+    createdDate: "2025-01-10",
     updatedAt: "2025-01-25",
   },
   {
@@ -153,7 +153,7 @@ export const mockProducts: Product[] = [
     onSale: false,
     images: ["/modern-home-office-desk-wood.jpg"],
     sku: "DSK-001",
-    createdAt: "2025-01-08",
+    createdDate: "2025-01-08",
     updatedAt: "2025-01-20",
   },
   {
@@ -172,7 +172,7 @@ export const mockProducts: Product[] = [
     onSale: true,
     images: ["/kids-bedroom-furniture.jpg"],
     sku: "KID-001",
-    createdAt: "2025-01-05",
+    createdDate: "2025-01-05",
     updatedAt: "2025-01-22",
   },
   {
@@ -190,7 +190,7 @@ export const mockProducts: Product[] = [
     onSale: false,
     images: ["/modern-bedroom-wardrobe.jpg"],
     sku: "WRD-001",
-    createdAt: "2025-01-03",
+    createdDate: "2025-01-03",
     updatedAt: "2025-01-18",
   },
   {
@@ -209,7 +209,7 @@ export const mockProducts: Product[] = [
     onSale: true,
     images: ["/l-shaped-corner-sofa-gray-modern.jpg"],
     sku: "SOF-002",
-    createdAt: "2025-01-01",
+    createdDate: "2025-01-01",
     updatedAt: "2025-01-15",
   },
 ]
@@ -243,7 +243,7 @@ export const mockOrders: Order[] = [
       country: "Egypt",
       postalCode: "11511",
     },
-    createdAt: "2025-01-28",
+    createdDate: "2025-01-28",
     updatedAt: "2025-01-29",
   },
   {
@@ -272,7 +272,7 @@ export const mockOrders: Order[] = [
       country: "Egypt",
       postalCode: "21599",
     },
-    createdAt: "2025-01-27",
+    createdDate: "2025-01-27",
     updatedAt: "2025-01-28",
   },
   {
@@ -301,7 +301,7 @@ export const mockOrders: Order[] = [
       country: "Egypt",
       postalCode: "12655",
     },
-    createdAt: "2025-01-26",
+    createdDate: "2025-01-26",
     updatedAt: "2025-01-27",
   },
   {
@@ -330,7 +330,7 @@ export const mockOrders: Order[] = [
       country: "Egypt",
       postalCode: "11519",
     },
-    createdAt: "2025-01-25",
+    createdDate: "2025-01-25",
     updatedAt: "2025-01-25",
   },
   {
@@ -359,7 +359,7 @@ export const mockOrders: Order[] = [
       country: "Egypt",
       postalCode: "11728",
     },
-    createdAt: "2025-01-24",
+    createdDate: "2025-01-24",
     updatedAt: "2025-01-26",
   },
 ]
@@ -443,7 +443,7 @@ export const adminUsers: User[] = [
 // Mock Categories
 export const mockCategories: Category[] = [
   {
-    id: "1",
+    id: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
     nameEn: "Living Room",
     nameAr: "غرفة المعيشة",
     slug: "living-room",
@@ -451,10 +451,11 @@ export const mockCategories: Category[] = [
     descriptionAr: "كنب وكراسي وأثاث غرفة المعيشة",
     productsCount: 45,
     status: "active",
-    createdAt: "2024-01-01",
+    imageUrl: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=2670&auto=format&fit=crop",
+    createdDate: "2024-01-01",
   },
   {
-    id: "2",
+    id: "550e8400-e29b-41d4-a716-446655440000",
     nameEn: "Bedroom",
     nameAr: "غرفة النوم",
     slug: "bedroom",
@@ -462,10 +463,11 @@ export const mockCategories: Category[] = [
     descriptionAr: "أسرة وخزائن وأثاث غرفة النوم",
     productsCount: 38,
     status: "active",
-    createdAt: "2024-01-01",
+    imageUrl: "https://images.unsplash.com/photo-1505691938895-1758d7eaa511?q=80&w=2670&auto=format&fit=crop",
+    createdDate: "2024-01-01",
   },
   {
-    id: "3",
+    id: "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
     nameEn: "Office",
     nameAr: "المكتب",
     slug: "office",
@@ -473,7 +475,8 @@ export const mockCategories: Category[] = [
     descriptionAr: "مكاتب وكراسي وأثاث المكتب",
     productsCount: 25,
     status: "active",
-    createdAt: "2024-01-01",
+    imageUrl: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2670&auto=format&fit=crop",
+    createdDate: "2024-01-01",
   },
   {
     id: "4",
@@ -484,7 +487,7 @@ export const mockCategories: Category[] = [
     descriptionAr: "أثاث غرف نوم الأطفال وغرف اللعب",
     productsCount: 20,
     status: "active",
-    createdAt: "2024-01-15",
+    createdDate: "2024-01-15",
   },
   {
     id: "5",
@@ -495,7 +498,7 @@ export const mockCategories: Category[] = [
     descriptionAr: "طاولات طعام وكراسي وأطقم سفرة",
     productsCount: 15,
     status: "active",
-    createdAt: "2024-02-01",
+    createdDate: "2024-02-01",
   },
   {
     id: "6",
@@ -506,7 +509,7 @@ export const mockCategories: Category[] = [
     descriptionAr: "أثاث الحدائق والأماكن الخارجية",
     productsCount: 12,
     status: "inactive",
-    createdAt: "2024-03-01",
+    createdDate: "2024-03-01",
   },
 ]
 

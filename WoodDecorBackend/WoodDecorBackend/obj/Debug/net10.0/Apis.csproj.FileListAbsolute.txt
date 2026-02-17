@@ -180,3 +180,4 @@ C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\WoodDecorBacken
 C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\WoodDecorBackend\obj\Debug\net10.0\Apis.genruntimeconfig.cache
 C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\WoodDecorBackend\obj\Debug\net10.0\ref\Apis.dll
 C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\WoodDecorBackend\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
+C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\WoodDecorBackend\bin\Debug\net10.0\Apis.staticwebassets.runtime.json

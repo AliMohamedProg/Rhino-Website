@@ -45,6 +45,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Plus, MoreHorizontal, Pencil, Trash2 } from "lucide-react"
+import { ar } from "date-fns/locale"
 
 export default function CategoriesPage() {
   const { t, language, dir } = useAdminLanguage()
@@ -54,6 +55,64 @@ export default function CategoriesPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [editingCategory, setEditingCategory] = useState<Category | null>(null)
   const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null)
+  const [formData, setFormData] = useState({
+    nameEn: "",
+    nameAr: "",
+    imageUrl: "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop",
+  })
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+
+  useEffect(() => {
+    if (editingCategory) {
+      setFormData({
+        nameEn: editingCategory.nameEn,
+        nameAr: editingCategory.nameAr,
+        imageUrl: editingCategory.imageUrl || "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop",
+      })
+    } else if (dialogOpen) {
+      setFormData({
+        nameEn: "",
+        nameAr: "",
+        imageUrl: "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop",
+      })
+      setSelectedFile(null)
+    }
+  }, [editingCategory, dialogOpen])
+
+  const handleSave = async () => {
+    try {
+      setLoading(true)
+
+      let finalImageUrl = formData.imageUrl
+      if (selectedFile) {
+        const uploadRes = await ApiClient.upload("api/upload", selectedFile)
+        finalImageUrl = uploadRes.url
+      }
+
+      if (editingCategory) {
+        await ApiClient.post("api/admin/Categories/edit-category", {
+          id: editingCategory.id,
+          nameEn: formData.nameEn,
+          nameAr: formData.nameAr,
+          imageUrl: finalImageUrl,
+          currentState: 1,
+        })
+      } else {
+        await ApiClient.post("api/admin/Categories/add-category", {
+          nameEn: formData.nameEn,
+          nameAr: formData.nameAr,
+          imageUrl: finalImageUrl,
+          currentState: 1,
+        })
+      }
+      setDialogOpen(false)
+      fetchCategories()
+    } catch (err) {
+      console.error("Failed to save category:", err)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const fetchCategories = async () => {
     try {
@@ -83,27 +142,83 @@ export default function CategoriesPage() {
     setDeleteDialogOpen(true)
   }
 
-  const confirmDelete = () => {
-    if (categoryToDelete) {
-      setCategories(categories.filter((c) => c.id !== categoryToDelete.id))
+  const confirmDelete = async () => {
+    if (!categoryToDelete) {
+      console.warn("[Page] confirmDelete called but categoryToDelete is null")
+      return
+    }
+
+    // Loud debug for the user
+    alert(`Starting delete for: ${categoryToDelete.nameEn}\nID: ${categoryToDelete.id}`)
+
+    console.log("[Page] confirmDelete triggered for:", categoryToDelete)
+
+    try {
+      setLoading(true)
+      const url = `api/admin/Categories/delete-category/${categoryToDelete.id}`
+      console.log(`[Page] Calling POST ${url}`)
+
+      const response = await ApiClient.post(url, {})
+      console.log("[Page] Delete successful, response:", response)
+
       setDeleteDialogOpen(false)
       setCategoryToDelete(null)
+      alert(language === "ar" ? "تم الحذف بنجاح" : "Deleted successfully")
+
+      // Refresh the list from server
+      await fetchCategories()
+    } catch (err: any) {
+      console.error("[Page] Critical: Delete API failed", err)
+      const errorMsg = err.message || JSON.stringify(err)
+      alert((language === "ar" ? "فشل الحذف: " : "Delete failed: ") + errorMsg)
+    } finally {
+      setLoading(false)
     }
   }
 
   const columns = [
     {
+      key: "image",
+      header: language === "ar" ? "الصورة" : "Image",
+      render: (category: Category) => (
+        <div className="h-12 w-12 rounded-md overflow-hidden bg-muted flex items-center justify-center">
+          {category.imageUrl ? (
+            <img
+              src={category.imageUrl}
+              alt={category.nameEn}
+              className="h-full w-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop"
+              }}
+            />
+          ) : (
+            <div className="text-[10px] text-muted-foreground">No Img</div>
+          )}
+        </div>
+      ),
+    },
+    {
       key: "name",
-      header: t("categories.categoryName"),
+      header: language === "ar" ? "الاسم الفئة بالانجليزي" : "CategoryName in english",
       render: (category: Category) => (
         <div className={cn(dir === "rtl" && "text-right")}>
           <p className="font-medium">
-            {language === "ar" ? category.nameAr : category.nameEn}
+            {category.nameEn}
           </p>
         </div>
       ),
     },
-
+    {
+      key: "name",
+      header: language === "ar" ? "الاسم الفئة بالعربية" : "CategoryName in arabic",
+      render: (category: Category) => (
+        <div className={cn(dir === "rtl" && "text-right")}>
+          <p className="font-medium">
+            {category.nameAr}
+          </p>
+        </div>
+      ),
+    },
     {
       key: "products",
       header: t("categories.products"),
@@ -112,11 +227,11 @@ export default function CategoriesPage() {
       ),
     },
     {
-      key: "createdAt",
+      key: "createdDate",
       header: language === "ar" ? "تاريخ الإنشاء" : "Created",
       render: (category: Category) => (
         <span className="text-muted-foreground">
-          {new Date(category.createdAt).toLocaleDateString(
+          {new Date(category.createdDate).toLocaleDateString(
             language === "ar" ? "ar-EG" : "en-US"
           )}
         </span>
@@ -219,21 +334,71 @@ export default function CategoriesPage() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="nameEn">{t("categories.categoryNameEn")}</Label>
-                <Input id="nameEn" defaultValue={editingCategory?.nameEn || ""} />
+                <Input
+                  id="nameEn"
+                  value={formData.nameEn}
+                  onChange={(e) => setFormData({ ...formData, nameEn: e.target.value })}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="nameAr">{t("categories.categoryNameAr")}</Label>
-                <Input id="nameAr" defaultValue={editingCategory?.nameAr || ""} dir="rtl" />
+                <Input
+                  id="nameAr"
+                  value={formData.nameAr}
+                  onChange={(e) => setFormData({ ...formData, nameAr: e.target.value })}
+                  dir="rtl"
+                />
               </div>
             </div>
-
-
+            <div className="space-y-2">
+              <Label htmlFor="image">{language === "ar" ? "صورة الفئة" : "Category Image"}</Label>
+              <Input
+                id="image"
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (file) setSelectedFile(file)
+                }}
+              />
+              {selectedFile ? (
+                <div className="mt-2 h-24 w-24 rounded-md overflow-hidden border bg-muted">
+                  <img
+                    src={URL.createObjectURL(selectedFile)}
+                    alt="Preview"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              ) : formData.imageUrl && (
+                <div className="mt-2 h-24 w-24 rounded-md overflow-hidden border bg-muted">
+                  <img
+                    src={formData.imageUrl}
+                    alt="Current"
+                    className="h-full w-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop"
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="imageUrl">{language === "ar" ? "أو رابط الصورة" : "Or Image URL"}</Label>
+              <Input
+                id="imageUrl"
+                placeholder="https://..."
+                value={formData.imageUrl}
+                onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+              />
+            </div>
           </div>
           <DialogFooter className={cn(dir === "rtl" && "flex-row-reverse")}>
             <Button variant="outline" onClick={() => setDialogOpen(false)}>
               {t("common.cancel")}
             </Button>
-            <Button onClick={() => setDialogOpen(false)}>{t("common.save")}</Button>
+            <Button onClick={handleSave} disabled={loading}>
+              {loading ? (language === "ar" ? "جاري الحفظ..." : "Saving...") : t("common.save")}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

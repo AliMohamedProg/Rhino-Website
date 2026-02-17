@@ -130,6 +130,16 @@ builder.Services.AddSingleton<TokenService>();
 
 builder.Host.UseSerilog();
 
+// Set WebRootPath if it's not set automatically
+if (string.IsNullOrEmpty(builder.Environment.WebRootPath))
+{
+    builder.Environment.WebRootPath = Path.Combine(builder.Environment.ContentRootPath, "wwwroot");
+}
+if (!Directory.Exists(builder.Environment.WebRootPath))
+{
+    Directory.CreateDirectory(builder.Environment.WebRootPath);
+}
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -139,7 +149,20 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
 app.UseCors("AllowFrontend");
+app.UseStaticFiles(); // Serve files from wwwroot
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "wwwroot", "uploads")),
+    RequestPath = "/uploads",
+    OnPrepareResponse = ctx =>
+    {
+        ctx.Context.Response.Headers.Append("Access-Control-Allow-Origin", "*");
+        ctx.Context.Response.Headers.Append("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    }
+});
 app.UseAuthentication();
 app.UseAuthorization();
 

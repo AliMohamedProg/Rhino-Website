@@ -89,7 +89,7 @@ export default function OrderDetailPage() {
               {getStatusBadge(status)}
             </div>
             <p className="text-muted-foreground">
-              {new Date(order.createdAt).toLocaleDateString(
+              {new Date(order.createdDate).toLocaleDateString(
                 language === "ar" ? "ar-EG" : "en-US",
                 { dateStyle: "full" }
               )}

@@ -14,7 +14,10 @@ namespace Bl.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<TbCategory, CategoryDto>().ReverseMap();
+                CreateMap<TbCategory, CategoryDto>().ForMember(dest => dest.ProductsCount,
+               opt => opt.MapFrom(src => src.TbItems.Count()))
+
+                .ReverseMap();
             CreateMap<TbImage, ImageDto>().ReverseMap();
             CreateMap<TbItem,ItemDto>().ReverseMap();
             CreateMap<TbOrder, OrderDto>().ReverseMap();

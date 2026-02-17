@@ -23,7 +23,7 @@ namespace BusinessLayer.Services
             Mapper = _Mapper;
             this.userService = userService;
         }
-        public List<Dto> GetAll()
+        public virtual List<Dto> GetAll()
         {
             var list = repository.GetAll();
             return Mapper.Map<List<T>, List<Dto>>(list);

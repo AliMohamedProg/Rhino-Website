@@ -27,7 +27,7 @@ namespace DAL.Repositories
             _logger = logger;
         }
 
-        public List<T> GetAll()
+        public virtual List<T> GetAll()
         {
             try
             {
@@ -161,9 +161,9 @@ namespace DAL.Repositories
             try
             {
                 var entity = GetById(id);
-                _dbSet.Attach(entity);
                 if (entity != null)
                 {
+                    _dbSet.Attach(entity);
                     entity.CurrentState = status;
                     _context.SaveChanges();
                     return true;

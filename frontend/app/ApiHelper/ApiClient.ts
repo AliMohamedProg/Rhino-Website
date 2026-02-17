@@ -2,6 +2,7 @@
 const BASE_URL = "https://localhost:7282/";
 
 async function request(method: "GET" | "POST" | "PATCH" | "DELETE", url: string, body?: any): Promise<any> {
+  console.log(`[ApiClient] Request: ${method} ${BASE_URL}${url}`, body || "")
   const options: RequestInit = {
     method,
     headers: { "Content-Type": "application/json" },
@@ -34,7 +35,8 @@ async function request(method: "GET" | "POST" | "PATCH" | "DELETE", url: string,
     throw new Error(`API Error ${res.status}: ${text}`);
   }
 
-  return res.json();
+  const text = await res.text();
+  return text ? JSON.parse(text) : null;
 }
 
 export const ApiClient = {
@@ -42,4 +44,16 @@ export const ApiClient = {
   post: (url: string, body: any) => request("POST", url, body),
   patch: (url: string, body: any) => request("PATCH", url, body),
   delete: (url: string) => request("DELETE", url),
+  upload: async (url: string, file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    const options: RequestInit = {
+      method: "POST",
+      body: formData,
+      credentials: "include",
+    };
+    const res = await fetch(BASE_URL + url, options);
+    if (!res.ok) throw new Error(`Upload failed: ${res.statusText}`);
+    return res.json();
+  },
 };
