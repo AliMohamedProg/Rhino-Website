@@ -8,6 +8,7 @@ export interface Product {
   descriptionAr: string
   price: number
   originalPrice?: number
+  discountAmount?: number
   stock: number
   category: string
   categoryId: string
@@ -15,6 +16,8 @@ export interface Product {
   featured: boolean
   onSale: boolean
   images: string[]
+  mainImage?: string
+  colors?: string
   sku: string
   createdDate: string
   updatedAt: string

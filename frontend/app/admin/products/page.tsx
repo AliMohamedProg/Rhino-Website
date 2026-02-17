@@ -1,14 +1,15 @@
 "use client"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { useAdminLanguage } from "@/context/admin-language-context"
 import { cn } from "@/lib/utils"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { DataTable } from "@/components/admin/data-table"
-import { mockProducts, type Product } from "@/lib/admin-data"
+import type { Product } from "@/lib/admin-data"
+import { ApiClient } from "@/app/ApiHelper/ApiClient"
+import { mapAdminItemToProduct, type AdminCategoryDto, type AdminItemDto } from "@/lib/admin-items"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,21 +32,54 @@ import Link from "next/link"
 
 export default function ProductsPage() {
   const { t, language, dir } = useAdminLanguage()
-  const router = useRouter()
-  const [products, setProducts] = useState(mockProducts)
+  const [products, setProducts] = useState<Product[]>([])
+  const [categories, setCategories] = useState<AdminCategoryDto[]>([])
+  const [loading, setLoading] = useState(true)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [productToDelete, setProductToDelete] = useState<Product | null>(null)
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true)
+      const [items, categories] = await Promise.all([
+        ApiClient.get("api/admin/Item"),
+        ApiClient.get("api/admin/Categories"),
+      ])
+
+      const mapped = (items as AdminItemDto[]).map((item) =>
+        mapAdminItemToProduct(item, categories as AdminCategoryDto[])
+      )
+      setCategories(categories as AdminCategoryDto[])
+      setProducts(mapped)
+    } catch (err) {
+      console.error("Failed to fetch products:", err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchProducts()
+  }, [])
 
   const handleDelete = (product: Product) => {
     setProductToDelete(product)
     setDeleteDialogOpen(true)
   }
 
-  const confirmDelete = () => {
-    if (productToDelete) {
-      setProducts(products.filter((p) => p.id !== productToDelete.id))
+  const confirmDelete = async () => {
+    if (!productToDelete) return
+
+    try {
+      setLoading(true)
+      await ApiClient.post(`api/admin/Item/delete-item/${productToDelete.id}`, {})
       setDeleteDialogOpen(false)
       setProductToDelete(null)
+      await fetchProducts()
+    } catch (err) {
+      console.error("Failed to delete product:", err)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -75,7 +109,7 @@ export default function ProductsPage() {
         <div className={cn("flex items-center gap-3", dir === "rtl" && "flex-row-reverse")}>
           <div className="relative h-12 w-12 overflow-hidden rounded-lg bg-muted shrink-0">
             <Image
-              src={product.images[0] || "/placeholder.jpg"}
+              src={product.mainImage || product.images[0] || "/placeholder.jpg"}
               alt={language === "ar" ? product.nameAr : product.nameEn}
               fill
               className="object-cover"
@@ -85,7 +119,12 @@ export default function ProductsPage() {
             <p className="font-medium">
               {language === "ar" ? product.nameAr : product.nameEn}
             </p>
-            <p className="text-sm text-muted-foreground">{product.sku}</p>
+            {product.colors && product.colors.trim().length > 0 && (
+              <p className="text-sm text-muted-foreground">
+                {language === "ar" ? "الألوان: " : "Colors: "}
+                {product.colors}
+              </p>
+            )}
           </div>
         </div>
       ),
@@ -94,14 +133,9 @@ export default function ProductsPage() {
       key: "category",
       header: t("products.category"),
       render: (product: Product) => {
-        const categoryMap: Record<string, { en: string; ar: string }> = {
-          "Living Room": { en: "Living Room", ar: "غرفة المعيشة" },
-          Bedroom: { en: "Bedroom", ar: "غرفة النوم" },
-          Office: { en: "Office", ar: "مكتب" },
-          Kids: { en: "Kids", ar: "أطفال" },
-        }
-        const cat = categoryMap[product.category]
-        return <span className="text-muted-foreground">{language === "ar" ? (cat ? cat.ar : product.category) : product.category}</span>
+        const category = categories.find((cat) => cat.id === product.categoryId)
+        const label = language === "ar" ? category?.nameAr : category?.nameEn
+        return <span className="text-muted-foreground">{label || product.category}</span>
       },
     },
     {
@@ -203,12 +237,18 @@ export default function ProductsPage() {
       {/* Products Table */}
       <Card>
         <CardContent className="pt-6">
-          <DataTable
-            data={products}
-            columns={columns}
-            searchPlaceholder={language === "ar" ? "البحث عن منتج..." : "Search products..."}
-            searchKey="nameEn"
-          />
+          {loading ? (
+            <div className="flex justify-center items-center h-48 text-muted-foreground animate-pulse">
+              {language === "ar" ? "جاري التحميل..." : "Loading products..."}
+            </div>
+          ) : (
+            <DataTable
+              data={products}
+              columns={columns}
+              searchPlaceholder={language === "ar" ? "البحث عن منتج..." : "Search products..."}
+              searchKey="nameEn"
+            />
+          )}
         </CardContent>
       </Card>
 

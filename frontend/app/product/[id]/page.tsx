@@ -372,6 +372,7 @@ type Product = {
   colors: string
   overallRating: number
   images?: string[]
+  mainImage?: string
 }
 
 type Review = {
@@ -411,9 +412,36 @@ export default function ProductDetailsPage() {
       try {
         const res = await fetch(`https://localhost:7282/api/Items/${id}`)
         const data = await res.json()
-        setProduct(data)
-        if (data.colors) {
-          const colorsArray = data.colors.split(",").map((c: string) => c.trim())
+        const colorsValue = data.colors ?? data.Colors ?? ""
+        const rawImages = data.images ?? data.Images ?? []
+        const price = Number(data.price ?? data.Price ?? 0)
+        const discountAmount = Number(data.discountAmount ?? data.DiscountAmount ?? 0)
+        const stockNumber = Number(data.stockNumber ?? data.StockNumber ?? 0)
+        const normalizedImages = Array.isArray(rawImages)
+          ? rawImages
+              .map((img: any) => {
+                if (typeof img === "string") return img
+                return img?.imageUrl || img?.ImageUrl || ""
+              })
+              .filter((img: string) => img.length > 0)
+          : []
+        const mainImage = data.mainImage ?? data.MainImage ?? ""
+        const images = [mainImage, ...normalizedImages].filter((img) => img && img.length > 0)
+        const uniqueImages = Array.from(new Set(images))
+
+        const normalizedProduct = {
+          ...data,
+          colors: colorsValue,
+          images: uniqueImages,
+          mainImage,
+          price: Number.isFinite(price) ? price : 0,
+          discountAmount: Number.isFinite(discountAmount) ? discountAmount : 0,
+          stockNumber: Number.isFinite(stockNumber) ? stockNumber : 0,
+        }
+
+        setProduct(normalizedProduct)
+        if (colorsValue) {
+          const colorsArray = colorsValue.split(",").map((c: string) => c.trim())
           if (colorsArray.length > 0) {
             setSelectedColor(colorsArray[0])
           }
@@ -491,16 +519,14 @@ export default function ProductDetailsPage() {
     ? product.colors.split(",").map(c => c.trim())
     : []
 
-  // Demo images for gallery
-  const productImages = [
-    "/placeholder.svg",
-    "/placeholder.svg",
-    "/placeholder.svg",
-    "/placeholder.svg",
-  ]
+  const productImages =
+    product.images && product.images.length > 0
+      ? product.images
+      : [product.mainImage || "/placeholder.svg"]
 
-  const increment = () => setQuantity(q => q + 1)
-  const decrement = () => setQuantity(q => (q > 1 ? q - 1 : 1))
+  const maxQty = product.stockNumber > 0 ? product.stockNumber : Number.MAX_SAFE_INTEGER
+  const increment = () => setQuantity(q => Math.min(q + 1, maxQty))
+  const decrement = () => setQuantity(q => Math.max(1, q - 1))
 
   const submitReview = () => {
     if (!reviewText.trim() || !reviewTitle.trim()) return
@@ -655,7 +681,11 @@ export default function ProductDetailsPage() {
                 <div className="flex items-center border rounded-lg">
                   <Button
                     variant="ghost"
-                    onClick={decrement}
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      decrement()
+                    }}
                     className="px-4 h-10"
                     disabled={quantity <= 1}
                   >
@@ -664,9 +694,13 @@ export default function ProductDetailsPage() {
                   <span className="w-14 text-center font-semibold text-lg">{quantity}</span>
                   <Button
                     variant="ghost"
-                    onClick={increment}
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      increment()
+                    }}
                     className="px-4 h-10"
-                    disabled={quantity >= product.stockNumber}
+                    disabled={product.stockNumber > 0 && quantity >= product.stockNumber}
                   >
                     +
                   </Button>

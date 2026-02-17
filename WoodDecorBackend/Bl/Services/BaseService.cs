@@ -14,9 +14,9 @@ namespace BusinessLayer.Services
 {
     public class BaseService<T, Dto> : IBaseService<T, Dto> where T : BaseTable
     {
-        private readonly ITableRepository<T> repository;
-        private readonly IMapper Mapper;
-        private readonly IUserService userService;
+        protected readonly ITableRepository<T> repository;
+        protected readonly IMapper Mapper;
+        protected readonly IUserService userService;
         public BaseService(ITableRepository<T> _repository, IMapper _Mapper, IUserService userService)
         {
             repository = _repository;

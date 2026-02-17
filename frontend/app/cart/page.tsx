@@ -7,6 +7,7 @@ import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { useLanguage } from "@/context/language-context"
 import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
 import { formatPrice } from "@/lib/products"
 import { useEffect, useState } from "react"
 
@@ -33,6 +34,44 @@ export default function CartPage() {
   const [cart, setCart] = useState<Cart | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [stockByItemId, setStockByItemId] = useState<Record<string, number>>({})
+
+  const normalizeCart = (data: any): Cart => {
+    const rawItems = data?.items ?? data?.Items ?? []
+    const items: CartItem[] = (rawItems as any[]).map((item) => ({
+      id: item.id ?? item.Id ?? "",
+      itemId: item.itemId ?? item.ItemId ?? item.productId ?? item.ProductId ?? "",
+      nameEn: item.nameEn ?? item.NameEn ?? "",
+      nameAr: item.nameAr ?? item.NameAr ?? "",
+      image: item.image ?? item.Image ?? "",
+      price: Number(item.price ?? item.Price ?? 0),
+      quantity: Number(item.quantity ?? item.Quantity ?? 1),
+      total: Number(item.total ?? item.Total ?? 0),
+      color: item.color ?? item.Color ?? "",
+    }))
+
+    return {
+      id: data?.id ?? data?.Id ?? "",
+      items,
+      cartTotal: Number(data?.cartTotal ?? data?.CartTotal ?? 0),
+    }
+  }
+
+  const toNumber = (value: unknown) => {
+    if (typeof value === "number") return Number.isFinite(value) ? value : 0
+    if (typeof value === "string") {
+      const cleaned = value.replace(/,/g, "")
+      const parsed = Number(cleaned)
+      return Number.isFinite(parsed) ? parsed : 0
+    }
+    return 0
+  }
+
+  const formatMoney = (amount: number) => {
+    const numeric = toNumber(amount)
+    const value = Math.round(numeric)
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  }
 
   // ====== Fetch Cart ======
   const fetchCart = async () => {
@@ -55,7 +94,31 @@ export default function CartPage() {
 
       const data = await res.json()
       console.log("Cart API response data:", data)
-      setCart(data)
+      const normalized = normalizeCart(data)
+      setCart(normalized)
+      if (normalized.items.length > 0) {
+        const stocks = await Promise.all(
+          normalized.items.map(async (item) => {
+            if (!item.itemId) return null
+            try {
+              const res = await fetch(`https://localhost:7282/api/Items/${item.itemId}`)
+              if (!res.ok) return null
+              const itemData = await res.json()
+              const stock = Number(itemData.stockNumber ?? itemData.StockNumber ?? 0)
+              return { id: item.itemId, stock: Number.isFinite(stock) ? stock : 0 }
+            } catch {
+              return null
+            }
+          })
+        )
+        setStockByItemId((prev) => {
+          const next = { ...prev }
+          stocks.forEach((entry) => {
+            if (entry) next[entry.id] = entry.stock
+          })
+          return next
+        })
+      }
       setError(null)
     } catch (err) {
       console.error("Failed to fetch cart:", err)
@@ -80,7 +143,8 @@ export default function CartPage() {
       })
       if (res.ok) {
         const updatedCart = await res.json()
-        setCart(updatedCart)
+        const normalized = normalizeCart(updatedCart)
+        setCart(normalized)
       }
     } catch (err) {
       console.error("Failed to add item:", err)
@@ -90,6 +154,10 @@ export default function CartPage() {
   // ====== Update Quantity ======
   const updateQuantity = async (productId: string, quantity: number) => {
     console.log("updateQuantity called with:", productId, quantity)
+    if (!productId) {
+      console.warn("updateQuantity aborted: missing productId")
+      return
+    }
     if (quantity < 1) return removeItem(productId)
 
     try {
@@ -126,8 +194,14 @@ export default function CartPage() {
   }
 
   const items = cart?.items || []
-  const total = cart?.cartTotal || 0
-  const shipping = total >= 1000 ? 0 : 50
+  const subtotal = items.reduce((sum, item) => {
+    const lineTotal = toNumber(item.total)
+    const price = toNumber(item.price)
+    const qty = toNumber(item.quantity)
+    const computed = lineTotal > 0 ? lineTotal : price * qty
+    return sum + computed
+  }, 0)
+  const shipping = subtotal >= 1000 ? 0 : 50
 
   if (loading) {
     return (
@@ -218,6 +292,7 @@ export default function CartPage() {
                       <div className="flex items-center justify-between mt-3">
                         <div className="flex items-center border border-border rounded-lg">
                           <button
+                            type="button"
                             onClick={() => updateQuantity(item.itemId, item.quantity - 1)}
                             className="w-8 h-8 flex items-center justify-center hover:bg-secondary transition-colors"
                           >
@@ -225,8 +300,21 @@ export default function CartPage() {
                           </button>
                           <span className="w-10 text-center text-sm font-medium">{item.quantity}</span>
                           <button
-                            onClick={() => updateQuantity(item.itemId, item.quantity + 1)}
+                            type="button"
+                            onClick={() => {
+                              const maxStock = stockByItemId[item.itemId]
+                              if (maxStock && item.quantity >= maxStock) {
+                                toast.error(
+                                  language === "ar"
+                                    ? "لقد وصلت للحد الأقصى للمخزون"
+                                    : "You reached the maximum available stock"
+                                )
+                                return
+                              }
+                              updateQuantity(item.itemId, item.quantity + 1)
+                            }}
                             className="w-8 h-8 flex items-center justify-center hover:bg-secondary transition-colors"
+                            disabled={!!stockByItemId[item.itemId] && item.quantity >= stockByItemId[item.itemId]}
                           >
                             <Plus size={14} />
                           </button>
@@ -250,7 +338,7 @@ export default function CartPage() {
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">{t("cart.subtotal")}</span>
                       <span className="font-medium text-foreground">
-                        {formatPrice(total)} {t("products.price")}
+                        {formatMoney(subtotal)} {t("products.price")}
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -260,13 +348,13 @@ export default function CartPage() {
                           ? language === "ar"
                             ? "مجاني"
                             : "Free"
-                          : `${formatPrice(shipping)} ${t("products.price")}`}
+                          : `${formatMoney(shipping)} ${t("products.price")}`}
                       </span>
                     </div>
                     <div className="border-t border-border pt-3 flex justify-between">
                       <span className="font-semibold text-foreground">{t("cart.total")}</span>
                       <span className="font-bold text-lg text-foreground">
-                        {formatPrice(total + shipping)} {t("products.price")}
+                        {formatMoney(subtotal + shipping)} {t("products.price")}
                       </span>
                     </div>
                   </div>
@@ -290,3 +378,6 @@ export default function CartPage() {
     </div>
   )
 }
+
+
+

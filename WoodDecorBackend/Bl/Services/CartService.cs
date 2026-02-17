@@ -110,9 +110,9 @@ public class CartService : BaseService<TbCart, CartDto>, ICart
             NameEn = i.Item.NameEn,
             NameAr = i.Item.NameAr,
             Image = i.Item.MainImage,
-            Price = i.Total,
+            Price = i.Price,
             Quantity = i.Quantity,
-            Total = i.Total * i.Quantity,
+            Total = i.Total,
             Color = i.Color
         }).ToList();
 

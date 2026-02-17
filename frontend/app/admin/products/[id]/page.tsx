@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
@@ -8,7 +9,9 @@ import { cn } from "@/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { mockProducts } from "@/lib/admin-data"
+import type { Product } from "@/lib/admin-data"
+import { ApiClient } from "@/app/ApiHelper/ApiClient"
+import { mapAdminItemToProduct, type AdminCategoryDto, type AdminItemDto } from "@/lib/admin-items"
 import { ArrowLeft, ArrowRight, Pencil, Trash2 } from "lucide-react"
 
 export default function ProductDetailPage() {
@@ -16,7 +19,44 @@ export default function ProductDetailPage() {
   const id = params.id as string
   const { t, language, dir } = useAdminLanguage()
 
-  const product = mockProducts.find((p) => p.id === id)
+  const [product, setProduct] = useState<Product | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        setLoading(true)
+        const [items, categories] = await Promise.all([
+          ApiClient.get("api/admin/Item"),
+          ApiClient.get("api/admin/Categories"),
+        ])
+
+        const found = (items as AdminItemDto[]).find((item) => item.id === id)
+        if (found) {
+          setProduct(mapAdminItemToProduct(found, categories as AdminCategoryDto[]))
+        } else {
+          setProduct(null)
+        }
+      } catch (err) {
+        console.error("Failed to fetch product:", err)
+        setProduct(null)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    if (id) {
+      fetchProduct()
+    }
+  }, [id])
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 text-muted-foreground animate-pulse">
+        {t("common.loading")}
+      </div>
+    )
+  }
 
   if (!product) {
     return (
@@ -95,8 +135,8 @@ export default function ProductDetailPage() {
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 sm:grid-cols-3">
-                {product.images.map((image, index) => (
-                  <div key={index} className="relative aspect-square rounded-lg overflow-hidden bg-muted">
+                {(product.images.length ? product.images : [product.mainImage || "/placeholder.svg"]).map((image, index) => (
+                  <div key={`${image}-${index}`} className="relative aspect-square rounded-lg overflow-hidden bg-muted">
                     <Image src={image || "/placeholder.svg"} alt={`Product ${index + 1}`} fill className="object-cover" />
                   </div>
                 ))}
@@ -192,10 +232,23 @@ export default function ProductDetailPage() {
                 <span className="text-muted-foreground">{t("products.category")}</span>
                 <span>{product.category}</span>
               </div>
-              <div className={cn("flex items-center justify-between", dir === "rtl" && "flex-row-reverse")}>
-                <span className="text-muted-foreground">{t("products.sku")}</span>
-                <span className="font-mono">{product.sku}</span>
-              </div>
+              {product.colors && product.colors.trim().length > 0 && (
+                <div className="space-y-2">
+                  <span className="text-muted-foreground">
+                    {language === "ar" ? "الألوان" : "Colors"}
+                  </span>
+                  <div className={cn("flex flex-wrap gap-2", dir === "rtl" && "justify-end")}>
+                    {product.colors.split(",").map((color, index) => (
+                      <span
+                        key={`${color}-${index}`}
+                        className="rounded-full border px-3 py-1 text-xs text-muted-foreground"
+                      >
+                        {color.trim()}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>

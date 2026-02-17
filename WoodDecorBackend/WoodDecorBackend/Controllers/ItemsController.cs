@@ -25,9 +25,13 @@ namespace Apis.Controllers
 
         // GET api/<ItemsController>/5
         [HttpGet("{id}")]
-        public ItemDto GetItemDetails(Guid id)
+        public ActionResult<ItemDto> GetItemDetails(Guid id)
         {
-            var item = _itemService.GetById(id);
+            var item = _itemService.GetItemWithImages(id);
+            if (item == null)
+            {
+                return NotFound();
+            }
             return item;
         }
         // GET: api/<ItemsController>/GetTheBestItemsDiscounts

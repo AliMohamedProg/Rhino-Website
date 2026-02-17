@@ -7,18 +7,166 @@ import { useState, useEffect } from "react"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { useLanguage } from "@/context/language-context"
-import { useWishlist } from "@/context/wishlist-context"
 import { Button } from "@/components/ui/button"
-import { ShoppingCart, Heart, Search } from "lucide-react"
+import { toast } from "sonner"
+import { ShoppingCart, Search } from "lucide-react"
 import { formatPrice } from "@/lib/products"
+
+type SearchItem = {
+  id: string
+  nameAr: string
+  nameEn: string
+  descriptionAr?: string
+  descriptionEn?: string
+  price: number
+  discountAmount: number
+  stockNumber: number
+  colors?: string
+  mainImage?: string
+}
+
+function SearchProductCard({ product }: { product: SearchItem }) {
+  const { language, t } = useLanguage()
+  const [selectedColor, setSelectedColor] = useState<string>("")
+  const [adding, setAdding] = useState(false)
+
+  const colors = product.colors
+    ? product.colors.split(",").map((c) => c.trim()).filter(Boolean)
+    : []
+  const displayColors = colors.slice(0, 3)
+  const originalPrice = product.price + product.discountAmount
+  const isInStock = product.stockNumber > 0
+
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (colors.length > 0 && !selectedColor) {
+      toast.error(
+        language === "ar"
+          ? "يرجى اختيار لون قبل الإضافة للسلة"
+          : "Please select a color before adding to cart"
+      )
+      return
+    }
+
+    try {
+      setAdding(true)
+      const res = await fetch("https://localhost:7282/api/Cart/add-to-cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          productId: product.id,
+          quantity: 1,
+          color: selectedColor || "Default",
+        }),
+      })
+
+      if (res.ok) {
+        window.location.href = "/cart"
+      } else if (res.status === 401) {
+        window.location.href = "/login"
+      }
+    } catch (error) {
+      console.error("Failed to add to cart:", error)
+    } finally {
+      setAdding(false)
+    }
+  }
+
+  return (
+    <div className="group bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg transition-shadow flex flex-col">
+      <Link href={`/product/${product.id}`} className="block relative h-48 md:h-56 bg-secondary">
+        <Image
+          src={product.mainImage || "/placeholder.svg"}
+          alt={language === "ar" ? product.nameAr : product.nameEn}
+          fill
+          className="object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+
+        {product.discountAmount > 0 && (
+          <span className="absolute top-2 start-2 bg-red-600 text-xs px-2 py-1 rounded text-white font-medium">
+            {language === "ar" ? `${product.discountAmount}%-` : `-${product.discountAmount}%`}
+          </span>
+        )}
+
+        <span
+          className={`absolute bottom-2 start-2 px-2 py-1 text-xs rounded font-medium ${
+            isInStock ? "bg-green-500 text-white" : "bg-gray-500 text-white"
+          }`}
+        >
+          {isInStock
+            ? language === "ar" ? "متاح" : "In Stock"
+            : language === "ar" ? "غير متاح" : "Out of Stock"}
+        </span>
+      </Link>
+
+      <div className="p-3 md:p-4 flex flex-col flex-1">
+        <Link href={`/product/${product.id}`}>
+          <h3 className="font-medium text-foreground text-sm md:text-base line-clamp-2 mb-2 hover:text-primary transition-colors">
+            {language === "ar" ? product.nameAr : product.nameEn}
+          </h3>
+        </Link>
+
+        <div className="flex gap-2 mb-3">
+          <span className="font-bold text-foreground">
+            {formatPrice(product.price)} {t("products.price")}
+          </span>
+          {product.discountAmount > 0 && (
+            <span className="line-through text-sm text-muted-foreground">
+              {formatPrice(originalPrice)}
+            </span>
+          )}
+        </div>
+
+        {displayColors.length > 0 && (
+          <div className="mb-3">
+            <div className="flex flex-wrap gap-2">
+              {displayColors.map((color, idx) => (
+                <button
+                  key={idx}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setSelectedColor(color)
+                  }}
+                  className={`px-2 py-1 text-xs border rounded transition-all ${
+                    selectedColor === color
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-background hover:bg-muted"
+                  }`}
+                  title={color}
+                >
+                  {color}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="mt-auto">
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full"
+            onClick={handleAddToCart}
+            disabled={adding}
+          >
+            <ShoppingCart size={16} className="me-2" />
+            {adding ? (language === "ar" ? "جاري الإضافة..." : "Adding...") : t("products.addToCart")}
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function SearchPage() {
   const searchParams = useSearchParams()
   const query = searchParams.get("q") || ""
   const { language, t } = useLanguage()
-  const { addItem: addToWishlist, isInWishlist, removeItem: removeFromWishlist } = useWishlist()
 
-  const [products, setProducts] = useState<any[]>([])
+  const [products, setProducts] = useState<SearchItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -54,38 +202,6 @@ export default function SearchPage() {
     )
   })
 
-  const handleAddToCart = async (product: any) => {
-    try {
-      const res = await fetch("https://localhost:7282/api/Cart/add-to-cart", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ productId: product.id, quantity: 1 })
-      })
-      
-      if (res.ok) {
-        window.location.href = "/cart"
-      } else if (res.status === 401) {
-        window.location.href = "/login"
-      }
-    } catch (error) {
-      console.error("Failed to add to cart:", error)
-    }
-  }
-
-  const handleWishlistToggle = (product: any) => {
-    if (isInWishlist(product.id)) {
-      removeFromWishlist(product.id)
-    } else {
-      addToWishlist({
-        id: product.id,
-        name: language === "ar" ? product.nameAr : product.nameEn,
-        price: product.price,
-        image: product.image || "/placeholder.svg",
-      })
-    }
-  }
-
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -107,66 +223,7 @@ export default function SearchPage() {
           {filteredProducts.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
               {filteredProducts.map((product) => (
-                <div
-                  key={product.id}
-                  className="group bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg transition-shadow"
-                >
-                  {/* Product Image */}
-                  <Link href={`/product/${product.id}`} className="block relative">
-                    <div className="relative h-48 md:h-56">
-                      <Image
-                        src={product.image || "/placeholder.svg"}
-                        alt={language === "ar" ? product.nameAr : product.nameEn}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-
-                      {/* Wishlist Button */}
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault()
-                          handleWishlistToggle(product)
-                        }}
-                        className={`absolute top-2 end-2 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
-                          isInWishlist(product.id)
-                            ? "bg-destructive text-destructive-foreground"
-                            : "bg-card/80 text-foreground hover:bg-card"
-                        }`}
-                      >
-                        <Heart
-                          size={16}
-                          fill={isInWishlist(product.id) ? "currentColor" : "none"}
-                        />
-                      </button>
-                    </div>
-                  </Link>
-
-                  {/* Product Info */}
-                  <div className="p-3 md:p-4">
-                    <Link href={`/product/${product.id}`}>
-                      <h3 className="font-medium text-foreground text-sm md:text-base line-clamp-2 mb-2 hover:text-secondary transition-colors">
-                        {language === "ar" ? product.nameAr : product.nameEn}
-                      </h3>
-                    </Link>
-
-                    {/* Price */}
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="text-lg font-bold text-secondary">
-                        {formatPrice(product.price)}
-                      </span>
-                    </div>
-
-                    {/* Add to Cart Button */}
-                    <Button
-                      size="sm"
-                      className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground"
-                      onClick={() => handleAddToCart(product)}
-                    >
-                      <ShoppingCart size={16} className="me-2" />
-                      {t("products.addToCart")}
-                    </Button>
-                  </div>
-                </div>
+                <SearchProductCard key={product.id} product={product} />
               ))}
             </div>
           ) : (

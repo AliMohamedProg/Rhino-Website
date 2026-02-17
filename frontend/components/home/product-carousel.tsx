@@ -17,6 +17,8 @@ type ApiItem = {
   discountAmount: number
   stockNumber: number
   colors?: string
+  mainImage?: string
+  image?: string
 }
 
 function ProductCard({ product }: { product: ApiItem }) {
@@ -26,7 +28,8 @@ function ProductCard({ product }: { product: ApiItem }) {
   const [adding, setAdding] = useState(false)
 
   const quantity = 1
-  const originalPrice = product.price + product.discountAmount
+  const discount = product.discountAmount ?? 0
+  const originalPrice = product.price + discount
 
   const colors = product.colors
     ? product.colors.split(',').map(c => c.trim()).filter(Boolean)
@@ -74,16 +77,16 @@ function ProductCard({ product }: { product: ApiItem }) {
     <div className="flex-shrink-0 w-[280px] bg-card rounded-lg border overflow-hidden hover:shadow-lg transition-shadow flex flex-col">
       <Link href={`/product/${product.id}`} className="block relative h-[200px] bg-secondary">
         <Image
-          src="/placeholder.svg"
+          src={product.mainImage || product.image || "/placeholder.svg"}
           alt={language === "ar" ? product.nameAr : product.nameEn}
           fill
           className="object-cover"
         />
 
         {/* Discount Badge */}
-        {product.discountAmount > 0 && (
+        {discount > 0 && (
           <span className="absolute top-2 start-2 bg-red-600 text-xs px-2 py-1 rounded text-white font-medium">
-            {language === "ar" ? `${product.discountAmount}%-` : `-${product.discountAmount}%`}
+            {language === "ar" ? `${discount}%-` : `-${discount}%`}
           </span>
         )}
 
@@ -108,9 +111,11 @@ function ProductCard({ product }: { product: ApiItem }) {
           <span className="font-bold text-foreground">
             {formatPrice(product.price)} {t("products.price")}
           </span>
-          <span className="line-through text-sm text-muted-foreground">
-            {formatPrice(originalPrice)}
-          </span>
+          {discount > 0 && (
+            <span className="line-through text-sm text-muted-foreground">
+              {formatPrice(originalPrice)}
+            </span>
+          )}
         </div>
 
         {/* Color Selection */}
@@ -168,7 +173,35 @@ export function ProductCarousel() {
       try {
         const res = await fetch("https://localhost:7282/api/Items/best-discounts")
         const data = await res.json()
-        setProducts(data)
+        const normalized = (data as any[]).map((item) => {
+          const price = Number(item.price ?? item.Price ?? 0)
+          const discountAmount = Number(item.discountAmount ?? item.DiscountAmount ?? 0)
+          const stockNumber = Number(item.stockNumber ?? item.StockNumber ?? 0)
+          const images = item.images ?? item.Images ?? []
+          const firstImage =
+            Array.isArray(images) && images.length > 0
+              ? images[0]?.imageUrl || images[0]?.ImageUrl || images[0]
+              : ""
+          const mainImage =
+            item.mainImage ??
+            item.MainImage ??
+            item.image ??
+            item.Image ??
+            firstImage ??
+            ""
+          return {
+            id: item.id ?? item.Id,
+            nameAr: item.nameAr ?? item.NameAr ?? "",
+            nameEn: item.nameEn ?? item.NameEn ?? "",
+            price: Number.isFinite(price) ? price : 0,
+            discountAmount: Number.isFinite(discountAmount) ? discountAmount : 0,
+            stockNumber: Number.isFinite(stockNumber) ? stockNumber : 0,
+            colors: item.colors ?? item.Colors ?? "",
+            mainImage,
+            image: item.image ?? item.Image ?? "",
+          } as ApiItem
+        })
+        setProducts(normalized)
       } catch (error) {
         console.error("Failed to fetch best discounts", error)
       } finally {
@@ -239,4 +272,3 @@ export function ProductCarousel() {
     </section>
   )
 }
-

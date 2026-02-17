@@ -27,5 +27,7 @@ namespace Bl.DTOs
 
         public string? Colors { get; set; }
 
+        public List<ImageDto> Images { get; set; } = new List<ImageDto>();
+
     }
 }

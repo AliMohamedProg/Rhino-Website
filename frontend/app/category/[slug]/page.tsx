@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, type MouseEvent } from "react"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
@@ -12,7 +12,8 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Slider } from "@/components/ui/slider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { ShoppingCart, ChevronUp, ChevronDown, Filter, Star } from "lucide-react"
+import { toast } from "sonner"
+import { ShoppingCart, ChevronUp, ChevronDown, Filter } from "lucide-react"
 import { formatPrice } from "@/lib/products"
 
 interface Item {
@@ -24,7 +25,8 @@ interface Item {
   stockNumber: number
   overallRating: number
   categoryId: string
-  image?: string
+  colors?: string
+  mainImage?: string
 }
 
 interface Category {
@@ -37,7 +39,7 @@ export default function CategoryPage() {
   const params = useParams()
   const categoryId = params.slug as string
 
-  const { language } = useLanguage()
+  const { language, t } = useLanguage()
 
   const [products, setProducts] = useState<Item[]>([])
   const [categories, setCategories] = useState<Category[]>([])
@@ -54,8 +56,14 @@ export default function CategoryPage() {
       try {
         // fetch products by category
         const res = await fetch(`https://localhost:7282/api/Category/${categoryId}`)
-        const data: Item[] = await res.json()
-        setProducts(data)
+        const data: any[] = await res.json()
+        const normalized = data.map((item) => ({
+          ...item,
+          discountAmount: item.discountAmount ?? item.DiscountAmount ?? 0,
+          mainImage: item.mainImage ?? item.MainImage ?? item.image ?? item.Image ?? "",
+          colors: item.colors ?? item.Colors ?? "",
+        })) as Item[]
+        setProducts(normalized)
 
         // fetch all categories for sidebar
 
@@ -88,6 +96,141 @@ export default function CategoryPage() {
     setHideOutOfStock(false)
     setPriceRange([0, 50000])
     setSelectedCategories([])
+  }
+
+  const CategoryProductCard = ({ product }: { product: Item }) => {
+    const [selectedColor, setSelectedColor] = useState("")
+    const [adding, setAdding] = useState(false)
+
+    const colors = product.colors
+      ? product.colors.split(",").map((c) => c.trim()).filter(Boolean)
+      : []
+    const displayColors = colors.slice(0, 3)
+    const originalPrice = product.price + product.discountAmount
+    const isInStock = product.stockNumber > 0
+
+    const handleAddToCart = async (e: MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault()
+      e.stopPropagation()
+
+      if (colors.length > 0 && !selectedColor) {
+        toast.error(
+          language === "ar"
+            ? "يرجى اختيار لون قبل الإضافة للسلة"
+            : "Please select a color before adding to cart"
+        )
+        return
+      }
+
+      try {
+        setAdding(true)
+        const res = await fetch("https://localhost:7282/api/Cart/add-to-cart", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            productId: product.id,
+            quantity: 1,
+            color: selectedColor || "Default",
+          }),
+        })
+
+        if (res.ok) {
+          window.location.href = "/cart"
+        } else if (res.status === 401) {
+          window.location.href = "/login"
+        }
+      } catch (error) {
+        console.error("Failed to add to cart:", error)
+      } finally {
+        setAdding(false)
+      }
+    }
+
+    return (
+      <div className="group bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg transition-shadow flex flex-col">
+        <Link href={`/product/${product.id}`} className="block relative h-48 md:h-56 bg-secondary">
+          <Image
+            src={product.mainImage || "/placeholder.svg"}
+            alt={language === "ar" ? product.nameAr : product.nameEn}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+
+          {product.discountAmount > 0 && (
+            <span className="absolute top-2 start-2 bg-red-600 text-xs px-2 py-1 rounded text-white font-medium">
+              {language === "ar" ? `${product.discountAmount}%-` : `-${product.discountAmount}%`}
+            </span>
+          )}
+
+          <span
+            className={`absolute bottom-2 start-2 px-2 py-1 text-xs rounded font-medium ${
+              isInStock ? "bg-green-500 text-white" : "bg-gray-500 text-white"
+            }`}
+          >
+            {isInStock
+              ? language === "ar" ? "متاح" : "In Stock"
+              : language === "ar" ? "غير متاح" : "Out of Stock"}
+          </span>
+        </Link>
+
+        <div className="p-3 md:p-4 flex flex-col flex-1">
+          <Link href={`/product/${product.id}`}>
+            <h3 className="font-medium text-foreground text-sm md:text-base line-clamp-2 mb-2 hover:text-primary transition-colors">
+              {language === "ar" ? product.nameAr : product.nameEn}
+            </h3>
+          </Link>
+
+          <div className="flex gap-2 mb-3">
+            <span className="font-bold text-foreground">
+              {formatPrice(product.price)} {t("products.price")}
+            </span>
+            <span className="line-through text-sm text-muted-foreground">
+              {formatPrice(originalPrice)}
+            </span>
+          </div>
+
+          {displayColors.length > 0 && (
+            <div className="mb-3">
+              <div className="flex flex-wrap gap-2">
+                {displayColors.map((color, idx) => (
+                  <button
+                    key={idx}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      setSelectedColor(color)
+                    }}
+                    className={`px-2 py-1 text-xs border rounded transition-all ${
+                      selectedColor === color
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "bg-background hover:bg-muted"
+                    }`}
+                    title={color}
+                  >
+                    {color}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="mt-auto">
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full"
+              onClick={handleAddToCart}
+              disabled={adding}
+            >
+              <ShoppingCart size={16} className="me-2" />
+              {adding
+                ? language === "ar" ? "جاري الإضافة..." : "Adding..."
+                : t("products.addToCart")}
+            </Button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
 
@@ -164,84 +307,9 @@ export default function CategoryPage() {
               </div>
 
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredProducts.map(product => {
-                  const hasDiscount = product.discountAmount > 0
-                  const discountPercent = product.discountAmount
-                  const finalPrice = hasDiscount
-                    ? Math.round(product.price * (1 - product.discountAmount / 100))
-                    : product.price
-
-                  return (
-                    <Link key={product.id} href={`/product/${product.id}`} className="block border rounded-lg overflow-hidden group hover:shadow-lg transition-shadow">
-                      <div className="relative h-56">
-                        <Image
-                          src={product.image || "/placeholder.png"}
-                          alt={language === "ar" ? product.nameAr : product.nameEn}
-                          fill
-                          className="object-cover group-hover:scale-105 transition"
-                        />
-                        {hasDiscount && (
-                          <span className="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded font-medium">
-                            -{discountPercent}%
-                          </span>
-                        )}
-
-                        <div className="absolute bottom-2 left-2">
-                          <span
-                            className={`px-2 py-1 text-xs rounded font-medium ${product.stockNumber > 0 ? "bg-green-500 text-white" : "bg-gray-500 text-white"
-                              }`}
-                          >
-                            {product.stockNumber > 0
-                              ? language === "ar" ? "متاح" : "In Stock"
-                              : language === "ar" ? "غير متاح" : "Out of Stock"}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="p-4">
-                        <h3 className="font-medium line-clamp-2">{language === "ar" ? product.nameAr : product.nameEn}</h3>
-
-                        <div className="flex items-center gap-2 my-2">
-                          <span className="font-bold text-foreground">
-                            {formatPrice(finalPrice)}
-                          </span>
-                          {hasDiscount && (
-                            <span className="text-sm text-muted-foreground line-through">
-                              {formatPrice(product.price)}
-                            </span>
-                          )}
-                          <Star size={14} className="text-yellow-400 ml-auto" />
-                          <span className="text-sm">{product.overallRating}</span>
-                        </div>
-
-                        <Button
-                          onClick={async (e) => {
-                            e.preventDefault()
-                            try {
-                              const res = await fetch("https://localhost:7282/api/Cart/add-to-cart", {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                credentials: "include",
-                                body: JSON.stringify({ productId: product.id, quantity: 1 })
-                              })
-
-                              if (res.ok) {
-                                window.location.href = "/cart"
-                              } else if (res.status === 401) {
-                                window.location.href = "/login"
-                              }
-                            } catch (error) {
-                              console.error("Failed to add to cart:", error)
-                            }
-                          }}
-                          className="w-full"
-                        >
-                          <ShoppingCart size={16} className="mr-2" /> Add to Cart
-                        </Button>
-                      </div>
-                    </Link>
-                  )
-                })}
+                {filteredProducts.map((product) => (
+                  <CategoryProductCard key={product.id} product={product} />
+                ))}
               </div>
             </div>
 

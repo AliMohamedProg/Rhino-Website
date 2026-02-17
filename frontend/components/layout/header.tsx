@@ -226,6 +226,26 @@ export function Header() {
         </div>
       </div>
 
+      {/* ================= Mobile Search ================= */}
+      <div className="bg-card border-b md:hidden">
+        <div className="container mx-auto px-4 py-3">
+          <form onSubmit={handleSearch} className="w-full">
+            <div className="relative">
+              <Input
+                type="search"
+                placeholder={t("search.placeholder")}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pe-10"
+              />
+              <button className="absolute end-3 top-1/2 -translate-y-1/2">
+                <Search size={20} />
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
       {/* ================= Categories Nav ================= */}
       <nav className="bg-primary hidden md:block">
         <ul className="flex justify-center gap-8 h-12 items-center">
