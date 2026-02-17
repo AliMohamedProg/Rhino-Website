@@ -7,7 +7,9 @@ public partial class TbOrderItem : BaseTable
 {
 
     public Guid ItemId { get; set; }
-
+    public string nameEn { get; set; }
+    public string nameAr { get; set; }
+    public string Image { get; set; }
     public Guid OrderId { get; set; }
 
     public int Qty { get; set; }

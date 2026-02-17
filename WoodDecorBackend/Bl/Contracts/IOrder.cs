@@ -11,6 +11,8 @@ namespace BusinessLayer.Contracts
 {
     public interface IOrder: IBaseService<TbOrder,OrderDto>
     {
-        // If I Want To Add A New Methods
+        Task<TbOrder> CreateOrder(Guid userId, string Country, string City, string Address, decimal Total, string PhoneNumber, string Email);
+        Task<List<OrderDto>> GetUserOrders(Guid userId);
+        Task<OrderDto> GetOrderById(Guid id);
     }
 }

@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
@@ -15,21 +15,168 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { formatPrice } from "@/lib/products"
 
+interface CartItem {
+  id: string
+  itemId: string
+  nameEn: string
+  nameAr: string
+  image: string
+  price: number
+  quantity: number
+  total: number
+  color: string
+}
+
+interface Cart {
+  id: string
+  items: CartItem[]
+  cartTotal: number
+}
+
 export default function CheckoutPage() {
   const { language, t } = useLanguage()
   const router = useRouter()
   const [paymentMethod, setPaymentMethod] = useState<"cod" | "card">("cod")
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [cart, setCart] = useState<Cart | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
+  // Form data
+  const [formData, setFormData] = useState({
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    country: "Egypt" // Default value
+  })
+
+  // Fetch cart on mount
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        setLoading(true)
+        const res = await fetch("https://localhost:7282/api/Cart", {
+          credentials: "include"
+        })
+
+        if (!res.ok) {
+          if (res.status === 401) {
+            setError(language === "ar" ? "يرجى تسجيل الدخول" : "Please login")
+          } else {
+            setError(`Error: ${res.status}`)
+          }
+          return
+        }
+
+        const data = await res.json()
+        setCart(data)
+        setError(null)
+      } catch (err) {
+        console.error("Failed to fetch cart:", err)
+        setError(language === "ar" ? "فشل في جلب السلة" : "Failed to fetch cart")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchCart()
+  }, [language])
+
+  const items = cart?.items || []
+  const total = cart?.cartTotal || 0
   const shipping = total >= 1000 ? 0 : 50
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    // Simulate order processing
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    clearCart()
-    router.push("/order-success")
+
+    const verifyAndRedirect = async () => {
+      try {
+        const verifyRes = await fetch("https://localhost:7282/api/order/my-orders", {
+          credentials: "include"
+        })
+        if (verifyRes.ok) {
+          const orders = await verifyRes.json()
+          const latestOrder = orders[0]
+          if (latestOrder) {
+            const orderTime = new Date(latestOrder.orderDate).getTime()
+            const now = Date.now()
+            if (now - orderTime < 120000) {
+              router.push("/order-success")
+              return true
+            }
+          }
+        }
+      } catch (vErr) {
+        console.error("Verification check failed:", vErr)
+      }
+      return false
+    }
+
+    try {
+      const res = await fetch("https://localhost:7282/api/order/create-from-cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          Country: formData.country,
+          City: formData.city,
+          Address: formData.address,
+          Total: total + shipping,
+          PhoneNumber: formData.phone,
+          Email: formData.email
+        })
+      })
+
+      if (res.ok) {
+        try {
+          const order = await res.json()
+          console.log("Order created:", order)
+          router.push("/order-success")
+        } catch (jsonErr) {
+          console.error("Server crashed during response:", jsonErr)
+          const success = await verifyAndRedirect()
+          if (!success) {
+            alert(language === "ar" ? "فشل في إنشاء الطلب" : "Failed to create order")
+          }
+        }
+      } else {
+        const errorText = await res.text()
+        if (errorText.includes('"orderNumber":"ORD-') || errorText.includes('"OrderNumber":"ORD-')) {
+          router.push("/order-success")
+        } else {
+          const success = await verifyAndRedirect()
+          if (!success) {
+            alert(language === "ar" ? "فشل في إنشاء الطلب" : "Failed to create order")
+          }
+        }
+      }
+    } catch (err) {
+      console.error("Connection or server error:", err)
+      const success = await verifyAndRedirect()
+      if (!success) {
+        alert(language === "ar" ? "حدث خطأ" : "An error occurred")
+      }
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 bg-secondary">
+          <div className="container mx-auto px-4 py-8">
+            <div className="flex items-center justify-center h-64">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    )
   }
 
   if (items.length === 0) {
@@ -68,28 +215,53 @@ export default function CheckoutPage() {
                   </h2>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="firstName">{t("checkout.firstName")}</Label>
-                      <Input id="firstName" required />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="lastName">{t("checkout.lastName")}</Label>
-                      <Input id="lastName" required />
-                    </div>
-                    <div className="space-y-2">
                       <Label htmlFor="email">{t("checkout.email")}</Label>
-                      <Input id="email" type="email" required />
+                      <Input
+                        id="email"
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="phone">{t("checkout.phone")}</Label>
-                      <Input id="phone" type="tel" required />
+                      <Input
+                        id="phone"
+                        type="tel"
+                        required
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        placeholder="012XXXXXXXX"
+                      />
                     </div>
-                    <div className="sm:col-span-2 space-y-2">
-                      <Label htmlFor="address">{t("checkout.address")}</Label>
-                      <Input id="address" required />
+                    <div className="space-y-2">
+                      <Label htmlFor="country">{language === "ar" ? "الدولة" : "Country"}</Label>
+                      <Input
+                        id="country"
+                        required
+                        value={formData.country}
+                        onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                        disabled
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="city">{t("checkout.city")}</Label>
-                      <Input id="city" required />
+                      <Input
+                        id="city"
+                        required
+                        value={formData.city}
+                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                      />
+                    </div>
+                    <div className="sm:col-span-2 space-y-2">
+                      <Label htmlFor="address">{t("checkout.address")}</Label>
+                      <Input
+                        id="address"
+                        required
+                        value={formData.address}
+                        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                      />
                     </div>
                   </div>
                 </div>
@@ -151,7 +323,7 @@ export default function CheckoutPage() {
                         <div className="relative w-16 h-16 flex-shrink-0 bg-secondary rounded-lg overflow-hidden">
                           <Image
                             src={item.image || "/placeholder.svg"}
-                            alt={item.name[language]}
+                            alt={language === "ar" ? (item.nameAr || item.nameEn) : item.nameEn}
                             fill
                             className="object-cover"
                           />
@@ -160,7 +332,9 @@ export default function CheckoutPage() {
                           </span>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-sm font-medium text-foreground line-clamp-1">{item.name[language]}</h3>
+                          <h3 className="text-sm font-medium text-foreground line-clamp-1">
+                            {language === "ar" ? (item.nameAr || item.nameEn) : item.nameEn}
+                          </h3>
                           <span className="text-sm text-muted-foreground">
                             {formatPrice(item.price * item.quantity)} {t("products.price")}
                           </span>

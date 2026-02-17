@@ -18,7 +18,11 @@ namespace Bl.Mapping
             CreateMap<TbImage, ImageDto>().ReverseMap();
             CreateMap<TbItem,ItemDto>().ReverseMap();
             CreateMap<TbOrder, OrderDto>().ReverseMap();
-            CreateMap<TbOrderItem, OrderItemDto>().ReverseMap();
+            CreateMap<TbOrderItem, OrderItemDto>()
+                .ForMember(dest => dest.NameEn, opt => opt.MapFrom(src => src.Item.NameEn))
+                .ForMember(dest => dest.NameAr, opt => opt.MapFrom(src => src.Item.NameAr))
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Item.MainImage))
+                .ReverseMap();
             CreateMap<TbReview, ReviewDto>().ReverseMap();
             CreateMap<TbSetting, SettingDto>().ReverseMap();
             CreateMap<TbSlider, SliderDto>().ReverseMap();

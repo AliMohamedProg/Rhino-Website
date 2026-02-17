@@ -11,6 +11,18 @@ import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { useAuth } from "../Context/auth-context"
 import { useEffect, useState } from "react"
+import { formatPrice } from "@/lib/products"
+
+interface Order {
+  id: string
+  orderDate: string
+  country: string
+  city: string
+  address: string
+  total: number
+  status: string
+  paymentStatus: string
+}
 
 const menuItems = [
   { key: "profile.orders", icon: Package },
@@ -23,12 +35,32 @@ export default function ProfilePage() {
   const { user, logout } = useAuth()
 
   const [activeTab, setActiveTab] = useState("profile.orders")
+  const [orders, setOrders] = useState<Order[]>([])
   const [orderCount, setOrderCount] = useState(0)
   const [wishlistCount, setWishlistCount] = useState(0)
+  const [loading, setLoading] = useState(true)
 
-  // Simulated counts - in real app, fetch from API
+  // Fetch orders from API
+  const fetchOrders = async () => {
+    try {
+      setLoading(true)
+      const res = await fetch("https://localhost:7282/api/order/my-orders", {
+        credentials: "include"
+      })
+      if (res.ok) {
+        const data = await res.json()
+        setOrders(data)
+        setOrderCount(data.length)
+      }
+    } catch (err) {
+      console.error("Failed to fetch orders:", err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   useEffect(() => {
-    setOrderCount(0)
+    fetchOrders()
     setWishlistCount(0)
   }, [])
 
@@ -63,14 +95,10 @@ export default function ProfilePage() {
               </div>
 
               {/* Quick Stats */}
-              <div className="grid grid-cols-2 gap-3 mb-6">
+              <div className="grid grid-cols-1 gap-3 mb-6">
                 <div className="bg-blue-50 dark:bg-blue-950 rounded-lg p-3 text-center">
                   <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{orderCount}</p>
                   <p className="text-xs text-muted-foreground">{language === "ar" ? "طلبات" : "Orders"}</p>
-                </div>
-                <div className="bg-red-50 dark:bg-red-950 rounded-lg p-3 text-center">
-                  <p className="text-2xl font-bold text-red-600 dark:text-red-400">{wishlistCount}</p>
-                  <p className="text-xs text-muted-foreground">{language === "ar" ? "المفضلة" : "Wishlist"}</p>
                 </div>
               </div>
 
@@ -114,11 +142,12 @@ export default function ProfilePage() {
                     <Package size={24} className="text-blue-600 dark:text-blue-400" />
                     {language === "ar" ? "طلباتي" : "My Orders"}
                   </h3>
-                  <Link href="/profile/orders" className="text-sm text-blue-600 hover:underline font-medium">
-                    {t("products.viewMore")}
-                  </Link>
                 </div>
-                {orderCount === 0 ? (
+                {loading ? (
+                  <div className="flex justify-center py-12">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                  </div>
+                ) : orders.length === 0 ? (
                   <div className="text-center py-12">
                     <div className="w-20 h-20 mx-auto mb-4 bg-muted rounded-full flex items-center justify-center">
                       <Package size={32} className="text-muted-foreground" />
@@ -137,7 +166,38 @@ export default function ProfilePage() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {/* Order cards would go here */}
+                    {orders.map((order) => (
+                      <div key={order.id} className="border border-border rounded-lg p-4 hover:bg-muted/50 transition-colors">
+                        <div className="flex flex-wrap justify-between items-start gap-4">
+                          <div>
+                            <p className="text-sm text-muted-foreground">
+                              {language === "ar" ? "تاريخ الطلب" : "Order Date"}: {new Date(order.orderDate).toLocaleDateString(language === "ar" ? "ar-EG" : "en-US")}
+                            </p>
+                            <p className="font-semibold text-foreground mt-1">
+                              {language === "ar" ? "المجموع" : "Total"}: {formatPrice(order.total)} {t("products.price")}
+                            </p>
+                            <p className="text-sm text-muted-foreground mt-1">
+                              {order.city}, {order.address}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${order.status === "Delivered" ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"
+                              }`}>
+                              {order.status}
+                            </span>
+                            <p className="text-xs text-muted-foreground mt-2">
+                              {language === "ar" ? "حالة الدفع" : "Payment"}: {order.paymentStatus}
+                            </p>
+                            <Link
+                              href={`/profile/orders/${order.id}`}
+                              className="inline-block mt-3 text-sm text-blue-600 hover:underline font-medium"
+                            >
+                              {language === "ar" ? "عرض التفاصيل" : "View Details"}
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>

@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import { useState, useEffect } from "react"
 import { useRouter, useParams } from "next/navigation"
 import Link from "next/link"
 import { Header } from "@/components/layout/header"
@@ -10,46 +10,155 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { formatPrice } from "@/lib/products"
 
-// Sample detailed order data (replace with API fetch later)
-const sampleOrder = {
-  id: "ORD-1001",
-  date: "2025-12-01",
-  status: "Processing",
-  shipping: {
-    name: "Ahmed Ali",
-    address: "25 Talaat Harb, Cairo, Egypt",
-    phone: "01001234567",
-  },
-  items: [
-    { sku: "ITM-001", name: "Oak Dining Table", qty: 1, price: "1,200 EGP" },
-    { sku: "ITM-002", name: "Ceramic Vase", qty: 2, price: "125 EGP" },
-  ],
-  subtotal: "1,450 EGP",
-  shippingCost: "50 EGP",
-  total: "1,500 EGP",
+interface OrderItem {
+  itemId: string
+  nameEn: string
+  nameAr: string
+  image: string
+  qty: number
+  unitPrice: number
 }
 
-function statusBadge(status: string) {
-  switch (status) {
-    case "Processing":
-      return <Badge variant="default">{status}</Badge>
+interface Order {
+  id: string
+  orderNumber: string
+  orderDate: string
+  status: string
+  paymentStatus: string
+  country: string
+  city: string
+  address: string
+  phoneNumber: string
+  email: string
+  total: number
+  delivryDate: string
+  tbOrderItems: OrderItem[]
+}
+
+function statusBadge(status: string, language: string) {
+  const displayStatus = status || "Pending"
+  switch (displayStatus) {
+    case "Pending":
+      return <Badge className="bg-yellow-500">{language === "ar" ? "قيد الانتظار" : "Pending"}</Badge>
     case "Shipped":
-      return <Badge variant="secondary">{status}</Badge>
+      return <Badge className="bg-blue-500">{language === "ar" ? "تم الشحن" : "Shipped"}</Badge>
     case "Delivered":
-      return <Badge variant="outline">{status}</Badge>
+      return <Badge className="bg-green-500">{language === "ar" ? "تم التوصيل" : "Delivered"}</Badge>
     default:
-      return <Badge>{status}</Badge>
+      return <Badge variant="outline">{displayStatus}</Badge>
   }
 }
 
 export default function OrderViewPage() {
-  const { language } = useLanguage()
+  const { language, t } = useLanguage()
   const router = useRouter()
   const params = useParams()
-  const orderId = (params as { id?: string })?.id || sampleOrder.id
+  const id = params?.id
 
-  // TODO: fetch order by id from backend
+  const [order, setOrder] = useState<Order | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
+
+  useEffect(() => {
+    const fetchOrder = async () => {
+      if (!id) return
+      try {
+        setLoading(true)
+        console.log(`Fetching order details for ID: ${id}`)
+
+        // Using common fetch with credentials to ensure absolute URL and cookie handling
+        const res = await fetch(`https://localhost:7282/api/order/${id}`, {
+          credentials: "include"
+        })
+
+        if (res.ok) {
+          const data = await res.json()
+          console.log("Order data received:", data)
+
+          // Normalize the data format in case the backend returns PascalCase
+          const rawItems = data.tbOrderItems || data.TbOrderItems || []
+
+          // Fetch missing product details (names/images) in parallel if they are null
+          const normalizedItems = await Promise.all(rawItems.map(async (item: any) => {
+            const normalized = {
+              ...item,
+              itemId: item.itemId || item.ItemId,
+              nameEn: item.nameEn || item.NameEn,
+              nameAr: item.nameAr || item.NameAr,
+              image: item.image || item.Image,
+              qty: item.qty || item.Qty,
+              unitPrice: item.unitPrice || item.UnitPrice
+            };
+
+            // If name or image is missing, fetch from Items API
+            if (!normalized.nameEn || !normalized.nameAr || !normalized.image) {
+              try {
+                const itemRes = await fetch(`https://localhost:7282/api/items/${normalized.itemId}`);
+                if (itemRes.ok) {
+                  const itemData = await itemRes.json();
+                  normalized.nameEn = normalized.nameEn || itemData.nameEn || itemData.NameEn;
+                  normalized.nameAr = normalized.nameAr || itemData.nameAr || itemData.NameAr;
+                  normalized.image = normalized.image || itemData.mainImage || itemData.MainImage;
+                }
+              } catch (e) {
+                console.warn(`Could not fetch details for item ${normalized.itemId}`, e);
+              }
+            }
+            return normalized;
+          }));
+
+          const normalizedData = {
+            ...data,
+            delivryDate: data.delivryDate || data.DelivryDate,
+            tbOrderItems: normalizedItems
+          }
+
+          setOrder(normalizedData)
+        } else {
+          console.error(`Order fetch failed with status: ${res.status}`)
+          setError(true)
+        }
+      } catch (err) {
+        console.error("Failed to fetch order:", err)
+        setError(true)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchOrder()
+  }, [id])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </main>
+        <Footer />
+      </div>
+    )
+  }
+
+  if (error || !order) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 flex flex-col items-center justify-center p-4">
+          <h2 className="text-xl font-semibold mb-4 text-foreground">
+            {language === "ar" ? "لم يتم العثور على الطلب" : "Order not found"}
+          </h2>
+          <Button onClick={() => router.push("/profile")}>
+            {language === "ar" ? "العودة للملف الشخصي" : "Back to Profile"}
+          </Button>
+        </main>
+        <Footer />
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -59,58 +168,77 @@ export default function OrderViewPage() {
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-2xl font-bold text-foreground">{language === "ar" ? "تفاصيل الطلب" : "Order Details"}</h1>
             <div className="flex items-center gap-3">
-              <Button variant="ghost" onClick={() => router.back()}>{language === "ar" ? "عودة" : "Back"}</Button>
-              <Link href="/profile/orders" className="text-sm text-primary hover:underline">{language === "ar" ? "قائمة الطلبات" : "Orders"}</Link>
+              <Button variant="outline" onClick={() => router.back()}>{language === "ar" ? "عودة" : "Back"}</Button>
+              <Link href="/profile" className="text-sm text-primary hover:underline">{language === "ar" ? "الملف الشخصي" : "Profile"}</Link>
             </div>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
             <div className="md:col-span-2">
               <Card className="mb-6">
-                <CardContent>
-                  <div className="flex items-center justify-between mb-4">
+                <CardContent className="pt-6">
+                  <div className="flex flex-wrap items-center justify-between gap-4 mb-6 pb-6 border-b">
                     <div>
                       <div className="text-sm text-muted-foreground">{language === "ar" ? "رقم الطلب" : "Order ID"}</div>
-                      <div className="font-medium">{orderId}</div>
+                      <div className="font-bold text-lg">{order.orderNumber}</div>
                     </div>
                     <div className="text-right">
                       <div className="text-sm text-muted-foreground">{language === "ar" ? "التاريخ" : "Date"}</div>
-                      <div className="font-medium">{sampleOrder.date}</div>
-                      <div className="mt-2">{statusBadge(sampleOrder.status)}</div>
+                      <div className="font-medium">{new Date(order.orderDate).toLocaleDateString(language === "ar" ? "ar-EG" : "en-US")}</div>
+                      <div className="mt-1 text-xs text-primary font-medium">
+                        {language === "ar" ? "تاريخ التوصيل المتوقع: " : "Estimated Delivery: "}
+                        {order.delivryDate ? new Date(order.delivryDate).toLocaleDateString(language === "ar" ? "ar-EG" : "en-US") : "---"}
+                      </div>
+                      <div className="mt-2 text-right">{statusBadge(order.status, language)}</div>
                     </div>
                   </div>
 
-                  <h3 className="text-lg font-semibold text-foreground mb-3">{language === "ar" ? "العناصر" : "Items"}</h3>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>{language === "ar" ? "المنتج" : "Product"}</TableHead>
-                        <TableHead>{language === "ar" ? "الكمية" : "Qty"}</TableHead>
-                        <TableHead>{language === "ar" ? "السعر" : "Price"}</TableHead>
-                        <TableHead></TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {sampleOrder.items.map((it) => (
-                        <TableRow key={it.sku}>
-                          <TableCell className="font-medium">{it.name}</TableCell>
-                          <TableCell>{it.qty}</TableCell>
-                          <TableCell>{it.price}</TableCell>
-
+                  <h3 className="text-lg font-semibold text-foreground mb-4">{language === "ar" ? "العناصر" : "Items"}</h3>
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="w-[100px]">{language === "ar" ? "الصورة" : "Image"}</TableHead>
+                          <TableHead>{language === "ar" ? "المنتج" : "Product"}</TableHead>
+                          <TableHead className="text-center">{language === "ar" ? "الكمية" : "Qty"}</TableHead>
+                          <TableHead className="text-right">{language === "ar" ? "السعر" : "Price"}</TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                      </TableHeader>
+                      <TableBody>
+                        {order.tbOrderItems.map((it, idx) => (
+                          <TableRow key={it.itemId || idx}>
+                            <TableCell>
+                              <div className="relative w-12 h-12 rounded overflow-hidden bg-muted">
+                                <img src={it.image || "/placeholder.svg"} alt={language === "ar" ? it.nameAr : it.nameEn} className="object-cover w-full h-full" />
+                              </div>
+                            </TableCell>
+                            <TableCell className="font-medium">
+                              {language === "ar" ? it.nameAr : it.nameEn}
+                            </TableCell>
+                            <TableCell className="text-center">{it.qty}</TableCell>
+                            <TableCell className="text-right">{formatPrice(it.unitPrice)} {t("products.price")}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
                 </CardContent>
               </Card>
 
               <Card>
-                <CardContent>
-                  <h3 className="text-lg font-semibold text-foreground mb-3">{language === "ar" ? "الشحن" : "Shipping"}</h3>
-                  <div className="space-y-1">
-                    <div className="font-medium">{sampleOrder.shipping.name}</div>
-                    <div className="text-sm text-muted-foreground">{sampleOrder.shipping.address}</div>
-                    <div className="text-sm text-muted-foreground">{sampleOrder.shipping.phone}</div>
+                <CardContent className="pt-6">
+                  <h3 className="text-lg font-semibold text-foreground mb-4">{language === "ar" ? "تفاصيل الشحن" : "Shipping Details"}</h3>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <div className="text-sm text-muted-foreground">{language === "ar" ? "العنوان" : "Address"}</div>
+                      <div className="font-medium">{order.address}</div>
+                      <div className="text-sm text-muted-foreground">{order.city}, {order.country}</div>
+                    </div>
+                    <div className="space-y-1 sm:text-right">
+                      <div className="text-sm text-muted-foreground">{language === "ar" ? "معلومات التواصل" : "Contact Information"}</div>
+                      <div className="font-medium">{order.phoneNumber}</div>
+                      <div className="text-sm text-muted-foreground">{order.email}</div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -118,20 +246,23 @@ export default function OrderViewPage() {
 
             <aside>
               <Card>
-                <CardContent>
-                  <h3 className="text-lg font-semibold text-foreground mb-3">{language === "ar" ? "ملخص الطلب" : "Order Summary"}</h3>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
+                <CardContent className="pt-6">
+                  <h3 className="text-lg font-semibold text-foreground mb-4">{language === "ar" ? "ملخص الطلب" : "Order Summary"}</h3>
+                  <div className="space-y-3">
+                    <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">{language === "ar" ? "المجموع الفرعي" : "Subtotal"}</span>
-                      <span>{sampleOrder.subtotal}</span>
+                      <span>{formatPrice(order.total)} {t("products.price")}</span>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">{language === "ar" ? "الشحن" : "Shipping"}</span>
-                      <span>{sampleOrder.shippingCost}</span>
+                      <span>{formatPrice(0)} {t("products.price")}</span>
                     </div>
-                    <div className="flex justify-between font-medium text-foreground border-t pt-2">
+                    <div className="flex justify-between font-bold text-lg text-foreground border-t pt-3 mt-3">
                       <span>{language === "ar" ? "الإجمالي" : "Total"}</span>
-                      <span>{sampleOrder.total}</span>
+                      <span className="text-primary">{formatPrice(order.total)} {t("products.price")}</span>
+                    </div>
+                    <div className="mt-4 p-3 bg-muted/50 rounded-lg text-xs text-muted-foreground text-center">
+                      {language === "ar" ? "طريقة الدفع" : "Payment Method"}: {order.paymentStatus}
                     </div>
                   </div>
                 </CardContent>

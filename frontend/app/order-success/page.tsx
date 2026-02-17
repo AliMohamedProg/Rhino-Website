@@ -25,7 +25,7 @@ export default function OrderSuccessPage() {
               : "Thank you for your order. We will contact you soon to confirm the details."}
           </p>
           <div className="flex flex-col gap-3">
-            <Link href="/profile/orders">
+            <Link href="/profile">
               <Button className="w-full">{t("profile.orders")}</Button>
             </Link>
             <Link href="/">
