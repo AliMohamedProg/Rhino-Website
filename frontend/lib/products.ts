@@ -201,3 +201,32 @@ export function getProductsByCategory(category: string): Product[] {
 export function formatPrice(price: number): string {
   return price.toLocaleString()
 }
+
+// Public Slider API
+const API_BASE_URL = "https://localhost:7282/api"
+
+export interface PublicSlider {
+  id: string
+  titleAr: string
+  titleEn: string
+  imageUrl: string
+  currentState: number
+  createdDate: string
+}
+
+export async function getPublicSliders(): Promise<PublicSlider[]> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/Slider`, {
+      next: { revalidate: 300 }, // Cache for 5 minutes
+    })
+    if (!response.ok) {
+      throw new Error("Failed to fetch sliders")
+    }
+    const data = await response.json()
+    // Filter only active sliders
+    return data.filter((slider: PublicSlider) => slider.currentState === 1)
+  } catch (error) {
+    console.error("Error fetching sliders:", error)
+    return []
+  }
+}

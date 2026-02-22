@@ -2,9 +2,13 @@
 using System.Security.Claims;
 using Bl.Contracts;
 using Bl.DTOs;
+using DAL.Context;
+using DAL.Contracts;
 using DAL.UserModel;
+using Domains;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Apis.Services
 {
@@ -13,21 +17,46 @@ namespace Apis.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ITableRepository<TbOrder> _orderRepository;
         public UserService(UserManager<ApplicationUser> _userManager, SignInManager<ApplicationUser> _signInManager,
-                          IHttpContextAccessor httpContextAccessor)
+                          IHttpContextAccessor httpContextAccessor, ITableRepository<TbOrder> orderRepository)
         {
             this._userManager = _userManager;
             this._signInManager = _signInManager;
             _httpContextAccessor = httpContextAccessor;
+            _orderRepository = orderRepository;
         }
         public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
         {
-            var users = _userManager.Users;
-            return users.Select(u => new UserDto
+            var users = _userManager.Users.ToList();
+
+            var userDtos = new List<UserDto>();
+
+            var orders = await _orderRepository.GetList<TbOrder>(o => o.CurrentState > 0);
+
+            foreach (var u in users)
             {
-                Id = Guid.Parse(u.Id),
-                Email = u.Email,
-            });
+                var roles = await _userManager.GetRolesAsync(u);
+
+                var userId = Guid.Parse(u.Id);
+                var userOrders = orders.Where(o => o.UserId == userId);
+
+                userDtos.Add(new UserDto
+                {
+                    Id = Guid.Parse(u.Id),
+                    Email = u.Email,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    PhoneNumber = u.PhoneNumber,
+                    Role = roles.FirstOrDefault(),
+                    TotalOrders = userOrders.Count(),
+                    TotalSpent = userOrders.Sum(o => o.Total),
+                    CreatedDate = DateTime.UtcNow
+                });
+            }
+
+
+            return userDtos;
         }
 
         public Guid GetLoggedInUser()
@@ -42,7 +71,6 @@ namespace Apis.Services
                 return Guid.Empty; // or throw an exception, depending on your needs
             }
         }
-
 
         public async Task<UserDto> GetUserByEmailAsync(string Email)
         {
@@ -121,7 +149,8 @@ namespace Apis.Services
                 Email = registerDto.Email,
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
-                PhoneNumber = registerDto.PhoneNumber
+                PhoneNumber = registerDto.PhoneNumber,
+                CreatedDate = DateTime.UtcNow
             };
 
             // 2. محاولة إنشاء المستخدم أولاً
@@ -151,8 +180,10 @@ namespace Apis.Services
             return new UserResultDto
             {
                 Success = false,
-                Errors = result.Errors.Select(e => e.Description)
+                Errors = result.Errors.Select(e => e.Description),
+                
             };
         }
+
     }
 }

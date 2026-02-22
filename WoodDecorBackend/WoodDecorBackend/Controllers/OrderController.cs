@@ -29,7 +29,7 @@ namespace Apis.Controllers
                 // نفترض إن الـ userId موجود من الـ JWT أو session
                 var userId = _userService.GetLoggedInUser();
 
-                var order = await _orderService.CreateOrder(userId , orderRequest.Country, orderRequest.City, orderRequest.Address, orderRequest.Total, orderRequest.PhoneNumber, orderRequest.Email);
+                var order = await _orderService.CreateOrder(userId , orderRequest.Country, orderRequest.City, orderRequest.Address, orderRequest.Total, orderRequest.PhoneNumber, orderRequest.Email, orderRequest.FirstName, orderRequest.LastName);
                 return Ok(order);
             }
             catch (Exception ex)

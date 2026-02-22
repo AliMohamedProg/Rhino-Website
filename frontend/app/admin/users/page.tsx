@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { ApiClient } from "@/app/ApiHelper/ApiClient"
 import { useAdminLanguage } from "@/context/admin-language-context"
 import { cn } from "@/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
@@ -8,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DataTable } from "@/components/admin/data-table"
-import { mockUsers, type User } from "@/lib/admin-data"
+import { type User } from "@/lib/admin-data"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,11 +36,87 @@ import {
 } from "@/components/ui/select"
 import { Plus, MoreHorizontal, Pencil, Trash2, Shield, Ban, CheckCircle } from "lucide-react"
 
+type ApiUser = {
+  id?: string
+  firstName?: string
+  lastName?: string
+  email?: string
+  phoneNumber?: string
+  role?: string | null
+  createdDate?: string | null
+  totalOrders?: number
+  totalSpent?: number
+}
+
+const normalizeRole = (role?: string | null): User["role"] => {
+  if (!role) return "customer"
+  const normalized = role.toLowerCase()
+  if (normalized === "admin" || normalized === "manager" || normalized === "customer") {
+    return normalized as User["role"]
+  }
+  if (normalized === "user") return "customer"
+  return "customer"
+}
+
+const mapApiUser = (apiUser: ApiUser, index: number): User => {
+  const safeEmail = apiUser.email?.trim() || ""
+  const safeName = [apiUser.firstName, apiUser.lastName].filter(Boolean).join(" ").trim()
+  const name = safeName || safeEmail || "Unknown User"
+  const rawTotalOrders = typeof apiUser.totalOrders === "number"
+    ? apiUser.totalOrders
+    : Number(apiUser.totalOrders ?? 0)
+  const rawTotalSpent = typeof apiUser.totalSpent === "number"
+    ? apiUser.totalSpent
+    : Number(apiUser.totalSpent ?? 0)
+  const totalOrders = Number.isFinite(rawTotalOrders) ? rawTotalOrders : 0
+  const totalSpent = Number.isFinite(rawTotalSpent) ? rawTotalSpent : 0
+
+  return {
+    id: apiUser.id || `user-${index}`,
+    name,
+    email: safeEmail,
+    phone: apiUser.phoneNumber || "",
+    role: normalizeRole(apiUser.role),
+    status: "active",
+    totalOrders,
+    totalSpent,
+    lastLogin: apiUser.createdDate || "",
+    joinDate: apiUser.createdDate || "",
+  }
+}
+
 export default function UsersPage() {
   const { t, language, dir } = useAdminLanguage()
-  const [users, setUsers] = useState(mockUsers)
+  const [users, setUsers] = useState<User[]>([])
+  const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingUser, setEditingUser] = useState<User | null>(null)
+
+  useEffect(() => {
+    let isMounted = true
+
+    const fetchUsers = async () => {
+      try {
+        setLoading(true)
+        setLoadError(false)
+        const data = await ApiClient.get("api/admin/users/get-all")
+        const list = Array.isArray(data) ? data : []
+        const mapped = list.map((user: ApiUser, index: number) => mapApiUser(user, index))
+        if (isMounted) setUsers(mapped)
+      } catch (err) {
+        console.error("Failed to fetch users:", err)
+        if (isMounted) setLoadError(true)
+      } finally {
+        if (isMounted) setLoading(false)
+      }
+    }
+
+    fetchUsers()
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   const getRoleBadge = (role: User["role"]) => {
     const roleConfig = {
@@ -99,6 +176,15 @@ export default function UsersPage() {
       ),
     },
     {
+      key: "phone",
+      header: t("users.phone"),
+      render: (user: User) => (
+        <span className="text-muted-foreground">
+          {user.phone || (language === "ar" ? "غير متاح" : "N/A")}
+        </span>
+      ),
+    },
+    {
       key: "role",
       header: t("users.role"),
       render: (user: User) => getRoleBadge(user.role),
@@ -127,53 +213,13 @@ export default function UsersPage() {
       header: t("users.joinDate"),
       render: (user: User) => (
         <span className="text-muted-foreground">
-          {new Date(user.joinDate).toLocaleDateString(
-            language === "ar" ? "ar-EG" : "en-US"
-          )}
+          {user.joinDate && !Number.isNaN(new Date(user.joinDate).getTime())
+            ? new Date(user.joinDate).toLocaleDateString(
+                language === "ar" ? "ar-EG" : "en-US"
+              )
+            : (language === "ar" ? "غير متاح" : "N/A")}
         </span>
       ),
-    },
-    {
-      key: "actions",
-      header: t("common.actions"),
-      render: (user: User) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">Actions</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align={dir === "rtl" ? "start" : "end"}>
-            <DropdownMenuItem
-              onClick={() => {
-                setEditingUser(user)
-                setDialogOpen(true)
-              }}
-            >
-              <Pencil className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-              {t("users.editUser")}
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            {user.status !== "active" && (
-              <DropdownMenuItem onClick={() => handleStatusChange(user.id, "active")}>
-                <CheckCircle className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-                {language === "ar" ? "تفعيل" : "Activate"}
-              </DropdownMenuItem>
-            )}
-            {user.status !== "blocked" && (
-              <DropdownMenuItem
-                className="text-destructive"
-                onClick={() => handleStatusChange(user.id, "blocked")}
-              >
-                <Ban className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-                {language === "ar" ? "حظر" : "Block"}
-              </DropdownMenuItem>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ),
-      className: "w-[70px]",
     },
   ]
 
@@ -194,76 +240,31 @@ export default function UsersPage() {
               : `Manage ${users.length} users`}
           </p>
         </div>
-        <Button onClick={() => { setEditingUser(null); setDialogOpen(true) }}>
-          <Plus className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-          {t("users.addUser")}
-        </Button>
       </div>
 
       {/* Users Table */}
       <Card>
         <CardContent className="pt-6">
-          <DataTable
-            data={users}
-            columns={columns}
+          {loading ? (
+            <div className="flex justify-center items-center h-48 text-muted-foreground animate-pulse">
+              {t("common.loading")}
+            </div>
+          ) : loadError ? (
+            <div className="flex justify-center items-center h-48 text-destructive">
+              {language === "ar" ? "فشل تحميل المستخدمين." : "Failed to load users."}
+            </div>
+          ) : (
+            <DataTable
+              data={users}
+              columns={columns}
             searchPlaceholder={language === "ar" ? "البحث عن مستخدم..." : "Search users..."}
-            searchKey="name"
-          />
+              searchKey="name"
+            />
+          )}
         </CardContent>
       </Card>
 
-      {/* Add/Edit User Dialog */}
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle className={cn(dir === "rtl" && "text-right")}>
-              {editingUser ? t("users.editUser") : t("users.addUser")}
-            </DialogTitle>
-            <DialogDescription className={cn(dir === "rtl" && "text-right")}>
-              {editingUser
-                ? language === "ar"
-                  ? "تعديل بيانات المستخدم"
-                  : "Edit user details"
-                : language === "ar"
-                ? "إضافة مستخدم جديد"
-                : "Add a new user to the system"}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">{t("users.name")}</Label>
-              <Input id="name" defaultValue={editingUser?.name || ""} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">{t("users.email")}</Label>
-              <Input id="email" type="email" defaultValue={editingUser?.email || ""} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="phone">{t("users.phone")}</Label>
-              <Input id="phone" defaultValue={editingUser?.phone || ""} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="role">{t("users.role")}</Label>
-              <Select defaultValue={editingUser?.role || "customer"}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="admin">{t("users.admin")}</SelectItem>
-                  <SelectItem value="manager">{t("users.manager")}</SelectItem>
-                  <SelectItem value="customer">{t("users.customer")}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <DialogFooter className={cn(dir === "rtl" && "flex-row-reverse")}>
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>
-              {t("common.cancel")}
-            </Button>
-            <Button onClick={() => setDialogOpen(false)}>{t("common.save")}</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+  
     </div>
   )
 }

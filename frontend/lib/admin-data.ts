@@ -1,3 +1,68 @@
+// API Base URL
+const API_BASE_URL = "https://localhost:7282/api/admin"
+
+// Slider Interface
+export interface Slider {
+  id: string
+  titleAr: string
+  titleEn: string
+  imageUrl: string
+  currentState: number
+  createdDate: string
+}
+
+import { ApiClient } from "@/app/ApiHelper/ApiClient"
+
+// Slider API Functions
+export async function getSliders(): Promise<Slider[]> {
+  try {
+    const result = await ApiClient.get("api/admin/Sliders")
+    return result || []
+  } catch (error) {
+    console.error("Error fetching sliders:", error)
+    return []
+  }
+}
+
+export async function addSlider(sliderData: {
+  titleAr: string
+  titleEn: string
+  imageUrl: string
+}): Promise<Slider | null> {
+  try {
+    const result = await ApiClient.post("api/admin/Sliders/add-slider", sliderData)
+    return result
+  } catch (error) {
+    console.error("Error adding slider:", error)
+    return null
+  }
+}
+
+export async function editSlider(sliderData: {
+  id: string
+  titleAr: string
+  titleEn: string
+  imageUrl: string
+}): Promise<Slider | null> {
+  try {
+    const result = await ApiClient.post("api/admin/Sliders/edit-slider", sliderData)
+    return result
+  } catch (error) {
+    console.error("Error editing slider:", error)
+    return null
+  }
+}
+
+export async function deleteSlider(sliderId: string): Promise<boolean> {
+  try {
+    await ApiClient.post(`api/admin/Sliders/delete-slider/${sliderId}`, {})
+    return true
+  } catch (error) {
+    console.error("Error deleting slider:", error)
+    return false
+  }
+}
+
 // Mock data for admin panel - will be replaced with API calls later
 
 export interface Product {
@@ -37,6 +102,9 @@ export interface Order {
     productName: string
     quantity: number
     price: number
+    nameEn?: string
+    nameAr?: string
+    image?: string
   }[]
   subtotal: number
   shipping: number
@@ -514,67 +582,6 @@ export const mockCategories: Category[] = [
     status: "inactive",
     createdDate: "2024-03-01",
   },
-]
-
-// Dashboard Stats
-export const mockDashboardStats: DashboardStats = {
-  totalRevenue: 1250000,
-  totalOrders: 856,
-  totalProducts: 155,
-  totalUsers: 2340,
-  revenueGrowth: 12.5,
-  ordersGrowth: 8.2,
-  productsGrowth: 5.0,
-  usersGrowth: 15.3,
-}
-
-// Chart Data
-export const mockSalesChartData: ChartData[] = [
-  { name: "Jan", value: 85000 },
-  { name: "Feb", value: 92000 },
-  { name: "Mar", value: 78000 },
-  { name: "Apr", value: 105000 },
-  { name: "May", value: 125000 },
-  { name: "Jun", value: 118000 },
-  { name: "Jul", value: 142000 },
-  { name: "Aug", value: 135000 },
-  { name: "Sep", value: 158000 },
-  { name: "Oct", value: 175000 },
-  { name: "Nov", value: 195000 },
-  { name: "Dec", value: 210000 },
-]
-
-export const mockOrdersChartData: ChartData[] = [
-  { name: "Jan", value: 65 },
-  { name: "Feb", value: 72 },
-  { name: "Mar", value: 58 },
-  { name: "Apr", value: 85 },
-  { name: "May", value: 92 },
-  { name: "Jun", value: 78 },
-  { name: "Jul", value: 105 },
-  { name: "Aug", value: 98 },
-  { name: "Sep", value: 115 },
-  { name: "Oct", value: 125 },
-  { name: "Nov", value: 138 },
-  { name: "Dec", value: 145 },
-]
-
-export const mockCategoryChartData: ChartData[] = [
-  { name: "Living Room", value: 35 },
-  { name: "Bedroom", value: 28 },
-  { name: "Office", value: 18 },
-  { name: "Kids", value: 12 },
-  { name: "Dining", value: 7 },
-]
-
-export const mockRevenueByDayData: ChartData[] = [
-  { name: "Sat", value: 12500 },
-  { name: "Sun", value: 18500 },
-  { name: "Mon", value: 15200 },
-  { name: "Tue", value: 22000 },
-  { name: "Wed", value: 19800 },
-  { name: "Thu", value: 25500 },
-  { name: "Fri", value: 8500 },
 ]
 
 // Aliases for backward compatibility

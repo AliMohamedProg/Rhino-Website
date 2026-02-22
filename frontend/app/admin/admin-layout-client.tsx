@@ -3,6 +3,7 @@
 import React from "react"
 
 import { AdminLanguageProvider, useAdminLanguage } from "@/context/admin-language-context"
+import { cairo } from "@/app/fonts"
 import { ThemeProvider } from "@/context/theme-context"
 import { AdminSidebar } from "@/components/admin/admin-sidebar"
 import { AdminHeader } from "@/components/admin/admin-header"
@@ -14,7 +15,7 @@ import { useRouter } from "next/navigation"
 import Loading from "@/app/loading"
 
 function AdminLayoutContent({ children }: { children: React.ReactNode }) {
-  const { dir } = useAdminLanguage()
+  const { dir, language } = useAdminLanguage()
   const { user, loading } = useAuth()
   const router = useRouter()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -38,7 +39,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-background" dir={dir}>
+    <div className={cn("min-h-screen bg-background", language === "ar" && cairo.className)} dir={dir}>
       {/* Desktop Sidebar */}
       <div className="hidden md:block">
         <AdminSidebar />

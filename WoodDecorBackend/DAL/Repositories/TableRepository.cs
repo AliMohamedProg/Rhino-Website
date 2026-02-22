@@ -11,6 +11,8 @@ using DAL.Exceptions;
 using Microsoft.Extensions.Logging;
 using DAL.Migrations;
 using System.Linq.Expressions;
+using Microsoft.AspNetCore.Identity;
+using DAL.UserModel;
 
 
 namespace DAL.Repositories
@@ -50,6 +52,10 @@ namespace DAL.Repositories
             {
                 throw new DataAccessExption(ex, "", _logger);
             }
+        }
+        public IQueryable<T> Query()
+        {
+            return _dbSet.AsNoTracking().Where(x => x.CurrentState > 0);
         }
         public T GetById(Guid id)
         {
@@ -234,6 +240,25 @@ namespace DAL.Repositories
             }
         }
 
+        public async Task<int> GetUserCount()
+        {
+            return await _context.Users.CountAsync();
+        }
+        public async Task<int> CountAsync(Expression<Func<T, bool>>? filter = null)
+        {
+            try
+            {
+                IQueryable<T> query = _dbSet.AsNoTracking();
 
+                if (filter != null)
+                    query = query.Where(filter);
+
+                return await query.CountAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new DataAccessExption(ex, "", _logger);
+            }
+        }
     }
 }

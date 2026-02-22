@@ -124,6 +124,7 @@ builder.Services.AddScoped<ISlider, SliderService>();
 builder.Services.AddScoped<IImage, ImageService>();
 builder.Services.AddScoped<ICart, CartService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IRefreshTokens, RefreshTokensService>();
 builder.Services.AddSingleton<TokenService>();
 //**************************************************************************************************************************************

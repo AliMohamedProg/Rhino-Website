@@ -1,13 +1,15 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { useLanguage } from "@/context/language-context"
 import { Button } from "@/components/ui/button"
+import { getPublicSliders, type PublicSlider } from "@/lib/products"
 
-const banners = [
+// Fallback banners if API fails
+const fallbackBanners = [
   {
     id: 1,
     image: "/placeholder.svg?height=500&width=1200",
@@ -36,7 +38,47 @@ const banners = [
 
 export function HeroBanner() {
   const { language, dir } = useLanguage()
+  const [sliders, setSliders] = useState<PublicSlider[]>([])
+  const [loading, setLoading] = useState(true)
   const [currentSlide, setCurrentSlide] = useState(0)
+
+  useEffect(() => {
+    const fetchSliders = async () => {
+      try {
+        const data = await getPublicSliders()
+        if (data.length > 0) {
+          setSliders(data)
+        } else {
+          setSliders([])
+        }
+      } catch (error) {
+        console.error("Error fetching sliders:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchSliders()
+  }, [])
+
+  // Use API sliders or fallback
+  const banners = sliders.length > 0
+    ? sliders.map((slider) => ({
+        id: slider.id,
+        image: slider.imageUrl,
+        title: { en: slider.titleEn, ar: slider.titleAr },
+        subtitle: { en: "", ar: "" },
+        cta: { en: "Shop Now", ar: "تسوق الآن" },
+        href: "/products",
+      }))
+    : fallbackBanners
+
+  // Update currentSlide when banners change
+  useEffect(() => {
+    if (banners.length > 0) {
+      setCurrentSlide((prev) => prev % banners.length)
+    }
+  }, [banners.length])
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % banners.length)
@@ -44,6 +86,16 @@ export function HeroBanner() {
 
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + banners.length) % banners.length)
+  }
+
+  if (loading) {
+    return (
+      <section className="relative bg-secondary overflow-hidden">
+        <div className="relative h-[300px] sm:h-[400px] md:h-[500px]">
+          <div className="absolute inset-0 bg-muted animate-pulse" />
+        </div>
+      </section>
+    )
   }
 
   const banner = banners[currentSlide]

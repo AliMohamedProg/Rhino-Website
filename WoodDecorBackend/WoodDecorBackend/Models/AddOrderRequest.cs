@@ -13,5 +13,7 @@ namespace Apis.Models
         public string PhoneNumber { get; set; }
         [EmailAddress(ErrorMessage = "the email is invalid")]
         public string Email { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }

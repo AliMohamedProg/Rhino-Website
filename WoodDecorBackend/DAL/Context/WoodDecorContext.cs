@@ -142,9 +142,7 @@ public partial class WoodDecorContext : IdentityDbContext<ApplicationUser>
 
         modelBuilder.Entity<TbSlider>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("TbSlider");
+
 
             entity.Property(e => e.TitleAr).HasMaxLength(50);
             entity.Property(e => e.TitleEn).HasMaxLength(50);

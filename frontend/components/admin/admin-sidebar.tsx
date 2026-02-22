@@ -21,6 +21,7 @@ import {
   HelpCircle,
   ChevronLeft,
   ChevronRight,
+  ImageIcon,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -38,6 +39,7 @@ const mainNavItems: NavItem[] = [
   { titleKey: "sidebar.orders", href: "/admin/orders", icon: ShoppingCart },
   { titleKey: "sidebar.users", href: "/admin/users", icon: Users },
   { titleKey: "sidebar.categories", href: "/admin/categories", icon: FolderTree },
+  { titleKey: "sidebar.sliders", href: "/admin/sliders", icon: ImageIcon },
 ]
 
 const secondaryNavItems: NavItem[] = [

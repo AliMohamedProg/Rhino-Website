@@ -3,16 +3,156 @@
   "WorkspaceRootPath": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\services\\dashboardservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\services\\dashboardservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\dal\\contracts\\itablerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|solutionrelative:dal\\contracts\\itablerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\dal\\repositories\\tablerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|solutionrelative:dal\\repositories\\tablerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\areas\\admin\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\areas\\admin\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\contracts\\idashboardservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\contracts\\idashboardservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\dtos\\dashboarddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\dtos\\dashboarddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\dtos\\orderitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\dtos\\orderitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\dtos\\recentorderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\dtos\\recentorderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\controllers\\ordercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\controllers\\ordercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\areas\\admin\\controllers\\orderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\areas\\admin\\controllers\\orderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{227E46CB-5E84-423F-A20F-CABA16737F37}|Domains\\Domains.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\domains\\tborder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{227E46CB-5E84-423F-A20F-CABA16737F37}|Domains\\Domains.csproj|solutionrelative:domains\\tborder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\services\\orderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\services\\orderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{227E46CB-5E84-423F-A20F-CABA16737F37}|Domains\\Domains.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\domains\\tborderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{227E46CB-5E84-423F-A20F-CABA16737F37}|Domains\\Domains.csproj|solutionrelative:domains\\tborderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\dtos\\orderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\dtos\\orderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\dal\\context\\wooddecorcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|solutionrelative:dal\\context\\wooddecorcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{227E46CB-5E84-423F-A20F-CABA16737F37}|Domains\\Domains.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\domains\\domains.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{227E46CB-5E84-423F-A20F-CABA16737F37}|Domains\\Domains.csproj|solutionrelative:domains\\domains.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\dal\\dal.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|solutionrelative:dal\\dal.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\dtos\\topproductdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\dtos\\topproductdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\dtos\\categorysalesdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\dtos\\categorysalesdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\dtos\\monthlyordersdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\dtos\\monthlyordersdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\dtos\\monthlysalesdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\dtos\\monthlysalesdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\areas\\admin\\controllers\\sliderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\areas\\admin\\controllers\\sliderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{227E46CB-5E84-423F-A20F-CABA16737F37}|Domains\\Domains.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\domains\\basetable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{227E46CB-5E84-423F-A20F-CABA16737F37}|Domains\\Domains.csproj|solutionrelative:domains\\basetable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{227E46CB-5E84-423F-A20F-CABA16737F37}|Domains\\Domains.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\domains\\tbslider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{227E46CB-5E84-423F-A20F-CABA16737F37}|Domains\\Domains.csproj|solutionrelative:domains\\tbslider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\services\\baseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\services\\baseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\controllers\\slidercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\controllers\\slidercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\controllers\\categorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\controllers\\categorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\contracts\\iorder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\contracts\\iorder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\areas\\admin\\controllers\\itemcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\areas\\admin\\controllers\\itemcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\areas\\admin\\controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\areas\\admin\\controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\areas\\admin\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\areas\\admin\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\contracts\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\contracts\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\dtos\\basedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\dtos\\basedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\services\\cartservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\services\\cartservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\dtos\\cartdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\dtos\\cartdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\dtos\\basedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\dtos\\basedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\dal\\repositories\\cartrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -23,20 +163,8 @@
       "RelativeMoniker": "D:0:0:{227E46CB-5E84-423F-A20F-CABA16737F37}|Domains\\Domains.csproj|solutionrelative:domains\\tbcart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\areas\\admin\\controllers\\itemcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\areas\\admin\\controllers\\itemcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\dal\\repositories\\tablerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|solutionrelative:dal\\repositories\\tablerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\services\\itemservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\services\\itemservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\controllers\\itemscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -47,20 +175,8 @@
       "RelativeMoniker": "D:0:0:{227E46CB-5E84-423F-A20F-CABA16737F37}|Domains\\Domains.csproj|solutionrelative:domains\\tbitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\areas\\admin\\controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\areas\\admin\\controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\controllers\\uploadcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\controllers\\uploadcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\controllers\\categorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\controllers\\categorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\services\\baseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\services\\baseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\services\\categoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -79,20 +195,8 @@
       "RelativeMoniker": "D:0:0:{227E46CB-5E84-423F-A20F-CABA16737F37}|Domains\\Domains.csproj|solutionrelative:domains\\tbreview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{227E46CB-5E84-423F-A20F-CABA16737F37}|Domains\\Domains.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\domains\\tborder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{227E46CB-5E84-423F-A20F-CABA16737F37}|Domains\\Domains.csproj|solutionrelative:domains\\tborder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\mapping\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\mapping\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\services\\contextconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -103,32 +207,8 @@
       "RelativeMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|solutionrelative:dal\\migrations\\20260216222630_addingorderinfointborder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\wooddecorbackend\\controllers\\ordercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\controllers\\ordercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\contracts\\iorder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\contracts\\iorder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\services\\orderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\services\\orderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\dtos\\orderitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\dtos\\orderitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{227E46CB-5E84-423F-A20F-CABA16737F37}|Domains\\Domains.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\domains\\tborderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{227E46CB-5E84-423F-A20F-CABA16737F37}|Domains\\Domains.csproj|solutionrelative:domains\\tborderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\contracts\\iorderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\contracts\\iorderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\dtos\\orderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\dtos\\orderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\bl\\services\\orderitemservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -149,6 +229,14 @@
     {
       "AbsoluteMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\dal\\migrations\\20260217172344_addproductscountintbcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|solutionrelative:dal\\migrations\\20260217172344_addproductscountintbcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\dal\\migrations\\20260218031718_addcreateddateintheapplicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|solutionrelative:dal\\migrations\\20260218031718_addcreateddateintheapplicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|c:\\users\\hp - victus\\downloads\\wooddecorwebsite\\wooddecorbackend\\dal\\migrations\\20260222005250_maketheidintbsliderprimarykey.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|solutionrelative:dal\\migrations\\20260222005250_maketheidintbsliderprimarykey.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -158,7 +246,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 11,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -166,197 +254,392 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "BaseDto.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\BaseDto.cs",
-              "RelativeDocumentMoniker": "Bl\\DTOs\\BaseDto.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\BaseDto.cs",
-              "RelativeToolTip": "Bl\\DTOs\\BaseDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-17T23:44:02.809Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "CartRepository.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\Repositories\\CartRepository.cs",
-              "RelativeDocumentMoniker": "DAL\\Repositories\\CartRepository.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\Repositories\\CartRepository.cs",
-              "RelativeToolTip": "DAL\\Repositories\\CartRepository.cs",
-              "ViewState": "AgIAACEAAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
+              "Title": "DashboardController.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\DashboardController.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Areas\\Admin\\Controllers\\DashboardController.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\DashboardController.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Areas\\Admin\\Controllers\\DashboardController.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAgwBwAAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-17T23:43:48.462Z",
+              "WhenOpened": "2026-02-22T04:03:28.96Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "TbCart.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\TbCart.cs",
-              "RelativeDocumentMoniker": "Domains\\TbCart.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\TbCart.cs",
-              "RelativeToolTip": "Domains\\TbCart.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "DashboardService.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\DashboardService.cs",
+              "RelativeDocumentMoniker": "Bl\\Services\\DashboardService.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\DashboardService.cs",
+              "RelativeToolTip": "Bl\\Services\\DashboardService.cs",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAswIgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-17T23:43:25.865Z",
+              "WhenOpened": "2026-02-22T02:57:43.441Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "CartDto.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\CartDto.cs",
-              "RelativeDocumentMoniker": "Bl\\DTOs\\CartDto.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\CartDto.cs",
-              "RelativeToolTip": "Bl\\DTOs\\CartDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-17T23:43:10.141Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 2,
               "Title": "TableRepository.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\Repositories\\TableRepository.cs",
               "RelativeDocumentMoniker": "DAL\\Repositories\\TableRepository.cs",
               "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\Repositories\\TableRepository.cs",
               "RelativeToolTip": "DAL\\Repositories\\TableRepository.cs",
-              "ViewState": "AgIAABcAAAAAAAAAAAArwCYAAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-17T17:18:13.397Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "CategoryService.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\CategoryService.cs",
-              "RelativeDocumentMoniker": "Bl\\Services\\CategoryService.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\CategoryService.cs",
-              "RelativeToolTip": "Bl\\Services\\CategoryService.cs",
-              "ViewState": "AgIAAAQAAAAAAAAAAAAYwCAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "ITableRepository.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\Contracts\\ITableRepository.cs",
+              "RelativeDocumentMoniker": "DAL\\Contracts\\ITableRepository.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\Contracts\\ITableRepository.cs",
+              "RelativeToolTip": "DAL\\Contracts\\ITableRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwA8AAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-17T17:07:12.099Z"
+              "WhenOpened": "2026-02-18T08:00:16.672Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
-              "Title": "AddOrderRequest.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Models\\AddOrderRequest.cs",
-              "RelativeDocumentMoniker": "WoodDecorBackend\\Models\\AddOrderRequest.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Models\\AddOrderRequest.cs",
-              "RelativeToolTip": "WoodDecorBackend\\Models\\AddOrderRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 6,
+              "Title": "OrderItemDto.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\OrderItemDto.cs",
+              "RelativeDocumentMoniker": "Bl\\DTOs\\OrderItemDto.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\OrderItemDto.cs",
+              "RelativeToolTip": "Bl\\DTOs\\OrderItemDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwA0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-16T22:18:01.086Z"
+              "WhenOpened": "2026-02-16T22:06:14.335Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "TbOrder.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\TbOrder.cs",
-              "RelativeDocumentMoniker": "Domains\\TbOrder.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\TbOrder.cs",
-              "RelativeToolTip": "Domains\\TbOrder.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAZAAAAAAAAAA==",
+              "DocumentIndex": 14,
+              "Title": "OrderDto.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\OrderDto.cs",
+              "RelativeDocumentMoniker": "Bl\\DTOs\\OrderDto.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\OrderDto.cs",
+              "RelativeToolTip": "Bl\\DTOs\\OrderDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-16T22:06:28.344Z"
+              "WhenOpened": "2026-02-16T22:06:09.638Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "TbCategory.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\TbCategory.cs",
-              "RelativeDocumentMoniker": "Domains\\TbCategory.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\TbCategory.cs",
-              "RelativeToolTip": "Domains\\TbCategory.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAApAAAAAAAAAA==",
+              "DocumentIndex": 13,
+              "Title": "TbOrderItem.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\TbOrderItem.cs",
+              "RelativeDocumentMoniker": "Domains\\TbOrderItem.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\TbOrderItem.cs",
+              "RelativeToolTip": "Domains\\TbOrderItem.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-17T17:22:31.293Z"
+              "WhenOpened": "2026-02-17T00:40:09.061Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
+              "Title": "OrdersController.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\OrdersController.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Areas\\Admin\\Controllers\\OrdersController.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\OrdersController.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Areas\\Admin\\Controllers\\OrdersController.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAABcAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-18T06:59:53.422Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "IDashboardService.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Contracts\\IDashboardService.cs",
+              "RelativeDocumentMoniker": "Bl\\Contracts\\IDashboardService.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Contracts\\IDashboardService.cs",
+              "RelativeToolTip": "Bl\\Contracts\\IDashboardService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAkAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-22T01:49:08.316Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Program.cs",
               "RelativeDocumentMoniker": "WoodDecorBackend\\Program.cs",
               "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Program.cs",
               "RelativeToolTip": "WoodDecorBackend\\Program.cs",
-              "ViewState": "AgIAAE8AAAAAAAAAAADgv14AAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAHQAAAAAAAAAAAAYwH4AAABCAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-16T22:02:28.75Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "CartService.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\CartService.cs",
-              "RelativeDocumentMoniker": "Bl\\Services\\CartService.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\CartService.cs",
-              "RelativeToolTip": "Bl\\Services\\CartService.cs",
-              "ViewState": "AgIAACEAAAAAAAAAAAAowCcAAAA1AAAAAAAAAA==",
+              "DocumentIndex": 5,
+              "Title": "DashboardDto.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\DashboardDto.cs",
+              "RelativeDocumentMoniker": "Bl\\DTOs\\DashboardDto.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\DashboardDto.cs",
+              "RelativeToolTip": "Bl\\DTOs\\DashboardDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAA/AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-16T21:43:51.302Z",
+              "WhenOpened": "2026-02-22T01:44:19.544Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
-              "Title": "ItemsController.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Controllers\\ItemsController.cs",
-              "RelativeDocumentMoniker": "WoodDecorBackend\\Controllers\\ItemsController.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Controllers\\ItemsController.cs",
-              "RelativeToolTip": "WoodDecorBackend\\Controllers\\ItemsController.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAQwBgAAAAAAAAAAAAAAA==",
+              "Title": "OrderController.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Controllers\\OrderController.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Controllers\\OrderController.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Controllers\\OrderController.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Controllers\\OrderController.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAAwCgAAAA/AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-17T02:52:21.835Z",
+              "WhenOpened": "2026-02-16T21:20:55.075Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ItemController.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\ItemController.cs",
-              "RelativeDocumentMoniker": "WoodDecorBackend\\Areas\\Admin\\Controllers\\ItemController.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\ItemController.cs",
-              "RelativeToolTip": "WoodDecorBackend\\Areas\\Admin\\Controllers\\ItemController.cs",
-              "ViewState": "AgIAADIAAAAAAAAAAAArwEEAAAAIAAAAAAAAAA==",
+              "DocumentIndex": 17,
+              "Title": "Domains.csproj",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\Domains.csproj",
+              "RelativeDocumentMoniker": "Domains\\Domains.csproj",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\Domains.csproj",
+              "RelativeToolTip": "Domains\\Domains.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-02-22T02:12:04.81Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Services\\UserService.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Services\\UserService.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Services\\UserService.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Services\\UserService.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAmwLoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-17T20:50:44.607Z",
+              "WhenOpened": "2026-02-17T04:39:46.322Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "TbOrder.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\TbOrder.cs",
+              "RelativeDocumentMoniker": "Domains\\TbOrder.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\TbOrder.cs",
+              "RelativeToolTip": "Domains\\TbOrder.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAA9wBkAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-16T22:06:28.344Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "ItemService.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\ItemService.cs",
-              "RelativeDocumentMoniker": "Bl\\Services\\ItemService.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\ItemService.cs",
-              "RelativeToolTip": "Bl\\Services\\ItemService.cs",
-              "ViewState": "AgIAAEgAAAAAAAAAAADgv2AAAABLAAAAAAAAAA==",
+              "DocumentIndex": 20,
+              "Title": "CategorySalesDto.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\CategorySalesDto.cs",
+              "RelativeDocumentMoniker": "Bl\\DTOs\\CategorySalesDto.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\CategorySalesDto.cs",
+              "RelativeToolTip": "Bl\\DTOs\\CategorySalesDto.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAqwAkAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-17T22:28:39.708Z",
+              "WhenOpened": "2026-02-22T01:46:11.081Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "OrderService.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\OrderService.cs",
+              "RelativeDocumentMoniker": "Bl\\Services\\OrderService.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\OrderService.cs",
+              "RelativeToolTip": "Bl\\Services\\OrderService.cs",
+              "ViewState": "AgIAAE8AAAAAAAAAAADwv2QAAACwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-16T21:43:35.244Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "RecentOrderDto.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\RecentOrderDto.cs",
+              "RelativeDocumentMoniker": "Bl\\DTOs\\RecentOrderDto.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\RecentOrderDto.cs",
+              "RelativeToolTip": "Bl\\DTOs\\RecentOrderDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-22T01:47:00.951Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "WoodDecorContext.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\Context\\WoodDecorContext.cs",
+              "RelativeDocumentMoniker": "DAL\\Context\\WoodDecorContext.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\Context\\WoodDecorContext.cs",
+              "RelativeToolTip": "DAL\\Context\\WoodDecorContext.cs",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAAwFAAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-22T00:52:04.323Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "TopProductDto.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\TopProductDto.cs",
+              "RelativeDocumentMoniker": "Bl\\DTOs\\TopProductDto.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\TopProductDto.cs",
+              "RelativeToolTip": "Bl\\DTOs\\TopProductDto.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAqwAkAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-22T01:48:09.998Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "DAL.csproj",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\DAL.csproj",
+              "RelativeDocumentMoniker": "DAL\\DAL.csproj",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\DAL.csproj",
+              "RelativeToolTip": "DAL\\DAL.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-02-22T02:12:10.868Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "MonthlyOrdersDto.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\MonthlyOrdersDto.cs",
+              "RelativeDocumentMoniker": "Bl\\DTOs\\MonthlyOrdersDto.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\MonthlyOrdersDto.cs",
+              "RelativeToolTip": "Bl\\DTOs\\MonthlyOrdersDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-22T01:45:36.31Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "MonthlySalesDto.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\MonthlySalesDto.cs",
+              "RelativeDocumentMoniker": "Bl\\DTOs\\MonthlySalesDto.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\MonthlySalesDto.cs",
+              "RelativeToolTip": "Bl\\DTOs\\MonthlySalesDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-22T01:44:56.952Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "BaseTable.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\BaseTable.cs",
+              "RelativeDocumentMoniker": "Domains\\BaseTable.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\BaseTable.cs",
+              "RelativeToolTip": "Domains\\BaseTable.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-22T00:49:16.196Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "SlidersController.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\SlidersController.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Areas\\Admin\\Controllers\\SlidersController.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\SlidersController.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Areas\\Admin\\Controllers\\SlidersController.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAgwD8AAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-21T14:33:54.996Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "BaseService.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\BaseService.cs",
+              "RelativeDocumentMoniker": "Bl\\Services\\BaseService.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\BaseService.cs",
+              "RelativeToolTip": "Bl\\Services\\BaseService.cs",
+              "ViewState": "AgIAACEAAAAAAAAAAAAYwDMAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-17T17:21:34.619Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAACMAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-17T03:07:22.78Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 35,
-              "Title": "20260217175730_makeProductsCountColumnNullable.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\Migrations\\20260217175730_makeProductsCountColumnNullable.cs",
-              "RelativeDocumentMoniker": "DAL\\Migrations\\20260217175730_makeProductsCountColumnNullable.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\Migrations\\20260217175730_makeProductsCountColumnNullable.cs",
-              "RelativeToolTip": "DAL\\Migrations\\20260217175730_makeProductsCountColumnNullable.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAABFAAAAAAAAAA==",
+              "Title": "BaseDto.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\BaseDto.cs",
+              "RelativeDocumentMoniker": "Bl\\DTOs\\BaseDto.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\BaseDto.cs",
+              "RelativeToolTip": "Bl\\DTOs\\BaseDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-17T17:57:30.913Z"
+              "WhenOpened": "2026-02-17T23:44:02.809Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 58,
+              "Title": "20260222005250_makeTheIdInTbSliderPrimaryKey.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\Migrations\\20260222005250_makeTheIdInTbSliderPrimaryKey.cs",
+              "RelativeDocumentMoniker": "DAL\\Migrations\\20260222005250_makeTheIdInTbSliderPrimaryKey.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\Migrations\\20260222005250_makeTheIdInTbSliderPrimaryKey.cs",
+              "RelativeToolTip": "DAL\\Migrations\\20260222005250_makeTheIdInTbSliderPrimaryKey.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-22T00:52:50.345Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "SliderController.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Controllers\\SliderController.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Controllers\\SliderController.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Controllers\\SliderController.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Controllers\\SliderController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAgwBMAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-21T14:36:03.068Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "TbSlider.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\TbSlider.cs",
+              "RelativeDocumentMoniker": "Domains\\TbSlider.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\TbSlider.cs",
+              "RelativeToolTip": "Domains\\TbSlider.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-22T00:49:11.474Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
               "Title": "CategoryController.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Controllers\\CategoryController.cs",
               "RelativeDocumentMoniker": "WoodDecorBackend\\Controllers\\CategoryController.cs",
@@ -368,7 +651,200 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 29,
+              "Title": "IOrder.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Contracts\\IOrder.cs",
+              "RelativeDocumentMoniker": "Bl\\Contracts\\IOrder.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Contracts\\IOrder.cs",
+              "RelativeToolTip": "Bl\\Contracts\\IOrder.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAhwA8AAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-16T22:03:39.263Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "CartDto.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\CartDto.cs",
+              "RelativeDocumentMoniker": "Bl\\DTOs\\CartDto.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\CartDto.cs",
+              "RelativeToolTip": "Bl\\DTOs\\CartDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-17T23:43:10.141Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Areas\\Admin\\Controllers\\UsersController.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Areas\\Admin\\Controllers\\UsersController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-18T02:21:50.057Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 57,
+              "Title": "20260218031718_addCreatedDateInTheApplicationUser.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\Migrations\\20260218031718_addCreatedDateInTheApplicationUser.cs",
+              "RelativeDocumentMoniker": "DAL\\Migrations\\20260218031718_addCreatedDateInTheApplicationUser.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\Migrations\\20260218031718_addCreatedDateInTheApplicationUser.cs",
+              "RelativeToolTip": "DAL\\Migrations\\20260218031718_addCreatedDateInTheApplicationUser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-18T03:17:19.296Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "IUserService.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Contracts\\IUserService.cs",
+              "RelativeDocumentMoniker": "Bl\\Contracts\\IUserService.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Contracts\\IUserService.cs",
+              "RelativeToolTip": "Bl\\Contracts\\IUserService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAsAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-18T02:20:55.381Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "ItemController.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\ItemController.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Areas\\Admin\\Controllers\\ItemController.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\ItemController.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Areas\\Admin\\Controllers\\ItemController.cs",
+              "ViewState": "AgIAADgAAAAAAAAAAAAwwEwAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-17T20:50:44.607Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "CategoriesController.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\CategoriesController.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Areas\\Admin\\Controllers\\CategoriesController.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\CategoriesController.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Areas\\Admin\\Controllers\\CategoriesController.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAmwFAAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-17T02:51:25.913Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 53,
+              "Title": "AddOrderRequest.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Models\\AddOrderRequest.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Models\\AddOrderRequest.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Models\\AddOrderRequest.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Models\\AddOrderRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-16T22:18:01.086Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 44,
+              "Title": "CategoryService.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\CategoryService.cs",
+              "RelativeDocumentMoniker": "Bl\\Services\\CategoryService.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\CategoryService.cs",
+              "RelativeToolTip": "Bl\\Services\\CategoryService.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAYwCAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-17T17:07:12.099Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "TbCart.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\TbCart.cs",
+              "RelativeDocumentMoniker": "Domains\\TbCart.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\TbCart.cs",
+              "RelativeToolTip": "Domains\\TbCart.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-17T23:43:25.865Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "CartRepository.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\Repositories\\CartRepository.cs",
+              "RelativeDocumentMoniker": "DAL\\Repositories\\CartRepository.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\Repositories\\CartRepository.cs",
+              "RelativeToolTip": "DAL\\Repositories\\CartRepository.cs",
+              "ViewState": "AgIAACEAAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-17T23:43:48.462Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 45,
+              "Title": "TbCategory.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\TbCategory.cs",
+              "RelativeDocumentMoniker": "Domains\\TbCategory.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\TbCategory.cs",
+              "RelativeToolTip": "Domains\\TbCategory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-17T17:22:31.293Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "CartService.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\CartService.cs",
+              "RelativeDocumentMoniker": "Bl\\Services\\CartService.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\CartService.cs",
+              "RelativeToolTip": "Bl\\Services\\CartService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACcAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-16T21:43:51.302Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "ItemsController.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Controllers\\ItemsController.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Controllers\\ItemsController.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Controllers\\ItemsController.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Controllers\\ItemsController.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAQwBgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-17T02:52:21.835Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "ItemService.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\ItemService.cs",
+              "RelativeDocumentMoniker": "Bl\\Services\\ItemService.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\ItemService.cs",
+              "RelativeToolTip": "Bl\\Services\\ItemService.cs",
+              "ViewState": "AgIAAEgAAAAAAAAAAADgv2AAAABLAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-17T22:28:39.708Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 55,
+              "Title": "20260217175730_makeProductsCountColumnNullable.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\Migrations\\20260217175730_makeProductsCountColumnNullable.cs",
+              "RelativeDocumentMoniker": "DAL\\Migrations\\20260217175730_makeProductsCountColumnNullable.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\Migrations\\20260217175730_makeProductsCountColumnNullable.cs",
+              "RelativeToolTip": "DAL\\Migrations\\20260217175730_makeProductsCountColumnNullable.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAABFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-17T17:57:30.913Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 43,
               "Title": "UploadController.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Controllers\\UploadController.cs",
               "RelativeDocumentMoniker": "WoodDecorBackend\\Controllers\\UploadController.cs",
@@ -380,7 +856,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 42,
               "Title": "TbItem.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\TbItem.cs",
               "RelativeDocumentMoniker": "Domains\\TbItem.cs",
@@ -392,32 +868,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "CategoriesController.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\CategoriesController.cs",
-              "RelativeDocumentMoniker": "WoodDecorBackend\\Areas\\Admin\\Controllers\\CategoriesController.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\CategoriesController.cs",
-              "RelativeToolTip": "WoodDecorBackend\\Areas\\Admin\\Controllers\\CategoriesController.cs",
-              "ViewState": "AgIAADUAAAAAAAAAAAAswFAAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-17T02:51:25.913Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "BaseService.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\BaseService.cs",
-              "RelativeDocumentMoniker": "Bl\\Services\\BaseService.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\BaseService.cs",
-              "RelativeToolTip": "Bl\\Services\\BaseService.cs",
-              "ViewState": "AgIAABcAAAAAAAAAAAAWwCYAAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-17T17:21:34.619Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 48,
               "Title": "MappingProfile.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Mapping\\MappingProfile.cs",
               "RelativeDocumentMoniker": "Bl\\Mapping\\MappingProfile.cs",
@@ -429,7 +880,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 47,
               "Title": "TbReview.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\TbReview.cs",
               "RelativeDocumentMoniker": "Domains\\TbReview.cs",
@@ -441,7 +892,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 56,
               "Title": "20260217172344_addProductsCountInTbCategory.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\Migrations\\20260217172344_addProductsCountInTbCategory.cs",
               "RelativeDocumentMoniker": "DAL\\Migrations\\20260217172344_addProductsCountInTbCategory.cs",
@@ -453,7 +904,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 46,
               "Title": "CategoryDto.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\CategoryDto.cs",
               "RelativeDocumentMoniker": "Bl\\DTOs\\CategoryDto.cs",
@@ -465,31 +916,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
-              "Title": "OrderItemDto.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\OrderItemDto.cs",
-              "RelativeDocumentMoniker": "Bl\\DTOs\\OrderItemDto.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\OrderItemDto.cs",
-              "RelativeToolTip": "Bl\\DTOs\\OrderItemDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwA0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-16T22:06:14.335Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 31,
-              "Title": "OrderDto.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\OrderDto.cs",
-              "RelativeDocumentMoniker": "Bl\\DTOs\\OrderDto.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\DTOs\\OrderDto.cs",
-              "RelativeToolTip": "Bl\\DTOs\\OrderDto.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAA3wBoAAAAxAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-16T22:06:09.638Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 49,
               "Title": "ContextConfig.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Services\\ContextConfig.cs",
               "RelativeDocumentMoniker": "WoodDecorBackend\\Services\\ContextConfig.cs",
@@ -501,31 +928,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "AuthController.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Controllers\\AuthController.cs",
-              "RelativeDocumentMoniker": "WoodDecorBackend\\Controllers\\AuthController.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Controllers\\AuthController.cs",
-              "RelativeToolTip": "WoodDecorBackend\\Controllers\\AuthController.cs",
-              "ViewState": "AgIAAB8AAAAAAAAAAAAjwDQAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-17T03:07:22.78Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 22,
-              "Title": "UserService.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Services\\UserService.cs",
-              "RelativeDocumentMoniker": "WoodDecorBackend\\Services\\UserService.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Services\\UserService.cs",
-              "RelativeToolTip": "WoodDecorBackend\\Services\\UserService.cs",
-              "ViewState": "AgIAAFcAAAAAAAAAAADgv2YAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-17T04:39:46.322Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 54,
               "Title": "20260217012649_dd.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\Migrations\\20260217012649_dd.cs",
               "RelativeDocumentMoniker": "DAL\\Migrations\\20260217012649_dd.cs",
@@ -537,7 +940,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 50,
               "Title": "20260216222630_addingOrderInfoInTbOrder.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\DAL\\Migrations\\20260216222630_addingOrderInfoInTbOrder.cs",
               "RelativeDocumentMoniker": "DAL\\Migrations\\20260216222630_addingOrderInfoInTbOrder.cs",
@@ -549,55 +952,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
-              "Title": "IOrder.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Contracts\\IOrder.cs",
-              "RelativeDocumentMoniker": "Bl\\Contracts\\IOrder.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Contracts\\IOrder.cs",
-              "RelativeToolTip": "Bl\\Contracts\\IOrder.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAUAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-16T22:03:39.263Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 27,
-              "Title": "OrderService.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\OrderService.cs",
-              "RelativeDocumentMoniker": "Bl\\Services\\OrderService.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\OrderService.cs",
-              "RelativeToolTip": "Bl\\Services\\OrderService.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAAAA8AAABGAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-16T21:43:35.244Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 25,
-              "Title": "OrderController.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Controllers\\OrderController.cs",
-              "RelativeDocumentMoniker": "WoodDecorBackend\\Controllers\\OrderController.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\WoodDecorBackend\\Controllers\\OrderController.cs",
-              "RelativeToolTip": "WoodDecorBackend\\Controllers\\OrderController.cs",
-              "ViewState": "AgIAABkAAAAAAAAAAAAqwCYAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-16T21:20:55.075Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 29,
-              "Title": "TbOrderItem.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\TbOrderItem.cs",
-              "RelativeDocumentMoniker": "Domains\\TbOrderItem.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Domains\\TbOrderItem.cs",
-              "RelativeToolTip": "Domains\\TbOrderItem.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-17T00:40:09.061Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 51,
               "Title": "IOrderItem.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Contracts\\IOrderItem.cs",
               "RelativeDocumentMoniker": "Bl\\Contracts\\IOrderItem.cs",
@@ -609,7 +964,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 52,
               "Title": "OrderItemService.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\WoodDecorBackend\\Bl\\Services\\OrderItemService.cs",
               "RelativeDocumentMoniker": "Bl\\Services\\OrderItemService.cs",

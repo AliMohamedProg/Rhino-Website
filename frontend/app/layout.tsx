@@ -1,15 +1,10 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
-import { Cairo } from "next/font/google"
+import { cairo, geist } from "./fonts"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { themeScript } from "@/lib/theme-script"
 import { AppProviders } from "@/providers"
-
-const _geist = Geist({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
-const _cairo = Cairo({ subsets: ["arabic", "latin"], weight: ["400", "500", "600", "700"] })
 
 export const metadata: Metadata = {
   title: "Wood Decor - Your Home, Your Style",
@@ -32,7 +27,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className="antialiased" suppressHydrationWarning>
-        <AppProviders geistClass={_geist.className} cairoClass={_cairo.className}>
+        <AppProviders geistClass={geist.className} cairoClass={cairo.className}>
           {children}
         </AppProviders>
         <Analytics />

@@ -34,6 +34,9 @@ namespace DAL.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -365,6 +368,16 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime");
 
@@ -577,6 +590,10 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Domains.TbSlider", b =>
                 {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -585,9 +602,6 @@ namespace DAL.Migrations
 
                     b.Property<int>("CurrentState")
                         .HasColumnType("int");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -610,7 +624,9 @@ namespace DAL.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.ToTable("TbSlider", (string)null);
+                    b.HasKey("Id");
+
+                    b.ToTable("TbSliders");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

@@ -25,9 +25,18 @@ namespace Bl.Mapping
                 .ForMember(dest => dest.TbImages, opt => opt.MapFrom(src => src.Images));
             CreateMap<TbOrder, OrderDto>().ReverseMap();
             CreateMap<TbOrderItem, OrderItemDto>()
-                .ForMember(dest => dest.NameEn, opt => opt.MapFrom(src => src.Item.NameEn))
-                .ForMember(dest => dest.NameAr, opt => opt.MapFrom(src => src.Item.NameAr))
-                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Item.MainImage))
+                .ForMember(dest => dest.NameEn, opt => opt.MapFrom(src =>
+                    !string.IsNullOrWhiteSpace(src.nameEn)
+                        ? src.nameEn
+                        : (src.Item != null ? src.Item.NameEn : null)))
+                .ForMember(dest => dest.NameAr, opt => opt.MapFrom(src =>
+                    !string.IsNullOrWhiteSpace(src.nameAr)
+                        ? src.nameAr
+                        : (src.Item != null ? src.Item.NameAr : null)))
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src =>
+                    !string.IsNullOrWhiteSpace(src.Image)
+                        ? src.Image
+                        : (src.Item != null ? src.Item.MainImage : null)))
                 .ReverseMap();
             CreateMap<TbReview, ReviewDto>().ReverseMap();
             CreateMap<TbSetting, SettingDto>().ReverseMap();

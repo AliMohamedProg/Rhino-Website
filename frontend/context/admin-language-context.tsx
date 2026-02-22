@@ -18,6 +18,7 @@ const adminTranslations: Translations = {
   "sidebar.orders": { en: "Orders", ar: "الطلبات" },
   "sidebar.users": { en: "Users", ar: "المستخدمون" },
   "sidebar.categories": { en: "Categories", ar: "الفئات" },
+  "sidebar.sliders": { en: "Sliders", ar: "الشرائح" },
   "sidebar.analytics": { en: "Analytics", ar: "التحليلات" },
   "sidebar.settings": { en: "Settings", ar: "الإعدادات" },
   "sidebar.reports": { en: "Reports", ar: "التقارير" },
@@ -193,6 +194,7 @@ const adminTranslations: Translations = {
   "common.of": { en: "of", ar: "من" },
   "common.showing": { en: "Showing", ar: "عرض" },
   "common.entries": { en: "entries", ar: "عناصر" },
+  "cart.quantity": { en: "Quantity", ar: "الكمية" },
   "common.all": { en: "All", ar: "الكل" },
   "common.none": { en: "None", ar: "لا شيء" },
   "common.select": { en: "Select", ar: "اختيار" },
@@ -269,11 +271,11 @@ interface AdminLanguageContextType {
 const AdminLanguageContext = createContext<AdminLanguageContextType | undefined>(undefined)
 
 export function AdminLanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>("en")
+  const [language, setLanguage] = useState<Language>("ar")
 
   useEffect(() => {
     const savedLang = localStorage.getItem("admin-language") as Language
-    if (savedLang && (savedLang === "en" || savedLang === "ar")) {
+    if (savedLang === "ar") {
       setLanguage(savedLang)
     }
   }, [])

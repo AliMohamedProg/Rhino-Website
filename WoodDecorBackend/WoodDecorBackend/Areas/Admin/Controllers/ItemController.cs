@@ -1,5 +1,6 @@
 ﻿using Bl.DTOs;
 using BusinessLayer.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
@@ -9,6 +10,7 @@ namespace Apis.Areas.Admin.Controllers
 {
     [Route("api/admin/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class ItemController : ControllerBase
     {
         IItem _itemService;

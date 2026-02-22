@@ -20,6 +20,8 @@ namespace Bl.DTOs
         [EmailAddress(ErrorMessage = "the email is invalid")]
         public string Email { get; set; }
         public string Status { get; set; } = null!;
+        public string FirstName { get; set; } = null!;
+        public string LastName { get; set; } = null!;
 
         public string PaymentStatus { get; set; } = null!;
         public string OrderNumber { get; set; } = null!;

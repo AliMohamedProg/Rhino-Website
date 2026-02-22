@@ -32,6 +32,8 @@ interface Order {
   address: string
   phoneNumber: string
   email: string
+  firstName: string
+  lastName: string
   total: number
   delivryDate: string
   tbOrderItems: OrderItem[]

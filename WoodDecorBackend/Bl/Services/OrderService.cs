@@ -26,12 +26,11 @@ namespace Bl.Services
             _tableRepository = _repository;
             _mapper = _Mapper;
         }
-        public async Task<TbOrder> CreateOrder(Guid userId, string Country, string City, string Address, decimal Total, string PhoneNumber, string Email)
+        public async Task<TbOrder> CreateOrder(Guid userId, string Country, string City, string Address, decimal Total, string PhoneNumber, string Email, string FirstName, string LastName)
         {
             var cart = await _cartRepository.GetActiveCartWithItemsAsync(userId);
             if (cart == null || !cart.Items.Any())
                 throw new Exception("Cart is empty!");
-
             var order = new TbOrder
             {
                 Id = Guid.NewGuid(),
@@ -43,6 +42,8 @@ namespace Bl.Services
                 Address = Address,
                 PhoneNumber = PhoneNumber,
                 Email = Email,
+                FirstName = FirstName,
+                LastName = LastName,
                 Status = "Pending",
                 PaymentStatus = "Pending",
                 OrderNumber = $"ORD-{DateTime.UtcNow:yyyyMMddHHmmss}-{Guid.NewGuid().ToString().Substring(0, 6).ToUpper()}",
@@ -62,7 +63,7 @@ namespace Bl.Services
                     nameAr = item.NameAr,
                     nameEn = item.NameEn,
                     Image = item.Image,
-                    CurrentState=1
+                    CurrentState = 1
                 });
             }
 
@@ -78,7 +79,7 @@ namespace Bl.Services
         {
             var orders = await _tableRepository.GetList<TbOrder>(filter: o => o.UserId == userId && o.CurrentState == 1, orderBy: o => o.OrderDate, isDescending: true, includers: o => o.TbOrderItems);
 
-            return _mapper.Map<List<OrderDto>>(orders); 
+            return _mapper.Map<List<OrderDto>>(orders);
         }
 
 
@@ -96,5 +97,26 @@ namespace Bl.Services
 
             return _mapper.Map<OrderDto>(entity);
         }
+        public async Task<List<OrderDto>> GetAllOrders()
+        {
+            var orders = await _tableRepository.GetList<TbOrder>(filter: o => o.CurrentState == 1, orderBy: o => o.OrderDate, isDescending: true, includers: o => o.TbOrderItems);
+            return _mapper.Map<List<OrderDto>>(orders);
+        }
+        public async Task<bool> UpdateOrderStatus(Guid orderId, string status)
+        {
+            var order =  _tableRepository.GetFirstOrDefault(
+                filter: o => o.Id == orderId
+            );
+
+            if (order == null)
+                throw new Exception("Order not found");
+
+            order.Status = status;
+
+            _tableRepository.Update(order);
+
+            return true;
+        }
+
     }
 }

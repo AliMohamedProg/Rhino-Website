@@ -29,5 +29,7 @@ namespace Bl.DTOs
         public string PhoneNumber { get; set; }
         public string? Role { get; set; }
         public string? ReturnUrl { get; set; }
+        public int TotalOrders { get; set; }
+        public decimal TotalSpent { get; set; }
     }
 }

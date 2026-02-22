@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Domains
 {
     public class BaseTable
     {
+        [Key]
         public Guid Id { get; set; }
         public Guid? UpdatedBy { get; set; }
 

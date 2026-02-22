@@ -48,7 +48,9 @@ export default function CheckoutPage() {
     phone: "",
     address: "",
     city: "",
-    country: "Egypt" // Default value
+    country: "Egypt", // Default value
+    firstName: "",
+    lastName: ""
   })
 
   // Fetch cart on mount
@@ -125,7 +127,9 @@ export default function CheckoutPage() {
           Address: formData.address,
           Total: total + shipping,
           PhoneNumber: formData.phone,
-          Email: formData.email
+          Email: formData.email,
+          FirstName: formData.firstName,
+          LastName: formData.lastName
         })
       })
 
@@ -214,6 +218,24 @@ export default function CheckoutPage() {
                     {t("checkout.shipping")}
                   </h2>
                   <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="firstName">{language === "ar" ? "الاسم الأول" : "First Name"}</Label>
+                      <Input
+                        id="firstName"
+                        required
+                        value={formData.firstName}
+                        onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="lastName">{language === "ar" ? "اسم العائلة" : "Last Name"}</Label>
+                      <Input
+                        id="lastName"
+                        required
+                        value={formData.lastName}
+                        onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                      />
+                    </div>
                     <div className="space-y-2">
                       <Label htmlFor="email">{t("checkout.email")}</Label>
                       <Input

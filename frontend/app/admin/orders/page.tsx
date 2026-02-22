@@ -1,13 +1,14 @@
-"use client"
+﻿"use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { ApiClient } from "@/app/ApiHelper/ApiClient"
 import { useAdminLanguage } from "@/context/admin-language-context"
 import { cn } from "@/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { DataTable } from "@/components/admin/data-table"
-import { mockOrders, type Order } from "@/lib/admin-data"
+import { type Order } from "@/lib/admin-data"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,10 +27,142 @@ import {
 import { MoreHorizontal, Eye, Download, Filter } from "lucide-react"
 import Link from "next/link"
 
+type ApiOrderItem = {
+  itemId?: string
+  productId?: string
+  nameEn?: string
+  nameAr?: string
+  qty?: number
+  quantity?: number
+  unitPrice?: number
+  price?: number
+}
+
+type ApiOrder = {
+  id?: string
+  userId?: string
+  orderNumber?: string
+  orderDate?: string
+  createdDate?: string
+  delivryDate?: string
+  address?: string
+  city?: string
+  country?: string
+  email?: string
+  phoneNumber?: string
+  firstName?: string
+  lastName?: string
+  status?: string
+  paymentStatus?: string
+  total?: number
+  tbOrderItems?: ApiOrderItem[]
+}
+
+const normalizeStatus = (status?: string | null): Order["status"] => {
+  if (!status) return "pending"
+  const normalized = status.toLowerCase()
+  if (normalized.includes("pending")) return "pending"
+  if (normalized.includes("process")) return "processing"
+  if (normalized.includes("ship")) return "shipped"
+  if (normalized.includes("deliver")) return "delivered"
+  if (normalized.includes("cancel")) return "cancelled"
+  if (normalized.includes("refund")) return "refunded"
+  return "pending"
+}
+
+const isGuid = (value: string) =>
+  /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(value)
+
+const mapApiOrder = (apiOrder: ApiOrder, index: number): Order => {
+  const safeEmail = apiOrder.email?.trim() || ""
+  const safePhone = apiOrder.phoneNumber || ""
+  const safeFirstName = apiOrder.firstName?.trim() || ""
+  const safeLastName = apiOrder.lastName?.trim() || ""
+  const safeName = safeFirstName && safeLastName 
+    ? `${safeFirstName} ${safeLastName}` 
+    : safeEmail ? safeEmail.split("@")[0] : safePhone || `Customer ${index + 1}`
+  const items = Array.isArray(apiOrder.tbOrderItems) ? apiOrder.tbOrderItems : []
+  const mappedItems = items.map((item, itemIndex) => {
+    const price = Number(item.unitPrice ?? item.price ?? 0)
+    const quantity = Number(item.qty ?? item.quantity ?? 0)
+    return {
+      productId: item.itemId || item.productId || `item-${index}-${itemIndex}`,
+      productName: item.nameEn || item.nameAr || "Item",
+      quantity: Number.isFinite(quantity) ? quantity : 0,
+      price: Number.isFinite(price) ? price : 0,
+    }
+  })
+  const subtotal = mappedItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const total = Number(apiOrder.total ?? subtotal)
+  const createdDate = apiOrder.orderDate || apiOrder.createdDate || new Date().toISOString()
+  const updatedAt = apiOrder.delivryDate || createdDate
+
+  return {
+    id: apiOrder.id || `order-${index}`,
+    orderNumber: apiOrder.orderNumber || `ORD-${String(index + 1).padStart(4, "0")}`,
+    customer: {
+      id: apiOrder.userId || `customer-${index}`,
+      name: safeName || "Customer",
+      email: safeEmail,
+      phone: safePhone,
+    },
+    items: mappedItems,
+    subtotal,
+    shipping: 0,
+    tax: 0,
+    discount: 0,
+    total: Number.isFinite(total) ? total : subtotal,
+    status: normalizeStatus(apiOrder.status),
+    paymentMethod: apiOrder.paymentStatus || "Unknown",
+    shippingAddress: {
+      street: apiOrder.address || "",
+      city: apiOrder.city || "",
+      state: "",
+      country: apiOrder.country || "",
+      postalCode: "",
+    },
+    createdDate,
+    updatedAt,
+  }
+}
+
 export default function OrdersPage() {
   const { t, language, dir } = useAdminLanguage()
-  const [orders, setOrders] = useState(mockOrders)
+  const [orders, setOrders] = useState<Order[]>([])
+  const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState(false)
   const [statusFilter, setStatusFilter] = useState<string>("all")
+
+  useEffect(() => {
+    let isMounted = true
+
+    const fetchOrders = async () => {
+      try {
+        setLoading(true)
+        setLoadError(false)
+        const data = await ApiClient.get("api/admin/Orders")
+        const list = Array.isArray(data)
+          ? data
+          : Array.isArray(data?.orders)
+            ? data.orders
+            : Array.isArray(data?.data)
+              ? data.data
+              : []
+        const mapped = list.map((order: ApiOrder, index: number) => mapApiOrder(order, index))
+        if (isMounted) setOrders(mapped)
+      } catch (err) {
+        console.error("Failed to fetch orders:", err)
+        if (isMounted) setLoadError(true)
+      } finally {
+        if (isMounted) setLoading(false)
+      }
+    }
+
+    fetchOrders()
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   const filteredOrders =
     statusFilter === "all"
@@ -53,12 +186,33 @@ export default function OrdersPage() {
     )
   }
 
-  const handleStatusChange = (orderId: string, newStatus: Order["status"]) => {
-    setOrders(
-      orders.map((order) =>
-        order.id === orderId ? { ...order, status: newStatus } : order
-      )
+  const handleStatusChange = async (orderId: string, newStatus: Order["status"]) => {
+    let previousStatus: Order["status"] | undefined
+
+    setOrders((prev) =>
+      prev.map((order) => {
+        if (order.id !== orderId) return order
+        previousStatus = order.status
+        return { ...order, status: newStatus }
+      })
     )
+
+    if (!isGuid(orderId)) {
+      return
+    }
+
+    try {
+      await ApiClient.post(`api/admin/Orders/edit-status?id=${orderId}`, newStatus)
+    } catch (err) {
+      console.error("Failed to update order status:", err)
+      if (previousStatus) {
+        setOrders((prev) =>
+          prev.map((order) =>
+            order.id === orderId ? { ...order, status: previousStatus! } : order
+          )
+        )
+      }
+    }
   }
 
   const formatCurrency = (amount: number) => {
@@ -222,12 +376,24 @@ export default function OrdersPage() {
             </Select>
           </div>
 
-          <DataTable
-            data={filteredOrders}
-            columns={columns}
-            searchPlaceholder={language === "ar" ? "البحث عن طلب..." : "Search orders..."}
-            searchKey="orderNumber"
-          />
+          {loading ? (
+            <div className="flex justify-center items-center h-48 text-muted-foreground animate-pulse">
+              {t("common.loading")}
+            </div>
+          ) : loadError ? (
+            <div className="flex justify-center items-center h-48 text-destructive">
+              {language === "ar" ? "فشل تحميل الطلبات." : "Failed to load orders."}
+            </div>
+          ) : null}
+
+          {!loading && !loadError && (
+            <DataTable
+              data={filteredOrders}
+              columns={columns}
+              searchPlaceholder={language === "ar" ? "البحث عن طلب..." : "Search orders..."}
+              searchKey="orderNumber"
+            />
+          )}
         </CardContent>
       </Card>
     </div>

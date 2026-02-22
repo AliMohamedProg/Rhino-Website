@@ -22,7 +22,10 @@ public partial class TbOrder : BaseTable
     public string Email { get; set; }
     public string OrderNumber { get; set; }
     public string Status { get; set; } = null!;
-
+    [MaxLength(50, ErrorMessage = "the first name must be less than 50 characters")]
+    public string FirstName { get; set; } = null!;
+    [MaxLength(50, ErrorMessage = "the first name must be less than 50 characters")]
+    public string LastName { get; set; } = null!;
     public string PaymentStatus { get; set; } = null!;
 
     public string? PaymobTransactionId { get; set; } = null!;
