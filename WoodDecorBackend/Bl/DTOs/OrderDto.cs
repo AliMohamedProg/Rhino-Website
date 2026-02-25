@@ -22,7 +22,7 @@ namespace Bl.DTOs
         public string Status { get; set; } = null!;
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
-
+        public string PaymentMethodName { get; set; } = null!;
         public string PaymentStatus { get; set; } = null!;
         public string OrderNumber { get; set; } = null!;
         public string PaymobTransactionId { get; set; } = null!;

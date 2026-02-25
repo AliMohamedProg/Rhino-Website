@@ -12,6 +12,5 @@ namespace Bl.Contracts
             string phone,
             string orderId,
             string paymentMethod);
-        Task MarkOrderAsPaid(Guid orderId);
     }
 }

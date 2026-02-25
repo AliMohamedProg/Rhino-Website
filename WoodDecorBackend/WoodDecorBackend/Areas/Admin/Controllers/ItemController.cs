@@ -45,7 +45,8 @@ namespace Apis.Areas.Admin.Controllers
                     NameEn = itemDto.NameEn,
                     DescriptionAr = itemDto.DescriptionAr,
                     DescriptionEn = itemDto.DescriptionEn,
-                    Colors = itemDto.Colors,
+                    ColorsEn = itemDto.ColorsEn,
+                    ColorsAr = itemDto.ColorsAr,
                     DiscountAmount = itemDto.DiscountAmount,
                     MainImage = mainImage ?? string.Empty,
                     //OverallRating = itemDto.OverallRating,
@@ -53,7 +54,8 @@ namespace Apis.Areas.Admin.Controllers
                     StockNumber = itemDto.StockNumber,
                     CategoryId = itemDto.CategoryId,
                     Images = itemDto.Images ?? new List<ImageDto>(),
-                    Material = itemDto.Material
+                    MaterialEn = itemDto.MaterialEn,
+                    MaterialAr = itemDto.MaterialAr,
                 };
                 _itemService.AddItemWithImages(item);
                 return true;
@@ -83,7 +85,8 @@ namespace Apis.Areas.Admin.Controllers
                     NameEn = itemDto.NameEn,
                     DescriptionAr = itemDto.DescriptionAr,
                     DescriptionEn = itemDto.DescriptionEn,
-                    Colors = itemDto.Colors,
+                    ColorsAr = itemDto.ColorsAr,
+                    ColorsEn = itemDto.ColorsEn,
                     DiscountAmount = itemDto.DiscountAmount,
                     MainImage = mainImage ?? string.Empty,
                     //OverallRating = itemDto.OverallRating,
@@ -91,7 +94,8 @@ namespace Apis.Areas.Admin.Controllers
                     StockNumber = itemDto.StockNumber,
                     CategoryId = itemDto.CategoryId,
                     Images = itemDto.Images ?? new List<ImageDto>(),
-                    Material = itemDto.Material
+                    MaterialAr = itemDto.MaterialAr,
+                    MaterialEn = itemDto.MaterialEn,
                 };
 
                 _itemService.UpdateItemWithImages(item);

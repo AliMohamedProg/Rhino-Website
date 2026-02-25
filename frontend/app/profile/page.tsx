@@ -63,6 +63,34 @@ export default function ProfilePage() {
     fetchOrders()
     setWishlistCount(0)
   }, [])
+  const handleCancelOrder = async (orderId: string) => {
+    try {
+      const res = await fetch(
+        `https://localhost:7282/api/order/cancel-order/${orderId}`,
+        {
+          method: "POST",
+          credentials: "include"
+        }
+      );
+
+      if (res.ok) {
+        const result = await res.json();
+
+        if (result === true) {
+          // Update UI instantly
+          setOrders(prev =>
+            prev.map(o =>
+              o.id === orderId ? { ...o, status: "Cancelled" } : o
+            )
+          );
+        } else {
+          alert("Failed to cancel order");
+        }
+      }
+    } catch (err) {
+      console.error("Cancel failed", err);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -167,6 +195,7 @@ export default function ProfilePage() {
                 ) : (
                   <div className="space-y-4">
                     {orders.map((order) => (
+
                       <div key={order.id} className="border border-border rounded-lg p-4 hover:bg-muted/50 transition-colors">
                         <div className="flex flex-wrap justify-between items-start gap-4">
                           <div>
@@ -180,7 +209,7 @@ export default function ProfilePage() {
                               {order.city}, {order.address}
                             </p>
                           </div>
-                          <div className="text-right">
+                          <div className="text-right flex flex-col items-end">
                             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${order.status === "Delivered" ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"
                               }`}>
                               {order.status}
@@ -190,10 +219,23 @@ export default function ProfilePage() {
                             </p>
                             <Link
                               href={`/profile/orders/${order.id}`}
-                              className="inline-block mt-3 text-sm text-blue-600 hover:underline font-medium"
+                              className="display-block mt-3 text-sm text-blue-600 hover:underline font-medium"
                             >
+
                               {language === "ar" ? "عرض التفاصيل" : "View Details"}
                             </Link>
+                            {
+                              order.status === "Pending" || order.status === "Processing" ? (
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  className="mt-2"
+                                  onClick={() => handleCancelOrder(order.id)}
+                                >
+                                  {language === "ar" ? "إلغاء الطلب" : "Cancel Order"}
+                                </Button>
+                              ) : null
+                            }
                           </div>
                         </div>
                       </div>

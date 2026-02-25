@@ -10,15 +10,22 @@ namespace Bl.DTOs
     {
         public bool Success { get; set; }
 
+        [JsonPropertyName("data")]
         public WebhookData Data { get; set; }
     }
 
     public class WebhookData
     {
         [JsonPropertyName("order")]
-        public Guid OrderId { get; set; }
+        public OrderData Order { get; set; }
 
         [JsonPropertyName("transaction_id")]
         public string TransactionId { get; set; }
+    }
+
+    public class OrderData
+    {
+        [JsonPropertyName("id")]
+        public Guid Id { get; set; }
     }
 }

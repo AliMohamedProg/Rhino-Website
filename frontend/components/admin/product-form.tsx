@@ -50,8 +50,10 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     categoryId: product?.categoryId || "",
     images: buildInitialImages(product),
     mainImage: product?.mainImage || product?.images?.[0] || "",
-    colors: product?.colors || "",
-    material: product?.material || "",
+    colorsEn: product?.colorsEn || "",
+    colorsAr: product?.colorsAr || "",
+    materialEn: product?.materialEn || "",
+    materialAr: product?.materialAr || "",
   })
 
   const [categories, setCategories] = useState<AdminCategoryDto[]>([])
@@ -71,8 +73,10 @@ export function ProductForm({ product, mode }: ProductFormProps) {
       categoryId: product.categoryId || "",
       images: buildInitialImages(product),
       mainImage: product.mainImage || product.images?.[0] || "",
-      colors: product.colors || "",
-      material: product.material || "",
+      colorsEn: product?.colorsEn || "",
+      colorsAr: product?.colorsAr || "",
+      materialEn: product?.materialEn || "",
+      materialAr: product?.materialAr || "",
     })
   }, [product])
 
@@ -106,8 +110,9 @@ export function ProductForm({ product, mode }: ProductFormProps) {
       )
       const currentState =
         mode === "edit" && product?.status === "inactive" ? 0 : 1
-      const colorsCheck = validateColorsInput(formData.colors)
-      if (!colorsCheck.valid) {
+      const colorsCheckEn = validateColorsInput(formData.colorsEn)
+      const colorsCheckAr = validateColorsInput(formData.colorsAr)
+      if (!colorsCheckEn.valid || !colorsCheckAr.valid) {
         alert(
           language === "ar"
             ? "يرجى إدخال الألوان بهذا الشكل: لون,لون,لون"
@@ -116,7 +121,8 @@ export function ProductForm({ product, mode }: ProductFormProps) {
         return
       }
 
-      const materialVal = (formData.material || "").trim()
+      const materialValEn = (formData.materialEn || "").trim()
+      const materialValAr = (formData.materialAr || "").trim()
       const payload = {
         id: product?.id,
         nameEn: formData.nameEn,
@@ -127,8 +133,10 @@ export function ProductForm({ product, mode }: ProductFormProps) {
         discountAmount,
         stockNumber: formData.stock,
         categoryId: formData.categoryId,
-        colors: colorsCheck.normalized,
-        material: materialVal,
+        colorsEn: colorsCheckEn.normalized,
+        colorsAr: colorsCheckAr.normalized,
+        materialEn: materialValEn,
+        materialAr: materialValAr,
         mainImage,
         images: formData.images.map((url) => ({ imageUrl: url })),
         currentState,
@@ -221,8 +229,8 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     if (hasEmpty) return { valid: false, normalized: trimmed }
     return { valid: true, normalized: parts.join(",") }
   }
-  const colorsValidation = validateColorsInput(formData.colors)
-  const showColorsError = formData.colors.trim().length > 0 && !colorsValidation.valid
+  const colorsValidation = validateColorsInput(formData.colorsEn || "")
+  const showColorsError = formData.colorsEn.trim().length > 0 && !colorsValidation.valid
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -490,13 +498,23 @@ export function ProductForm({ product, mode }: ProductFormProps) {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="colors">
-                  {language === "ar" ? "الألوان" : "Colors"}
+                  {language === "ar" ? "الألوان باللغة الإنجليزية" : "Colors English Name"}
                 </Label>
                 <Input
                   id="colors"
-                  value={formData.colors}
-                  onChange={(e) => handleChange("colors", e.target.value)}
-                  placeholder={language === "ar" ? "أحمر,أزرق,أخضر" : "red,blue,green"}
+                  value={formData.colorsEn}
+                  onChange={(e) => handleChange("colorsEn", e.target.value)}
+                  placeholder="red,blue,green"
+                  aria-invalid={showColorsError}
+                />
+                <Label htmlFor="colors">
+                  {language === "ar" ? "الألوان باللغة العربية" : "Colors Arabic Name"}
+                </Label>
+                <Input
+                  id="colors"
+                  value={formData.colorsAr}
+                  onChange={(e) => handleChange("colorsAr", e.target.value)}
+                  placeholder="أحمر,أزرق,أخضر"
                   aria-invalid={showColorsError}
                 />
                 {showColorsError ? (
@@ -515,15 +533,25 @@ export function ProductForm({ product, mode }: ProductFormProps) {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="material">
-                  {language === "ar" ? "الخامات" : "Materials"}
+                  {language === "ar" ? "الخامة باللغة الإنجليزية" : "Material English Name"}
                 </Label>
                 <Input
                   id="material"
-                  value={formData.material}
-                  onChange={(e) => handleChange("material", e.target.value)}
-                  placeholder={language === "ar" ? "أدخل الخامة (مثال: خشب)" : "Enter material (e.g. Wood)"}
+                  value={formData.materialEn}
+                  onChange={(e) => handleChange("materialEn", e.target.value)}
+                  placeholder="Enter material (e.g. Wood)"
+                />
+                <Label htmlFor="material">
+                  {language === "ar" ? "الخامة باللغة العربية" : "Material Arabic Name"}
+                </Label>
+                <Input
+                  id="material"
+                  value={formData.materialAr}
+                  onChange={(e) => handleChange("materialAr", e.target.value)}
+                  placeholder="أدخل الخامة (مثال: خشب)"
                 />
               </div>
+
             </CardContent>
           </Card>
         </div>

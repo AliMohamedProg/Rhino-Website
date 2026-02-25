@@ -29,7 +29,7 @@ namespace Apis.Controllers
                 // نفترض إن الـ userId موجود من الـ JWT أو session
                 var userId = _userService.GetLoggedInUser();
 
-                var order = await _orderService.CreateOrder(userId , orderRequest.Country, orderRequest.City, orderRequest.Address, orderRequest.Total, orderRequest.PhoneNumber, orderRequest.Email, orderRequest.FirstName, orderRequest.LastName, orderRequest.TransactionId);
+                var order = await _orderService.CreateOrder(userId, orderRequest.Country, orderRequest.PaymentMethodName, orderRequest.City, orderRequest.Address, orderRequest.Total, orderRequest.PhoneNumber, orderRequest.Email, orderRequest.FirstName, orderRequest.LastName, orderRequest.TransactionId);
                 return Ok(order);
             }
             catch (Exception ex)
@@ -66,6 +66,30 @@ namespace Apis.Controllers
             catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
+            }
+        }
+        
+        [HttpPost("cancel-order/{orderId}")]
+        public async Task<bool> CancelOrder(Guid orderId)
+        {
+            try
+            {
+                var order = _orderService.GetOrderById(orderId);
+                if (order.Result.Status == "Shipped" || order.Result.Status == "Delivered")
+                {
+                    throw new Exception("Can't Cancel Order Because it is Shipped");
+                }
+                else if (order.Result.Status == "Pending" || order.Result.Status == "Processing")
+                {
+                    await _orderService.UpdateOrderStatus(orderId, "Cancelled");
+                    return true;
+                }
+                return true;
+
+            }
+            catch
+            {
+                return false;
             }
         }
     }

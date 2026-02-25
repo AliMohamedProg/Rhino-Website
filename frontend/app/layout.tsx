@@ -6,6 +6,7 @@ import Script from "next/script"
 import "./globals.css"
 import { themeScript } from "@/lib/theme-script"
 import { AppProviders } from "@/providers"
+import { MessageCircle } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Wood Decor - Your Home, Your Style",
@@ -45,6 +46,14 @@ export default function RootLayout({
             gtag('config', 'G-78J3VLPBR7');
           `}
         </Script>
+        <a
+          href="https://wa.me/201080075293"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="fixed bottom-5 right-5 z-50 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+        >
+          <MessageCircle size={28} />
+        </a>
       </body>
     </html>
   )

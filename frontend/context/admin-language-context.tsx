@@ -72,6 +72,7 @@ const adminTranslations: Translations = {
   "products.dimensions": { en: "Dimensions", ar: "الأبعاد" },
   "products.featured": { en: "Featured", ar: "مميز" },
   "products.onSale": { en: "On Sale", ar: "عرض خاص" },
+  "products.material": { en: "Material", ar: "الخامة" },
 
   // Orders
   "orders.title": { en: "Orders Management", ar: "إدارة الطلبات" },

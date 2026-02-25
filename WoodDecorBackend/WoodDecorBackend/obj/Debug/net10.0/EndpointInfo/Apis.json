@@ -907,6 +907,46 @@
         }
       }
     },
+    "/api/Order/cancel-order/{orderId}": {
+      "post": {
+        "tags": [
+          "Order"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/admin/Orders": {
       "get": {
         "tags": [
@@ -1465,6 +1505,10 @@
             "type": "string",
             "nullable": true
           },
+          "paymentMethodName": {
+            "type": "string",
+            "nullable": true
+          },
           "transactionId": {
             "type": "string",
             "nullable": true
@@ -1677,11 +1721,19 @@
             "type": "integer",
             "format": "int32"
           },
-          "colors": {
+          "colorsEn": {
             "type": "string",
             "nullable": true
           },
-          "material": {
+          "colorsAr": {
+            "type": "string",
+            "nullable": true
+          },
+          "materialEn": {
+            "type": "string",
+            "nullable": true
+          },
+          "materialAr": {
             "type": "string",
             "nullable": true
           },

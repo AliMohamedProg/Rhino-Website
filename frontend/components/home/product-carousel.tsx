@@ -16,7 +16,8 @@ type ApiItem = {
   price: number
   discountAmount: number
   stockNumber: number
-  colors?: string
+  colorsEn?: string
+  colorsAr?: string
   mainImage?: string
   image?: string
 }
@@ -31,18 +32,22 @@ function ProductCard({ product }: { product: ApiItem }) {
   const discount = product.discountAmount ?? 0
   const originalPrice = product.price + discount
 
-  const colors = product.colors
-    ? product.colors.split(',').map(c => c.trim()).filter(Boolean)
+  const colorsEn = product.colorsEn
+    ? product.colorsEn.split(',').map(c => c.trim()).filter(Boolean)
+    : []
+
+  const colorsAr = product.colorsAr
+    ? product.colorsAr.split(',').map(c => c.trim()).filter(Boolean)
     : []
 
   // Take up to 3 colors to display
-  const displayColors = colors.slice(0, 3)
+  const displayColors = language === "ar" ? colorsAr : colorsEn
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault() // Prevent navigation to product page
     e.stopPropagation()
 
-    if (colors.length > 0 && !selectedColor) {
+    if (displayColors.length > 0 && !selectedColor) {
       toast.error(language === "ar" ? "يرجى اختيار لون قبل الإضافة للسلة" : "Please select a color before adding to cart")
       return
     }
@@ -136,7 +141,8 @@ function ProductCard({ product }: { product: ApiItem }) {
                     }`}
                   title={color}
                 >
-                  {color}
+                  {color
+                  }
                 </button>
               ))}
             </div>

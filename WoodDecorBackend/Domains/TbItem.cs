@@ -25,8 +25,10 @@ public partial class TbItem : BaseTable
 
     public int StockNumber { get; set; }
 
-    public string? Colors { get; set; }
-    public string? Material { get; set; }
+    public string? ColorsEn { get; set; }
+    public string? ColorsAr { get; set; }
+    public string? MaterialEn { get; set; }
+    public string? MaterialAr { get; set; }
 
     public virtual TbCategory Category { get; set; } = null!;
 

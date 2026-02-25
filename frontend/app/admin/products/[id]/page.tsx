@@ -232,13 +232,13 @@ export default function ProductDetailPage() {
                 <span className="text-muted-foreground">{t("products.category")}</span>
                 <span>{product.category}</span>
               </div>
-              {product.colors && product.colors.trim().length > 0 && (
+              {product.colorsEn && product.colorsEn.trim().length > 0 && (
                 <div className="space-y-2">
                   <span className="text-muted-foreground">
                     {language === "ar" ? "الألوان" : "Colors"}
                   </span>
                   <div className={cn("flex flex-wrap gap-2", dir === "rtl" && "justify-end")}>
-                    {product.colors.split(",").map((color, index) => (
+                    {product.colorsEn.split(",").map((color, index) => (
                       <span
                         key={`${color}-${index}`}
                         className="rounded-full border px-3 py-1 text-xs text-muted-foreground"
@@ -247,6 +247,16 @@ export default function ProductDetailPage() {
                       </span>
                     ))}
                   </div>
+                </div>
+              )}
+              {product.materialEn && product.materialEn.trim().length > 0 && (
+                <div className="space-y-1">
+                  <span className="text-muted-foreground block">
+                    {language === "ar" ? "المادة" : "Material"}
+                  </span>
+                  <span className={cn("block", dir === "rtl" && "text-right")}>
+                    {language === "ar" ? product.materialAr : product.materialEn}
+                  </span>
                 </div>
               )}
             </CardContent>

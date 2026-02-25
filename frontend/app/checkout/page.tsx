@@ -51,6 +51,70 @@ export default function CheckoutPage() {
     lastName: ""
   })
 
+  const egyptGovernoratesEn = [
+    "Cairo",
+    "Giza",
+    "Alexandria",
+    "Dakahlia",
+    "Red Sea",
+    "Beheira",
+    "Fayoum",
+    "Gharbia",
+    "Ismailia",
+    "Menofia",
+    "Minya",
+    "Qalyubia",
+    "New Valley",
+    "Suez",
+    "Aswan",
+    "Assiut",
+    "Beni Suef",
+    "Port Said",
+    "Damietta",
+    "Sharkia",
+    "South Sinai",
+    "Kafr El Sheikh",
+    "Matrouh",
+    "Luxor",
+    "Qena",
+    "North Sinai",
+    "Sohag"
+  ]
+
+  const egyptGovernoratesAr = [
+    "القاهرة",
+    "الجيزة",
+    "الإسكندرية",
+    "الدقهلية",
+    "البحر الأحمر",
+    "البحيرة",
+    "الفيوم",
+    "الغربية",
+    "الإسماعيلية",
+    "المنوفية",
+    "المنيا",
+    "القليوبية",
+    "الوادي الجديد",
+    "السويس",
+    "أسوان",
+    "أسيوط",
+    "بني سويف",
+    "بورسعيد",
+    "دمياط",
+    "الشرقية",
+    "جنوب سيناء",
+    "كفر الشيخ",
+    "مطروح",
+    "الأقصر",
+    "قنا",
+    "شمال سيناء",
+    "سوهاج"
+  ]
+  const paymentMethodNames: Record<"cod" | "card" | "wallet", string> = {
+    cod: "Cash On Delivery",
+    card: "Credit / Debit Card",
+    wallet: "Mobile Wallet"
+  }
   // =============================
   // Fetch Cart
   // =============================
@@ -92,7 +156,9 @@ export default function CheckoutPage() {
             PhoneNumber: formData.phone,
             Email: formData.email,
             FirstName: formData.firstName,
-            LastName: formData.lastName
+            LastName: formData.lastName,
+            // PaymentMethod: paymentMethod,
+            PaymentMethodName: paymentMethodNames[paymentMethod]
           })
         }
       )
@@ -119,7 +185,8 @@ export default function CheckoutPage() {
             email: formData.email,
             phoneNumber: formData.phone,
             orderId: order.id,
-            paymentMethod: paymentMethod
+            paymentMethod: paymentMethod,
+            // paymentMethodName: paymentMethodNames[paymentMethod]
           })
         }
       )
@@ -187,10 +254,29 @@ export default function CheckoutPage() {
                   value={language === "ar" ? "مصر" : "Egypt"}
                   disabled
                 />
-                <Input placeholder="City"
-                  required
-                  onChange={e => setFormData({ ...formData, city: e.target.value })}
-                />
+                <div>
+                  <select
+                    required
+                    className="w-full mt-2 p-2 border rounded-md bg-background"
+                    value={formData.city}
+                    onChange={(e) =>
+                      setFormData({ ...formData, city: e.target.value })
+                    }
+                  >
+                    <option value="">
+                      {language === "ar" ? "اختر المحافظة" : "Select Governorate"}
+                    </option>
+
+                    {(language === "ar"
+                      ? egyptGovernoratesAr
+                      : egyptGovernoratesEn
+                    ).map((gov, index) => (
+                      <option key={index} value={gov}>
+                        {gov}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <Input placeholder="Address"
                   required
                   onChange={e => setFormData({ ...formData, address: e.target.value })}

@@ -27,6 +27,7 @@ public partial class TbOrder : BaseTable
     [MaxLength(50, ErrorMessage = "the first name must be less than 50 characters")]
     public string LastName { get; set; } = null!;
     public string PaymentStatus { get; set; } = null!;
+    public string PaymentMethodName { get; set; } = null!;
 
     public string? PaymobTransactionId { get; set; } = null!;
 

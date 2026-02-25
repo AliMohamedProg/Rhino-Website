@@ -119,10 +119,16 @@ export default function ProductsPage() {
             <p className="font-medium">
               {language === "ar" ? product.nameAr : product.nameEn}
             </p>
-            {product.colors && product.colors.trim().length > 0 && (
+            {product.colorsEn && product.colorsEn.trim().length > 0 && (
               <p className="text-sm text-muted-foreground">
                 {language === "ar" ? "الألوان: " : "Colors: "}
-                {product.colors}
+                {language === "ar" ? product.colorsAr : product.colorsEn}
+              </p>
+            )}
+            {product.materialEn && product.materialEn.trim().length > 0 && (
+              <p className="text-sm text-muted-foreground">
+                {language === "ar" ? "المادة: " : "Material: "}
+                {language === "ar" ? product.materialAr : product.materialEn}
               </p>
             )}
           </div>

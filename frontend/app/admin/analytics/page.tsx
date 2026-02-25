@@ -24,13 +24,6 @@ export default function AnalyticsPage() {
       </div>
 
       <Tabs defaultValue="revenue" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="revenue">{isRTL ? "الإيرادات" : "Revenue"}</TabsTrigger>
-          <TabsTrigger value="orders">{isRTL ? "الطلبات" : "Orders"}</TabsTrigger>
-          <TabsTrigger value="traffic">{isRTL ? "الزيارات" : "Traffic"}</TabsTrigger>
-          <TabsTrigger value="conversion">{isRTL ? "التحويل" : "Conversion"}</TabsTrigger>
-        </TabsList>
-
         <TabsContent value="revenue" className="space-y-4">
           <Card>
             <CardContent className="h-[750px] p-0 relative">

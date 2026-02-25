@@ -8,7 +8,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { DataTable } from "@/components/admin/data-table"
-import { mockCategories, type Category } from "@/lib/admin-data"
+import { type Category } from "@/lib/admin-data"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -58,7 +58,7 @@ export default function CategoriesPage() {
   const [formData, setFormData] = useState({
     nameEn: "",
     nameAr: "",
-    imageUrl: "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop",
+    imageUrl: "",
   })
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
@@ -73,7 +73,7 @@ export default function CategoriesPage() {
       setFormData({
         nameEn: "",
         nameAr: "",
-        imageUrl: "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop",
+        imageUrl: "",
       })
       setSelectedFile(null)
     }

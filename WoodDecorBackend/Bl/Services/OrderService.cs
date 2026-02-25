@@ -26,7 +26,7 @@ namespace Bl.Services
             _tableRepository = _repository;
             _mapper = _Mapper;
         }
-        public async Task<TbOrder> CreateOrder(Guid userId, string Country, string City, string Address, decimal Total, string PhoneNumber, string Email, string FirstName, string LastName, string? transactionId = null)
+        public async Task<TbOrder> CreateOrder(Guid userId, string Country, string paymentMethodName, string City, string Address, decimal Total, string PhoneNumber, string Email, string FirstName, string LastName, string? transactionId = null)
         {
             var cart = await _cartRepository.GetActiveCartWithItemsAsync(userId);
             if (cart == null || !cart.Items.Any())
@@ -49,7 +49,8 @@ namespace Bl.Services
                 PaymobTransactionId = transactionId,
                 OrderNumber = $"ORD-{DateTime.UtcNow:yyyyMMddHHmmss}-{Guid.NewGuid().ToString().Substring(0, 6).ToUpper()}",
                 CurrentState = 1,
-                DelivryDate = DateTime.Now.AddDays(5)
+                DelivryDate = DateTime.Now.AddDays(5),
+                PaymentMethodName = paymentMethodName
             };
 
             foreach (var item in cart.Items)
@@ -134,6 +135,25 @@ namespace Bl.Services
             _tableRepository.Update(order);
 
             return true;
+        }
+        public async Task MarkOrderAsPaid(Guid orderId, string transactionId)
+        {
+            var order = _tableRepository.GetById(orderId);
+
+            if (order == null)
+                return;
+            if (order.Status == "Cancelled")
+                return;
+
+            // ✅ لو الأوردر متدفع قبل كده → متعملش حاجة
+            if (order.PaymentStatus == "Paid")
+                return;
+
+            order.PaymentStatus = "Paid";
+            order.PaymobTransactionId = transactionId;
+            order.Status = "Processing";
+
+            _tableRepository.Update(order);
         }
 
     }

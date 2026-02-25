@@ -64,13 +64,13 @@ export function HeroBanner() {
   // Use API sliders or fallback
   const banners = sliders.length > 0
     ? sliders.map((slider) => ({
-        id: slider.id,
-        image: slider.imageUrl,
-        title: { en: slider.titleEn, ar: slider.titleAr },
-        subtitle: { en: "", ar: "" },
-        cta: { en: "Shop Now", ar: "تسوق الآن" },
-        href: "/products",
-      }))
+      id: slider.id,
+      image: slider.imageUrl,
+      title: { en: slider.titleEn, ar: slider.titleAr },
+      subtitle: { en: "", ar: "" },
+      cta: { en: "Shop Now", ar: "تسوق الآن" },
+      href: "/product",
+    }))
     : fallbackBanners
 
   // Update currentSlide when banners change
@@ -150,9 +150,8 @@ export function HeroBanner() {
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              className={`w-2 h-2 rounded-full transition-colors ${
-                index === currentSlide ? "bg-accent" : "bg-card/50"
-              }`}
+              className={`w-2 h-2 rounded-full transition-colors ${index === currentSlide ? "bg-accent" : "bg-card/50"
+                }`}
               aria-label={`Go to slide ${index + 1}`}
             />
           ))}

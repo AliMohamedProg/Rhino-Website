@@ -106,17 +106,7 @@ namespace Bl.Services
                 RedirectUrl  = redirectUrl
             };
         }
-        public async Task MarkOrderAsPaid(Guid orderId)
-        {
-            var order = await _orderService.GetOrderById(orderId);
 
-            if (order == null)
-                return;
-
-            order.PaymentStatus = "Paid";
-
-            _orderService.Update(order);
-        }
 
     }
 }

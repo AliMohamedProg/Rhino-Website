@@ -26,6 +26,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useState } from "react"
+import Image from "next/image"
 
 interface NavItem {
   titleKey: string
@@ -44,15 +45,11 @@ const mainNavItems: NavItem[] = [
 
 const secondaryNavItems: NavItem[] = [
   { titleKey: "sidebar.analytics", href: "/admin/analytics", icon: BarChart3 },
-  { titleKey: "sidebar.reports", href: "/admin/reports", icon: FileText },
-  { titleKey: "sidebar.inventory", href: "/admin/inventory", icon: Warehouse },
-  { titleKey: "sidebar.coupons", href: "/admin/coupons", icon: Ticket },
   { titleKey: "sidebar.reviews", href: "/admin/reviews", icon: Star },
 ]
 
 const bottomNavItems: NavItem[] = [
   { titleKey: "sidebar.settings", href: "/admin/settings", icon: Settings },
-  { titleKey: "sidebar.support", href: "/admin/support", icon: HelpCircle },
 ]
 
 export function AdminSidebar() {
@@ -100,12 +97,15 @@ export function AdminSidebar() {
       <div className="flex h-16 items-center justify-between border-b border-sidebar-border px-4">
         {!collapsed && (
           <Link href="/admin" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-              <span className="text-sm font-bold text-primary-foreground">W</span>
-            </div>
-            <span className="text-lg font-semibold text-sidebar-foreground">
-              {dir === "rtl" ? "وود ديكور" : "Wood Decor"}
-            </span>
+            <Image
+              src="/images/logo-websait.png"
+              alt="Wood Decor Logo"
+              width={40}
+              height={40}
+              sizes="40px"
+              className="object-contain"
+              priority
+            />
           </Link>
         )}
         {collapsed && (

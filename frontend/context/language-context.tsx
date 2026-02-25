@@ -47,6 +47,7 @@ const translations: Translations = {
   "products.specifications": { en: "Specifications", ar: "المواصفات" },
   "products.reviews": { en: "Reviews", ar: "التقييمات" },
   "products.related": { en: "Related Products", ar: "منتجات ذات صلة" },
+  "products.material": { en: "Material", ar: "الخامة" },
 
   // Cart
   "cart.title": { en: "Shopping Cart", ar: "سلة التسوق" },

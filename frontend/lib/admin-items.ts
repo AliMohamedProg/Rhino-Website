@@ -19,6 +19,7 @@ export interface AdminItemDto {
   images?: AdminImageDto[]
   currentState?: number
   colors?: string | null
+  material?: string | null
   createdDate?: string | null
 }
 
@@ -69,6 +70,7 @@ export const mapAdminItemToProduct = (
     onSale: discount > 0,
     images: imageUrls,
     colors: item.colors ?? "",
+    material: item.material ?? "",
     sku: "",
     createdDate: item.createdDate ?? new Date().toISOString(),
     updatedAt: item.createdDate ?? new Date().toISOString(),

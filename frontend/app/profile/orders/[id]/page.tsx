@@ -132,7 +132,33 @@ export default function OrderViewPage() {
 
     fetchOrder()
   }, [id])
+  const handleCancelOrder = async () => {
+    if (!order) return;
 
+    try {
+      const res = await fetch(
+        `https://localhost:7282/api/order/cancel-order/${order.id}`,
+        {
+          method: "POST",
+          credentials: "include"
+        }
+      );
+
+      if (res.ok) {
+        const result = await res.json();
+
+        if (result === true) {
+          setOrder(prev =>
+            prev ? { ...prev, status: "Cancelled" } : prev
+          );
+        } else {
+          alert("Failed to cancel order");
+        }
+      }
+    } catch (err) {
+      console.error("Cancel failed", err);
+    }
+  };
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -192,6 +218,16 @@ export default function OrderViewPage() {
                         {order.delivryDate ? new Date(order.delivryDate).toLocaleDateString(language === "ar" ? "ar-EG" : "en-US") : "---"}
                       </div>
                       <div className="mt-2 text-right">{statusBadge(order.status, language)}</div>
+                      {(order.status === "Pending" || order.status === "Processing") && (
+                        <div className="mt-3">
+                          <Button
+                            variant="destructive"
+                            onClick={handleCancelOrder}
+                          >
+                            {language === "ar" ? "إلغاء الطلب" : "Cancel Order"}
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   </div>
 

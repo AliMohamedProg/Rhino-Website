@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/footer"
 import { HeroBanner } from "@/components/home/hero-banner"
 import { ProductCarousel } from "@/components/home/product-carousel"
 import { CategoriesGrid } from "@/components/home/categories-grid"
+import { MessageCircle } from "lucide-react"
 
 /** Home page. Auth state is handled by AuthProvider (no duplicate /api/auth/me call). */
 export default function HomePage() {

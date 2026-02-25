@@ -52,27 +52,21 @@ namespace Apis.Controllers
         [HttpPost("webhook")]
         public async Task<IActionResult> Webhook()
         {
+            var body = await new StreamReader(Request.Body).ReadToEndAsync();
 
-            using var reader = new StreamReader(Request.Body);
-            var body = await reader.ReadToEndAsync();
-
-            // 1️⃣ Verify Signature أول حاجة
             if (!VerifySignature(body))
-                return Unauthorized("Invalid Signature");
+                return Unauthorized();
 
             var request = JsonSerializer.Deserialize<PaymobWebhook>(body);
 
-            if (request == null)
-                return BadRequest();
-
-            // 2️⃣ تحقق إن الحالة Paid فعلاً من Paymob
-            if (request.Success)
+            if (request?.Success == true && request.Data?.Order != null)
             {
-                await _paymobService.MarkOrderAsPaid(request.Data.OrderId);
+                var orderId = request.Data.Order.Id;
+
+                await _orderService.MarkOrderAsPaid(orderId, request.Data.TransactionId);
             }
 
             return Ok();
-
         }
         private bool VerifySignature(string body)
         {

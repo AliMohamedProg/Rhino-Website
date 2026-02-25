@@ -56,6 +56,8 @@ type ApiOrder = {
   paymentStatus?: string
   total?: number
   tbOrderItems?: ApiOrderItem[]
+  paymentMethod?: string
+  paymentMethodName?: string
 }
 
 const normalizeStatus = (status?: string | null): Order["status"] => {
@@ -78,8 +80,8 @@ const mapApiOrder = (apiOrder: ApiOrder, index: number): Order => {
   const safePhone = apiOrder.phoneNumber || ""
   const safeFirstName = apiOrder.firstName?.trim() || ""
   const safeLastName = apiOrder.lastName?.trim() || ""
-  const safeName = safeFirstName && safeLastName 
-    ? `${safeFirstName} ${safeLastName}` 
+  const safeName = safeFirstName && safeLastName
+    ? `${safeFirstName} ${safeLastName}`
     : safeEmail ? safeEmail.split("@")[0] : safePhone || `Customer ${index + 1}`
   const items = Array.isArray(apiOrder.tbOrderItems) ? apiOrder.tbOrderItems : []
   const mappedItems = items.map((item, itemIndex) => {
@@ -114,6 +116,7 @@ const mapApiOrder = (apiOrder: ApiOrder, index: number): Order => {
     total: Number.isFinite(total) ? total : subtotal,
     status: normalizeStatus(apiOrder.status),
     paymentMethod: apiOrder.paymentStatus || "Unknown",
+    paymentMethodName: apiOrder.paymentMethodName || "Unknown",
     shippingAddress: {
       street: apiOrder.address || "",
       city: apiOrder.city || "",
@@ -259,6 +262,15 @@ export default function OrdersPage() {
       ),
     },
     {
+      key: "paymentMethodName",
+      header: language === "ar" ? "طريقة الدفع" : "Payment Method",
+      render: (order: Order) => (
+        <span className="text-muted-foreground">
+          {order.paymentMethodName}
+        </span>
+      ),
+    },
+    {
       key: "status",
       header: t("orders.status"),
       render: (order: Order) => getStatusBadge(order.status),
@@ -323,7 +335,6 @@ export default function OrdersPage() {
     { value: "shipped", labelEn: "Shipped", labelAr: "تم الشحن" },
     { value: "delivered", labelEn: "Delivered", labelAr: "تم التوصيل" },
     { value: "cancelled", labelEn: "Cancelled", labelAr: "ملغي" },
-    { value: "refunded", labelEn: "Refunded", labelAr: "مسترد" },
   ]
 
   return (
@@ -343,10 +354,6 @@ export default function OrdersPage() {
               : `Manage ${orders.length} orders`}
           </p>
         </div>
-        <Button variant="outline">
-          <Download className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-          {t("common.export")}
-        </Button>
       </div>
 
       {/* Filters */}

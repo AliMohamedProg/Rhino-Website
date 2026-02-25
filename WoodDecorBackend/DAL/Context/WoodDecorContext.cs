@@ -65,7 +65,10 @@ public partial class WoodDecorContext : IdentityDbContext<ApplicationUser>
         modelBuilder.Entity<TbItem>(entity =>
         {
             entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.Colors).HasMaxLength(50);
+            entity.Property(e => e.ColorsEn).HasMaxLength(100);
+            entity.Property(e => e.ColorsAr).HasMaxLength(100);
+            entity.Property(e => e.MaterialEn).HasMaxLength(100);
+            entity.Property(e => e.MaterialAr).HasMaxLength(100);
             entity.Property(e => e.NameAr).HasMaxLength(50);
             entity.Property(e => e.NameEn).HasMaxLength(50);
             entity.Property(e => e.Price).HasColumnType("decimal(18, 4)");
