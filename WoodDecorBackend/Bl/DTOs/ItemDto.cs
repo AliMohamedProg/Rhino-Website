@@ -26,6 +26,7 @@ namespace Bl.DTOs
         public int StockNumber { get; set; }
 
         public string? Colors { get; set; }
+        public string? Material { get; set; }
 
         public List<ImageDto> Images { get; set; } = new List<ImageDto>();
 

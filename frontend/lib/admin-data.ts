@@ -83,6 +83,7 @@ export interface Product {
   images: string[]
   mainImage?: string
   colors?: string
+  material?: string
   sku: string
   createdDate: string
   updatedAt: string

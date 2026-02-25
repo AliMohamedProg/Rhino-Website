@@ -102,37 +102,10 @@ public partial class WoodDecorContext : IdentityDbContext<ApplicationUser>
                 .HasConstraintName("FK_TbOrderItems_TbOrder");
         });
 
-        //// TbCart
-        //modelBuilder.Entity<TbCart>(entity =>
-        //{
-        //    entity.Property(e => e.Id).ValueGeneratedNever();
-        //    entity.Property(e => e.UserId).IsRequired();
-
-        //    // Relation with CartItems
-        //    entity.HasMany(c => c.Items)
-        //          .WithOne(ci => ci.Cart)
-        //          .HasForeignKey(ci => ci.CartId)
-        //          .OnDelete(DeleteBehavior.Cascade); // لو عايز تحذف كل العناصر مع حذف الكارت
-        //});
-
-        //// TbCartItem
-        //modelBuilder.Entity<TbCartItem>(entity =>
-        //{
-        //    entity.Property(e => e.Id).ValueGeneratedNever();
-        //    entity.Property(e => e.Quantity).IsRequired();
-        //    entity.Property(e => e.UnitPrice).HasColumnType("decimal(18,2)");
-
-        //    // Relation with Item
-        //    entity.HasOne(ci => ci.Item)
-        //          .WithMany() // لو مش محتاج تربطه بالـ Item بشكل عكسي
-        //          .HasForeignKey(ci => ci.ItemId)
-        //          .OnDelete(DeleteBehavior.ClientSetNull);
-        //});
-
 
         modelBuilder.Entity<TbReview>(entity =>
         {
-            entity.HasNoKey();
+            entity.HasKey(e => e.Id);
         });
 
         modelBuilder.Entity<TbSetting>(entity =>

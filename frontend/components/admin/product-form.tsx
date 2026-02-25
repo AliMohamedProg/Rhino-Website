@@ -51,6 +51,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     images: buildInitialImages(product),
     mainImage: product?.mainImage || product?.images?.[0] || "",
     colors: product?.colors || "",
+    material: product?.material || "",
   })
 
   const [categories, setCategories] = useState<AdminCategoryDto[]>([])
@@ -71,6 +72,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
       images: buildInitialImages(product),
       mainImage: product.mainImage || product.images?.[0] || "",
       colors: product.colors || "",
+      material: product.material || "",
     })
   }, [product])
 
@@ -114,6 +116,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
         return
       }
 
+      const materialVal = (formData.material || "").trim()
       const payload = {
         id: product?.id,
         nameEn: formData.nameEn,
@@ -125,6 +128,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
         stockNumber: formData.stock,
         categoryId: formData.categoryId,
         colors: colorsCheck.normalized,
+        material: materialVal,
         mainImage,
         images: formData.images.map((url) => ({ imageUrl: url })),
         currentState,
@@ -245,8 +249,8 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                   ? "إضافة منتج جديد إلى المتجر"
                   : "Add a new product to your store"
                 : language === "ar"
-                ? "تعديل بيانات المنتج"
-                : "Edit product details"}
+                  ? "تعديل بيانات المنتج"
+                  : "Edit product details"}
             </p>
           </div>
         </div>
@@ -258,8 +262,8 @@ export function ProductForm({ product, mode }: ProductFormProps) {
             {isSubmitting
               ? t("common.loading")
               : mode === "create"
-              ? t("products.addProduct")
-              : t("common.save")}
+                ? t("products.addProduct")
+                : t("common.save")}
           </Button>
         </div>
       </div>
@@ -508,6 +512,17 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                       : "Separate each color with a comma."}
                   </p>
                 )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="material">
+                  {language === "ar" ? "الخامات" : "Materials"}
+                </Label>
+                <Input
+                  id="material"
+                  value={formData.material}
+                  onChange={(e) => handleChange("material", e.target.value)}
+                  placeholder={language === "ar" ? "أدخل الخامة (مثال: خشب)" : "Enter material (e.g. Wood)"}
+                />
               </div>
             </CardContent>
           </Card>

@@ -370,6 +370,7 @@ type Product = {
   discountAmount: number
   stockNumber: number
   colors: string
+  material?: string
   overallRating: number
   images?: string[]
   mainImage?: string
@@ -419,11 +420,11 @@ export default function ProductDetailsPage() {
         const stockNumber = Number(data.stockNumber ?? data.StockNumber ?? 0)
         const normalizedImages = Array.isArray(rawImages)
           ? rawImages
-              .map((img: any) => {
-                if (typeof img === "string") return img
-                return img?.imageUrl || img?.ImageUrl || ""
-              })
-              .filter((img: string) => img.length > 0)
+            .map((img: any) => {
+              if (typeof img === "string") return img
+              return img?.imageUrl || img?.ImageUrl || ""
+            })
+            .filter((img: string) => img.length > 0)
           : []
         const mainImage = data.mainImage ?? data.MainImage ?? ""
         const images = [mainImage, ...normalizedImages].filter((img) => img && img.length > 0)
@@ -432,6 +433,7 @@ export default function ProductDetailsPage() {
         const normalizedProduct = {
           ...data,
           colors: colorsValue,
+          material: data.material ?? data.Material ?? "",
           images: uniqueImages,
           mainImage,
           price: Number.isFinite(price) ? price : 0,
@@ -456,15 +458,30 @@ export default function ProductDetailsPage() {
     fetchProduct()
   }, [id])
 
-  // Dummy reviews
+  // Fetch reviews
   useEffect(() => {
-    setReviews([
-      { id: "1", title: "Elegant Dining Set", date: "2026-02-07", rating: 5, text: "Great product! Exactly as described. Fast shipping and excellent packaging.", userName: "Ahmed M." },
-      { id: "2", title: "Modern Chair", date: "2026-02-06", rating: 5, text: "Excellent quality and design. Very comfortable and sturdy.", userName: "Sarah K." },
-      { id: "3", title: "Wooden Table", date: "2026-02-05", rating: 4, text: "Good, but a bit heavy. Otherwise perfect!", userName: "Omar R." },
-      { id: "4", title: "Luxury Sofa", date: "2026-02-04", rating: 5, text: "Super comfy and stylish! Worth every penny.", userName: "Fatima H." },
-    ])
-  }, [])
+    const fetchReviews = async () => {
+      try {
+        const res = await fetch(`https://localhost:7282/api/review/get-reviews?productId=${id}`)
+        if (res.ok) {
+          const data = await res.json()
+          // Map backend response to current Review type if needed
+          const normalizedReviews = data.map((r: any) => ({
+            id: r.id,
+            title: r.title || (language === "ar" ? "تقييم" : "Review"),
+            date: r.createdDate ? r.createdDate.split("T")[0] : new Date().toISOString().split("T")[0],
+            rating: r.rating,
+            text: r.comment || r.text,
+            userName: r.userName || (language === "ar" ? "مستخدم" : "User")
+          }))
+          setReviews(normalizedReviews)
+        }
+      } catch (err) {
+        console.error("Failed to fetch reviews:", err)
+      }
+    }
+    if (id) fetchReviews()
+  }, [id, language])
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -528,23 +545,55 @@ export default function ProductDetailsPage() {
   const increment = () => setQuantity(q => Math.min(q + 1, maxQty))
   const decrement = () => setQuantity(q => Math.max(1, q - 1))
 
-  const submitReview = () => {
+  const submitReview = async () => {
     if (!reviewText.trim() || !reviewTitle.trim()) return
 
-    const newReview: Review = {
-      id: (reviews.length + 1).toString(),
-      title: reviewTitle,
-      date: new Date().toISOString().split("T")[0],
-      rating: reviewRating,
-      text: reviewText,
-      userName: "You",
+    try {
+      const payload = {
+        productId: id,
+        title: reviewTitle,
+        review: reviewText,
+        rating: reviewRating
+      }
+
+      const res = await fetch("https://localhost:7282/api/review/add-review", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        credentials: "include"
+      })
+
+      if (res.ok) {
+        const text = await res.text()
+        let r: any = {}
+        try {
+          r = text ? JSON.parse(text) : {}
+        } catch (e) {
+          console.log("Response is not JSON, treating as success string")
+        }
+
+        const newReview: Review = {
+          id: r?.id || Date.now().toString(),
+          title: reviewTitle,
+          date: new Date().toISOString().split("T")[0],
+          rating: reviewRating,
+          text: reviewText,
+          userName: language === "ar" ? "أنت" : "You",
+        }
+        setReviews([newReview, ...reviews])
+        setShowReviewForm(false)
+        setReviewText("")
+        setReviewTitle("")
+        setReviewRating(5)
+        setCurrentReviewIndex(0)
+      } else {
+        const errText = await res.text()
+        console.error("Failed to add review:", errText)
+        alert(language === "ar" ? "فشل إضافة التقييم. ربما تحتاج لتسجيل الدخول." : "Failed to add review. You might need to login.")
+      }
+    } catch (err) {
+      console.error("Error submitting review:", err)
     }
-    setReviews([newReview, ...reviews])
-    setShowReviewForm(false)
-    setReviewText("")
-    setReviewTitle("")
-    setReviewRating(5)
-    setCurrentReviewIndex(0)
   }
 
   const nextReview = () => {
@@ -664,8 +713,8 @@ export default function ProductDetailsPage() {
                         key={index}
                         onClick={() => setSelectedColor(color)}
                         className={`px-4 py-2 border rounded-full text-sm font-medium transition-all ${selectedColor === color
-                            ? "border-primary bg-primary text-white"
-                            : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
+                          ? "border-primary bg-primary text-white"
+                          : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
                           }`}
                       >
                         {color}
@@ -817,6 +866,12 @@ export default function ProductDetailsPage() {
                       <span className="font-semibold">{product.overallRating} / 5</span>
                     </div>
                   </div>
+                  {product.material && (
+                    <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                      <span className="text-gray-500">{language === "ar" ? "الخامة" : "Material"}</span>
+                      <span className="font-semibold">{product.material}</span>
+                    </div>
+                  )}
                   {colorsArray.length > 0 && (
                     <div className="flex justify-between items-start py-2">
                       <span className="text-gray-500">{language === "ar" ? "الألوان المتاحة" : "Available Colors"}</span>
@@ -947,10 +1002,10 @@ export default function ProductDetailsPage() {
 
           </div>
         </div>
-      </section>
+      </section >
 
       <Footer />
-    </div>
+    </div >
   )
 }
 

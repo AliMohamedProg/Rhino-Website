@@ -127,6 +127,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IRefreshTokens, RefreshTokensService>();
 builder.Services.AddSingleton<TokenService>();
+builder.Services.AddHttpClient<IPaymobPayment, PaymobService>();
 //**************************************************************************************************************************************
 
 builder.Host.UseSerilog();

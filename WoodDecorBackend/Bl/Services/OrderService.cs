@@ -26,7 +26,7 @@ namespace Bl.Services
             _tableRepository = _repository;
             _mapper = _Mapper;
         }
-        public async Task<TbOrder> CreateOrder(Guid userId, string Country, string City, string Address, decimal Total, string PhoneNumber, string Email, string FirstName, string LastName)
+        public async Task<TbOrder> CreateOrder(Guid userId, string Country, string City, string Address, decimal Total, string PhoneNumber, string Email, string FirstName, string LastName, string? transactionId = null)
         {
             var cart = await _cartRepository.GetActiveCartWithItemsAsync(userId);
             if (cart == null || !cart.Items.Any())
@@ -45,7 +45,8 @@ namespace Bl.Services
                 FirstName = FirstName,
                 LastName = LastName,
                 Status = "Pending",
-                PaymentStatus = "Pending",
+                PaymentStatus = transactionId != null ? "Paid" : "Pending",
+                PaymobTransactionId = transactionId,
                 OrderNumber = $"ORD-{DateTime.UtcNow:yyyyMMddHHmmss}-{Guid.NewGuid().ToString().Substring(0, 6).ToUpper()}",
                 CurrentState = 1,
                 DelivryDate = DateTime.Now.AddDays(5)
@@ -112,6 +113,23 @@ namespace Bl.Services
                 throw new Exception("Order not found");
 
             order.Status = status;
+
+            _tableRepository.Update(order);
+
+            return true;
+        }
+
+        public async Task<bool> UpdateOrderPaymentStatus(Guid orderId, string transactionId, string status)
+        {
+            var order = _tableRepository.GetFirstOrDefault(
+                filter: o => o.Id == orderId
+            );
+
+            if (order == null)
+                throw new Exception("Order not found");
+
+            order.PaymentStatus = status;
+            order.PaymobTransactionId = transactionId;
 
             _tableRepository.Update(order);
 

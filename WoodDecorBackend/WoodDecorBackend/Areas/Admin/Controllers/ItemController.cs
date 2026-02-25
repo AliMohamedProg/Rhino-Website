@@ -53,6 +53,7 @@ namespace Apis.Areas.Admin.Controllers
                     StockNumber = itemDto.StockNumber,
                     CategoryId = itemDto.CategoryId,
                     Images = itemDto.Images ?? new List<ImageDto>(),
+                    Material = itemDto.Material
                 };
                 _itemService.AddItemWithImages(item);
                 return true;
@@ -90,6 +91,7 @@ namespace Apis.Areas.Admin.Controllers
                     StockNumber = itemDto.StockNumber,
                     CategoryId = itemDto.CategoryId,
                     Images = itemDto.Images ?? new List<ImageDto>(),
+                    Material = itemDto.Material
                 };
 
                 _itemService.UpdateItemWithImages(item);

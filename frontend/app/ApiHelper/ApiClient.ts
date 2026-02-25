@@ -36,7 +36,11 @@ async function request(method: "GET" | "POST" | "PATCH" | "DELETE", url: string,
   }
 
   const text = await res.text();
-  return text ? JSON.parse(text) : null;
+  try {
+    return text ? JSON.parse(text) : null;
+  } catch (e) {
+    return text;
+  }
 }
 
 export const ApiClient = {
