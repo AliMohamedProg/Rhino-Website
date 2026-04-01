@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react"
 import { useAdminLanguage } from "@/context/admin-language-context"
-import { cn } from "@/lib/utils"
+import { cn, getImageUrl } from "@/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -42,6 +42,7 @@ export default function SlidersPage() {
   const [sliders, setSliders] = useState<Slider[]>([])
   const [loading, setLoading] = useState(true)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [deleteAllDialogOpen, setDeleteAllDialogOpen] = useState(false)
   const [sliderToDelete, setSliderToDelete] = useState<Slider | null>(null)
   const [addDialogOpen, setAddDialogOpen] = useState(false)
   const [editDialogOpen, setEditDialogOpen] = useState(false)
@@ -104,7 +105,9 @@ export default function SlidersPage() {
 
     try {
       setUploading(true)
-      const result = await ApiClient.upload("api/Image/upload", selectedFile)
+      // CORRECT ENDPOINT: The previous "api/Image/upload" is incorrect for your backend
+      const result = await ApiClient.upload("api/Upload", selectedFile)
+      // Check both 'url' (returned by current UploadController) and 'imageUrl'
       return result?.url || result?.imageUrl || result
     } catch (error) {
       console.error("Error uploading image:", error)
@@ -136,22 +139,49 @@ export default function SlidersPage() {
     }
   }
 
+  const confirmDeleteAll = async () => {
+    try {
+      setLoading(true)
+      await ApiClient.post(`api/admin/Sliders/delete-all-sliders`, {})
+      setDeleteAllDialogOpen(false)
+      alert(language === "ar" ? "تم حذف جميع الشرائح بنجاح" : "All sliders deleted successfully")
+      await fetchSliders()
+    } catch (err: any) {
+      console.error("Failed to delete all sliders:", err)
+      const errorMsg = err.message || JSON.stringify(err)
+      alert((language === "ar" ? "فشل الحذف: " : "Delete failed: ") + errorMsg)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleSubmitAdd = async () => {
     try {
       setLoading(true)
 
-      let imageUrl = formData.imageUrl
+      let imageUrl = ""
 
       // If a file was selected, upload it first
       if (selectedFile) {
         const uploadedUrl = await handleUpload()
         if (uploadedUrl) {
           imageUrl = uploadedUrl
+        } else {
+          alert(language === "ar" ? "فشل رفع الصورة. يرجى المحاولة مرة أخرى." : "Image upload failed. Please try again.")
+          return
         }
+      } else {
+        imageUrl = formData.imageUrl
+      }
+
+      // CRITICAL: Block blob URLs from being saved
+      if (imageUrl.startsWith("blob:")) {
+        alert(language === "ar" ? "خطأ في معالجة الصورة. يرجى اختيار الصورة مرة أخرى." : "Incomplete image processing. Please re-select the image.")
+        return
       }
 
       if (!imageUrl) {
-        console.error("Image URL is required")
+        alert(language === "ar" ? "الصورة مطلوبة" : "Image is required")
         return
       }
 
@@ -184,11 +214,20 @@ export default function SlidersPage() {
         const uploadedUrl = await handleUpload()
         if (uploadedUrl) {
           imageUrl = uploadedUrl
+        } else {
+          alert(language === "ar" ? "فشل رفع الصورة. يرجى المحاولة مرة أخرى." : "Image upload failed. Please try again.")
+          return
         }
       }
 
+      // CRITICAL: Block blob URLs from being saved
+      if (imageUrl.startsWith("blob:")) {
+        alert(language === "ar" ? "خطأ في معالجة الصورة. يرجى اختيار الصورة مرة أخرى." : "Incomplete image processing. Please re-select the image.")
+        return
+      }
+
       if (!imageUrl) {
-        console.error("Image URL is required")
+        alert(language === "ar" ? "الصورة مطلوبة" : "Image is required")
         return
       }
 
@@ -227,10 +266,18 @@ export default function SlidersPage() {
               : "Manage homepage sliders"}
           </p>
         </div>
-        <Button onClick={handleAdd} className={dir === "rtl" ? "flex-row-reverse" : ""}>
-          <Plus className="h-4 w-4 mr-2" />
-          {language === "ar" ? "إضافة شريحة" : "Add Slider"}
-        </Button>
+        <div className="flex items-center gap-2">
+          {sliders.length > 0 && (
+            <Button variant="destructive" onClick={() => setDeleteAllDialogOpen(true)} className={dir === "rtl" ? "flex-row-reverse" : ""}>
+              <Trash2 className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
+              {language === "ar" ? "حذف الكل" : "Delete All"}
+            </Button>
+          )}
+          <Button onClick={handleAdd} className={dir === "rtl" ? "flex-row-reverse" : ""}>
+            <Plus className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
+            {language === "ar" ? "إضافة شريحة" : "Add Slider"}
+          </Button>
+        </div>
       </div>
 
       {loading && !sliders.length ? (
@@ -259,7 +306,7 @@ export default function SlidersPage() {
               <div className="relative aspect-video bg-muted">
                 {slider.imageUrl ? (
                   <Image
-                    src={slider.imageUrl}
+                    src={getImageUrl(slider.imageUrl)}
                     alt={language === "ar" ? slider.titleAr : slider.titleEn}
                     fill
                     className="object-cover"
@@ -509,16 +556,16 @@ export default function SlidersPage() {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>
+            <AlertDialogTitle className={cn(dir === "rtl" && "text-right")}>
               {language === "ar" ? "حذف الشريحة" : "Delete Slider"}
             </AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogDescription className={cn(dir === "rtl" && "text-right")}>
               {language === "ar"
                 ? "هل أنت متأكد من حذف هذه الشريحة؟ لا يمكن التراجع عن هذا الإجراء."
                 : "Are you sure you want to delete this slider? This action cannot be undone."}
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
+          <AlertDialogFooter className={cn(dir === "rtl" && "flex-row-reverse")}>
             <AlertDialogCancel>
               {language === "ar" ? "إلغاء" : "Cancel"}
             </AlertDialogCancel>
@@ -527,6 +574,33 @@ export default function SlidersPage() {
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
               {language === "ar" ? "حذف" : "Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Delete All Confirmation Dialog */}
+      <AlertDialog open={deleteAllDialogOpen} onOpenChange={setDeleteAllDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className={cn(dir === "rtl" && "text-right")}>
+              {language === "ar" ? "حذف جميع الشرائح" : "Delete All Sliders"}
+            </AlertDialogTitle>
+            <AlertDialogDescription className={cn(dir === "rtl" && "text-right")}>
+              {language === "ar"
+                ? "هل أنت متأكد من حذف جميع الشرائح؟ لا يمكن التراجع عن هذا الإجراء."
+                : "Are you sure you want to delete all sliders? This action cannot be undone."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className={cn(dir === "rtl" && "flex-row-reverse")}>
+            <AlertDialogCancel>
+              {language === "ar" ? "إلغاء" : "Cancel"}
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDeleteAll}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {language === "ar" ? "حذف الكل" : "Delete All"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useEffect, useState } from "react"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/select"
 import { MoreHorizontal, Eye, Download, Filter } from "lucide-react"
 import Link from "next/link"
+import { exportOrdersExcel, exportOrdersPdf } from "@/app/ApiHelper/ExportApi"
 
 type ApiOrderItem = {
   itemId?: string
@@ -189,6 +190,22 @@ export default function OrdersPage() {
     )
   }
 
+  const getPaymentStatusBadge = (paymentStatus: string) => {
+    const status = paymentStatus || "Pending"
+    const statusConfig: Record<string, { labelEn: string, labelAr: string, className: string }> = {
+      Paid: { labelEn: "Paid", labelAr: "تم الدفع", className: "bg-emerald-500/10 text-emerald-600 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800" },
+      Pending: { labelEn: "Pending", labelAr: "قيد الانتظار", className: "bg-yellow-500/10 text-yellow-600 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800" },
+      Refunded: { labelEn: "Refunded", labelAr: "مسترد", className: "bg-purple-500/10 text-purple-600 border-purple-200 dark:bg-purple-900/20 dark:text-purple-400 dark:border-purple-800" },
+      Failed: { labelEn: "Failed", labelAr: "فشل", className: "bg-red-500/10 text-red-600 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800" },
+    }
+    const config = statusConfig[status] || statusConfig["Pending"]
+    return (
+      <Badge variant="outline" className={cn("font-medium", config.className)}>
+        {language === "ar" ? config.labelAr : config.labelEn}
+      </Badge>
+    )
+  }
+
   const handleStatusChange = async (orderId: string, newStatus: Order["status"]) => {
     let previousStatus: Order["status"] | undefined
 
@@ -265,9 +282,10 @@ export default function OrdersPage() {
       key: "paymentMethodName",
       header: language === "ar" ? "طريقة الدفع" : "Payment Method",
       render: (order: Order) => (
-        <span className="text-muted-foreground">
-          {order.paymentMethodName}
-        </span>
+        <div className="flex flex-col gap-1">
+          <span className="text-sm font-medium">{order.paymentMethodName}</span>
+          {getPaymentStatusBadge(order.paymentMethod)}
+        </div>
       ),
     },
     {
@@ -354,6 +372,22 @@ export default function OrdersPage() {
               : `Manage ${orders.length} orders`}
           </p>
         </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">
+              <Download className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
+              {language === "ar" ? "تصدير" : "Export"}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => exportOrdersExcel()}>
+              {language === "ar" ? "تصدير إلى Excel" : "Export to Excel"}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => exportOrdersPdf()}>
+              {language === "ar" ? "تصدير إلى PDF" : "Export to PDF"}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {/* Filters */}

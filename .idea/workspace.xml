@@ -1,140 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="4c7985ae-7627-4db9-81df-2bd9955b9cc5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/.vs/ProjectEvaluation/wooddecorbackend.metadata.v10.bin" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/.vs/ProjectEvaluation/wooddecorbackend.metadata.v10.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/.vs/ProjectEvaluation/wooddecorbackend.projects.v10.bin" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/.vs/ProjectEvaluation/wooddecorbackend.projects.v10.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/.vs/ProjectEvaluation/wooddecorbackend.strings.v10.bin" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/.vs/ProjectEvaluation/wooddecorbackend.strings.v10.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/.vs/WoodDecorBackend.slnx/DesignTimeBuild/.dtbcache.v2" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/.vs/WoodDecorBackend.slnx/DesignTimeBuild/.dtbcache.v2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/.vs/WoodDecorBackend.slnx/FileContentIndex/06e95817-cb6a-4a5c-ac54-d83ff6ee38d9.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/.vs/WoodDecorBackend.slnx/FileContentIndex/b41ddc24-f640-4482-8d5f-b2e32b8235e9.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/.vs/WoodDecorBackend.slnx/FileContentIndex/cf72ebaf-f345-445a-ba09-1ab4998e361d.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/.vs/WoodDecorBackend.slnx/FileContentIndex/d02181a1-7d68-4900-88c3-7c2908f02023.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/.vs/WoodDecorBackend.slnx/FileContentIndex/e070e64b-9c3d-447e-ab90-992aec50b867.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/.vs/WoodDecorBackend.slnx/copilot-chat/1a18df9b/sessions/2a41aad9-be13-49e0-88cb-670d0d0181de" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/.vs/WoodDecorBackend.slnx/copilot-chat/1a18df9b/sessions/2a41aad9-be13-49e0-88cb-670d0d0181de" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/.vs/WoodDecorBackend.slnx/v18/.futdcache.v2" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/.vs/WoodDecorBackend.slnx/v18/.futdcache.v2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/.vs/WoodDecorBackend.slnx/v18/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/.vs/WoodDecorBackend.slnx/v18/.suo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/.vs/WoodDecorBackend.slnx/v18/DocumentLayout.backup.json" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/.vs/WoodDecorBackend.slnx/v18/DocumentLayout.backup.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/.vs/WoodDecorBackend.slnx/v18/DocumentLayout.json" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/.vs/WoodDecorBackend.slnx/v18/DocumentLayout.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/.vs/WoodDecorBackend/CopilotIndices/18.0.988.22099/CodeChunks.db" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/.vs/WoodDecorBackend/CopilotIndices/18.0.988.22099/CodeChunks.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/.vs/WoodDecorBackend/CopilotIndices/18.0.988.22099/SemanticSymbols.db" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/.vs/WoodDecorBackend/CopilotIndices/18.0.988.22099/SemanticSymbols.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Bl/Mapping/MappingProfile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Bl/Mapping/MappingProfile.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Bl/bin/Debug/net10.0/Bl.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Bl/bin/Debug/net10.0/Bl.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Bl/bin/Debug/net10.0/Bl.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Bl/bin/Debug/net10.0/Bl.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Bl/bin/Debug/net10.0/DAL.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Bl/bin/Debug/net10.0/DAL.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Bl/bin/Debug/net10.0/DAL.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Bl/bin/Debug/net10.0/DAL.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Bl/bin/Debug/net10.0/Domains.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Bl/bin/Debug/net10.0/Domains.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Bl/bin/Debug/net10.0/Domains.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Bl/bin/Debug/net10.0/Domains.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.csproj.AssemblyReference.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.csproj.CoreCompileInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.csproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.csproj.FileListAbsolute.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.sourcelink.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/Debug/net10.0/ref/Bl.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/Debug/net10.0/ref/Bl.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/Debug/net10.0/refint/Bl.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/Debug/net10.0/refint/Bl.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/DAL/Context/WoodDecorContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/DAL/Context/WoodDecorContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/DAL/Migrations/WoodDecorContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/DAL/Migrations/WoodDecorContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/DAL/bin/Debug/net10.0/DAL.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/DAL/bin/Debug/net10.0/DAL.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/DAL/bin/Debug/net10.0/DAL.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/DAL/bin/Debug/net10.0/DAL.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/DAL/bin/Debug/net10.0/Domains.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/DAL/bin/Debug/net10.0/Domains.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/DAL/bin/Debug/net10.0/Domains.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/DAL/bin/Debug/net10.0/Domains.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/rider.project.model.nuget.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Bl/obj/rider.project.restore.info" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/Debug/net10.0/DAL.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/Debug/net10.0/DAL.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/Debug/net10.0/DAL.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/Debug/net10.0/DAL.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/Debug/net10.0/DAL.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/Debug/net10.0/DAL.csproj.AssemblyReference.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/Debug/net10.0/DAL.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/Debug/net10.0/DAL.csproj.CoreCompileInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/Debug/net10.0/DAL.csproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/Debug/net10.0/DAL.csproj.FileListAbsolute.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/Debug/net10.0/DAL.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/Debug/net10.0/DAL.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/Debug/net10.0/DAL.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/Debug/net10.0/DAL.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/Debug/net10.0/DAL.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/Debug/net10.0/DAL.sourcelink.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/Debug/net10.0/ref/DAL.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/Debug/net10.0/ref/DAL.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/Debug/net10.0/refint/DAL.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/Debug/net10.0/refint/DAL.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Domains/bin/Debug/net10.0/Domains.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Domains/bin/Debug/net10.0/Domains.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Domains/bin/Debug/net10.0/Domains.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Domains/bin/Debug/net10.0/Domains.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/rider.project.model.nuget.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/DAL/obj/rider.project.restore.info" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Domains/obj/Debug/net10.0/Domains.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Domains/obj/Debug/net10.0/Domains.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Domains/obj/Debug/net10.0/Domains.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Domains/obj/Debug/net10.0/Domains.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Domains/obj/Debug/net10.0/Domains.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Domains/obj/Debug/net10.0/Domains.csproj.CoreCompileInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Domains/obj/Debug/net10.0/Domains.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Domains/obj/Debug/net10.0/Domains.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Domains/obj/Debug/net10.0/Domains.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Domains/obj/Debug/net10.0/Domains.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Domains/obj/Debug/net10.0/Domains.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Domains/obj/Debug/net10.0/Domains.sourcelink.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Domains/obj/Debug/net10.0/ref/Domains.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Domains/obj/Debug/net10.0/ref/Domains.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Domains/obj/Debug/net10.0/refint/Domains.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Domains/obj/Debug/net10.0/refint/Domains.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/Apis.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/Apis.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/Apis.csproj.user" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/Apis.csproj.user" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/Controllers/WeatherForecastController.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/Services/UserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/Services/UserService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/appsettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/Apis.deps.json" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/Apis.deps.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/Apis.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/Apis.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/Apis.exe" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/Apis.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/Apis.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/Apis.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/Bl.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/Bl.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/Bl.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/Bl.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/DAL.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/DAL.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/DAL.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/DAL.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/Domains.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/Domains.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/Domains.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/Domains.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/Microsoft.IdentityModel.Protocols.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/Microsoft.IdentityModel.Protocols.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/Microsoft.OpenApi.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/Microsoft.OpenApi.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/System.IdentityModel.Tokens.Jwt.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/System.IdentityModel.Tokens.Jwt.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/bin/Debug/net10.0/appsettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Apis.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Apis.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Domains/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Domains/obj/rider.project.model.nuget.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/Domains/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/Domains/obj/rider.project.restore.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/Controllers/OrderController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/Controllers/OrderController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/Apis.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/Apis.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/Apis.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/Apis.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/Apis.MvcApplicationPartsAssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/Apis.MvcApplicationPartsAssemblyInfo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/Apis.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/Apis.assets.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/Apis.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/Apis.csproj.AssemblyReference.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/Apis.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/Apis.csproj.CoreCompileInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/Apis.csproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/Apis.csproj.FileListAbsolute.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/Apis.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/Apis.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/Apis.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/Apis.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/Apis.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/Apis.sourcelink.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/apphost.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/ref/Apis.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/ref/Apis.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/refint/Apis.dll" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/refint/Apis.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/rjsmcshtml.dswa.cache.json" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/rjsmcshtml.dswa.cache.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/rjsmrazor.dswa.cache.json" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/rjsmrazor.dswa.cache.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/rpswa.dswa.cache.json" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/Debug/net10.0/rpswa.dswa.cache.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/project.assets.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/rider.project.model.nuget.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/WoodDecorBackend/WoodDecorBackend/obj/rider.project.restore.info" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/app/login/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/login/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/register/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/register/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/components/layout/header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/layout/header.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="861" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 5
-}]]></component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="39Bnk9zNiXB0OescX8lNTHuhgTM" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "git-widget-placeholder": "main",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\HP - Victus\\Downloads\\WoodDecorWebsite\\frontend\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -150,6 +83,12 @@
       <option name="presentableId" value="Default" />
       <updated>1770178502810</updated>
       <workItem from="1770178527839" duration="188000" />
+      <workItem from="1772422734714" duration="207000" />
+      <workItem from="1772422971239" duration="1468000" />
+      <workItem from="1772428591367" duration="751000" />
+      <workItem from="1772589206408" duration="235000" />
+      <workItem from="1772589846519" duration="1342000" />
+      <workItem from="1772603610769" duration="8000" />
     </task>
     <servers />
   </component>

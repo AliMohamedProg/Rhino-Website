@@ -1,8 +1,8 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { cairo, geist } from "./fonts"
+import { GoogleAnalytics } from "@next/third-parties/google"
 import { Analytics } from "@vercel/analytics/next"
-import Script from "next/script"
 import "./globals.css"
 import { themeScript } from "@/lib/theme-script"
 import { AppProviders } from "@/providers"
@@ -21,8 +21,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  // ❌ شيل useAuth() من هنا
-
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -33,19 +31,7 @@ export default function RootLayout({
           {children}
         </AppProviders>
         <Analytics />
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-78J3VLPBR7"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', 'G-78J3VLPBR7');
-          `}
-        </Script>
+        <GoogleAnalytics gaId="G-78J3VLPBR7" />
         <a
           href="https://wa.me/201080075293"
           target="_blank"

@@ -4,7 +4,7 @@ import { useEffect, useState, type FormEvent } from "react"
 import { useRouter } from "next/navigation"
 import { useAdminLanguage } from "@/context/admin-language-context"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
-import { cn } from "@/lib/utils"
+import { cn, getImageUrl } from "@/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -110,13 +110,13 @@ export function ProductForm({ product, mode }: ProductFormProps) {
       )
       const currentState =
         mode === "edit" && product?.status === "inactive" ? 0 : 1
-      const colorsCheckEn = validateColorsInput(formData.colorsEn)
-      const colorsCheckAr = validateColorsInput(formData.colorsAr)
+      const colorsCheckEn = validateColorsInputEn(formData.colorsEn)
+      const colorsCheckAr = validateColorsInputAr(formData.colorsAr)
       if (!colorsCheckEn.valid || !colorsCheckAr.valid) {
         alert(
           language === "ar"
-            ? "يرجى إدخال الألوان بهذا الشكل: لون,لون,لون"
-            : "Please enter colors like this: color,color,color"
+            ? "يرجى إدخال الألوان بهذا الشكل الصحيح: لون,لون,لون"
+            : "Please enter colors in the correct format: color,color,color"
         )
         return
       }
@@ -221,16 +221,34 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     0,
     Math.round(formData.price * (1 - normalizedDiscount / 100))
   )
-  const validateColorsInput = (value: string) => {
-    const trimmed = value.trim()
+  const validateColorsInputEn = (value: string) => {
+    const standardizedStr = value.replace(/،/g, ",")
+    const trimmed = standardizedStr.trim()
     if (!trimmed) return { valid: true, normalized: "" }
     const parts = trimmed.split(",").map((part) => part.trim())
     const hasEmpty = parts.some((part) => part.length === 0)
-    if (hasEmpty) return { valid: false, normalized: trimmed }
+    const regex = /^[A-Za-z\s0-9\-]+(,[A-Za-z\s0-9\-]+)*$/
+    if (hasEmpty || !regex.test(trimmed)) return { valid: false, normalized: trimmed }
     return { valid: true, normalized: parts.join(",") }
   }
-  const colorsValidation = validateColorsInput(formData.colorsEn || "")
-  const showColorsError = formData.colorsEn.trim().length > 0 && !colorsValidation.valid
+
+  const validateColorsInputAr = (value: string) => {
+    const standardizedStr = value.replace(/،/g, ",")
+    const trimmed = standardizedStr.trim()
+    if (!trimmed) return { valid: true, normalized: "" }
+    const parts = trimmed.split(",").map((part) => part.trim())
+    const hasEmpty = parts.some((part) => part.length === 0)
+    // Allows Arabic letters, numbers, hyphens, and spaces separated by commas
+    const regex = /^[\u0600-\u06FF\s0-9\-]+(,[\u0600-\u06FF\s0-9\-]+)*$/
+    if (hasEmpty || !regex.test(trimmed)) return { valid: false, normalized: trimmed }
+    return { valid: true, normalized: parts.join(",") }
+  }
+
+  const colorsValidationEn = validateColorsInputEn(formData.colorsEn || "")
+  const showColorsErrorEn = formData.colorsEn.trim().length > 0 && !colorsValidationEn.valid
+
+  const colorsValidationAr = validateColorsInputAr(formData.colorsAr || "")
+  const showColorsErrorAr = formData.colorsAr.trim().length > 0 && !colorsValidationAr.valid
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -422,7 +440,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
               <div className="grid gap-4 sm:grid-cols-4">
                 {formData.images.map((image, index) => (
                   <div key={`${image}-${index}`} className="relative aspect-square rounded-lg overflow-hidden bg-muted">
-                    <Image src={image || "/placeholder.svg"} alt={`Product ${index + 1}`} fill className="object-cover" />
+                    <Image src={getImageUrl(image)} alt={`Product ${index + 1}`} fill className="object-cover" />
                     {image === formData.mainImage && (
                       <span className="absolute left-2 top-2 rounded bg-primary px-2 py-0.5 text-xs text-primary-foreground">
                         {language === "ar" ? "رئيسية" : "Main"}
@@ -497,33 +515,41 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="colors">
+                <Label htmlFor="colorsEn">
                   {language === "ar" ? "الألوان باللغة الإنجليزية" : "Colors English Name"}
                 </Label>
                 <Input
-                  id="colors"
+                  id="colorsEn"
                   value={formData.colorsEn}
                   onChange={(e) => handleChange("colorsEn", e.target.value)}
                   placeholder="red,blue,green"
-                  aria-invalid={showColorsError}
+                  aria-invalid={showColorsErrorEn}
                 />
-                <Label htmlFor="colors">
+                {showColorsErrorEn && (
+                  <p className="text-xs text-destructive">
+                    {language === "ar"
+                      ? "الصيغة الإنجليزية غير صحيحة. الصيغة الصحيحة: لون,لون,لون"
+                      : "English format is invalid. Format: color,color,color"}
+                  </p>
+                )}
+                <Label htmlFor="colorsAr">
                   {language === "ar" ? "الألوان باللغة العربية" : "Colors Arabic Name"}
                 </Label>
                 <Input
-                  id="colors"
+                  id="colorsAr"
                   value={formData.colorsAr}
                   onChange={(e) => handleChange("colorsAr", e.target.value)}
                   placeholder="أحمر,أزرق,أخضر"
-                  aria-invalid={showColorsError}
+                  aria-invalid={showColorsErrorAr}
                 />
-                {showColorsError ? (
+                {showColorsErrorAr && (
                   <p className="text-xs text-destructive">
                     {language === "ar"
-                      ? "الصيغة الصحيحة: لون,لون,لون"
-                      : "Format: color,color,color"}
+                      ? "الصيغة العربية غير صحيحة. الصيغة الصحيحة: لون,لون,لون"
+                      : "Arabic format is invalid. Format: color,color,color"}
                   </p>
-                ) : (
+                )}
+                {!showColorsErrorEn && !showColorsErrorAr && (
                   <p className="text-xs text-muted-foreground">
                     {language === "ar"
                       ? "افصل كل لون بفاصلة."

@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
+import { ApiClient } from "@/app/ApiHelper/ApiClient"
 
 export default function LoginPage() {
   const { language } = useLanguage()
@@ -24,18 +25,7 @@ export default function LoginPage() {
       setLoading(true)
 
       try {
-        const res = await fetch("https://localhost:7282/api/auth/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ email, password }),
-        })
-
-        if (!res.ok) {
-          throw new Error(language === "ar" ? "فشل تسجيل الدخول" : "Login failed")
-        }
-
-        const data = await res.json()
+        const data = await ApiClient.post("api/auth/login", { email, password })
         window.location.href = "/"
       } catch (err: unknown) {
         const message = err instanceof Error ? err.message : (language === "ar" ? "حدث خطأ" : "Something went wrong")
@@ -87,7 +77,6 @@ export default function LoginPage() {
                   className="transition-all duration-200"
                 />
               </div>
-
               <div className="space-y-2">
                 <Label htmlFor="login-password">
                   {language === "ar" ? "كلمة المرور" : "Password"}

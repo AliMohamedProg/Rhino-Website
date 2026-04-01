@@ -34,7 +34,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Plus, MoreHorizontal, Pencil, Trash2, Shield, Ban, CheckCircle } from "lucide-react"
+import { exportUsersExcel, exportUsersPdf } from "@/app/ApiHelper/ExportApi"
+import { MoreHorizontal, Pencil, Trash2, Shield, Ban, CheckCircle, Download } from "lucide-react"
 
 type ApiUser = {
   id?: string
@@ -240,6 +241,22 @@ export default function UsersPage() {
               : `Manage ${users.length} users`}
           </p>
         </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">
+              <Download className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
+              {language === "ar" ? "تصدير" : "Export"}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => exportUsersExcel()}>
+              {language === "ar" ? "تصدير إلى Excel" : "Export to Excel"}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => exportUsersPdf()}>
+              {language === "ar" ? "تصدير إلى PDF" : "Export to PDF"}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {/* Users Table */}

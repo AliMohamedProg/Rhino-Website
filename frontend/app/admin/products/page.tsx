@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useAdminLanguage } from "@/context/admin-language-context"
-import { cn } from "@/lib/utils"
+import { cn, getImageUrl } from "@/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -26,9 +26,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { Plus, MoreHorizontal, Pencil, Trash2, Eye } from "lucide-react"
+import { Plus, MoreHorizontal, Pencil, Trash2, Eye, Download } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { exportItemsExcel, exportItemsPdf } from "@/app/ApiHelper/ExportApi"
 
 export default function ProductsPage() {
   const { t, language, dir } = useAdminLanguage()
@@ -36,6 +37,7 @@ export default function ProductsPage() {
   const [categories, setCategories] = useState<AdminCategoryDto[]>([])
   const [loading, setLoading] = useState(true)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [deleteAllDialogOpen, setDeleteAllDialogOpen] = useState(false)
   const [productToDelete, setProductToDelete] = useState<Product | null>(null)
 
   const fetchProducts = async () => {
@@ -83,6 +85,22 @@ export default function ProductsPage() {
     }
   }
 
+  const confirmDeleteAll = async () => {
+    try {
+      setLoading(true)
+      await ApiClient.post(`api/admin/Item/delete-all-items`, {})
+      setDeleteAllDialogOpen(false)
+      alert(language === "ar" ? "تم حذف جميع المنتجات بنجاح" : "All products deleted successfully")
+      await fetchProducts()
+    } catch (err: any) {
+      console.error("Failed to delete all products:", err)
+      const errorMsg = err.message || JSON.stringify(err)
+      alert((language === "ar" ? "فشل الحذف: " : "Delete failed: ") + errorMsg)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const getStatusBadge = (status: Product["status"]) => {
     const statusConfig = {
       active: { variant: "default" as const, labelEn: "Active", labelAr: "نشط", className: "bg-emerald-500" },
@@ -109,7 +127,7 @@ export default function ProductsPage() {
         <div className={cn("flex items-center gap-3", dir === "rtl" && "flex-row-reverse")}>
           <div className="relative h-12 w-12 overflow-hidden rounded-lg bg-muted shrink-0">
             <Image
-              src={product.mainImage || product.images[0] || "/placeholder.jpg"}
+              src={getImageUrl(product.mainImage || product.images[0])}
               alt={language === "ar" ? product.nameAr : product.nameEn}
               fill
               className="object-cover"
@@ -232,12 +250,36 @@ export default function ProductsPage() {
               : `Manage ${products.length} products`}
           </p>
         </div>
-        <Button asChild>
-          <Link href="/admin/products/new" className={cn("flex items-center gap-2", dir === "rtl" && "flex-row-reverse")}>
-            <Plus className="h-4 w-4" />
-            {t("products.addProduct")}
-          </Link>
-        </Button>
+        <div className="flex items-center gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                <Download className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
+                {language === "ar" ? "تصدير" : "Export"}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => exportItemsExcel()}>
+                {language === "ar" ? "تصدير إلى Excel" : "Export to Excel"}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => exportItemsPdf()}>
+                {language === "ar" ? "تصدير إلى PDF" : "Export to PDF"}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          {products.length > 0 && (
+            <Button variant="destructive" onClick={() => setDeleteAllDialogOpen(true)}>
+              <Trash2 className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
+              {language === "ar" ? "حذف الكل" : "Delete All"}
+            </Button>
+          )}
+          <Button asChild>
+            <Link href="/admin/products/new" className={cn("flex items-center gap-2", dir === "rtl" && "flex-row-reverse")}>
+              <Plus className="h-4 w-4" />
+              {t("products.addProduct")}
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {/* Products Table */}
@@ -278,6 +320,31 @@ export default function ProductsPage() {
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
               {t("products.deleteProduct")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Delete All Confirmation Dialog */}
+      <AlertDialog open={deleteAllDialogOpen} onOpenChange={setDeleteAllDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className={cn(dir === "rtl" && "text-right")}>
+              {language === "ar" ? "حذف جميع المنتجات" : "Delete All Products"}
+            </AlertDialogTitle>
+            <AlertDialogDescription className={cn(dir === "rtl" && "text-right")}>
+              {language === "ar"
+                ? "هل أنت متأكد من حذف جميع المنتجات؟ لا يمكن التراجع عن هذا الإجراء."
+                : "Are you sure you want to delete all products? This action cannot be undone."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className={cn(dir === "rtl" && "flex-row-reverse")}>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDeleteAll}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {language === "ar" ? "حذف الكل" : "Delete All"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -133,6 +133,7 @@ const mapApiOrder = (apiOrder: ApiOrder): Order => {
     total: Number.isFinite(total) ? total : subtotal,
     status: normalizeStatus(apiOrder.status),
     paymentMethod: apiOrder.paymentStatus || "Unknown",
+    paymentMethodName: apiOrder.paymentStatus || "Unknown",
     shippingAddress: {
       street: apiOrder.address || "",
       city: apiOrder.city || "",
@@ -272,10 +273,39 @@ export default function OrderDetailPage() {
           </div>
         </div>
         <div className={cn("flex items-center gap-2", dir === "rtl" && "flex-row-reverse")}>
-          <Button variant="outline" size="icon">
+          <Button variant="outline" size="icon" onClick={() => window.print()}>
             <Printer className="h-4 w-4" />
           </Button>
-          <Button variant="outline" size="icon">
+          <Button variant="outline" size="icon" onClick={() => {
+            const invoiceText = `Order Number: ${order.orderNumber}
+Date: ${new Date(order.createdDate).toLocaleDateString()}
+Status: ${order.status}
+Customer: ${order.customer.name} (${order.customer.email})
+Phone: ${order.customer.phone}
+
+Items:
+${order.items.map(i => `- ${i.productName} (Qty: ${i.quantity}) - ${formatCurrency(i.price)}`).join('\n')}
+
+Subtotal: ${formatCurrency(order.subtotal)}
+Shipping: ${formatCurrency(order.shipping)}
+Tax: ${formatCurrency(order.tax)}
+Discount: -${formatCurrency(order.discount)}
+Total: ${formatCurrency(order.total)}
+
+Shipping Address:
+${order.shippingAddress.street}
+${order.shippingAddress.city}, ${order.shippingAddress.state}
+${order.shippingAddress.country} ${order.shippingAddress.postalCode}
+Payment Method: ${order.paymentMethod}
+`;
+            const element = document.createElement("a");
+            const file = new Blob([invoiceText], { type: 'text/plain' });
+            element.href = URL.createObjectURL(file);
+            element.download = `invoice-${order.orderNumber}.txt`;
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+          }}>
             <Download className="h-4 w-4" />
           </Button>
         </div>

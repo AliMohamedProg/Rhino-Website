@@ -1,5 +1,5 @@
 // app/helpers/ApiClient.ts
-const BASE_URL = "https://localhost:7282/";
+const BASE_URL = (process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "") + "/";
 
 async function request(method: "GET" | "POST" | "PATCH" | "DELETE", url: string, body?: any): Promise<any> {
   console.log(`[ApiClient] Request: ${method} ${BASE_URL}${url}`, body || "")

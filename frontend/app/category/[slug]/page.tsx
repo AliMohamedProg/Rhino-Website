@@ -15,6 +15,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { toast } from "sonner"
 import { ShoppingCart, ChevronUp, ChevronDown, Filter } from "lucide-react"
 import { formatPrice } from "@/lib/products"
+import { ApiClient } from "@/app/ApiHelper/ApiClient"
 
 interface Item {
   id: string
@@ -25,7 +26,8 @@ interface Item {
   stockNumber: number
   overallRating: number
   categoryId: string
-  colors?: string
+  colorsEn?: string
+  colorsAr?: string
   mainImage?: string
 }
 
@@ -55,17 +57,15 @@ export default function CategoryPage() {
     const fetchData = async () => {
       try {
         // fetch products by category
-        const res = await fetch(`https://localhost:7282/api/Category/${categoryId}`)
-        const data: any[] = await res.json()
+        const data: any[] = await ApiClient.get(`api/Category/${categoryId}`)
         const normalized = data.map((item) => ({
           ...item,
           discountAmount: item.discountAmount ?? item.DiscountAmount ?? 0,
           mainImage: item.mainImage ?? item.MainImage ?? item.image ?? item.Image ?? "",
-          colors: item.colors ?? item.Colors ?? "",
+          colorsEn: item.colorsEn ?? item.ColorsEn ?? item.colors ?? item.Colors ?? "",
+          colorsAr: item.colorsAr ?? item.ColorsAr ?? item.colors ?? item.Colors ?? "",
         })) as Item[]
         setProducts(normalized)
-
-        // fetch all categories for sidebar
 
       } catch (err) {
         console.error(err)
@@ -102,18 +102,22 @@ export default function CategoryPage() {
     const [selectedColor, setSelectedColor] = useState("")
     const [adding, setAdding] = useState(false)
 
-    const colors = product.colors
-      ? product.colors.split(",").map((c) => c.trim()).filter(Boolean)
+    const colorsEn = product.colorsEn
+      ? product.colorsEn.split(",").map((c) => c.trim()).filter(Boolean)
       : []
-    const displayColors = colors.slice(0, 3)
-    const originalPrice = product.price + product.discountAmount
+    const colorsAr = product.colorsAr
+      ? product.colorsAr.split(",").map((c) => c.trim()).filter(Boolean)
+      : []
+    const colors = language === "ar" ? colorsAr : colorsEn
+    const displayColors = colors
+    const discountedPrice = product.discountAmount > 0 ? product.price * (1 - product.discountAmount / 100) : product.price
     const isInStock = product.stockNumber > 0
 
     const handleAddToCart = async (e: MouseEvent<HTMLButtonElement>) => {
       e.preventDefault()
       e.stopPropagation()
 
-      if (colors.length > 0 && !selectedColor) {
+      if (colorsEn.length > 0 && !selectedColor) {
         toast.error(
           language === "ar"
             ? "يرجى اختيار لون قبل الإضافة للسلة"
@@ -124,7 +128,7 @@ export default function CategoryPage() {
 
       try {
         setAdding(true)
-        const res = await fetch("https://localhost:7282/api/Cart/add-to-cart", {
+        const res = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")}/api/Cart/add-to-cart`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -154,6 +158,8 @@ export default function CategoryPage() {
             src={product.mainImage || "/placeholder.svg"}
             alt={language === "ar" ? product.nameAr : product.nameEn}
             fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            loading="lazy"
             className="object-cover group-hover:scale-105 transition-transform duration-300"
           />
 
@@ -183,11 +189,13 @@ export default function CategoryPage() {
 
           <div className="flex gap-2 mb-3">
             <span className="font-bold text-foreground">
-              {formatPrice(product.price)} {t("products.price")}
+              {formatPrice(discountedPrice)} {t("products.price")}
             </span>
-            <span className="line-through text-sm text-muted-foreground">
-              {formatPrice(originalPrice)}
-            </span>
+            {product.discountAmount > 0 && (
+              <span className="line-through text-sm text-muted-foreground">
+                {formatPrice(product.price)}
+              </span>
+            )}
           </div>
 
           {displayColors.length > 0 && (

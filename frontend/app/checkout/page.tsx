@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { formatPrice } from "@/lib/products"
+import { ApiClient } from "@/app/ApiHelper/ApiClient"
 
 interface CartItem {
   id: string
@@ -110,6 +111,40 @@ export default function CheckoutPage() {
     "شمال سيناء",
     "سوهاج"
   ]
+
+  const shippingRates: Record<string, number> = {
+    // Default 50 for main cities
+    "Cairo": 50, "القاهرة": 50,
+    "Giza": 50, "الجيزة": 50,
+    "Alexandria": 60, "الإسكندرية": 60,
+    "Port Said": 65, "بورسعيد": 65,
+    "Suez": 65, "السويس": 65,
+    "Ismailia": 65, "الإسماعيلية": 65,
+    // delta
+    "Dakahlia": 70, "الدقهلية": 70,
+    "Gharbia": 70, "الغربية": 70,
+    "Kafr El Sheikh": 70, "كفر الشيخ": 70,
+    "Menofia": 70, "المنوفية": 70,
+    "Damietta": 70, "دمياط": 70,
+    "Sharkia": 70, "الشرقية": 70,
+    "Beheira": 70, "البحيرة": 70,
+    "Qalyubia": 55, "القليوبية": 55,
+    // upper egypt
+    "Beni Suef": 80, "بني سويف": 80,
+    "Fayoum": 80, "الفيوم": 80,
+    "Minya": 90, "المنيا": 90,
+    "Assiut": 100, "أسيوط": 100,
+    "Sohag": 110, "سوهاج": 110,
+    "Qena": 120, "قنا": 120,
+    "Luxor": 130, "الأقصر": 130,
+    "Aswan": 150, "أسوان": 150,
+    // remote
+    "Red Sea": 150, "البحر الأحمر": 150,
+    "New Valley": 180, "الوادي الجديد": 180,
+    "Matrouh": 150, "مطروح": 150,
+    "North Sinai": 180, "شمال سيناء": 180,
+    "South Sinai": 180, "جنوب سيناء": 180,
+  }
   const paymentMethodNames: Record<"cod" | "card" | "wallet", string> = {
     cod: "Cash On Delivery",
     card: "Credit / Debit Card",
@@ -119,17 +154,17 @@ export default function CheckoutPage() {
   // Fetch Cart
   // =============================
   useEffect(() => {
-    fetch("https://localhost:7282/api/Cart", {
-      credentials: "include"
-    })
-      .then(res => res.json())
+    ApiClient.get("api/Cart")
       .then(data => setCart(data))
       .catch(err => console.log(err))
   }, [])
 
   const items = cart?.items || []
   const total = cart?.cartTotal || 0
-  const shipping = total >= 1000 ? 0 : 50
+  
+  // Calculate shipping based on city and order threshold
+  const baseShippingCharge = shippingRates[formData.city] || 50
+  const shipping = (total >= 1000 || total === 0) ? 0 : baseShippingCharge;
 
 
 
@@ -142,28 +177,20 @@ export default function CheckoutPage() {
 
     try {
       // 1️⃣ Create Order
-      const orderRes = await fetch(
-        "https://localhost:7282/api/order/create-from-cart",
+      const order = await ApiClient.post(
+        "api/order/create-from-cart",
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({
-            Country: formData.country,
-            City: formData.city,
-            Address: formData.address,
-            Total: total + shipping,
-            PhoneNumber: formData.phone,
-            Email: formData.email,
-            FirstName: formData.firstName,
-            LastName: formData.lastName,
-            // PaymentMethod: paymentMethod,
-            PaymentMethodName: paymentMethodNames[paymentMethod]
-          })
+          Country: formData.country,
+          City: formData.city,
+          Address: formData.address,
+          Total: total + shipping,
+          PhoneNumber: formData.phone,
+          Email: formData.email,
+          FirstName: formData.firstName,
+          LastName: formData.lastName,
+          PaymentMethodName: paymentMethodNames[paymentMethod]
         }
       )
-
-      const order = await orderRes.json()
 
       // 2️⃣ If COD → مباشرة نجاح
       if (paymentMethod === "cod") {
@@ -172,26 +199,18 @@ export default function CheckoutPage() {
       }
 
       // 3️⃣ If Card or Wallet → call payment API
-      const paymentRes = await fetch(
-        "https://localhost:7282/api/payment/create",
+      const paymentData = await ApiClient.post(
+        "api/payment/create",
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({
-            amount: total + shipping,
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            email: formData.email,
-            phoneNumber: formData.phone,
-            orderId: order.id,
-            paymentMethod: paymentMethod,
-            // paymentMethodName: paymentMethodNames[paymentMethod]
-          })
+          amount: total + shipping,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phoneNumber: formData.phone,
+          orderId: order.id,
+          paymentMethod: paymentMethod,
         }
       )
-
-      const paymentData = await paymentRes.json()
 
       // 🔥 Wallet & Card Redirect
       if (paymentData.redirectUrl) {

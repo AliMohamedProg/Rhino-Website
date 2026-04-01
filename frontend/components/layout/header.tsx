@@ -20,6 +20,7 @@ import {
 import { useLanguage } from "@/context/language-context"
 import { useTheme } from "@/context/theme-context"
 import { useAuth } from "@/app/Context/auth-context"
+import { ApiClient } from "@/app/ApiHelper/ApiClient"
 
 import { useCart } from "@/context/cart-context"
 
@@ -64,10 +65,7 @@ export function Header() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("https://localhost:7282/api/category")
-        if (!res.ok) throw new Error("Failed to fetch categories")
-
-        const data: Category[] = await res.json()
+        const data = await ApiClient.get("api/category") as Category[]
         setCategories(data.filter(c => c.currentState === 1))
       } catch (error) {
         console.error(error)
@@ -245,6 +243,67 @@ export function Header() {
           </form>
         </div>
       </div>
+
+      {/* ================= Mobile Navigation Menu ================= */}
+      {mobileMenuOpen && (
+        <div className="bg-card border-b md:hidden animate-in slide-in-from-top-4 duration-200">
+          <div className="container mx-auto px-4 py-4 max-h-[70vh] overflow-y-auto">
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+              {language === "ar" ? "الأقسام" : "Categories"}
+            </h3>
+            <ul className="grid grid-cols-1 gap-2">
+              <li>
+                <Link
+                  href="/"
+                  className="flex items-center py-2 px-3 rounded-md hover:bg-secondary text-foreground"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {t("nav.home")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/product"
+                  className="flex items-center py-2 px-3 rounded-md hover:bg-secondary text-foreground"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {t("nav.furniture")}
+                </Link>
+              </li>
+              
+              <div className="h-px bg-border my-2" />
+              
+              {categories.map((category) => (
+                <li key={category.id}>
+                  <Link
+                    href={`/category/${category.id}`}
+                    className="flex items-center py-2 px-3 rounded-md hover:bg-secondary text-foreground"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {language === "ar" ? category.nameAr : category.nameEn}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            {/* Quick Actions for Mobile */}
+            {!user && (
+              <div className="mt-6 pt-6 border-t flex flex-col gap-3">
+                <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+                  <Button variant="outline" className="w-full justify-start text-sm">
+                    {language === "ar" ? "تسجيل الدخول" : "Login"}
+                  </Button>
+                </Link>
+                <Link href="/register" onClick={() => setMobileMenuOpen(false)}>
+                  <Button className="w-full justify-start text-sm">
+                    {language === "ar" ? "إنشاء حساب" : "Sign Up"}
+                  </Button>
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* ================= Categories Nav ================= */}
       <nav className="bg-primary hidden md:block">

@@ -17,8 +17,10 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import { formatPrice } from "@/lib/products"
+import { getImageUrl, cn } from "@/lib/utils"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
+import { ApiClient } from "@/app/ApiHelper/ApiClient"
 
 type Product = {
   id: string
@@ -73,8 +75,7 @@ export default function ProductDetailsPage() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`https://localhost:7282/api/Items/${id}`)
-        const data = await res.json()
+        const data = await ApiClient.get(`api/Items/${id}`)
         const colorsValue = data.colors ?? data.Colors ?? ""
         const rawImages = data.images ?? data.Images ?? []
         const price = Number(data.price ?? data.Price ?? 0)
@@ -104,12 +105,6 @@ export default function ProductDetailsPage() {
         }
 
         setProduct(normalizedProduct)
-        if (colorsValue) {
-          const colorsArray = colorsValue.split(",").map((c: string) => c.trim())
-          if (colorsArray.length > 0) {
-            setSelectedColor(colorsArray[0])
-          }
-        }
       } catch (err) {
         console.error(err)
       } finally {
@@ -124,17 +119,28 @@ export default function ProductDetailsPage() {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const res = await fetch(`https://localhost:7282/api/review/get-reviews?productId=${id}`)
+        const res = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")}/api/review/get-reviews?productId=${id}`)
         if (res.ok) {
           const data = await res.json()
-          // Map backend response to current Review type if needed
-          const normalizedReviews = data.map((r: any) => ({
-            id: r.id,
+          const emailToName = (email?: string) => {
+            if (!email || typeof email !== "string") return null
+            const at = email.indexOf("@")
+            const raw = (at >= 0 ? email.slice(0, at) : email).trim()
+            return raw.length ? raw : null
+          }
+
+          // Backend DTO is `ReviewDto` => { review, rating, userEmail, createdDate, ... }
+          const normalizedReviews = (Array.isArray(data) ? data : []).map((r: any) => ({
+            id: (r.id ?? r.Id ?? Date.now().toString()).toString(),
             title: r.title || (language === "ar" ? "تقييم" : "Review"),
-            date: r.createdDate ? r.createdDate.split("T")[0] : new Date().toISOString().split("T")[0],
-            rating: r.rating,
-            text: r.comment || r.text,
-            userName: r.userName || (language === "ar" ? "مستخدم" : "User")
+            date: (r.createdDate ?? r.CreatedDate)
+              ? String(r.createdDate ?? r.CreatedDate).split("T")[0]
+              : new Date().toISOString().split("T")[0],
+            rating: Number(r.rating ?? r.Rating ?? 0),
+            text: String(r.review ?? r.Review ?? "").trim(),
+            userName:
+              emailToName(r.userName ?? r.UserName ?? r.userEmail ?? r.UserEmail) ||
+              (language === "ar" ? "مستخدم" : "User"),
           }))
           setReviews(normalizedReviews)
         }
@@ -193,7 +199,7 @@ export default function ProductDetailsPage() {
     )
   }
 
-  const originalPrice = product.price + product.discountAmount
+  const discountedPrice = product.discountAmount > 0 ? product.price * (1 - product.discountAmount / 100) : product.price
   const colorsArrayEn = product.colorsEn
     ? product.colorsEn.split(",").map(c => c.trim())
     : []
@@ -221,7 +227,7 @@ export default function ProductDetailsPage() {
         rating: reviewRating
       }
 
-      const res = await fetch("https://localhost:7282/api/review/add-review", {
+      const res = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")}/api/review/add-review`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -294,7 +300,7 @@ export default function ProductDetailsPage() {
               onClick={() => setIsZoomed(!isZoomed)}
             >
               <Image
-                src={productImages[selectedImageIndex]}
+                src={getImageUrl(productImages[selectedImageIndex])}
                 alt={language === "ar" ? product.nameAr : product.nameEn}
                 fill
                 className={`object-cover transition-transform duration-300 ${isZoomed ? "scale-150" : "scale-100"}`}
@@ -321,7 +327,7 @@ export default function ProductDetailsPage() {
                     }`}
                 >
                   <Image
-                    src={img}
+                    src={getImageUrl(img)}
                     alt={`${language === "ar" ? product.nameAr : product.nameEn} ${index + 1}`}
                     fill
                     className="object-cover"
@@ -343,13 +349,13 @@ export default function ProductDetailsPage() {
 
               {/* Price */}
               <div className="flex items-center gap-4 mb-6">
-                <span className="text-4xl font-bold text-foreground">{formatPrice(product.price)}</span>
+                <span className="text-4xl font-bold text-foreground">{formatPrice(discountedPrice)}</span>
                 {product.discountAmount > 0 && (
-                  <span className="text-xl line-through text-gray-400">{formatPrice(originalPrice)}</span>
+                  <span className="text-xl line-through text-gray-400">{formatPrice(product.price)}</span>
                 )}
                 {product.discountAmount > 0 && (
                   <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
-                    {Math.round((product.discountAmount / originalPrice) * 100)}% {language === "ar" ? "خصم" : "OFF"}
+                    {Math.round(product.discountAmount)}% {language === "ar" ? "خصم" : "OFF"}
                   </span>
                 )}
               </div>
@@ -440,11 +446,15 @@ export default function ProductDetailsPage() {
 
               {/* Add to Cart & Wishlist */}
               <div className="flex gap-3 mb-6">
-                <Button className="flex-1 bg-red-600 hover:bg-red-700 text-white shadow-md flex items-center justify-center gap-2 h-12 text-lg"
+                <Button className="flex-1 bg-red-600 hover:bg-red-700 text-white shadow-md flex items-center justify-center gap-2 h-12 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={async () => {
+                    if ((colorsArrayEn.length > 0 || colorsArrayAr.length > 0) && !selectedColor) {
+                      alert(language === "ar" ? "يرجى اختيار اللون أولاً" : "Please select a color first");
+                      return;
+                    }
                     try {
                       console.log("Adding to cart - productId:", product.id, "quantity:", quantity)
-                      const res = await fetch("https://localhost:7282/api/Cart/add-to-cart", {
+                      const res = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")}/api/Cart/add-to-cart`, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         credentials: "include",
@@ -465,10 +475,12 @@ export default function ProductDetailsPage() {
                       console.error("Failed to add to cart:", error)
                     }
                   }}
-                  disabled={!isInStock}
+                  disabled={!isInStock || ((colorsArrayEn.length > 0 || colorsArrayAr.length > 0) && !selectedColor)}
                 >
                   <ShoppingCart size={22} />
-                  {t("products.addToCart")}
+                  {((colorsArrayEn.length > 0 || colorsArrayAr.length > 0) && !selectedColor) 
+                    ? (language === "ar" ? "اختر اللون" : "Select Color") 
+                    : t("products.addToCart")}
                 </Button>
 
                 <Button
@@ -478,8 +490,8 @@ export default function ProductDetailsPage() {
                     toggleItem({
                       id: product.id,
                       name: { ar: product.nameAr, en: product.nameEn },
-                      price: product.price,
-                      originalPrice,
+                      price: discountedPrice,
+                      originalPrice: product.price,
                       image: "/placeholder.svg",
                     })
                   }
@@ -622,7 +634,7 @@ export default function ProductDetailsPage() {
 
                   {/* Carousel */}
                   {reviews.length > 0 && (
-                    <div className="relative bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                    <div className="relative bg-white rounded-xl p-6 shadow-sm border border-gray-100 overflow-visible">
                       <div className="overflow-hidden">
                         <div
                           className="flex transition-transform duration-300"
@@ -651,14 +663,14 @@ export default function ProductDetailsPage() {
                           <button
                             onClick={prevReview}
                             disabled={currentReviewIndex === 0}
-                            className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white shadow-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="absolute -left-4 md:-left-10 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white shadow-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             <ArrowLeft size={20} />
                           </button>
                           <button
                             onClick={nextReview}
                             disabled={currentReviewIndex === reviews.length - 1}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white shadow-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="absolute -right-4 md:-right-10 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white shadow-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             <ArrowRight size={20} />
                           </button>

@@ -4,6 +4,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { useState, useEffect } from "react"
 import { useLanguage } from "@/context/language-context"
+import { ApiClient } from "@/app/ApiHelper/ApiClient"
 
 interface Category {
   id: string
@@ -21,9 +22,7 @@ export function CategoriesGrid() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("https://localhost:7282/api/category")
-        if (!res.ok) throw new Error("Failed to fetch categories")
-        const data: Category[] = await res.json()
+        const data = await ApiClient.get("api/category") as Category[]
 
         // لو حابب تخفي الديليتد / غير النشطة
         const activeCategories = data.filter(c => c.currentState === 1)
@@ -67,6 +66,8 @@ export function CategoriesGrid() {
                     src={category.imageUrl || "/placeholder.svg"}
                     alt={language === "ar" ? category.nameAr : category.nameEn}
                     fill
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 200px"
+                    loading="lazy"
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>

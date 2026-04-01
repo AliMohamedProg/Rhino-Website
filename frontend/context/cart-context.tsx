@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import { ApiClient } from "@/app/ApiHelper/ApiClient"
 
 export interface CartItem {
   id: string
@@ -33,26 +34,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const refreshCart = async () => {
     try {
-      const res = await fetch("https://localhost:7282/api/Cart", {
-        credentials: "include"
-      })
-
-      if (res.ok) {
-        const cart = await res.json()
-        if (cart && cart.items) {
-          const mappedItems: CartItem[] = cart.items.map((item: any) => ({
-            id: item.id,
-            itemId: item.itemId,
-            name: { en: item.nameEn, ar: item.nameAr },
-            price: item.price,
-            image: item.image,
-            quantity: item.quantity,
-            total: item.total
-          }))
-          setItems(mappedItems)
-        } else {
-          setItems([])
-        }
+      const cart = await ApiClient.get("api/Cart")
+      if (cart && cart.items) {
+        const mappedItems: CartItem[] = cart.items.map((item: any) => ({
+          id: item.id,
+          itemId: item.itemId,
+          name: { en: item.nameEn, ar: item.nameAr },
+          price: item.price,
+          image: item.image,
+          quantity: item.quantity,
+          total: item.total
+        }))
+        setItems(mappedItems)
+      } else {
+        setItems([])
       }
     } catch (error) {
       console.error("Failed to fetch cart:", error)
@@ -68,16 +63,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addItem = async (productId: string, quantity: number, color?: string) => {
     try {
-      const res = await fetch("https://localhost:7282/api/Cart/add-to-cart", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ productId, quantity, color: color || "Default" })
-      })
-
-      if (res.ok) {
-        await refreshCart()
-      }
+      await ApiClient.post("api/Cart/add-to-cart", { productId, quantity, color: color || "Default" })
+      await refreshCart()
     } catch (error) {
       console.error("Failed to add item to cart:", error)
     }
@@ -85,12 +72,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const removeItem = async (productId: string) => {
     try {
-      await fetch(`https://localhost:7282/api/Cart/items/${productId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ quantity: 0 })
-      })
+      await ApiClient.patch(`api/Cart/items/${productId}`, { quantity: 0 })
       await refreshCart()
     } catch (error) {
       console.error("Failed to remove item from cart:", error)
@@ -99,12 +81,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const updateQuantity = async (productId: string, quantity: number) => {
     try {
-      await fetch(`https://localhost:7282/api/Cart/items/${productId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ quantity })
-      })
+      await ApiClient.patch(`api/Cart/items/${productId}`, { quantity })
       await refreshCart()
     } catch (error) {
       console.error("Failed to update cart item:", error)

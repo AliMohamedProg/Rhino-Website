@@ -11,7 +11,8 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { formatPrice } from "@/lib/products"
-
+import { ApiClient } from "@/app/ApiHelper/ApiClient"
+import { Printer, Download } from "lucide-react"
 interface OrderItem {
   itemId: string
   nameEn: string
@@ -43,13 +44,32 @@ function statusBadge(status: string, language: string) {
   const displayStatus = status || "Pending"
   switch (displayStatus) {
     case "Pending":
-      return <Badge className="bg-yellow-500">{language === "ar" ? "قيد الانتظار" : "Pending"}</Badge>
+      return <Badge className="bg-yellow-500 hover:bg-yellow-600 border-none">{language === "ar" ? "قيد الانتظار" : "Pending"}</Badge>
+    case "Processing":
+      return <Badge className="bg-blue-500 hover:bg-blue-600 border-none">{language === "ar" ? "جاري المعالجة" : "Processing"}</Badge>
     case "Shipped":
-      return <Badge className="bg-blue-500">{language === "ar" ? "تم الشحن" : "Shipped"}</Badge>
+      return <Badge className="bg-purple-500 hover:bg-purple-600 border-none">{language === "ar" ? "تم الشحن" : "Shipped"}</Badge>
     case "Delivered":
-      return <Badge className="bg-green-500">{language === "ar" ? "تم التوصيل" : "Delivered"}</Badge>
+      return <Badge className="bg-green-500 hover:bg-green-600 border-none">{language === "ar" ? "تم التوصيل" : "Delivered"}</Badge>
+    case "Cancelled":
+      return <Badge className="bg-red-500 hover:bg-red-600 border-none">{language === "ar" ? "ملغي" : "Cancelled"}</Badge>
     default:
       return <Badge variant="outline">{displayStatus}</Badge>
+  }
+}
+
+function paymentStatusBadge(status: string, language: string) {
+  const displayStatus = status || "Pending"
+  switch (displayStatus) {
+    case "Paid":
+      return <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800">{language === "ar" ? "مدفوع" : "Paid"}</Badge>
+    case "Refunded":
+      return <Badge variant="secondary" className="bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-900/30 dark:text-purple-400 dark:border-purple-800">{language === "ar" ? "مرتجع" : "Refunded"}</Badge>
+    case "Failed":
+      return <Badge variant="secondary" className="bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800">{language === "ar" ? "فشل" : "Failed"}</Badge>
+    case "Pending":
+    default:
+      return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-800">{language === "ar" ? "معلق" : "Pending"}</Badge>
   }
 }
 
@@ -71,7 +91,7 @@ export default function OrderViewPage() {
         console.log(`Fetching order details for ID: ${id}`)
 
         // Using common fetch with credentials to ensure absolute URL and cookie handling
-        const res = await fetch(`https://localhost:7282/api/order/${id}`, {
+        const res = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")}/api/order/${id}`, {
           credentials: "include"
         })
 
@@ -97,7 +117,9 @@ export default function OrderViewPage() {
             // If name or image is missing, fetch from Items API
             if (!normalized.nameEn || !normalized.nameAr || !normalized.image) {
               try {
-                const itemRes = await fetch(`https://localhost:7282/api/items/${normalized.itemId}`);
+                const itemRes = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")}/api/items/${normalized.itemId}`, {
+                  credentials: "include"
+                });
                 if (itemRes.ok) {
                   const itemData = await itemRes.json();
                   normalized.nameEn = normalized.nameEn || itemData.nameEn || itemData.NameEn;
@@ -136,12 +158,9 @@ export default function OrderViewPage() {
     if (!order) return;
 
     try {
-      const res = await fetch(
-        `https://localhost:7282/api/order/cancel-order/${order.id}`,
-        {
-          method: "POST",
-          credentials: "include"
-        }
+      const res = await ApiClient.post(
+        `api/order/cancel-order/${order.id}`,
+        {}
       );
 
       if (res.ok) {
@@ -195,9 +214,42 @@ export default function OrderViewPage() {
         <div className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-2xl font-bold text-foreground">{language === "ar" ? "تفاصيل الطلب" : "Order Details"}</h1>
-            <div className="flex items-center gap-3">
-              <Button variant="outline" onClick={() => router.back()}>{language === "ar" ? "عودة" : "Back"}</Button>
-              <Link href="/profile" className="text-sm text-primary hover:underline">{language === "ar" ? "الملف الشخصي" : "Profile"}</Link>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" onClick={() => window.print()}>
+                <Printer className="h-4 w-4 mr-2" />
+                {language === "ar" ? "طباعة" : "Print"}
+              </Button>
+              <Button variant="outline" size="sm" onClick={() => {
+                const invoiceText = `Order Number: ${order.orderNumber}
+Date: ${new Date(order.orderDate).toLocaleDateString(language === "ar" ? "ar-EG" : "en-US")}
+Status: ${order.status}
+Customer Name: ${order.firstName} ${order.lastName}
+Email: ${order.email}
+Phone: ${order.phoneNumber}
+
+Items:
+${order.tbOrderItems.map(i => `- ${language === "ar" ? i.nameAr : i.nameEn} (Qty: ${i.qty}) - ${formatPrice(i.unitPrice)} ${t("products.price")}`).join('\n')}
+
+Total: ${formatPrice(order.total)} ${t("products.price")}
+
+Shipping Address:
+${order.address}
+${order.city}, ${order.country}
+Payment Method: ${order.paymentStatus}
+`;
+                const element = document.createElement("a");
+                const file = new Blob([invoiceText], { type: 'text/plain' });
+                element.href = URL.createObjectURL(file);
+                element.download = `invoice-${order.orderNumber}.txt`;
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+              }}>
+                <Download className="h-4 w-4 mr-2" />
+                {language === "ar" ? "تحميل" : "Download"}
+              </Button>
+              <Button variant="outline" size="sm" onClick={() => router.back()}>{language === "ar" ? "عودة" : "Back"}</Button>
+              <Link href="/profile" className="text-sm text-primary hover:underline ml-2">{language === "ar" ? "الملف الشخصي" : "Profile"}</Link>
             </div>
           </div>
 
@@ -219,13 +271,18 @@ export default function OrderViewPage() {
                       </div>
                       <div className="mt-2 text-right">{statusBadge(order.status, language)}</div>
                       {(order.status === "Pending" || order.status === "Processing") && (
-                        <div className="mt-3">
+                         <div className="mt-4">
                           <Button
-                            variant="destructive"
+                            variant="outline"
+                            className="w-full border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 hover:border-red-300 transition-all duration-200 py-6 rounded-xl flex items-center justify-center gap-3 group shadow-sm bg-transparent"
                             onClick={handleCancelOrder}
                           >
-                            {language === "ar" ? "إلغاء الطلب" : "Cancel Order"}
+                            <span className="w-2 h-2 rounded-full bg-red-500 group-hover:scale-125 transition-transform duration-300 animate-pulse"></span>
+                            <span className="font-semibold">{language === "ar" ? "إلغاء هذا الطلب" : "Cancel This Order"}</span>
                           </Button>
+                          <p className="mt-2 text-[10px] text-muted-foreground text-center">
+                            {language === "ar" ? "* لا يمكن الإلغاء بعد الشحن" : "* Orders cannot be cancelled after shipping"}
+                          </p>
                         </div>
                       )}
                     </div>
@@ -299,8 +356,9 @@ export default function OrderViewPage() {
                       <span>{language === "ar" ? "الإجمالي" : "Total"}</span>
                       <span className="text-primary">{formatPrice(order.total)} {t("products.price")}</span>
                     </div>
-                    <div className="mt-4 p-3 bg-muted/50 rounded-lg text-xs text-muted-foreground text-center">
-                      {language === "ar" ? "طريقة الدفع" : "Payment Method"}: {order.paymentStatus}
+                    <div className="mt-4 p-3 bg-muted/50 rounded-lg text-sm flex flex-col items-center gap-2">
+                      <span className="text-muted-foreground">{language === "ar" ? "حالة الدفع" : "Payment Status"}</span>
+                      {paymentStatusBadge(order.paymentStatus, language)}
                     </div>
                   </div>
                 </CardContent>

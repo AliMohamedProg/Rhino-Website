@@ -29,41 +29,32 @@ function OrderSuccessContent() {
         return
       }
 
-      if (successParam === "true" || successParam === "true") {
-        const pendingDataStr = localStorage.getItem("pendingCheckoutData")
-        if (pendingDataStr) {
+      if (successParam === "true") {
+        const pendingOrderId = localStorage.getItem("pendingOrderId")
+        if (pendingOrderId && idParam) {
           try {
-            const formData = JSON.parse(pendingDataStr)
-            if (idParam) {
-              formData.TransactionId = idParam
-            }
-
-            const res = await fetch("https://localhost:7282/api/order/create-from-cart", {
+            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")
+            const res = await fetch(`${apiUrl}/api/order/mark-as-paid/${pendingOrderId}?transactionId=${idParam}`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              credentials: "include",
-              body: JSON.stringify(formData)
+              credentials: "include"
             })
 
-            localStorage.removeItem("pendingCheckoutData")
+            localStorage.removeItem("pendingOrderId")
 
             if (res.ok) {
               setStatus("success")
             } else {
-              const text = await res.text()
-              if (text.includes('"orderNumber":"ORD-') || text.includes('"OrderNumber":"ORD-')) {
-                setStatus("success")
-              } else {
-                setStatus("success") // fallback to success because payment succeeded
-              }
+              // Fallback to success as long as transaction was successful in Paymob
+              setStatus("success")
             }
           } catch (err) {
-            console.error("Failed to create order after payment:", err)
-            localStorage.removeItem("pendingCheckoutData")
+            console.error("Failed to mark order as paid:", err)
+            localStorage.removeItem("pendingOrderId")
             setStatus("success") // Fallback
           }
         } else {
-          // No pending data found, but payment was successful
+          // No pending order ID found, but payment was successful
           setStatus("success")
         }
       }

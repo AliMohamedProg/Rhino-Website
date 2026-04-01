@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
+import { ApiClient } from "@/app/ApiHelper/ApiClient"
 
 export default function RegisterPage() {
   const { language } = useLanguage()
@@ -99,7 +100,7 @@ export default function RegisterPage() {
       }
 
       try {
-        const res = await fetch("https://localhost:7282/api/auth/register", {
+        const res = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")}/api/auth/register`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -109,7 +110,6 @@ export default function RegisterPage() {
         })
 
         const data = await res.json()
-        window.location.href = "/login"
 
         if (!res.ok) {
           const errorMsg = data.errors
@@ -119,6 +119,7 @@ export default function RegisterPage() {
         }
 
         alert(language === "ar" ? "تم إنشاء الحساب بنجاح" : "Account created successfully")
+        window.location.href = "/login"
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : (language === "ar" ? "حدث خطأ" : "Something went wrong")
         alert(language === "ar" ? `حدث خطأ: ${msg}` : `Error: ${msg}`)

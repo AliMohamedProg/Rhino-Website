@@ -44,8 +44,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Plus, MoreHorizontal, Pencil, Trash2 } from "lucide-react"
+import { Plus, MoreHorizontal, Pencil, Trash2, Download } from "lucide-react"
 import { ar } from "date-fns/locale"
+import { exportCategoriesExcel, exportCategoriesPdf } from "@/app/ApiHelper/ExportApi"
 
 export default function CategoriesPage() {
   const { t, language, dir } = useAdminLanguage()
@@ -53,6 +54,7 @@ export default function CategoriesPage() {
   const [loading, setLoading] = useState(true)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [deleteAllDialogOpen, setDeleteAllDialogOpen] = useState(false)
   const [editingCategory, setEditingCategory] = useState<Category | null>(null)
   const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null)
   const [formData, setFormData] = useState({
@@ -176,6 +178,23 @@ export default function CategoriesPage() {
     }
   }
 
+  const confirmDeleteAll = async () => {
+    try {
+      setLoading(true)
+      const url = `api/admin/Categories/delete-all-categories`
+      await ApiClient.post(url, {})
+      setDeleteAllDialogOpen(false)
+      alert(language === "ar" ? "تم حذف جميع الفئات بنجاح" : "All categories deleted successfully")
+      await fetchCategories()
+    } catch (err: any) {
+      console.error("[Page] Critical: Delete All API failed", err)
+      const errorMsg = err.message || JSON.stringify(err)
+      alert((language === "ar" ? "فشل الحذف: " : "Delete failed: ") + errorMsg)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const columns = [
     {
       key: "image",
@@ -289,10 +308,34 @@ export default function CategoriesPage() {
               : `Manage ${categories.length} categories`}
           </p>
         </div>
-        <Button onClick={() => { setEditingCategory(null); setDialogOpen(true) }}>
-          <Plus className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-          {t("categories.addCategory")}
-        </Button>
+        <div className="flex items-center gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                <Download className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
+                {language === "ar" ? "تصدير" : "Export"}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => exportCategoriesExcel()}>
+                {language === "ar" ? "تصدير إلى Excel" : "Export to Excel"}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => exportCategoriesPdf()}>
+                {language === "ar" ? "تصدير إلى PDF" : "Export to PDF"}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          {categories.length > 0 && (
+            <Button variant="destructive" onClick={() => setDeleteAllDialogOpen(true)}>
+              <Trash2 className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
+              {language === "ar" ? "حذف الكل" : "Delete All"}
+            </Button>
+          )}
+          <Button onClick={() => { setEditingCategory(null); setDialogOpen(true) }}>
+            <Plus className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
+            {t("categories.addCategory")}
+          </Button>
+        </div>
       </div>
 
       {/* Categories Table */}
@@ -423,6 +466,31 @@ export default function CategoriesPage() {
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
               {t("categories.deleteCategory")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Delete All Confirmation Dialog */}
+      <AlertDialog open={deleteAllDialogOpen} onOpenChange={setDeleteAllDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className={cn(dir === "rtl" && "text-right")}>
+              {language === "ar" ? "حذف جميع الفئات" : "Delete All Categories"}
+            </AlertDialogTitle>
+            <AlertDialogDescription className={cn(dir === "rtl" && "text-right")}>
+              {language === "ar"
+                ? "هل أنت متأكد من حذف جميع الفئات؟ لا يمكن التراجع عن هذا الإجراء."
+                : "Are you sure you want to delete all categories? This action cannot be undone."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className={cn(dir === "rtl" && "flex-row-reverse")}>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDeleteAll}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {language === "ar" ? "حذف الكل" : "Delete All"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

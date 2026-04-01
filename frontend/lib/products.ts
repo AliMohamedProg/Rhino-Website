@@ -203,7 +203,7 @@ export function formatPrice(price: number): string {
 }
 
 // Public Slider API
-const API_BASE_URL = "https://localhost:7282/api"
+const API_BASE_URL = ((process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")) + "/api"
 
 export interface PublicSlider {
   id: string
@@ -216,17 +216,49 @@ export interface PublicSlider {
 
 export async function getPublicSliders(): Promise<PublicSlider[]> {
   try {
-    const response = await fetch(`${API_BASE_URL}/Slider`, {
-      next: { revalidate: 300 }, // Cache for 5 minutes
-    })
-    if (!response.ok) {
-      throw new Error("Failed to fetch sliders")
+    // Determine the base URL for the fetch call
+    let url = `${API_BASE_URL}/Slider`;
+    
+    const isServer = typeof window === "undefined";
+    
+    // For local development on the server, we might need to bypass certificate checks
+    // or fallback to http if https fails on the server (common Node.js issue with self-signed certs)
+    if (isServer && url.startsWith("https://localhost")) {
+      // In development, we can tell Node to ignore SSL issues for localhost
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     }
-    const data = await response.json()
-    // Filter only active sliders
-    return data.filter((slider: PublicSlider) => slider.currentState === 1)
+
+    const response = await fetch(url, {
+      cache: "no-store",
+    })
+    
+    if (!response.ok) {
+      console.error(`[getPublicSliders] API responded with status: ${response.status}`);
+      throw new Error(`Failed to fetch sliders: ${response.status}`);
+    }
+    
+    const rawData = await response.json()
+    if (!Array.isArray(rawData)) {
+      console.warn("[getPublicSliders] API returned non-array data:", rawData);
+      return []
+    }
+
+    // Normalize property names (handle both camelCase and PascalCase)
+    const data: PublicSlider[] = rawData.map((item: any) => ({
+      id: item.id ?? item.Id ?? "",
+      titleAr: item.titleAr ?? item.TitleAr ?? "",
+      titleEn: item.titleEn ?? item.TitleEn ?? "",
+      imageUrl: item.imageUrl ?? item.ImageUrl ?? "",
+      currentState: item.currentState ?? item.CurrentState ?? 0,
+      createdDate: item.createdDate ?? item.CreatedDate ?? "",
+    }))
+
+    // Filter only active sliders (currentState > 0)
+    const activeSliders = data.filter((slider) => slider.currentState > 0);
+    console.log(`[getPublicSliders] Successfully fetched ${activeSliders.length} sliders`);
+    return activeSliders;
   } catch (error) {
-    console.error("Error fetching sliders:", error)
+    console.error("[getPublicSliders] Error fetching sliders:", error)
     return []
   }
 }

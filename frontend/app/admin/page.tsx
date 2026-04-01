@@ -8,8 +8,10 @@ import { RecentOrdersTable } from "@/components/admin/recent-orders-table"
 import { TopProductsCard } from "@/components/admin/top-products-card"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
 import type { Order, Product } from "@/lib/admin-data"
-import { DollarSign, ShoppingCart, Package, Users } from "lucide-react"
+import { DollarSign, ShoppingCart, Package, Users, Eye } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { HeroBanner } from "@/components/home/hero-banner"
+import { getPublicSliders } from "@/lib/products"
 
 // Dashboard API types
 interface DashboardData {
@@ -57,18 +59,21 @@ const RevenueChart = dynamic(
 export default function AdminDashboardPage() {
   const { t, language, dir } = useAdminLanguage()
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null)
+  const [initialSliders, setInitialSliders] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
         setLoading(true)
-        const data = await ApiClient.get("api/admin/dashboard")
-        if (data) {
-          setDashboardData(data)
-        }
+        const [data, sliders] = await Promise.all([
+          ApiClient.get("api/admin/dashboard"),
+          getPublicSliders()
+        ])
+        if (data) setDashboardData(data)
+        if (sliders) setInitialSliders(sliders)
       } catch (error) {
-        console.error("Failed to fetch dashboard:", error)
+        console.error("Failed to fetch dashboard data:", error)
       } finally {
         setLoading(false)
       }
@@ -95,23 +100,23 @@ export default function AdminDashboardPage() {
   // Transform API data for charts
   const salesChartData = dashboardData?.monthlySales
     ? dashboardData.monthlySales.map((item) => ({
-        name: item.monthName,
-        value: item.total,
-      }))
+      name: item.monthName,
+      value: item.total,
+    }))
     : []
 
   const ordersChartData = dashboardData?.monthlyOrders
     ? dashboardData.monthlyOrders.map((item) => ({
-        name: item.monthName,
-        value: item.count,
-      }))
+      name: item.monthName,
+      value: item.count,
+    }))
     : []
 
   const categoryChartData = dashboardData?.topCategories
     ? dashboardData.topCategories.map((item) => ({
-        name: language === "ar" ? item.nameAr : item.nameEn,
-        value: item.totalSold,
-      }))
+      name: language === "ar" ? item.nameAr : item.nameEn,
+      value: item.totalSold,
+    }))
     : []
 
   // Revenue chart - use monthly sales data (same as sales chart since no daily data available)
@@ -120,67 +125,70 @@ export default function AdminDashboardPage() {
   // Convert dashboard recent orders to Order format for the table
   const recentOrders: Order[] = recentOrdersData
     ? recentOrdersData.map((order, index) => ({
-        id: `order-${index}`,
-        orderNumber: order.orderNumber,
-        customer: {
-          id: `customer-${index}`,
-          name: order.customerName,
-          email: "",
-          phone: "",
-        },
-        items: [],
-        subtotal: order.total,
-        shipping: 0,
-        tax: 0,
-        discount: 0,
-        total: order.total,
-        status: (order.status?.toLowerCase() as Order["status"]) || "pending",
-        paymentMethod: "",
-        shippingAddress: {
-          street: "",
-          city: "",
-          state: "",
-          country: "",
-          postalCode: "",
-        },
-        createdDate: order.date || new Date().toISOString(),
-        updatedAt: order.date || new Date().toISOString(),
-      }))
+      id: `order-${index}`,
+      orderNumber: order.orderNumber,
+      customer: {
+        id: `customer-${index}`,
+        name: order.customerName,
+        email: "",
+        phone: "",
+      },
+      items: [],
+      subtotal: order.total,
+      shipping: 0,
+      tax: 0,
+      discount: 0,
+      total: order.total,
+      status: (order.status?.toLowerCase() as Order["status"]) || "pending",
+      paymentMethod: "",
+      shippingAddress: {
+        street: "",
+        city: "",
+        state: "",
+        country: "",
+        postalCode: "",
+      },
+      createdDate: order.date || new Date().toISOString(),
+      updatedAt: order.date || new Date().toISOString(),
+    }))
     : []
 
   // Convert dashboard top products to Product format
   const topProducts: Product[] = topProductsData
     ? topProductsData.map((product) => ({
-        id: `product-${product.nameEn}`,
-        nameEn: product.nameEn,
-        nameAr: product.nameAr,
-        descriptionEn: "",
-        descriptionAr: "",
-        price: product.price,
-        originalPrice: product.price,
-        stock: product.stock,
-        category: "",
-        categoryId: "",
-        status: "active" as const,
-        featured: true,
-        onSale: false,
-        images: ["/placeholder.jpg"],
-        mainImage: "/placeholder.jpg",
-        sku: "",
-        createdDate: "",
-        updatedAt: "",
-      }))
+      id: `product-${product.nameEn}`,
+      nameEn: product.nameEn,
+      nameAr: product.nameAr,
+      descriptionEn: "",
+      descriptionAr: "",
+      price: product.price,
+      originalPrice: product.price,
+      stock: product.stock,
+      category: "",
+      categoryId: "",
+      status: "active" as const,
+      featured: true,
+      onSale: false,
+      images: ["/placeholder.jpg"],
+      mainImage: "/placeholder.jpg",
+      sku: "",
+      createdDate: "",
+      updatedAt: "",
+    }))
     : []
 
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div className={cn(dir === "rtl" && "text-right")}>
-        <h1 className="text-2xl font-bold tracking-tight">{t("dashboard.title")}</h1>
-        <p className="text-muted-foreground">
-          {t("dashboard.welcome")}, Admin!
-        </p>
+      <div className={cn("flex flex-col sm:flex-row sm:items-center justify-between gap-4", dir === "rtl" && "text-right")}>
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">{t("dashboard.title")}</h1>
+          <p className="text-muted-foreground">
+            {t("dashboard.welcome")}, Admin!
+          </p>
+        </div>
       </div>
+
 
       {/* Stats Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

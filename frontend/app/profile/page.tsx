@@ -10,6 +10,7 @@ import { useTheme } from "@/context/theme-context"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { useAuth } from "../Context/auth-context"
+import { ApiClient } from "@/app/ApiHelper/ApiClient"
 import { useEffect, useState } from "react"
 import { formatPrice } from "@/lib/products"
 
@@ -44,14 +45,9 @@ export default function ProfilePage() {
   const fetchOrders = async () => {
     try {
       setLoading(true)
-      const res = await fetch("https://localhost:7282/api/order/my-orders", {
-        credentials: "include"
-      })
-      if (res.ok) {
-        const data = await res.json()
-        setOrders(data)
-        setOrderCount(data.length)
-      }
+      const data = await ApiClient.get("api/order/my-orders")
+      setOrders(data)
+      setOrderCount(data.length)
     } catch (err) {
       console.error("Failed to fetch orders:", err)
     } finally {
@@ -65,27 +61,15 @@ export default function ProfilePage() {
   }, [])
   const handleCancelOrder = async (orderId: string) => {
     try {
-      const res = await fetch(
-        `https://localhost:7282/api/order/cancel-order/${orderId}`,
-        {
-          method: "POST",
-          credentials: "include"
-        }
-      );
-
-      if (res.ok) {
-        const result = await res.json();
-
-        if (result === true) {
-          // Update UI instantly
-          setOrders(prev =>
-            prev.map(o =>
-              o.id === orderId ? { ...o, status: "Cancelled" } : o
-            )
-          );
-        } else {
-          alert("Failed to cancel order");
-        }
+      const result = await ApiClient.post(`api/order/cancel-order/${orderId}`, {})
+      if (result === true) {
+        setOrders(prev =>
+          prev.map(o =>
+            o.id === orderId ? { ...o, status: "Cancelled" } : o
+          )
+        );
+      } else {
+        alert("Failed to cancel order");
       }
     } catch (err) {
       console.error("Cancel failed", err);
@@ -196,46 +180,68 @@ export default function ProfilePage() {
                   <div className="space-y-4">
                     {orders.map((order) => (
 
-                      <div key={order.id} className="border border-border rounded-lg p-4 hover:bg-muted/50 transition-colors">
-                        <div className="flex flex-wrap justify-between items-start gap-4">
-                          <div>
-                            <p className="text-sm text-muted-foreground">
-                              {language === "ar" ? "تاريخ الطلب" : "Order Date"}: {new Date(order.orderDate).toLocaleDateString(language === "ar" ? "ar-EG" : "en-US")}
-                            </p>
-                            <p className="font-semibold text-foreground mt-1">
-                              {language === "ar" ? "المجموع" : "Total"}: {formatPrice(order.total)} {t("products.price")}
-                            </p>
-                            <p className="text-sm text-muted-foreground mt-1">
-                              {order.city}, {order.address}
-                            </p>
+                      <div key={order.id} className="border border-border rounded-lg p-3 sm:p-6 hover:bg-muted/50 transition-colors">
+                        <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex flex-col gap-1">
+                              <p className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1.5 font-medium">
+                                <Package size={14} className="text-muted-foreground" />
+                                {language === "ar" ? "تاريخ الطلب" : "Order Date"}: {new Date(order.orderDate).toLocaleDateString(language === "ar" ? "ar-EG" : "en-US")}
+                              </p>
+                              <div className="flex items-baseline gap-2 mt-1">
+                                <span className="text-lg sm:text-xl font-bold text-foreground">{formatPrice(order.total)}</span>
+                                <span className="text-xs text-muted-foreground uppercase">{t("products.price")}</span>
+                              </div>
+                              <div className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground mt-1">
+                                <MapPin size={14} className="flex-shrink-0" />
+                                <span className="truncate">{order.city}, {order.address}</span>
+                              </div>
+                            </div>
                           </div>
-                          <div className="text-right flex flex-col items-end">
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${order.status === "Delivered" ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"
+                          
+                          <div className="w-full sm:w-auto flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-3 border-t sm:border-t-0 pt-3 sm:pt-0 mt-2 sm:mt-0">
+                            <div className="flex flex-col items-start sm:items-end gap-2">
+                              {/* Status Badges */}
+                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-medium ${
+                                order.status === "Delivered" ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
+                                order.status === "Cancelled" ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
+                                order.status === "Processing" ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400" :
+                                order.status === "Shipped" ? "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400" :
+                                "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
                               }`}>
-                              {order.status}
-                            </span>
-                            <p className="text-xs text-muted-foreground mt-2">
-                              {language === "ar" ? "حالة الدفع" : "Payment"}: {order.paymentStatus}
-                            </p>
-                            <Link
-                              href={`/profile/orders/${order.id}`}
-                              className="display-block mt-3 text-sm text-blue-600 hover:underline font-medium"
-                            >
+                                {order.status}
+                              </span>
+                              
+                              <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider ${
+                                order.paymentStatus === "Paid" ? "border border-green-200 text-green-600 bg-green-50/50 dark:border-green-800 dark:text-green-500" :
+                                order.paymentStatus === "Refunded" ? "border border-purple-200 text-purple-600 bg-purple-50/50 dark:border-purple-800 dark:text-purple-500" :
+                                order.paymentStatus === "Failed" ? "border border-red-200 text-red-600 bg-red-50/50 dark:border-red-800 dark:text-red-500" :
+                                "border border-yellow-200 text-yellow-600 bg-yellow-50/50 dark:border-yellow-800 dark:text-yellow-500"
+                              }`}>
+                                {language === "ar" ? "الدفع" : "Payment"}: {order.paymentStatus}
+                              </span>
+                            </div>
 
-                              {language === "ar" ? "عرض التفاصيل" : "View Details"}
-                            </Link>
-                            {
-                              order.status === "Pending" || order.status === "Processing" ? (
+                            <div className="flex flex-col items-end gap-2">
+                              <Link
+                                href={`/profile/orders/${order.id}`}
+                                className="text-xs sm:text-sm text-blue-600 hover:text-blue-700 hover:underline font-bold"
+                              >
+                                {language === "ar" ? "عرض التفاصيل" : "View Details"}
+                              </Link>
+                              
+                              {(order.status === "Pending" || order.status === "Processing") && (
                                 <Button
-                                  variant="destructive"
+                                  variant="outline"
                                   size="sm"
-                                  className="mt-2"
+                                  className="border-red-100 text-red-600 hover:bg-red-50 hover:text-red-700 transition-all rounded-lg h-7 sm:h-8 px-2 sm:px-4 text-[10px] sm:text-xs flex items-center gap-1 bg-transparent group"
                                   onClick={() => handleCancelOrder(order.id)}
                                 >
-                                  {language === "ar" ? "إلغاء الطلب" : "Cancel Order"}
+                                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 group-hover:scale-125 transition-transform duration-200"></span>
+                                  {language === "ar" ? "إلغاء" : "Cancel"}
                                 </Button>
-                              ) : null
-                            }
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>

@@ -1,5 +1,5 @@
 // API Base URL
-const API_BASE_URL = "https://localhost:7282/api/admin"
+const API_BASE_URL = ((process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")) + "/api/admin"
 
 // Slider Interface
 export interface Slider {
@@ -16,8 +16,18 @@ import { ApiClient } from "@/app/ApiHelper/ApiClient"
 // Slider API Functions
 export async function getSliders(): Promise<Slider[]> {
   try {
-    const result = await ApiClient.get("api/admin/Sliders")
-    return result || []
+    const rawData = await ApiClient.get("api/admin/Sliders")
+    if (!Array.isArray(rawData)) return []
+
+    // Normalize property names (handle both camelCase and PascalCase)
+    return rawData.map((item: any) => ({
+      id: item.id ?? item.Id ?? "",
+      titleAr: item.titleAr ?? item.TitleAr ?? "",
+      titleEn: item.titleEn ?? item.TitleEn ?? "",
+      imageUrl: item.imageUrl ?? item.ImageUrl ?? "",
+      currentState: item.currentState ?? item.CurrentState ?? 0,
+      createdDate: item.createdDate ?? item.CreatedDate ?? "",
+    }))
   } catch (error) {
     console.error("Error fetching sliders:", error)
     return []

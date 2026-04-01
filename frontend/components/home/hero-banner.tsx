@@ -6,6 +6,7 @@ import Link from "next/link"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { useLanguage } from "@/context/language-context"
 import { Button } from "@/components/ui/button"
+import { getImageUrl } from "@/lib/utils"
 import { getPublicSliders, type PublicSlider } from "@/lib/products"
 
 // Fallback banners if API fails
@@ -36,14 +37,16 @@ const fallbackBanners = [
   },
 ]
 
-export function HeroBanner() {
+export function HeroBanner({ initialSliders }: { initialSliders?: PublicSlider[] }) {
   const { language, dir } = useLanguage()
-  const [sliders, setSliders] = useState<PublicSlider[]>([])
-  const [loading, setLoading] = useState(true)
+  const [sliders, setSliders] = useState<PublicSlider[]>(initialSliders || [])
+  const [loading, setLoading] = useState(initialSliders ? false : true)
   const [currentSlide, setCurrentSlide] = useState(0)
 
   useEffect(() => {
     const fetchSliders = async () => {
+      if (initialSliders && initialSliders.length > 0) return // Skip fetch if we have SSR data
+      
       try {
         const data = await getPublicSliders()
         if (data.length > 0) {
@@ -59,7 +62,7 @@ export function HeroBanner() {
     }
 
     fetchSliders()
-  }, [])
+  }, [initialSliders])
 
   // Use API sliders or fallback
   const banners = sliders.length > 0
@@ -98,59 +101,69 @@ export function HeroBanner() {
     )
   }
 
-  const banner = banners[currentSlide]
+  // Ensure currentSlide is within bounds before rendering
+  const safeIndex = (currentSlide >= 0 && currentSlide < banners.length) ? currentSlide : 0;
 
   return (
-    <section className="relative bg-secondary overflow-hidden">
+    <section className="relative bg-secondary overflow-hidden group">
       <div className="relative h-[300px] sm:h-[400px] md:h-[500px]">
-        <Image
-          src={banner.image || "/placeholder.svg"}
-          alt={banner.title[language]}
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-transparent" />
+        {/* Render all images but only show the current one with opacity to prevent flickers/disappearance */}
+        {banners.map((banner, index) => (
+          <div
+            key={banner.id || index}
+            className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${index === safeIndex ? "opacity-100 z-10" : "opacity-0 z-0"
+              }`}
+          >
+            <Image
+              src={getImageUrl(banner.image)}
+              alt={banner.title[language] || "Banner Image"}
+              fill
+              className="object-cover"
+              priority={index === 0}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-transparent pointer-events-none" />
 
-        <div className="absolute inset-0 flex items-center">
-          <div className={`container mx-auto px-4 ${dir === "rtl" ? "flex justify-start" : ""}`}>
-            <div className={`max-w-lg ${dir === "rtl" ? "pr-8 md:pr-12 text-right" : "pl-8 md:pl-12"}`}>
-              <p className="text-primary-foreground/90 text-sm md:text-base mb-2">{banner.subtitle[language]}</p>
-              <h1 className="text-3xl md:text-5xl font-bold text-primary-foreground mb-6 text-balance">
-                {banner.title[language]}
-              </h1>
-              <Link href={banner.href}>
-                <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                  {banner.cta[language]}
-                </Button>
-              </Link>
+            <div className="absolute inset-0 flex items-center">
+              <div className={`container mx-auto px-4 ${dir === "rtl" ? "flex justify-start" : ""}`}>
+                <div className={`max-w-2xl ${dir === "rtl" ? "pr-8 md:pr-12 text-right" : "pl-8 md:pl-12"}`}>
+                  <p className="text-primary-foreground/90 text-sm md:text-base mb-2">{banner.subtitle[language]}</p>
+                  <h1 className="text-3xl md:text-5xl font-bold text-primary-foreground mb-6 leading-tight">
+                    {banner.title[language]}
+                  </h1>
+                  <Link href={banner.href}>
+                    <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                      {banner.cta[language]}
+                    </Button>
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        ))}
 
         {/* Navigation Arrows */}
         <button
-          onClick={dir === "rtl" ? nextSlide : prevSlide}
-          className="absolute start-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-card/80 hover:bg-card flex items-center justify-center text-foreground transition-colors"
+          onClick={prevSlide}
+          className="absolute start-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-card/80 hover:bg-card flex items-center justify-center text-foreground transition-all z-20 md:opacity-0 group-hover:opacity-100"
           aria-label="Previous slide"
         >
           {dir === "rtl" ? <ChevronRight size={24} /> : <ChevronLeft size={24} />}
         </button>
         <button
-          onClick={dir === "rtl" ? prevSlide : nextSlide}
-          className="absolute end-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-card/80 hover:bg-card flex items-center justify-center text-foreground transition-colors"
+          onClick={nextSlide}
+          className="absolute end-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-card/80 hover:bg-card flex items-center justify-center text-foreground transition-all z-20 md:opacity-0 group-hover:opacity-100"
           aria-label="Next slide"
         >
           {dir === "rtl" ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}
         </button>
 
         {/* Dots */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
           {banners.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              className={`w-2 h-2 rounded-full transition-colors ${index === currentSlide ? "bg-accent" : "bg-card/50"
+              className={`w-2 h-2 rounded-full transition-colors ${index === safeIndex ? "bg-accent" : "bg-card/50 hover:bg-card"
                 }`}
               aria-label={`Go to slide ${index + 1}`}
             />

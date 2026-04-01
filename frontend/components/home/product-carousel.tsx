@@ -6,8 +6,10 @@ import Image from "next/image"
 import { toast } from "sonner"
 import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react"
 import { useLanguage } from "@/context/language-context"
+import { ApiClient } from "@/app/ApiHelper/ApiClient"
 import { Button } from "@/components/ui/button"
 import { formatPrice } from "@/lib/products"
+import { getImageUrl } from "@/lib/utils"
 
 type ApiItem = {
   id: string
@@ -30,7 +32,7 @@ function ProductCard({ product }: { product: ApiItem }) {
 
   const quantity = 1
   const discount = product.discountAmount ?? 0
-  const originalPrice = product.price + discount
+  const discountedPrice = discount > 0 ? product.price * (1 - discount / 100) : product.price
 
   const colorsEn = product.colorsEn
     ? product.colorsEn.split(',').map(c => c.trim()).filter(Boolean)
@@ -47,7 +49,7 @@ function ProductCard({ product }: { product: ApiItem }) {
     e.preventDefault() // Prevent navigation to product page
     e.stopPropagation()
 
-    if (displayColors.length > 0 && !selectedColor) {
+    if (colorsEn.length > 0 && !selectedColor) {
       toast.error(language === "ar" ? "يرجى اختيار لون قبل الإضافة للسلة" : "Please select a color before adding to cart")
       return
     }
@@ -55,7 +57,7 @@ function ProductCard({ product }: { product: ApiItem }) {
     try {
       setAdding(true)
       setError("")
-      const res = await fetch("https://localhost:7282/api/Cart/add-to-cart", {
+      const res = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")}/api/Cart/add-to-cart`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -82,9 +84,11 @@ function ProductCard({ product }: { product: ApiItem }) {
     <div className="flex-shrink-0 w-[280px] bg-card rounded-lg border overflow-hidden hover:shadow-lg transition-shadow flex flex-col">
       <Link href={`/product/${product.id}`} className="block relative h-[200px] bg-secondary">
         <Image
-          src={product.mainImage || product.image || "/placeholder.svg"}
+          src={getImageUrl(product.mainImage || product.image)}
           alt={language === "ar" ? product.nameAr : product.nameEn}
           fill
+          sizes="280px"
+          loading="lazy"
           className="object-cover"
         />
 
@@ -114,11 +118,11 @@ function ProductCard({ product }: { product: ApiItem }) {
 
         <div className="flex gap-2 mb-3">
           <span className="font-bold text-foreground">
-            {formatPrice(product.price)} {t("products.price")}
+            {formatPrice(discountedPrice)} {t("products.price")}
           </span>
           {discount > 0 && (
             <span className="line-through text-sm text-muted-foreground">
-              {formatPrice(originalPrice)}
+              {formatPrice(product.price)}
             </span>
           )}
         </div>
@@ -177,8 +181,7 @@ export function ProductCarousel() {
   useEffect(() => {
     const fetchBestDiscounts = async () => {
       try {
-        const res = await fetch("https://localhost:7282/api/Items/best-discounts")
-        const data = await res.json()
+        const data = await ApiClient.get("api/Items/best-discounts")
         const normalized = (data as any[]).map((item) => {
           const price = Number(item.price ?? item.Price ?? 0)
           const discountAmount = Number(item.discountAmount ?? item.DiscountAmount ?? 0)
@@ -202,7 +205,8 @@ export function ProductCarousel() {
             price: Number.isFinite(price) ? price : 0,
             discountAmount: Number.isFinite(discountAmount) ? discountAmount : 0,
             stockNumber: Number.isFinite(stockNumber) ? stockNumber : 0,
-            colors: item.colors ?? item.Colors ?? "",
+            colorsEn: item.colorsEn ?? item.ColorsEn ?? item.colors ?? item.Colors ?? "",
+            colorsAr: item.colorsAr ?? item.ColorsAr ?? item.colors ?? item.Colors ?? "",
             mainImage,
             image: item.image ?? item.Image ?? "",
           } as ApiItem

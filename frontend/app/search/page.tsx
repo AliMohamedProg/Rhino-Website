@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import { ShoppingCart, Search } from "lucide-react"
 import { formatPrice } from "@/lib/products"
+import { getImageUrl } from "@/lib/utils"
+import { ApiClient } from "@/app/ApiHelper/ApiClient"
 
 type SearchItem = {
   id: string
@@ -21,7 +23,8 @@ type SearchItem = {
   price: number
   discountAmount: number
   stockNumber: number
-  colors?: string
+  colorsEn?: string
+  colorsAr?: string
   mainImage?: string
 }
 
@@ -30,18 +33,22 @@ function SearchProductCard({ product }: { product: SearchItem }) {
   const [selectedColor, setSelectedColor] = useState<string>("")
   const [adding, setAdding] = useState(false)
 
-  const colors = product.colors
-    ? product.colors.split(",").map((c) => c.trim()).filter(Boolean)
+  const colorsEn = product.colorsEn
+    ? product.colorsEn.split(",").map((c) => c.trim()).filter(Boolean)
     : []
-  const displayColors = colors.slice(0, 3)
-  const originalPrice = product.price + product.discountAmount
+  const colorsAr = product.colorsAr
+    ? product.colorsAr.split(",").map((c) => c.trim()).filter(Boolean)
+    : []
+  const colors = language === "ar" ? colorsAr : colorsEn
+  const displayColors = colors
+  const discountedPrice = product.discountAmount > 0 ? product.price * (1 - product.discountAmount / 100) : product.price
   const isInStock = product.stockNumber > 0
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
 
-    if (colors.length > 0 && !selectedColor) {
+    if (colorsEn.length > 0 && !selectedColor) {
       toast.error(
         language === "ar"
           ? "يرجى اختيار لون قبل الإضافة للسلة"
@@ -52,7 +59,7 @@ function SearchProductCard({ product }: { product: SearchItem }) {
 
     try {
       setAdding(true)
-      const res = await fetch("https://localhost:7282/api/Cart/add-to-cart", {
+      const res = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")}/api/Cart/add-to-cart`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -79,9 +86,11 @@ function SearchProductCard({ product }: { product: SearchItem }) {
     <div className="group bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg transition-shadow flex flex-col">
       <Link href={`/product/${product.id}`} className="block relative h-48 md:h-56 bg-secondary">
         <Image
-          src={product.mainImage || "/placeholder.svg"}
+          src={getImageUrl(product.mainImage)}
           alt={language === "ar" ? product.nameAr : product.nameEn}
           fill
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          loading="lazy"
           className="object-cover group-hover:scale-105 transition-transform duration-300"
         />
 
@@ -111,11 +120,11 @@ function SearchProductCard({ product }: { product: SearchItem }) {
 
         <div className="flex gap-2 mb-3">
           <span className="font-bold text-foreground">
-            {formatPrice(product.price)} {t("products.price")}
+            {formatPrice(discountedPrice)} {t("products.price")}
           </span>
           {product.discountAmount > 0 && (
             <span className="line-through text-sm text-muted-foreground">
-              {formatPrice(originalPrice)}
+              {formatPrice(product.price)}
             </span>
           )}
         </div>
@@ -174,9 +183,7 @@ export default function SearchPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("https://localhost:7282/api/items")
-        if (!res.ok) throw new Error("Failed to fetch products")
-        const data = await res.json()
+        const data = await ApiClient.get("api/items")
         setProducts(data)
       } catch (err: any) {
         setError(err.message)
