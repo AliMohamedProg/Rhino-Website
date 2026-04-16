@@ -5,13 +5,11 @@ import { useParams } from "next/navigation"
 import { ProductForm } from "@/components/admin/product-form"
 import type { Product } from "@/lib/admin-data"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
-import { useAdminLanguage } from "@/context/admin-language-context"
 import { mapAdminItemToProduct, type AdminCategoryDto, type AdminItemDto } from "@/lib/admin-items"
 
 export default function EditProductPage() {
   const params = useParams()
   const id = params.id as string
-  const { t, language } = useAdminLanguage()
   const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -46,7 +44,7 @@ export default function EditProductPage() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-muted-foreground animate-pulse">
-        {t("common.loading")}
+        Loading...
       </div>
     )
   }
@@ -55,7 +53,7 @@ export default function EditProductPage() {
     return (
       <div className="flex flex-col items-center justify-center py-12">
         <h2 className="text-xl font-semibold">
-          {language === "ar" ? "المنتج غير موجود" : "Product not found"}
+          {"Product not found"}
         </h2>
       </div>
     )

@@ -49,7 +49,6 @@ import { ar } from "date-fns/locale"
 import { exportCategoriesExcel, exportCategoriesPdf } from "@/app/ApiHelper/ExportApi"
 
 export default function CategoriesPage() {
-  const { t, language, dir } = useAdminLanguage()
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -59,7 +58,6 @@ export default function CategoriesPage() {
   const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null)
   const [formData, setFormData] = useState({
     nameEn: "",
-    nameAr: "",
     imageUrl: "",
   })
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -68,13 +66,11 @@ export default function CategoriesPage() {
     if (editingCategory) {
       setFormData({
         nameEn: editingCategory.nameEn,
-        nameAr: editingCategory.nameAr,
         imageUrl: editingCategory.imageUrl || "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop",
       })
     } else if (dialogOpen) {
       setFormData({
         nameEn: "",
-        nameAr: "",
         imageUrl: "",
       })
       setSelectedFile(null)
@@ -88,21 +84,21 @@ export default function CategoriesPage() {
       let finalImageUrl = formData.imageUrl
       if (selectedFile) {
         const uploadRes = await ApiClient.upload("api/upload", selectedFile)
-        finalImageUrl = uploadRes.url
+        finalImageUrl = uploadRes?.url || uploadRes?.imageUrl || uploadRes
       }
 
       if (editingCategory) {
         await ApiClient.post("api/admin/Categories/edit-category", {
           id: editingCategory.id,
           nameEn: formData.nameEn,
-          nameAr: formData.nameAr,
+          nameAr: "", // Removed from form
           imageUrl: finalImageUrl,
           currentState: 1,
         })
       } else {
         await ApiClient.post("api/admin/Categories/add-category", {
           nameEn: formData.nameEn,
-          nameAr: formData.nameAr,
+          nameAr: "", // Removed from form
           imageUrl: finalImageUrl,
           currentState: 1,
         })
@@ -116,14 +112,10 @@ export default function CategoriesPage() {
     }
   }
 
+
   const fetchCategories = async () => {
     try {
       setLoading(true)
-
-      // Debug: Fetch 'me' endpoint to see current user permissions
-      const me = await ApiClient.get("api/auth/me")
-      console.log("Current Auth State:", me)
-
       const data = await ApiClient.get("api/admin/Categories")
       setCategories(data)
     } catch (err) {
@@ -146,33 +138,21 @@ export default function CategoriesPage() {
 
   const confirmDelete = async () => {
     if (!categoryToDelete) {
-      console.warn("[Page] confirmDelete called but categoryToDelete is null")
       return
     }
-
-    // Loud debug for the user
-    alert(`Starting delete for: ${categoryToDelete.nameEn}\nID: ${categoryToDelete.id}`)
-
-    console.log("[Page] confirmDelete triggered for:", categoryToDelete)
 
     try {
       setLoading(true)
       const url = `api/admin/Categories/delete-category/${categoryToDelete.id}`
-      console.log(`[Page] Calling POST ${url}`)
-
-      const response = await ApiClient.post(url, {})
-      console.log("[Page] Delete successful, response:", response)
-
+      await ApiClient.post(url, {})
       setDeleteDialogOpen(false)
       setCategoryToDelete(null)
-      alert(language === "ar" ? "تم الحذف بنجاح" : "Deleted successfully")
-
-      // Refresh the list from server
+      alert("Deleted successfully")
       await fetchCategories()
     } catch (err: any) {
       console.error("[Page] Critical: Delete API failed", err)
       const errorMsg = err.message || JSON.stringify(err)
-      alert((language === "ar" ? "فشل الحذف: " : "Delete failed: ") + errorMsg)
+      alert("Delete failed: " + errorMsg)
     } finally {
       setLoading(false)
     }
@@ -184,12 +164,12 @@ export default function CategoriesPage() {
       const url = `api/admin/Categories/delete-all-categories`
       await ApiClient.post(url, {})
       setDeleteAllDialogOpen(false)
-      alert(language === "ar" ? "تم حذف جميع الفئات بنجاح" : "All categories deleted successfully")
+      alert("All categories deleted successfully")
       await fetchCategories()
     } catch (err: any) {
       console.error("[Page] Critical: Delete All API failed", err)
       const errorMsg = err.message || JSON.stringify(err)
-      alert((language === "ar" ? "فشل الحذف: " : "Delete failed: ") + errorMsg)
+      alert("Delete failed: " + errorMsg)
     } finally {
       setLoading(false)
     }
@@ -198,7 +178,7 @@ export default function CategoriesPage() {
   const columns = [
     {
       key: "image",
-      header: language === "ar" ? "الصورة" : "Image",
+      header: "Image",
       render: (category: Category) => (
         <div className="h-12 w-12 rounded-md overflow-hidden bg-muted flex items-center justify-center">
           {category.imageUrl ? (
@@ -218,9 +198,9 @@ export default function CategoriesPage() {
     },
     {
       key: "name",
-      header: language === "ar" ? "الاسم الفئة بالانجليزي" : "CategoryName in english",
+      header: "Category Name",
       render: (category: Category) => (
-        <div className={cn(dir === "rtl" && "text-right")}>
+        <div>
           <p className="font-medium">
             {category.nameEn}
           </p>
@@ -228,37 +208,24 @@ export default function CategoriesPage() {
       ),
     },
     {
-      key: "name",
-      header: language === "ar" ? "الاسم الفئة بالعربية" : "CategoryName in arabic",
-      render: (category: Category) => (
-        <div className={cn(dir === "rtl" && "text-right")}>
-          <p className="font-medium">
-            {category.nameAr}
-          </p>
-        </div>
-      ),
-    },
-    {
-      key: "products",
-      header: t("categories.products"),
+      key: "productsCount",
+      header: "Products",
       render: (category: Category) => (
         <span className="font-medium">{category.productsCount}</span>
       ),
     },
     {
       key: "createdDate",
-      header: language === "ar" ? "تاريخ الإنشاء" : "Created",
+      header: "Created",
       render: (category: Category) => (
         <span className="text-muted-foreground">
-          {new Date(category.createdDate).toLocaleDateString(
-            language === "ar" ? "ar-EG" : "en-US"
-          )}
+          {new Date(category.createdDate).toLocaleDateString("en-US")}
         </span>
       ),
     },
     {
       key: "actions",
-      header: t("common.actions"),
+      header: "Actions",
       render: (category: Category) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -267,22 +234,22 @@ export default function CategoriesPage() {
               <span className="sr-only">Actions</span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align={dir === "rtl" ? "start" : "end"}>
+          <DropdownMenuContent align="end">
             <DropdownMenuItem
               onClick={() => {
                 setEditingCategory(category)
                 setDialogOpen(true)
               }}
             >
-              <Pencil className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-              {t("categories.editCategory")}
+              <Pencil className="h-4 w-4 mr-2" />
+              Edit Category
             </DropdownMenuItem>
             <DropdownMenuItem
               className="text-destructive"
               onClick={() => handleDelete(category)}
             >
-              <Trash2 className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-              {t("categories.deleteCategory")}
+              <Trash2 className="h-4 w-4 mr-2" />
+              Delete Category
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -295,45 +262,40 @@ export default function CategoriesPage() {
     <div className="space-y-6">
       {/* Page Header */}
       <div
-        className={cn(
-          "flex items-center justify-between",
-          dir === "rtl" && "flex-row-reverse"
-        )}
+        className="flex items-center justify-between"
       >
-        <div className={cn(dir === "rtl" && "text-right")}>
-          <h1 className="text-2xl font-bold tracking-tight">{t("categories.title")}</h1>
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Categories Management</h1>
           <p className="text-muted-foreground">
-            {language === "ar"
-              ? `إدارة ${categories.length} فئة`
-              : `Manage ${categories.length} categories`}
+            Manage {categories.length} categories
           </p>
         </div>
         <div className="flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline">
-                <Download className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-                {language === "ar" ? "تصدير" : "Export"}
+                <Download className="h-4 w-4 mr-2" />
+                Export
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => exportCategoriesExcel()}>
-                {language === "ar" ? "تصدير إلى Excel" : "Export to Excel"}
+                Export to Excel
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => exportCategoriesPdf()}>
-                {language === "ar" ? "تصدير إلى PDF" : "Export to PDF"}
+                Export to PDF
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           {categories.length > 0 && (
             <Button variant="destructive" onClick={() => setDeleteAllDialogOpen(true)}>
-              <Trash2 className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-              {language === "ar" ? "حذف الكل" : "Delete All"}
+              <Trash2 className="h-4 w-4 mr-2" />
+              Delete All
             </Button>
           )}
           <Button onClick={() => { setEditingCategory(null); setDialogOpen(true) }}>
-            <Plus className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-            {t("categories.addCategory")}
+            <Plus className="h-4 w-4 mr-2" />
+            Add Category
           </Button>
         </div>
       </div>
@@ -343,13 +305,13 @@ export default function CategoriesPage() {
         <CardContent className="pt-6">
           {loading ? (
             <div className="flex justify-center items-center h-48 text-muted-foreground animate-pulse">
-              {language === "ar" ? "جاري التحميل..." : "Loading categories..."}
+              Loading categories...
             </div>
           ) : (
             <DataTable
               data={categories}
               columns={columns}
-              searchPlaceholder={language === "ar" ? "البحث عن فئة..." : "Search categories..."}
+              searchPlaceholder="Search categories..."
               searchKey="nameEn"
             />
           )}
@@ -360,41 +322,27 @@ export default function CategoriesPage() {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
-            <DialogTitle className={cn(dir === "rtl" && "text-right")}>
-              {editingCategory ? t("categories.editCategory") : t("categories.addCategory")}
+            <DialogTitle>
+              {editingCategory ? "Edit Category" : "Add Category"}
             </DialogTitle>
-            <DialogDescription className={cn(dir === "rtl" && "text-right")}>
+            <DialogDescription>
               {editingCategory
-                ? language === "ar"
-                  ? "تعديل بيانات الفئة"
-                  : "Edit category details"
-                : language === "ar"
-                  ? "إضافة فئة جديدة"
-                  : "Add a new category to the store"}
+                ? "Edit category details"
+                : "Add a new category to the store"}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="nameEn">{t("categories.categoryNameEn")}</Label>
-                <Input
-                  id="nameEn"
-                  value={formData.nameEn}
-                  onChange={(e) => setFormData({ ...formData, nameEn: e.target.value })}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="nameAr">{t("categories.categoryNameAr")}</Label>
-                <Input
-                  id="nameAr"
-                  value={formData.nameAr}
-                  onChange={(e) => setFormData({ ...formData, nameAr: e.target.value })}
-                  dir="rtl"
-                />
-              </div>
-            </div>
             <div className="space-y-2">
-              <Label htmlFor="image">{language === "ar" ? "صورة الفئة" : "Category Image"}</Label>
+              <Label htmlFor="nameEn">Name</Label>
+              <Input
+                id="nameEn"
+                value={formData.nameEn}
+                onChange={(e) => setFormData({ ...formData, nameEn: e.target.value })}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="image">Category Image</Label>
               <Input
                 id="image"
                 type="file"
@@ -426,7 +374,7 @@ export default function CategoriesPage() {
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="imageUrl">{language === "ar" ? "أو رابط الصورة" : "Or Image URL"}</Label>
+              <Label htmlFor="imageUrl">Or Image URL</Label>
               <Input
                 id="imageUrl"
                 placeholder="https://..."
@@ -435,12 +383,12 @@ export default function CategoriesPage() {
               />
             </div>
           </div>
-          <DialogFooter className={cn(dir === "rtl" && "flex-row-reverse")}>
+          <DialogFooter>
             <Button variant="outline" onClick={() => setDialogOpen(false)}>
-              {t("common.cancel")}
+              Cancel
             </Button>
             <Button onClick={handleSave} disabled={loading}>
-              {loading ? (language === "ar" ? "جاري الحفظ..." : "Saving...") : t("common.save")}
+              {loading ? "Saving..." : "Save"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -450,22 +398,20 @@ export default function CategoriesPage() {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle className={cn(dir === "rtl" && "text-right")}>
-              {t("categories.deleteCategory")}
+            <AlertDialogTitle>
+              Delete Category
             </AlertDialogTitle>
-            <AlertDialogDescription className={cn(dir === "rtl" && "text-right")}>
-              {language === "ar"
-                ? `هل أنت متأكد من حذف "${categoryToDelete?.nameAr}"؟ لا يمكن التراجع عن هذا الإجراء.`
-                : `Are you sure you want to delete "${categoryToDelete?.nameEn}"? This action cannot be undone.`}
+            <AlertDialogDescription>
+              Are you sure you want to delete &quot;{categoryToDelete?.nameEn}&quot;? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className={cn(dir === "rtl" && "flex-row-reverse")}>
-            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDelete}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              {t("categories.deleteCategory")}
+              Delete Category
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -475,22 +421,20 @@ export default function CategoriesPage() {
       <AlertDialog open={deleteAllDialogOpen} onOpenChange={setDeleteAllDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle className={cn(dir === "rtl" && "text-right")}>
-              {language === "ar" ? "حذف جميع الفئات" : "Delete All Categories"}
+            <AlertDialogTitle>
+              Delete All Categories
             </AlertDialogTitle>
-            <AlertDialogDescription className={cn(dir === "rtl" && "text-right")}>
-              {language === "ar"
-                ? "هل أنت متأكد من حذف جميع الفئات؟ لا يمكن التراجع عن هذا الإجراء."
-                : "Are you sure you want to delete all categories? This action cannot be undone."}
+            <AlertDialogDescription>
+              Are you sure you want to delete all categories? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className={cn(dir === "rtl" && "flex-row-reverse")}>
-            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDeleteAll}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              {language === "ar" ? "حذف الكل" : "Delete All"}
+              Delete All
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -498,3 +442,4 @@ export default function CategoriesPage() {
     </div>
   )
 }
+

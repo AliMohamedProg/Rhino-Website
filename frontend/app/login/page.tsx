@@ -2,9 +2,8 @@
 
 import React, { useState, useCallback } from "react"
 import Link from "next/link"
-import { Header } from "@/components/layout/header"
+import { Navbar } from "@/components/layout/Navbar"
 import { Footer } from "@/components/layout/footer"
-import { useLanguage } from "@/context/language-context"
 import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
 import { Button } from "@/components/ui/button"
@@ -12,7 +11,6 @@ import { Label } from "@/components/ui/label"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
 
 export default function LoginPage() {
-  const { language } = useLanguage()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
@@ -25,94 +23,92 @@ export default function LoginPage() {
       setLoading(true)
 
       try {
-        const data = await ApiClient.post("api/auth/login", { email, password })
+        await ApiClient.post("api/auth/login", { email, password })
         window.location.href = "/"
       } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : (language === "ar" ? "حدث خطأ" : "Something went wrong")
+        const message = err instanceof Error ? err.message : "Something went wrong"
         setError(message)
       } finally {
         setLoading(false)
       }
     },
-    [email, password, language],
+    [email, password],
   )
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <Header />
-      <main className="flex-1 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen flex flex-col bg-white">
+      <Navbar />
+      <main className="flex-1 flex items-center justify-center px-4 py-32">
         <div
           className="w-full max-w-md animate-in fade-in slide-in-from-bottom-4 duration-300"
           role="main"
-          aria-label={language === "ar" ? "تسجيل الدخول" : "Login"}
+          aria-label="Login"
         >
-          <h1 className="text-2xl font-bold text-foreground mb-2 text-center">
-            {language === "ar" ? "تسجيل الدخول" : "Login"}
+          <h1 className="text-4xl font-serif text-mahogany mb-2 text-center italic">
+            Login
           </h1>
-          <p className="text-sm text-muted-foreground mb-6 text-center">
-            {language === "ar" ? "أدخل بريدك وكلمة المرور" : "Enter your email and password"}
+          <p className="text-sm text-taupe mb-10 text-center font-medium tracking-wide uppercase">
+            Enter your email and password
           </p>
 
-          <div className="bg-card rounded-xl border border-border p-6 shadow-sm transition-shadow hover:shadow-md">
-            <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="bg-white rounded-[2rem] border border-gray-100 p-10 shadow-xl transition-shadow hover:shadow-2xl">
+            <form onSubmit={handleSubmit} className="space-y-6">
               {error && (
-                <p className="text-sm text-destructive bg-destructive/10 dark:bg-destructive/20 border border-destructive/30 rounded-md px-3 py-2">
+                <p className="text-xs text-red-500 bg-red-50 border border-red-100 rounded-xl px-4 py-3 font-bold tracking-tight">
                   {error}
                 </p>
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="login-email">
-                  {language === "ar" ? "البريد الإلكتروني" : "Email"}
+                <Label htmlFor="login-email" className="text-[10px] font-bold tracking-[0.2em] text-taupe uppercase ml-2">
+                  Email
                 </Label>
                 <Input
                   id="login-email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder={language === "ar" ? "example@email.com" : "example@email.com"}
+                  placeholder="example@email.com"
                   required
                   autoComplete="email"
-                  aria-invalid={!!error}
-                  className="transition-all duration-200"
+                  className="rounded-2xl border-gray-100 bg-gray-50/50 focus:bg-white transition-all duration-300 h-14 px-6"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="login-password">
-                  {language === "ar" ? "كلمة المرور" : "Password"}
+                <Label htmlFor="login-password" className="text-[10px] font-bold tracking-[0.2em] text-taupe uppercase ml-2">
+                  Password
                 </Label>
                 <PasswordInput
                   id="login-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder={language === "ar" ? "كلمة المرور" : "Password"}
+                  placeholder="Password"
                   required
                   autoComplete="current-password"
-                  error={!!error}
-                  className="transition-all duration-200"
+                  className="rounded-2xl border-gray-100 bg-gray-50/50 focus:bg-white transition-all duration-300 h-14 px-6"
                 />
               </div>
 
               <Button
                 type="submit"
-                className="w-full transition-all duration-200"
+                className="w-full h-16 rounded-2xl bg-mahogany text-white font-bold tracking-[0.15em] uppercase hover:brightness-110 active:scale-95 transition-all shadow-lg text-xs"
                 disabled={loading}
               >
-                {loading
-                  ? (language === "ar" ? "جاري تسجيل الدخول..." : "Signing in...")
-                  : (language === "ar" ? "تسجيل الدخول" : "Sign In")}
+                {loading ? "Signing in..." : "Sign In"}
               </Button>
             </form>
 
-            <p className="text-sm text-muted-foreground mt-5 pt-4 border-t border-border text-center">
-              {language === "ar" ? "ليس لديك حساب؟" : "Don't have an account?"}{" "}
+            <div className="mt-10 pt-8 border-t border-gray-100 flex flex-col items-center gap-4">
+               <p className="text-sm text-taupe font-medium">
+                Don't have an account?
+              </p>
               <Link
                 href="/register"
-                className="text-primary font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded"
+                className="text-mahogany font-bold tracking-[0.1em] uppercase hover:underline text-xs"
               >
-                {language === "ar" ? "إنشاء حساب" : "Create one"}
+                Create one
               </Link>
-            </p>
+            </div>
           </div>
         </div>
       </main>

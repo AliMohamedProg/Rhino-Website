@@ -3,15 +3,127 @@
   "WorkspaceRootPath": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\wooddecorbackend\\models\\addcartitemrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\models\\addcartitemrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\wooddecorbackend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\bl\\dtos\\cartdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\dtos\\cartdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\bl\\dtos\\sliderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\dtos\\sliderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\bl\\dtos\\refreshtokensdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\dtos\\refreshtokensdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\bl\\mapping\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\mapping\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\bl\\contracts\\icategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\contracts\\icategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\bl\\contracts\\icart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\contracts\\icart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\bl\\contracts\\ibaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\contracts\\ibaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\bl\\contracts\\iorderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\contracts\\iorderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\bl\\contracts\\ireview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\contracts\\ireview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\bl\\contracts\\isetting.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\contracts\\isetting.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\bl\\contracts\\irefreshtokens.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\contracts\\irefreshtokens.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\bl\\contracts\\iitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\contracts\\iitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\bl\\contracts\\ipaymobpayment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\contracts\\ipaymobpayment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\bl\\services\\cartservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\services\\cartservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\bl\\contracts\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\contracts\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\bl\\dtos\\monthlyordersdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\dtos\\monthlyordersdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{227E46CB-5E84-423F-A20F-CABA16737F37}|Domains\\Domains.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\domains\\tbcart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{227E46CB-5E84-423F-A20F-CABA16737F37}|Domains\\Domains.csproj|solutionrelative:domains\\tbcart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\wooddecorbackend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\wooddecorbackend\\services\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\services\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\wooddecorbackend\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\wooddecorbackend\\services\\contextconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\services\\contextconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{227E46CB-5E84-423F-A20F-CABA16737F37}|Domains\\Domains.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\domains\\tbrefreshtokens.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{227E46CB-5E84-423F-A20F-CABA16737F37}|Domains\\Domains.csproj|solutionrelative:domains\\tbrefreshtokens.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\dal\\context\\wooddecorcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|solutionrelative:dal\\context\\wooddecorcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\wooddecorbackend\\apis.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\apis.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\dal\\exceptions\\dataaccessexption.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|solutionrelative:dal\\exceptions\\dataaccessexption.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\bl\\services\\refreshtokensservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\services\\refreshtokensservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\dal\\repositories\\tablerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|solutionrelative:dal\\repositories\\tablerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\wooddecorbackend\\controllers\\reviewcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\controllers\\reviewcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\HP - Victus\\AppData\\Local\\Temp\\.vsdbgsrc\\53bfbf4a0e03c100db831fb2ad432cf6b3622d7ff2ff0b57b67764884fb1be58\\BrowserRefreshMiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\wooddecorbackend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\bl\\dtos\\imagedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -50,16 +162,8 @@
       "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\areas\\admin\\controllers\\orderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\bl\\contracts\\ipaymobpayment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\contracts\\ipaymobpayment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\wooddecorbackend\\controllers\\paymentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\controllers\\paymentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\dal\\repositories\\tablerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|solutionrelative:dal\\repositories\\tablerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\wooddecorbackend\\controllers\\slidercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -72,10 +176,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\bl\\bl.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
       "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\bl.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\dal\\context\\wooddecorcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|solutionrelative:dal\\context\\wooddecorcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{227E46CB-5E84-423F-A20F-CABA16737F37}|Domains\\Domains.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\domains\\tbitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -100,14 +200,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\wooddecorbackend\\areas\\admin\\controllers\\reviewscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0C7FC1FF-2E02-3FF1-0BC1-A8B0FF65011C}|WoodDecorBackend\\Apis.csproj|solutionrelative:wooddecorbackend\\areas\\admin\\controllers\\reviewscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\bl\\contracts\\ibaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7A06A914-9A1A-4E6E-BC7F-613753F7BB11}|Bl\\Bl.csproj|solutionrelative:bl\\contracts\\ibaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|c:\\users\\hp - victus\\downloads\\furniture store ecommerce website\\backend\\dal\\migrations\\20260316210515_addindexintborderandorderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3DA4B342-6B5F-4637-A300-BEF886DE6ADA}|DAL\\DAL.csproj|solutionrelative:dal\\migrations\\20260316210515_addindexintborderandorderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -117,7 +209,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -129,250 +221,202 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "BrowserRefreshMiddleware.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\AppData\\Local\\Temp\\.vsdbgsrc\\53bfbf4a0e03c100db831fb2ad432cf6b3622d7ff2ff0b57b67764884fb1be58\\BrowserRefreshMiddleware.cs",
-              "RelativeDocumentMoniker": "..\\..\\..\\AppData\\Local\\Temp\\.vsdbgsrc\\53bfbf4a0e03c100db831fb2ad432cf6b3622d7ff2ff0b57b67764884fb1be58\\BrowserRefreshMiddleware.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\AppData\\Local\\Temp\\.vsdbgsrc\\53bfbf4a0e03c100db831fb2ad432cf6b3622d7ff2ff0b57b67764884fb1be58\\BrowserRefreshMiddleware.cs [Read Only]",
-              "RelativeToolTip": "..\\..\\..\\AppData\\Local\\Temp\\.vsdbgsrc\\53bfbf4a0e03c100db831fb2ad432cf6b3622d7ff2ff0b57b67764884fb1be58\\BrowserRefreshMiddleware.cs [Read Only]",
-              "ViewState": "AgIAAD4AAAAAAAAAAAAewFMAAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-01T08:30:21.772Z",
-              "EditorCaption": " [Read Only]"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ReviewController.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Controllers\\ReviewController.cs",
-              "RelativeDocumentMoniker": "WoodDecorBackend\\Controllers\\ReviewController.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Controllers\\ReviewController.cs",
-              "RelativeToolTip": "WoodDecorBackend\\Controllers\\ReviewController.cs",
-              "ViewState": "AgIAABoAAAAAAAAAAAAqwCAAAAAMAAAAAAAAAA==",
+              "Title": "AddCartItemRequest.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Models\\AddCartItemRequest.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Models\\AddCartItemRequest.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Models\\AddCartItemRequest.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Models\\AddCartItemRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-01T08:28:27.561Z",
+              "WhenOpened": "2026-04-11T11:11:30.201Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ImageDto.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\DTOs\\ImageDto.cs",
-              "RelativeDocumentMoniker": "Bl\\DTOs\\ImageDto.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\DTOs\\ImageDto.cs",
-              "RelativeToolTip": "Bl\\DTOs\\ImageDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAALAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "CartDto.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\DTOs\\CartDto.cs",
+              "RelativeDocumentMoniker": "Bl\\DTOs\\CartDto.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\DTOs\\CartDto.cs",
+              "RelativeToolTip": "Bl\\DTOs\\CartDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-27T04:15:45.499Z"
+              "WhenOpened": "2026-04-11T10:48:22.882Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
+              "Title": "RefreshTokensDto.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\DTOs\\RefreshTokensDto.cs",
+              "RelativeDocumentMoniker": "Bl\\DTOs\\RefreshTokensDto.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\DTOs\\RefreshTokensDto.cs",
+              "RelativeToolTip": "Bl\\DTOs\\RefreshTokensDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-11T10:38:10.692Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "MappingProfile.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Mapping\\MappingProfile.cs",
+              "RelativeDocumentMoniker": "Bl\\Mapping\\MappingProfile.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Mapping\\MappingProfile.cs",
+              "RelativeToolTip": "Bl\\Mapping\\MappingProfile.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAQwBAAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-11T10:31:11.804Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ICart.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Contracts\\ICart.cs",
+              "RelativeDocumentMoniker": "Bl\\Contracts\\ICart.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Contracts\\ICart.cs",
+              "RelativeToolTip": "Bl\\Contracts\\ICart.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-11T10:30:21.949Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ICategory.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Contracts\\ICategory.cs",
+              "RelativeDocumentMoniker": "Bl\\Contracts\\ICategory.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Contracts\\ICategory.cs",
+              "RelativeToolTip": "Bl\\Contracts\\ICategory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-11T10:30:19.839Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "IOrderItem.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Contracts\\IOrderItem.cs",
+              "RelativeDocumentMoniker": "Bl\\Contracts\\IOrderItem.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Contracts\\IOrderItem.cs",
+              "RelativeToolTip": "Bl\\Contracts\\IOrderItem.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-11T10:30:19.307Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "IReview.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Contracts\\IReview.cs",
+              "RelativeDocumentMoniker": "Bl\\Contracts\\IReview.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Contracts\\IReview.cs",
+              "RelativeToolTip": "Bl\\Contracts\\IReview.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-11T10:30:18.641Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ISetting.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Contracts\\ISetting.cs",
+              "RelativeDocumentMoniker": "Bl\\Contracts\\ISetting.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Contracts\\ISetting.cs",
+              "RelativeToolTip": "Bl\\Contracts\\ISetting.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-11T10:30:17.648Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "IRefreshTokens.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Contracts\\IRefreshTokens.cs",
+              "RelativeDocumentMoniker": "Bl\\Contracts\\IRefreshTokens.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Contracts\\IRefreshTokens.cs",
+              "RelativeToolTip": "Bl\\Contracts\\IRefreshTokens.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-11T10:30:15.686Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "IItem.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Contracts\\IItem.cs",
+              "RelativeDocumentMoniker": "Bl\\Contracts\\IItem.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Contracts\\IItem.cs",
+              "RelativeToolTip": "Bl\\Contracts\\IItem.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-11T10:30:08.422Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Program.cs",
               "RelativeDocumentMoniker": "WoodDecorBackend\\Program.cs",
               "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Program.cs",
               "RelativeToolTip": "WoodDecorBackend\\Program.cs",
-              "ViewState": "AgIAAEAAAAAAAAAAAAAmwEwAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAACkAAAAAAAAAAAAcwDMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-26T16:50:14.594Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "PaymobPaymentService.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Services\\PaymobPaymentService.cs",
-              "RelativeDocumentMoniker": "Bl\\Services\\PaymobPaymentService.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Services\\PaymobPaymentService.cs",
-              "RelativeToolTip": "Bl\\Services\\PaymobPaymentService.cs",
-              "ViewState": "AgIAAAQAAAAAAAAAAAAswBsAAAAcAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "SliderDto.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\DTOs\\SliderDto.cs",
+              "RelativeDocumentMoniker": "Bl\\DTOs\\SliderDto.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\DTOs\\SliderDto.cs",
+              "RelativeToolTip": "Bl\\DTOs\\SliderDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-19T01:32:55.168Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "IPaymobPayment.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Contracts\\IPaymobPayment.cs",
-              "RelativeDocumentMoniker": "Bl\\Contracts\\IPaymobPayment.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Contracts\\IPaymobPayment.cs",
-              "RelativeToolTip": "Bl\\Contracts\\IPaymobPayment.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAZAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-19T01:32:26.34Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "OrderController.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Controllers\\OrderController.cs",
-              "RelativeDocumentMoniker": "WoodDecorBackend\\Controllers\\OrderController.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Controllers\\OrderController.cs",
-              "RelativeToolTip": "WoodDecorBackend\\Controllers\\OrderController.cs",
-              "ViewState": "AgIAAEQAAAAAAAAAAAAlwE0AAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-19T01:22:39.056Z"
+              "WhenOpened": "2026-04-11T10:42:54.571Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 15,
-              "Title": "SliderController.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Controllers\\SliderController.cs",
-              "RelativeDocumentMoniker": "WoodDecorBackend\\Controllers\\SliderController.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Controllers\\SliderController.cs",
-              "RelativeToolTip": "WoodDecorBackend\\Controllers\\SliderController.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAAwAsAAAAFAAAAAAAAAA==",
+              "Title": "CartService.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Services\\CartService.cs",
+              "RelativeDocumentMoniker": "Bl\\Services\\CartService.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Services\\CartService.cs",
+              "RelativeToolTip": "Bl\\Services\\CartService.cs",
+              "ViewState": "AgIAAHMAAAAAAAAAAAAuwG0AAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-18T04:10:04.457Z"
+              "WhenOpened": "2026-04-11T10:29:16.975Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "TbOrder.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Domains\\TbOrder.cs",
-              "RelativeDocumentMoniker": "Domains\\TbOrder.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Domains\\TbOrder.cs",
-              "RelativeToolTip": "Domains\\TbOrder.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAAA1wAwAAAAtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T06:55:16.403Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ITableRepository.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\DAL\\Contracts\\ITableRepository.cs",
-              "RelativeDocumentMoniker": "DAL\\Contracts\\ITableRepository.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\DAL\\Contracts\\ITableRepository.cs",
-              "RelativeToolTip": "DAL\\Contracts\\ITableRepository.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAA/wB8AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T04:45:47.653Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "CategoriesController.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\CategoriesController.cs",
-              "RelativeDocumentMoniker": "WoodDecorBackend\\Areas\\Admin\\Controllers\\CategoriesController.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\CategoriesController.cs",
-              "RelativeToolTip": "WoodDecorBackend\\Areas\\Admin\\Controllers\\CategoriesController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAA2AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T04:54:07.816Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "ReviewDto.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\DTOs\\ReviewDto.cs",
-              "RelativeDocumentMoniker": "Bl\\DTOs\\ReviewDto.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\DTOs\\ReviewDto.cs",
-              "RelativeToolTip": "Bl\\DTOs\\ReviewDto.cs",
+              "DocumentIndex": 16,
+              "Title": "IUserService.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Contracts\\IUserService.cs",
+              "RelativeDocumentMoniker": "Bl\\Contracts\\IUserService.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Contracts\\IUserService.cs",
+              "RelativeToolTip": "Bl\\Contracts\\IUserService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-27T04:15:50.025Z"
+              "WhenOpened": "2026-04-11T10:28:25.359Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "OrderService.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Services\\OrderService.cs",
-              "RelativeDocumentMoniker": "Bl\\Services\\OrderService.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Services\\OrderService.cs",
-              "RelativeToolTip": "Bl\\Services\\OrderService.cs",
-              "ViewState": "AgIAAGEAAAAAAAAAAAA0wIMAAABCAAAAAAAAAA==",
+              "DocumentIndex": 22,
+              "Title": "ContextConfig.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Services\\ContextConfig.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Services\\ContextConfig.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Services\\ContextConfig.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Services\\ContextConfig.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-19T02:20:48.556Z"
+              "WhenOpened": "2026-04-05T15:08:29.309Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
-              "Title": "UserDto.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\DTOs\\UserDto.cs",
-              "RelativeDocumentMoniker": "Bl\\DTOs\\UserDto.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\DTOs\\UserDto.cs",
-              "RelativeToolTip": "Bl\\DTOs\\UserDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-26T08:55:43.181Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "PaymentController.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Controllers\\PaymentController.cs",
-              "RelativeDocumentMoniker": "WoodDecorBackend\\Controllers\\PaymentController.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Controllers\\PaymentController.cs",
-              "RelativeToolTip": "WoodDecorBackend\\Controllers\\PaymentController.cs",
-              "ViewState": "AgIAAC8AAAAAAAAAAAAqwD0AAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T06:03:04.4Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "OrdersController.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\OrdersController.cs",
-              "RelativeDocumentMoniker": "WoodDecorBackend\\Areas\\Admin\\Controllers\\OrdersController.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\OrdersController.cs",
-              "RelativeToolTip": "WoodDecorBackend\\Areas\\Admin\\Controllers\\OrdersController.cs",
-              "ViewState": "AgIAADgAAAAAAAAAAAAgwBcAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T04:54:30.853Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "Bl.csproj",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Bl.csproj",
-              "RelativeDocumentMoniker": "Bl\\Bl.csproj",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Bl.csproj",
-              "RelativeToolTip": "Bl\\Bl.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-03-16T20:56:02.365Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 26,
-              "Title": "20260316210515_addIndexInTbOrderAndOrderItem.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\DAL\\Migrations\\20260316210515_addIndexInTbOrderAndOrderItem.cs",
-              "RelativeDocumentMoniker": "DAL\\Migrations\\20260316210515_addIndexInTbOrderAndOrderItem.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\DAL\\Migrations\\20260316210515_addIndexInTbOrderAndOrderItem.cs",
-              "RelativeToolTip": "DAL\\Migrations\\20260316210515_addIndexInTbOrderAndOrderItem.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T21:05:16.278Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "TableRepository.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\DAL\\Repositories\\TableRepository.cs",
-              "RelativeDocumentMoniker": "DAL\\Repositories\\TableRepository.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\DAL\\Repositories\\TableRepository.cs",
-              "RelativeToolTip": "DAL\\Repositories\\TableRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAhwCkAAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T04:47:36.036Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "TbItem.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Domains\\TbItem.cs",
-              "RelativeDocumentMoniker": "Domains\\TbItem.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Domains\\TbItem.cs",
-              "RelativeToolTip": "Domains\\TbItem.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAIBJwAsAAAApAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T06:55:23.483Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 25,
               "Title": "IBaseService.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Contracts\\IBaseService.cs",
               "RelativeDocumentMoniker": "Bl\\Contracts\\IBaseService.cs",
@@ -384,7 +428,343 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 20,
+              "Title": "TokenService.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Services\\TokenService.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Services\\TokenService.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Services\\TokenService.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Services\\TokenService.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAYwCUAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-05T15:17:49.332Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "TbCart.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Domains\\TbCart.cs",
+              "RelativeDocumentMoniker": "Domains\\TbCart.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Domains\\TbCart.cs",
+              "RelativeToolTip": "Domains\\TbCart.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-11T09:48:16.574Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "TbRefreshTokens.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Domains\\TbRefreshTokens.cs",
+              "RelativeDocumentMoniker": "Domains\\TbRefreshTokens.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Domains\\TbRefreshTokens.cs",
+              "RelativeToolTip": "Domains\\TbRefreshTokens.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-05T15:04:40.083Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "ImageDto.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\DTOs\\ImageDto.cs",
+              "RelativeDocumentMoniker": "Bl\\DTOs\\ImageDto.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\DTOs\\ImageDto.cs",
+              "RelativeToolTip": "Bl\\DTOs\\ImageDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-27T04:15:45.499Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "IPaymobPayment.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Contracts\\IPaymobPayment.cs",
+              "RelativeDocumentMoniker": "Bl\\Contracts\\IPaymobPayment.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Contracts\\IPaymobPayment.cs",
+              "RelativeToolTip": "Bl\\Contracts\\IPaymobPayment.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-19T01:32:26.34Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "MonthlyOrdersDto.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\DTOs\\MonthlyOrdersDto.cs",
+              "RelativeDocumentMoniker": "Bl\\DTOs\\MonthlyOrdersDto.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\DTOs\\MonthlyOrdersDto.cs",
+              "RelativeToolTip": "Bl\\DTOs\\MonthlyOrdersDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-11T09:49:03.863Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\appsettings.json",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\appsettings.json",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\appsettings.json",
+              "RelativeToolTip": "WoodDecorBackend\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-04-05T08:42:52.849Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "ReviewController.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Controllers\\ReviewController.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Controllers\\ReviewController.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Controllers\\ReviewController.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Controllers\\ReviewController.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAiwCAAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-01T08:28:27.561Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAJYAAAAAAAAAAAAmwKYAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-05T06:19:55.727Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "RefreshTokensService.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Services\\RefreshTokensService.cs",
+              "RelativeDocumentMoniker": "Bl\\Services\\RefreshTokensService.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Services\\RefreshTokensService.cs",
+              "RelativeToolTip": "Bl\\Services\\RefreshTokensService.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-05T06:19:32.808Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "PaymobPaymentService.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Services\\PaymobPaymentService.cs",
+              "RelativeDocumentMoniker": "Bl\\Services\\PaymobPaymentService.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Services\\PaymobPaymentService.cs",
+              "RelativeToolTip": "Bl\\Services\\PaymobPaymentService.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAswBsAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-19T01:32:55.168Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "TableRepository.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\DAL\\Repositories\\TableRepository.cs",
+              "RelativeDocumentMoniker": "DAL\\Repositories\\TableRepository.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\DAL\\Repositories\\TableRepository.cs",
+              "RelativeToolTip": "DAL\\Repositories\\TableRepository.cs",
+              "ViewState": "AgIAAOgAAAAAAAAAAIBJwPUAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-16T04:47:36.036Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "WoodDecorContext.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\DAL\\Context\\WoodDecorContext.cs",
+              "RelativeDocumentMoniker": "DAL\\Context\\WoodDecorContext.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\DAL\\Context\\WoodDecorContext.cs",
+              "RelativeToolTip": "DAL\\Context\\WoodDecorContext.cs",
+              "ViewState": "AgIAADwAAAAAAAAAAAAuwI8AAABGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-16T20:53:51.055Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "Apis.csproj",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Apis.csproj",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Apis.csproj",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Apis.csproj",
+              "RelativeToolTip": "WoodDecorBackend\\Apis.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-04-05T08:51:15.846Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "DataAccessExption.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\DAL\\Exceptions\\DataAccessExption.cs",
+              "RelativeDocumentMoniker": "DAL\\Exceptions\\DataAccessExption.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\DAL\\Exceptions\\DataAccessExption.cs",
+              "RelativeToolTip": "DAL\\Exceptions\\DataAccessExption.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-05T08:35:07.574Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "BrowserRefreshMiddleware.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\AppData\\Local\\Temp\\.vsdbgsrc\\53bfbf4a0e03c100db831fb2ad432cf6b3622d7ff2ff0b57b67764884fb1be58\\BrowserRefreshMiddleware.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\AppData\\Local\\Temp\\.vsdbgsrc\\53bfbf4a0e03c100db831fb2ad432cf6b3622d7ff2ff0b57b67764884fb1be58\\BrowserRefreshMiddleware.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\AppData\\Local\\Temp\\.vsdbgsrc\\53bfbf4a0e03c100db831fb2ad432cf6b3622d7ff2ff0b57b67764884fb1be58\\BrowserRefreshMiddleware.cs",
+              "RelativeToolTip": "..\\..\\..\\AppData\\Local\\Temp\\.vsdbgsrc\\53bfbf4a0e03c100db831fb2ad432cf6b3622d7ff2ff0b57b67764884fb1be58\\BrowserRefreshMiddleware.cs",
+              "ViewState": "AgIAAD4AAAAAAAAAAAAewFMAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-01T08:30:21.772Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "OrderController.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Controllers\\OrderController.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Controllers\\OrderController.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Controllers\\OrderController.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Controllers\\OrderController.cs",
+              "ViewState": "AgIAAEQAAAAAAAAAAAAlwE0AAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-19T01:22:39.056Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "SliderController.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Controllers\\SliderController.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Controllers\\SliderController.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Controllers\\SliderController.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Controllers\\SliderController.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAwAsAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-18T04:10:04.457Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 45,
+              "Title": "TbOrder.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Domains\\TbOrder.cs",
+              "RelativeDocumentMoniker": "Domains\\TbOrder.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Domains\\TbOrder.cs",
+              "RelativeToolTip": "Domains\\TbOrder.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAxwAwAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-16T06:55:16.403Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "ITableRepository.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\DAL\\Contracts\\ITableRepository.cs",
+              "RelativeDocumentMoniker": "DAL\\Contracts\\ITableRepository.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\DAL\\Contracts\\ITableRepository.cs",
+              "RelativeToolTip": "DAL\\Contracts\\ITableRepository.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAA7wB8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-16T04:45:47.653Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "CategoriesController.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\CategoriesController.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Areas\\Admin\\Controllers\\CategoriesController.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\CategoriesController.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Areas\\Admin\\Controllers\\CategoriesController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-16T04:54:07.816Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "ReviewDto.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\DTOs\\ReviewDto.cs",
+              "RelativeDocumentMoniker": "Bl\\DTOs\\ReviewDto.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\DTOs\\ReviewDto.cs",
+              "RelativeToolTip": "Bl\\DTOs\\ReviewDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-27T04:15:50.025Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "OrderService.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Services\\OrderService.cs",
+              "RelativeDocumentMoniker": "Bl\\Services\\OrderService.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Services\\OrderService.cs",
+              "RelativeToolTip": "Bl\\Services\\OrderService.cs",
+              "ViewState": "AgIAAGIAAAAAAAAAAAAIwIMAAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-19T02:20:48.556Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "UserDto.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\DTOs\\UserDto.cs",
+              "RelativeDocumentMoniker": "Bl\\DTOs\\UserDto.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\DTOs\\UserDto.cs",
+              "RelativeToolTip": "Bl\\DTOs\\UserDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-26T08:55:43.181Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "PaymentController.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Controllers\\PaymentController.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Controllers\\PaymentController.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Controllers\\PaymentController.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Controllers\\PaymentController.cs",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAqwD0AAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-16T06:03:04.4Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "OrdersController.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\OrdersController.cs",
+              "RelativeDocumentMoniker": "WoodDecorBackend\\Areas\\Admin\\Controllers\\OrdersController.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\OrdersController.cs",
+              "RelativeToolTip": "WoodDecorBackend\\Areas\\Admin\\Controllers\\OrdersController.cs",
+              "ViewState": "AgIAADgAAAAAAAAAAAAgwBcAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-16T04:54:30.853Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 43,
+              "Title": "Bl.csproj",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Bl.csproj",
+              "RelativeDocumentMoniker": "Bl\\Bl.csproj",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Bl.csproj",
+              "RelativeToolTip": "Bl\\Bl.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-03-16T20:56:02.365Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 44,
+              "Title": "TbItem.cs",
+              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Domains\\TbItem.cs",
+              "RelativeDocumentMoniker": "Domains\\TbItem.cs",
+              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Domains\\TbItem.cs",
+              "RelativeToolTip": "Domains\\TbItem.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAIBJwAsAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-16T06:55:23.483Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 47,
               "Title": "BaseService.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\Services\\BaseService.cs",
               "RelativeDocumentMoniker": "Bl\\Services\\BaseService.cs",
@@ -396,7 +776,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 42,
               "Title": "ItemDto.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\Bl\\DTOs\\ItemDto.cs",
               "RelativeDocumentMoniker": "Bl\\DTOs\\ItemDto.cs",
@@ -408,31 +788,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "WoodDecorContext.cs",
-              "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\DAL\\Context\\WoodDecorContext.cs",
-              "RelativeDocumentMoniker": "DAL\\Context\\WoodDecorContext.cs",
-              "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\DAL\\Context\\WoodDecorContext.cs",
-              "RelativeToolTip": "DAL\\Context\\WoodDecorContext.cs",
-              "ViewState": "AgIAAFkAAAAAAAAAAAAqwBYAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T20:53:51.055Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 46,
               "Title": "ItemController.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\ItemController.cs",
               "RelativeDocumentMoniker": "WoodDecorBackend\\Areas\\Admin\\Controllers\\ItemController.cs",
               "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\ItemController.cs",
               "RelativeToolTip": "WoodDecorBackend\\Areas\\Admin\\Controllers\\ItemController.cs",
-              "ViewState": "AgIAALoAAAAAAAAAAIA4wL4AAAA2AAAAAAAAAA==",
+              "ViewState": "AgIAALsAAAAAAAAAAAAewL4AAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-16T04:44:42.242Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 48,
               "Title": "SlidersController.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\SlidersController.cs",
               "RelativeDocumentMoniker": "WoodDecorBackend\\Areas\\Admin\\Controllers\\SlidersController.cs",
@@ -444,13 +812,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 49,
               "Title": "ReviewsController.cs",
               "DocumentMoniker": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\ReviewsController.cs",
               "RelativeDocumentMoniker": "WoodDecorBackend\\Areas\\Admin\\Controllers\\ReviewsController.cs",
               "ToolTip": "C:\\Users\\HP - Victus\\Downloads\\Furniture Store Ecommerce Website\\Backend\\WoodDecorBackend\\Areas\\Admin\\Controllers\\ReviewsController.cs",
               "RelativeToolTip": "WoodDecorBackend\\Areas\\Admin\\Controllers\\ReviewsController.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAIBZwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-16T04:54:35.972Z"
             }

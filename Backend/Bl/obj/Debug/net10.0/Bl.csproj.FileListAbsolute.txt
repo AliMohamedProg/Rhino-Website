@@ -1,66 +1,84 @@
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\Backend\Bl\bin\Debug\net10.0\Bl.deps.json
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\Backend\Bl\bin\Debug\net10.0\Bl.dll
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\Backend\Bl\bin\Debug\net10.0\Bl.pdb
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\Backend\Bl\obj\Debug\net10.0\Bl.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\Backend\Bl\obj\Debug\net10.0\Bl.AssemblyInfoInputs.cache
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\Backend\Bl\obj\Debug\net10.0\Bl.AssemblyInfo.cs
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\Backend\Bl\obj\Debug\net10.0\Bl.csproj.CoreCompileInputs.cache
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\Backend\Bl\obj\Debug\net10.0\Bl.sourcelink.json
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\Backend\Bl\obj\Debug\net10.0\Bl.dll
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\Backend\Bl\obj\Debug\net10.0\refint\Bl.dll
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\Backend\Bl\obj\Debug\net10.0\Bl.pdb
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\Backend\Bl\obj\Debug\net10.0\ref\Bl.dll
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\Bl\bin\Debug\net10.0\Bl.deps.json
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\Bl\bin\Debug\net10.0\Bl.dll
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\Bl\bin\Debug\net10.0\Bl.pdb
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\Bl\bin\Debug\net10.0\DAL.dll
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\Bl\bin\Debug\net10.0\Domains.dll
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\Bl\bin\Debug\net10.0\DAL.pdb
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\Bl\bin\Debug\net10.0\Domains.pdb
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\Bl\obj\Debug\net10.0\Bl.csproj.AssemblyReference.cache
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\Bl\obj\Debug\net10.0\Bl.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\Bl\obj\Debug\net10.0\Bl.AssemblyInfoInputs.cache
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\Bl\obj\Debug\net10.0\Bl.AssemblyInfo.cs
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\Bl\obj\Debug\net10.0\Bl.csproj.CoreCompileInputs.cache
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\Bl\obj\Debug\net10.0\Bl.sourcelink.json
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\Bl\obj\Debug\net10.0\Bl.csproj.Up2Date
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\Bl\obj\Debug\net10.0\Bl.dll
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\Bl\obj\Debug\net10.0\refint\Bl.dll
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\Bl\obj\Debug\net10.0\Bl.pdb
-C:\Users\HP - Victus\Downloads\WoodDecorWebsite\WoodDecorBackend\Bl\obj\Debug\net10.0\ref\Bl.dll
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\WoodDecorBackend\Bl\bin\Debug\net10.0\Bl.deps.json
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\WoodDecorBackend\Bl\bin\Debug\net10.0\Bl.dll
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\WoodDecorBackend\Bl\bin\Debug\net10.0\Bl.pdb
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\WoodDecorBackend\Bl\bin\Debug\net10.0\DAL.dll
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\WoodDecorBackend\Bl\bin\Debug\net10.0\Domains.dll
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\WoodDecorBackend\Bl\bin\Debug\net10.0\DAL.pdb
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\WoodDecorBackend\Bl\bin\Debug\net10.0\Domains.pdb
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\WoodDecorBackend\Bl\obj\Debug\net10.0\Bl.csproj.AssemblyReference.cache
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\WoodDecorBackend\Bl\obj\Debug\net10.0\Bl.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\WoodDecorBackend\Bl\obj\Debug\net10.0\Bl.AssemblyInfoInputs.cache
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\WoodDecorBackend\Bl\obj\Debug\net10.0\Bl.AssemblyInfo.cs
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\WoodDecorBackend\Bl\obj\Debug\net10.0\Bl.csproj.CoreCompileInputs.cache
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\WoodDecorBackend\Bl\obj\Debug\net10.0\Bl.sourcelink.json
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\WoodDecorBackend\Bl\obj\Debug\net10.0\Bl.csproj.Up2Date
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\WoodDecorBackend\Bl\obj\Debug\net10.0\Bl.dll
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\WoodDecorBackend\Bl\obj\Debug\net10.0\refint\Bl.dll
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\WoodDecorBackend\Bl\obj\Debug\net10.0\Bl.pdb
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\WoodDecorBackend\Bl\obj\Debug\net10.0\ref\Bl.dll
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\Backend\Bl\bin\Debug\net10.0\Bl.deps.json
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\Backend\Bl\bin\Debug\net10.0\Bl.dll
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\Backend\Bl\bin\Debug\net10.0\Bl.pdb
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\Backend\Bl\bin\Debug\net10.0\DAL.dll
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\Backend\Bl\bin\Debug\net10.0\Domains.dll
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\Backend\Bl\bin\Debug\net10.0\DAL.pdb
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\Backend\Bl\bin\Debug\net10.0\Domains.pdb
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\Backend\Bl\obj\Debug\net10.0\Bl.csproj.AssemblyReference.cache
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\Backend\Bl\obj\Debug\net10.0\Bl.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\Backend\Bl\obj\Debug\net10.0\Bl.AssemblyInfoInputs.cache
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\Backend\Bl\obj\Debug\net10.0\Bl.AssemblyInfo.cs
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\Backend\Bl\obj\Debug\net10.0\Bl.csproj.CoreCompileInputs.cache
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\Backend\Bl\obj\Debug\net10.0\Bl.sourcelink.json
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\Backend\Bl\obj\Debug\net10.0\Bl.csproj.Up2Date
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\Backend\Bl\obj\Debug\net10.0\Bl.dll
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\Backend\Bl\obj\Debug\net10.0\refint\Bl.dll
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\Backend\Bl\obj\Debug\net10.0\Bl.pdb
-C:\Users\HP - Victus\Downloads\Furniture Store Ecommerce Website\Backend\Bl\obj\Debug\net10.0\ref\Bl.dll
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/Backend/Bl/bin/Debug/net10.0/Bl.deps.json
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/Backend/Bl/bin/Debug/net10.0/Bl.dll
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/Backend/Bl/bin/Debug/net10.0/Bl.pdb
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/Backend/Bl/obj/Debug/net10.0/Bl.GeneratedMSBuildEditorConfig.editorconfig
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/Backend/Bl/obj/Debug/net10.0/Bl.AssemblyInfoInputs.cache
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/Backend/Bl/obj/Debug/net10.0/Bl.AssemblyInfo.cs
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/Backend/Bl/obj/Debug/net10.0/Bl.csproj.CoreCompileInputs.cache
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/Backend/Bl/obj/Debug/net10.0/Bl.sourcelink.json
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/Backend/Bl/obj/Debug/net10.0/Bl.dll
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/Backend/Bl/obj/Debug/net10.0/refint/Bl.dll
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/Backend/Bl/obj/Debug/net10.0/Bl.pdb
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/Backend/Bl/obj/Debug/net10.0/ref/Bl.dll
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/WoodDecorBackend/Bl/bin/Debug/net10.0/Bl.deps.json
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/WoodDecorBackend/Bl/bin/Debug/net10.0/Bl.dll
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/WoodDecorBackend/Bl/bin/Debug/net10.0/Bl.pdb
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/WoodDecorBackend/Bl/bin/Debug/net10.0/DAL.dll
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/WoodDecorBackend/Bl/bin/Debug/net10.0/Domains.dll
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/WoodDecorBackend/Bl/bin/Debug/net10.0/DAL.pdb
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/WoodDecorBackend/Bl/bin/Debug/net10.0/Domains.pdb
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.csproj.AssemblyReference.cache
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.GeneratedMSBuildEditorConfig.editorconfig
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.AssemblyInfoInputs.cache
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.AssemblyInfo.cs
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.csproj.CoreCompileInputs.cache
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.sourcelink.json
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.csproj.Up2Date
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.dll
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/WoodDecorBackend/Bl/obj/Debug/net10.0/refint/Bl.dll
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.pdb
+C:/Users/HP - Victus/Downloads/WoodDecorWebsite/WoodDecorBackend/Bl/obj/Debug/net10.0/ref/Bl.dll
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/WoodDecorBackend/Bl/bin/Debug/net10.0/Bl.deps.json
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/WoodDecorBackend/Bl/bin/Debug/net10.0/Bl.dll
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/WoodDecorBackend/Bl/bin/Debug/net10.0/Bl.pdb
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/WoodDecorBackend/Bl/bin/Debug/net10.0/DAL.dll
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/WoodDecorBackend/Bl/bin/Debug/net10.0/Domains.dll
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/WoodDecorBackend/Bl/bin/Debug/net10.0/DAL.pdb
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/WoodDecorBackend/Bl/bin/Debug/net10.0/Domains.pdb
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.csproj.AssemblyReference.cache
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.GeneratedMSBuildEditorConfig.editorconfig
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.AssemblyInfoInputs.cache
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.AssemblyInfo.cs
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.csproj.CoreCompileInputs.cache
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.sourcelink.json
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.csproj.Up2Date
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.dll
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/WoodDecorBackend/Bl/obj/Debug/net10.0/refint/Bl.dll
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/WoodDecorBackend/Bl/obj/Debug/net10.0/Bl.pdb
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/WoodDecorBackend/Bl/obj/Debug/net10.0/ref/Bl.dll
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/Backend/Bl/bin/Debug/net10.0/Bl.deps.json
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/Backend/Bl/bin/Debug/net10.0/Bl.dll
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/Backend/Bl/bin/Debug/net10.0/Bl.pdb
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/Backend/Bl/bin/Debug/net10.0/DAL.dll
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/Backend/Bl/bin/Debug/net10.0/Domains.dll
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/Backend/Bl/bin/Debug/net10.0/DAL.pdb
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/Backend/Bl/bin/Debug/net10.0/Domains.pdb
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/Backend/Bl/obj/Debug/net10.0/Bl.csproj.AssemblyReference.cache
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/Backend/Bl/obj/Debug/net10.0/Bl.GeneratedMSBuildEditorConfig.editorconfig
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/Backend/Bl/obj/Debug/net10.0/Bl.AssemblyInfoInputs.cache
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/Backend/Bl/obj/Debug/net10.0/Bl.AssemblyInfo.cs
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/Backend/Bl/obj/Debug/net10.0/Bl.csproj.CoreCompileInputs.cache
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/Backend/Bl/obj/Debug/net10.0/Bl.sourcelink.json
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/Backend/Bl/obj/Debug/net10.0/Bl.csproj.Up2Date
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/Backend/Bl/obj/Debug/net10.0/Bl.dll
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/Backend/Bl/obj/Debug/net10.0/refint/Bl.dll
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/Backend/Bl/obj/Debug/net10.0/Bl.pdb
+C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/Backend/Bl/obj/Debug/net10.0/ref/Bl.dll
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/Bl/bin/Debug/net10.0/Bl.deps.json
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/Bl/bin/Debug/net10.0/Bl.dll
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/Bl/bin/Debug/net10.0/Bl.pdb
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/Bl/bin/Debug/net10.0/DAL.dll
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/Bl/bin/Debug/net10.0/Domains.dll
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/Bl/bin/Debug/net10.0/DAL.pdb
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/Bl/bin/Debug/net10.0/Domains.pdb
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/Bl/obj/Debug/net10.0/Bl.csproj.AssemblyReference.cache
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/Bl/obj/Debug/net10.0/Bl.GeneratedMSBuildEditorConfig.editorconfig
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/Bl/obj/Debug/net10.0/Bl.AssemblyInfoInputs.cache
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/Bl/obj/Debug/net10.0/Bl.AssemblyInfo.cs
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/Bl/obj/Debug/net10.0/Bl.csproj.CoreCompileInputs.cache
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/Bl/obj/Debug/net10.0/Bl.sourcelink.json
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/Bl/obj/Debug/net10.0/Bl.csproj.Up2Date
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/Bl/obj/Debug/net10.0/Bl.dll
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/Bl/obj/Debug/net10.0/refint/Bl.dll
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/Bl/obj/Debug/net10.0/Bl.pdb
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/Bl/obj/Debug/net10.0/ref/Bl.dll

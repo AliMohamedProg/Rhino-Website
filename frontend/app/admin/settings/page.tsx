@@ -14,19 +14,21 @@ import { Save, Store, Bell, Shield, CreditCard, Truck, Mail } from "lucide-react
 import { toast } from "sonner";
 
 export default function SettingsPage() {
-  const { t, isRTL } = useAdminLanguage();
   const [loading, setLoading] = useState(false);
 
   const handleSave = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      toast.success(isRTL ? "تم حفظ الإعدادات بنجاح" : "Settings saved successfully");
+      toast.success("Settings saved successfully");
     }, 1000);
   };
 
   return (
-    <>
-    </>
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-4">Settings</h1>
+      <p className="text-muted-foreground">General settings for your store.</p>
+    </div>
   );
 }
+

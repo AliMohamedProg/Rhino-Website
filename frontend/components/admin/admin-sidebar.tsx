@@ -1,11 +1,8 @@
 "use client"
 
-import React from "react"
-
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { useAdminLanguage } from "@/context/admin-language-context"
 import {
   LayoutDashboard,
   Package,
@@ -14,14 +11,10 @@ import {
   FolderTree,
   BarChart3,
   Settings,
-  FileText,
-  Warehouse,
-  Ticket,
-  Star,
-  HelpCircle,
   ChevronLeft,
   ChevronRight,
   ImageIcon,
+  Star,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -29,32 +22,31 @@ import { useState } from "react"
 import Image from "next/image"
 
 interface NavItem {
-  titleKey: string
+  title: string
   href: string
   icon: React.ComponentType<{ className?: string }>
 }
 
 const mainNavItems: NavItem[] = [
-  { titleKey: "sidebar.dashboard", href: "/admin", icon: LayoutDashboard },
-  { titleKey: "sidebar.products", href: "/admin/products", icon: Package },
-  { titleKey: "sidebar.orders", href: "/admin/orders", icon: ShoppingCart },
-  { titleKey: "sidebar.users", href: "/admin/users", icon: Users },
-  { titleKey: "sidebar.categories", href: "/admin/categories", icon: FolderTree },
-  { titleKey: "sidebar.sliders", href: "/admin/sliders", icon: ImageIcon },
+  { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { title: "Products", href: "/admin/products", icon: Package },
+  { title: "Orders", href: "/admin/orders", icon: ShoppingCart },
+  { title: "Users", href: "/admin/users", icon: Users },
+  { title: "Categories", href: "/admin/categories", icon: FolderTree },
+  { title: "Sliders", href: "/admin/sliders", icon: ImageIcon },
 ]
 
 const secondaryNavItems: NavItem[] = [
-  { titleKey: "sidebar.analytics", href: "/admin/analytics", icon: BarChart3 },
-  { titleKey: "sidebar.reviews", href: "/admin/reviews", icon: Star },
+  { title: "Analytics", href: "/admin/analytics", icon: BarChart3 },
+  { title: "Reviews", href: "/admin/reviews", icon: Star },
 ]
 
 const bottomNavItems: NavItem[] = [
-  { titleKey: "sidebar.settings", href: "/admin/settings", icon: Settings },
+  { title: "Settings", href: "/admin/settings", icon: Settings },
 ]
 
 export function AdminSidebar() {
   const pathname = usePathname()
-  const { t, dir } = useAdminLanguage()
   const [collapsed, setCollapsed] = useState(false)
 
   const isActive = (href: string) => {
@@ -80,7 +72,7 @@ export function AdminSidebar() {
         )}
       >
         <Icon className={cn("h-5 w-5 shrink-0", active && "text-primary")} />
-        {!collapsed && <span>{t(item.titleKey)}</span>}
+        {!collapsed && <span>{item.title}</span>}
       </Link>
     )
   }
@@ -88,8 +80,7 @@ export function AdminSidebar() {
   return (
     <aside
       className={cn(
-        "fixed inset-y-0 z-50 flex flex-col border-r border-sidebar-border bg-sidebar transition-all duration-300",
-        dir === "rtl" ? "right-0 border-l border-r-0" : "left-0",
+        "fixed inset-y-0 left-0 z-50 flex flex-col border-r border-sidebar-border bg-sidebar transition-all duration-300",
         collapsed ? "w-16" : "w-64"
       )}
     >
@@ -106,12 +97,13 @@ export function AdminSidebar() {
               className="object-contain"
               priority
             />
+            <span className="font-serif italic text-mahogany font-bold">Rhino Admin</span>
           </Link>
         )}
         {collapsed && (
           <Link href="/admin" className="mx-auto">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-              <span className="text-sm font-bold text-primary-foreground">W</span>
+              <span className="text-sm font-bold text-primary-foreground">R</span>
             </div>
           </Link>
         )}
@@ -157,13 +149,10 @@ export function AdminSidebar() {
           className="w-full justify-center"
           onClick={() => setCollapsed(!collapsed)}
         >
-          {dir === "rtl" ? (
-            collapsed ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />
-          ) : (
-            collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />
-          )}
+          {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
         </Button>
       </div>
     </aside>
   )
 }
+

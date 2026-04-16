@@ -32,7 +32,6 @@ import Link from "next/link"
 import { exportItemsExcel, exportItemsPdf } from "@/app/ApiHelper/ExportApi"
 
 export default function ProductsPage() {
-  const { t, language, dir } = useAdminLanguage()
   const [products, setProducts] = useState<Product[]>([])
   const [categories, setCategories] = useState<AdminCategoryDto[]>([])
   const [loading, setLoading] = useState(true)
@@ -90,12 +89,12 @@ export default function ProductsPage() {
       setLoading(true)
       await ApiClient.post(`api/admin/Item/delete-all-items`, {})
       setDeleteAllDialogOpen(false)
-      alert(language === "ar" ? "تم حذف جميع المنتجات بنجاح" : "All products deleted successfully")
+      alert("All products deleted successfully")
       await fetchProducts()
     } catch (err: any) {
       console.error("Failed to delete all products:", err)
       const errorMsg = err.message || JSON.stringify(err)
-      alert((language === "ar" ? "فشل الحذف: " : "Delete failed: ") + errorMsg)
+      alert("Delete failed: " + errorMsg)
     } finally {
       setLoading(false)
     }
@@ -103,50 +102,48 @@ export default function ProductsPage() {
 
   const getStatusBadge = (status: Product["status"]) => {
     const statusConfig = {
-      active: { variant: "default" as const, labelEn: "Active", labelAr: "نشط", className: "bg-emerald-500" },
-      inactive: { variant: "secondary" as const, labelEn: "Inactive", labelAr: "غير نشط", className: "" },
-      draft: { variant: "outline" as const, labelEn: "Draft", labelAr: "مسودة", className: "" },
+      active: { variant: "default" as const, label: "Active", className: "bg-emerald-500" },
+      inactive: { variant: "secondary" as const, label: "Inactive", className: "" },
+      draft: { variant: "outline" as const, label: "Draft", className: "" },
     }
-    const config = statusConfig[status]
+    const config = statusConfig[status] || statusConfig.active
     return (
       <Badge variant={config.variant} className={config.className}>
-        {language === "ar" ? config.labelAr : config.labelEn}
+        {config.label}
       </Badge>
     )
   }
 
   const formatCurrency = (amount: number) => {
-    return `${amount.toLocaleString()} ${t("common.egp")}`
+    return `${amount.toLocaleString()} EGP`
   }
 
   const columns = [
     {
       key: "product",
-      header: t("products.productName"),
+      header: "Product Name",
       render: (product: Product) => (
-        <div className={cn("flex items-center gap-3", dir === "rtl" && "flex-row-reverse")}>
+        <div className="flex items-center gap-3">
           <div className="relative h-12 w-12 overflow-hidden rounded-lg bg-muted shrink-0">
             <Image
               src={getImageUrl(product.mainImage || product.images[0])}
-              alt={language === "ar" ? product.nameAr : product.nameEn}
+              alt={product.nameEn}
               fill
               className="object-cover"
             />
           </div>
-          <div className={cn(dir === "rtl" && "text-right")}>
+          <div>
             <p className="font-medium">
-              {language === "ar" ? product.nameAr : product.nameEn}
+              {product.nameEn}
             </p>
             {product.colorsEn && product.colorsEn.trim().length > 0 && (
               <p className="text-sm text-muted-foreground">
-                {language === "ar" ? "الألوان: " : "Colors: "}
-                {language === "ar" ? product.colorsAr : product.colorsEn}
+                Colors: {product.colorsEn}
               </p>
             )}
             {product.materialEn && product.materialEn.trim().length > 0 && (
               <p className="text-sm text-muted-foreground">
-                {language === "ar" ? "المادة: " : "Material: "}
-                {language === "ar" ? product.materialAr : product.materialEn}
+                Material: {product.materialEn}
               </p>
             )}
           </div>
@@ -155,18 +152,18 @@ export default function ProductsPage() {
     },
     {
       key: "category",
-      header: t("products.category"),
+      header: "Category",
       render: (product: Product) => {
         const category = categories.find((cat) => cat.id === product.categoryId)
-        const label = language === "ar" ? category?.nameAr : category?.nameEn
+        const label = category?.nameEn
         return <span className="text-muted-foreground">{label || product.category}</span>
       },
     },
     {
       key: "price",
-      header: t("products.price"),
+      header: "Price",
       render: (product: Product) => (
-        <div className={cn(dir === "rtl" && "text-right")}>
+        <div>
           <p className="font-medium">{formatCurrency(product.price)}</p>
           {product.originalPrice && (
             <p className="text-sm text-muted-foreground line-through">
@@ -178,7 +175,7 @@ export default function ProductsPage() {
     },
     {
       key: "stock",
-      header: t("products.stock"),
+      header: "Stock",
       render: (product: Product) => (
         <span
           className={cn(
@@ -192,12 +189,12 @@ export default function ProductsPage() {
     },
     {
       key: "status",
-      header: t("products.status"),
+      header: "Status",
       render: (product: Product) => getStatusBadge(product.status),
     },
     {
       key: "actions",
-      header: t("common.actions"),
+      header: "Actions",
       render: (product: Product) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -206,25 +203,25 @@ export default function ProductsPage() {
               <span className="sr-only">Actions</span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align={dir === "rtl" ? "start" : "end"}>
+          <DropdownMenuContent align="end">
             <DropdownMenuItem asChild>
               <Link href={`/admin/products/${product.id}`}>
-                <Eye className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-                {t("common.view")}
+                <Eye className="h-4 w-4 mr-2" />
+                View
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href={`/admin/products/${product.id}/edit`}>
-                <Pencil className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-                {t("common.edit")}
+                <Pencil className="h-4 w-4 mr-2" />
+                Edit
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem
               className="text-destructive"
               onClick={() => handleDelete(product)}
             >
-              <Trash2 className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-              {t("products.deleteProduct")}
+              <Trash2 className="h-4 w-4 mr-2" />
+              Delete Product
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -237,46 +234,41 @@ export default function ProductsPage() {
     <div className="space-y-6">
       {/* Page Header */}
       <div
-        className={cn(
-          "flex items-center justify-between",
-          dir === "rtl" && "flex-row-reverse"
-        )}
+        className="flex items-center justify-between"
       >
-        <div className={cn(dir === "rtl" && "text-right")}>
-          <h1 className="text-2xl font-bold tracking-tight">{t("products.title")}</h1>
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Products Management</h1>
           <p className="text-muted-foreground">
-            {language === "ar"
-              ? `إدارة ${products.length} منتج`
-              : `Manage ${products.length} products`}
+            Manage {products.length} products
           </p>
         </div>
         <div className="flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline">
-                <Download className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-                {language === "ar" ? "تصدير" : "Export"}
+                <Download className="h-4 w-4 mr-2" />
+                Export
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => exportItemsExcel()}>
-                {language === "ar" ? "تصدير إلى Excel" : "Export to Excel"}
+                Export to Excel
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => exportItemsPdf()}>
-                {language === "ar" ? "تصدير إلى PDF" : "Export to PDF"}
+                Export to PDF
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           {products.length > 0 && (
             <Button variant="destructive" onClick={() => setDeleteAllDialogOpen(true)}>
-              <Trash2 className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-              {language === "ar" ? "حذف الكل" : "Delete All"}
+              <Trash2 className="h-4 w-4 mr-2" />
+              Delete All
             </Button>
           )}
           <Button asChild>
-            <Link href="/admin/products/new" className={cn("flex items-center gap-2", dir === "rtl" && "flex-row-reverse")}>
+            <Link href="/admin/products/new" className="flex items-center gap-2">
               <Plus className="h-4 w-4" />
-              {t("products.addProduct")}
+              Add Product
             </Link>
           </Button>
         </div>
@@ -287,13 +279,13 @@ export default function ProductsPage() {
         <CardContent className="pt-6">
           {loading ? (
             <div className="flex justify-center items-center h-48 text-muted-foreground animate-pulse">
-              {language === "ar" ? "جاري التحميل..." : "Loading products..."}
+              Loading products...
             </div>
           ) : (
             <DataTable
               data={products}
               columns={columns}
-              searchPlaceholder={language === "ar" ? "البحث عن منتج..." : "Search products..."}
+              searchPlaceholder="Search products..."
               searchKey="nameEn"
             />
           )}
@@ -304,22 +296,20 @@ export default function ProductsPage() {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle className={cn(dir === "rtl" && "text-right")}>
-              {t("products.deleteProduct")}
+            <AlertDialogTitle>
+              Delete Product
             </AlertDialogTitle>
-            <AlertDialogDescription className={cn(dir === "rtl" && "text-right")}>
-              {language === "ar"
-                ? `هل أنت متأكد من حذف "${productToDelete?.nameAr}"؟ لا يمكن التراجع عن هذا الإجراء.`
-                : `Are you sure you want to delete "${productToDelete?.nameEn}"? This action cannot be undone.`}
+            <AlertDialogDescription>
+              Are you sure you want to delete &quot;{productToDelete?.nameEn}&quot;? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className={cn(dir === "rtl" && "flex-row-reverse")}>
-            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDelete}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              {t("products.deleteProduct")}
+              Delete Product
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -329,22 +319,20 @@ export default function ProductsPage() {
       <AlertDialog open={deleteAllDialogOpen} onOpenChange={setDeleteAllDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle className={cn(dir === "rtl" && "text-right")}>
-              {language === "ar" ? "حذف جميع المنتجات" : "Delete All Products"}
+            <AlertDialogTitle>
+              Delete All Products
             </AlertDialogTitle>
-            <AlertDialogDescription className={cn(dir === "rtl" && "text-right")}>
-              {language === "ar"
-                ? "هل أنت متأكد من حذف جميع المنتجات؟ لا يمكن التراجع عن هذا الإجراء."
-                : "Are you sure you want to delete all products? This action cannot be undone."}
+            <AlertDialogDescription>
+              Are you sure you want to delete all products? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className={cn(dir === "rtl" && "flex-row-reverse")}>
-            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDeleteAll}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              {language === "ar" ? "حذف الكل" : "Delete All"}
+              Delete All
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -352,3 +340,4 @@ export default function ProductsPage() {
     </div>
   )
 }
+

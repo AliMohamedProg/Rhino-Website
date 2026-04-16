@@ -46,8 +46,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>()); // registers profiles from Bl.Mapping
 
 //Context
-builder.Services.AddDbContext<WoodDecorContext>(options =>
-       options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<WoodDecorContext>(options => 
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
@@ -172,7 +172,7 @@ app.MapControllers();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-    using (var scope = app.Services.CreateScope())
+using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();

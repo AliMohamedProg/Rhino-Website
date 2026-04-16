@@ -2,7 +2,6 @@
 
 import { useEffect, useState, type FormEvent } from "react"
 import { useRouter } from "next/navigation"
-import { useAdminLanguage } from "@/context/admin-language-context"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
 import { cn, getImageUrl } from "@/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -29,7 +28,6 @@ interface ProductFormProps {
 }
 
 export function ProductForm({ product, mode }: ProductFormProps) {
-  const { t, language, dir } = useAdminLanguage()
   const router = useRouter()
 
   const buildInitialImages = (item?: Product) => {
@@ -41,9 +39,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
 
   const [formData, setFormData] = useState({
     nameEn: product?.nameEn || "",
-    nameAr: product?.nameAr || "",
     descriptionEn: product?.descriptionEn || "",
-    descriptionAr: product?.descriptionAr || "",
     price: product?.originalPrice ?? product?.price ?? 0,
     discountAmount: product?.discountAmount ?? 0,
     stock: product?.stock || 0,
@@ -51,9 +47,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     images: buildInitialImages(product),
     mainImage: product?.mainImage || product?.images?.[0] || "",
     colorsEn: product?.colorsEn || "",
-    colorsAr: product?.colorsAr || "",
     materialEn: product?.materialEn || "",
-    materialAr: product?.materialAr || "",
   })
 
   const [categories, setCategories] = useState<AdminCategoryDto[]>([])
@@ -64,9 +58,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     if (!product) return
     setFormData({
       nameEn: product.nameEn || "",
-      nameAr: product.nameAr || "",
       descriptionEn: product.descriptionEn || "",
-      descriptionAr: product.descriptionAr || "",
       price: product.originalPrice ?? product.price ?? 0,
       discountAmount: product.discountAmount ?? 0,
       stock: product.stock || 0,
@@ -74,9 +66,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
       images: buildInitialImages(product),
       mainImage: product.mainImage || product.images?.[0] || "",
       colorsEn: product?.colorsEn || "",
-      colorsAr: product?.colorsAr || "",
       materialEn: product?.materialEn || "",
-      materialAr: product?.materialAr || "",
     })
   }, [product])
 
@@ -98,9 +88,16 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     setIsSubmitting(true)
 
     try {
+      if (!formData.categoryId) {
+        alert("Please select a category")
+        setIsSubmitting(false)
+        return
+      }
+
       const mainImage = formData.mainImage || formData.images[0] || ""
       if (!mainImage) {
-        alert(language === "ar" ? "يرجى رفع صورة رئيسية" : "Please upload a main image")
+        alert("Please upload a main image")
+        setIsSubmitting(false)
         return
       }
 
@@ -111,36 +108,32 @@ export function ProductForm({ product, mode }: ProductFormProps) {
       const currentState =
         mode === "edit" && product?.status === "inactive" ? 0 : 1
       const colorsCheckEn = validateColorsInputEn(formData.colorsEn)
-      const colorsCheckAr = validateColorsInputAr(formData.colorsAr)
-      if (!colorsCheckEn.valid || !colorsCheckAr.valid) {
-        alert(
-          language === "ar"
-            ? "يرجى إدخال الألوان بهذا الشكل الصحيح: لون,لون,لون"
-            : "Please enter colors in the correct format: color,color,color"
-        )
+      if (!colorsCheckEn.valid) {
+        alert("Please enter colors in the correct format: color,color,color")
+        setIsSubmitting(false)
         return
       }
 
       const materialValEn = (formData.materialEn || "").trim()
-      const materialValAr = (formData.materialAr || "").trim()
       const payload = {
-        id: product?.id,
+        id: product?.id || "00000000-0000-0000-0000-000000000000",
         nameEn: formData.nameEn,
-        nameAr: formData.nameAr,
+        nameAr: "", // Removed from form
         descriptionEn: formData.descriptionEn,
-        descriptionAr: formData.descriptionAr,
+        descriptionAr: "", // Removed from form
         price: formData.price,
         discountAmount,
         stockNumber: formData.stock,
         categoryId: formData.categoryId,
         colorsEn: colorsCheckEn.normalized,
-        colorsAr: colorsCheckAr.normalized,
+        colorsAr: "", // Removed from form
         materialEn: materialValEn,
-        materialAr: materialValAr,
+        materialAr: "", // Removed from form
         mainImage,
         images: formData.images.map((url) => ({ imageUrl: url })),
         currentState,
       }
+
 
       if (mode === "create") {
         await ApiClient.post("api/admin/Item/add-item", payload)
@@ -168,7 +161,8 @@ export function ProductForm({ product, mode }: ProductFormProps) {
       const uploadedUrls: string[] = []
       for (const file of Array.from(files)) {
         const uploadRes = await ApiClient.upload("api/Upload", file)
-        if (uploadRes?.url) uploadedUrls.push(uploadRes.url)
+        const url = uploadRes?.url || uploadRes?.imageUrl || uploadRes
+        if (url) uploadedUrls.push(url)
       }
 
       if (uploadedUrls.length) {
@@ -232,64 +226,40 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     return { valid: true, normalized: parts.join(",") }
   }
 
-  const validateColorsInputAr = (value: string) => {
-    const standardizedStr = value.replace(/،/g, ",")
-    const trimmed = standardizedStr.trim()
-    if (!trimmed) return { valid: true, normalized: "" }
-    const parts = trimmed.split(",").map((part) => part.trim())
-    const hasEmpty = parts.some((part) => part.length === 0)
-    // Allows Arabic letters, numbers, hyphens, and spaces separated by commas
-    const regex = /^[\u0600-\u06FF\s0-9\-]+(,[\u0600-\u06FF\s0-9\-]+)*$/
-    if (hasEmpty || !regex.test(trimmed)) return { valid: false, normalized: trimmed }
-    return { valid: true, normalized: parts.join(",") }
-  }
-
   const colorsValidationEn = validateColorsInputEn(formData.colorsEn || "")
   const showColorsErrorEn = formData.colorsEn.trim().length > 0 && !colorsValidationEn.valid
-
-  const colorsValidationAr = validateColorsInputAr(formData.colorsAr || "")
-  const showColorsErrorAr = formData.colorsAr.trim().length > 0 && !colorsValidationAr.valid
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Header */}
-      <div
-        className={cn(
-          "flex items-center justify-between",
-          dir === "rtl" && "flex-row-reverse"
-        )}
-      >
-        <div className={cn("flex items-center gap-4", dir === "rtl" && "flex-row-reverse")}>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" asChild>
             <Link href="/admin/products">
-              {dir === "rtl" ? <ArrowRight className="h-5 w-5" /> : <ArrowLeft className="h-5 w-5" />}
+              <ArrowLeft className="h-5 w-5" />
             </Link>
           </Button>
-          <div className={cn(dir === "rtl" && "text-right")}>
+          <div>
             <h1 className="text-2xl font-bold tracking-tight">
-              {mode === "create" ? t("products.addProduct") : t("products.editProduct")}
+              {mode === "create" ? "Add Product" : "Edit Product"}
             </h1>
             <p className="text-muted-foreground">
               {mode === "create"
-                ? language === "ar"
-                  ? "إضافة منتج جديد إلى المتجر"
-                  : "Add a new product to your store"
-                : language === "ar"
-                  ? "تعديل بيانات المنتج"
-                  : "Edit product details"}
+                ? "Add a new product to your store"
+                : "Edit product details"}
             </p>
           </div>
         </div>
-        <div className={cn("flex items-center gap-2", dir === "rtl" && "flex-row-reverse")}>
+        <div className="flex items-center gap-2">
           <Button variant="outline" type="button" asChild>
-            <Link href="/admin/products">{t("common.cancel")}</Link>
+            <Link href="/admin/products">Cancel</Link>
           </Button>
           <Button type="submit" disabled={isSubmitting || isUploading}>
             {isSubmitting
-              ? t("common.loading")
+              ? "Saving..."
               : mode === "create"
-                ? t("products.addProduct")
-                : t("common.save")}
+                ? "Add Product"
+                : "Save Changes"}
           </Button>
         </div>
       </div>
@@ -300,52 +270,28 @@ export function ProductForm({ product, mode }: ProductFormProps) {
           {/* Basic Information */}
           <Card>
             <CardHeader>
-              <CardTitle className={cn(dir === "rtl" && "text-right")}>
-                {language === "ar" ? "المعلومات الأساسية" : "Basic Information"}
+              <CardTitle>
+                Basic Information
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="nameEn">{t("products.productNameEn")}</Label>
-                  <Input
-                    id="nameEn"
-                    value={formData.nameEn}
-                    onChange={(e) => handleChange("nameEn", e.target.value)}
-                    placeholder="Enter product name in English"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="nameAr">{t("products.productNameAr")}</Label>
-                  <Input
-                    id="nameAr"
-                    value={formData.nameAr}
-                    onChange={(e) => handleChange("nameAr", e.target.value)}
-                    placeholder="أدخل اسم المنتج بالعربية"
-                    dir="rtl"
-                    required
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="nameEn">Product Name</Label>
+                <Input
+                  id="nameEn"
+                  value={formData.nameEn}
+                  onChange={(e) => handleChange("nameEn", e.target.value)}
+                  placeholder="Enter product name"
+                  required
+                />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="descriptionEn">{t("products.descriptionEn")}</Label>
+                <Label htmlFor="descriptionEn">Description</Label>
                 <Textarea
                   id="descriptionEn"
                   value={formData.descriptionEn}
                   onChange={(e) => handleChange("descriptionEn", e.target.value)}
-                  placeholder="Enter product description in English"
-                  rows={4}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="descriptionAr">{t("products.descriptionAr")}</Label>
-                <Textarea
-                  id="descriptionAr"
-                  value={formData.descriptionAr}
-                  onChange={(e) => handleChange("descriptionAr", e.target.value)}
-                  placeholder="أدخل وصف المنتج بالعربية"
-                  dir="rtl"
+                  placeholder="Enter product description"
                   rows={4}
                 />
               </div>
@@ -355,14 +301,14 @@ export function ProductForm({ product, mode }: ProductFormProps) {
           {/* Pricing */}
           <Card>
             <CardHeader>
-              <CardTitle className={cn(dir === "rtl" && "text-right")}>
-                {language === "ar" ? "التسعير" : "Pricing"}
+              <CardTitle>
+                Pricing & Inventory
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="space-y-2">
-                  <Label htmlFor="price">{t("products.price")} (EGP)</Label>
+                  <Label htmlFor="price">Price (EGP)</Label>
                   <Input
                     id="price"
                     type="number"
@@ -374,7 +320,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="discountAmount">
-                    {language === "ar" ? "الخصم (%)" : "Discount (%)"}
+                    Discount (%)
                   </Label>
                   <Input
                     id="discountAmount"
@@ -391,7 +337,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="stock">{t("products.stock")}</Label>
+                  <Label htmlFor="stock">Stock Quantity</Label>
                   <Input
                     id="stock"
                     type="number"
@@ -405,7 +351,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="space-y-2 sm:col-span-1">
                   <Label htmlFor="priceAfterDiscount">
-                    {language === "ar" ? "السعر بعد الخصم" : "Price After Discount"}
+                    Price After Discount
                   </Label>
                   <Input
                     id="priceAfterDiscount"
@@ -421,12 +367,12 @@ export function ProductForm({ product, mode }: ProductFormProps) {
           {/* Images */}
           <Card>
             <CardHeader>
-              <CardTitle className={cn(dir === "rtl" && "text-right")}>
-                {t("products.images")}
+              <CardTitle>
+                Product Images
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Input
+              <input
                 id="product-images-upload"
                 type="file"
                 accept="image/*"
@@ -443,10 +389,10 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                     <Image src={getImageUrl(image)} alt={`Product ${index + 1}`} fill className="object-cover" />
                     {image === formData.mainImage && (
                       <span className="absolute left-2 top-2 rounded bg-primary px-2 py-0.5 text-xs text-primary-foreground">
-                        {language === "ar" ? "رئيسية" : "Main"}
+                        Main
                       </span>
                     )}
-                    <div className={cn("absolute bottom-2 left-2 flex items-center gap-2", dir === "rtl" && "right-2 left-auto")}>
+                    <div className="absolute bottom-2 left-2 flex items-center gap-2">
                       {image !== formData.mainImage && (
                         <Button
                           type="button"
@@ -455,7 +401,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                           className="h-6 px-2 text-xs"
                           onClick={() => handleSetMainImage(image)}
                         >
-                          {language === "ar" ? "تعيين رئيسية" : "Set Main"}
+                          Set Main
                         </Button>
                       )}
                       <Button
@@ -477,8 +423,8 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                   <Upload className="h-8 w-8 text-muted-foreground" />
                   <span className="text-sm text-muted-foreground">
                     {isUploading
-                      ? language === "ar" ? "جاري الرفع..." : "Uploading..."
-                      : language === "ar" ? "رفع صور" : "Upload Images"}
+                      ? "Uploading..."
+                      : "Upload Images"}
                   </span>
                 </label>
               </div>
@@ -491,24 +437,24 @@ export function ProductForm({ product, mode }: ProductFormProps) {
           {/* Organization */}
           <Card>
             <CardHeader>
-              <CardTitle className={cn(dir === "rtl" && "text-right")}>
-                {language === "ar" ? "التنظيم" : "Organization"}
+              <CardTitle>
+                Organization
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="category">{t("products.category")}</Label>
+                <Label htmlFor="category">Category</Label>
                 <Select
                   value={formData.categoryId}
                   onValueChange={(value) => handleChange("categoryId", value)}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder={language === "ar" ? "اختر الفئة" : "Select category"} />
+                    <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                   <SelectContent>
                     {categories.map((category) => (
                       <SelectItem key={category.id} value={category.id}>
-                        {language === "ar" ? category.nameAr : category.nameEn}
+                        {category.nameEn}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -516,7 +462,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="colorsEn">
-                  {language === "ar" ? "الألوان باللغة الإنجليزية" : "Colors English Name"}
+                  Colors
                 </Label>
                 <Input
                   id="colorsEn"
@@ -527,54 +473,24 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                 />
                 {showColorsErrorEn && (
                   <p className="text-xs text-destructive">
-                    {language === "ar"
-                      ? "الصيغة الإنجليزية غير صحيحة. الصيغة الصحيحة: لون,لون,لون"
-                      : "English format is invalid. Format: color,color,color"}
+                    Format: color,color,color
                   </p>
                 )}
-                <Label htmlFor="colorsAr">
-                  {language === "ar" ? "الألوان باللغة العربية" : "Colors Arabic Name"}
-                </Label>
-                <Input
-                  id="colorsAr"
-                  value={formData.colorsAr}
-                  onChange={(e) => handleChange("colorsAr", e.target.value)}
-                  placeholder="أحمر,أزرق,أخضر"
-                  aria-invalid={showColorsErrorAr}
-                />
-                {showColorsErrorAr && (
-                  <p className="text-xs text-destructive">
-                    {language === "ar"
-                      ? "الصيغة العربية غير صحيحة. الصيغة الصحيحة: لون,لون,لون"
-                      : "Arabic format is invalid. Format: color,color,color"}
-                  </p>
-                )}
-                {!showColorsErrorEn && !showColorsErrorAr && (
+                {!showColorsErrorEn && (
                   <p className="text-xs text-muted-foreground">
-                    {language === "ar"
-                      ? "افصل كل لون بفاصلة."
-                      : "Separate each color with a comma."}
+                    Separate each color with a comma.
                   </p>
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="material">
-                  {language === "ar" ? "الخامة باللغة الإنجليزية" : "Material English Name"}
+                <Label htmlFor="materialEn">
+                  Material
                 </Label>
                 <Input
-                  id="material"
+                  id="materialEn"
                   value={formData.materialEn}
                   onChange={(e) => handleChange("materialEn", e.target.value)}
                   placeholder="Enter material (e.g. Wood)"
-                />
-                <Label htmlFor="material">
-                  {language === "ar" ? "الخامة باللغة العربية" : "Material Arabic Name"}
-                </Label>
-                <Input
-                  id="material"
-                  value={formData.materialAr}
-                  onChange={(e) => handleChange("materialAr", e.target.value)}
-                  placeholder="أدخل الخامة (مثال: خشب)"
                 />
               </div>
 
@@ -585,3 +501,4 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     </form>
   )
 }
+

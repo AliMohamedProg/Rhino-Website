@@ -13,6 +13,7 @@ type User = {
 
 type AuthContextType = {
   user: User | null
+  isAuthenticated: boolean
   loading: boolean
   logout: () => Promise<void>
   refreshUser: () => Promise<void>
@@ -26,17 +27,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const fetchUser = async () => {
     try {
-      const data = await ApiClient.get("api/auth/me")
+      const data = await ApiClient.auth.me()
       // Map backend response to user object
-      // Falling back to "Admin" role if the email matches the seed admin
-      const isAdminEmail = data.userName === "admin@gmail.com" || data.email === "admin@gmail.com";
+      // Handle both PascalCase (Swagger) and camelCase (JS usual) and the previous userId/userName structure
+      const userEmail = data.email || data.Email || data.userName || data.UserName;
+      const isAdminEmail = userEmail === "admin@gmail.com";
 
       setUser({
-        id: data.userId,
-        userName: data.userName,
-        email: data.email || data.userName,
-        role: data.role || (isAdminEmail ? "Admin" : "User"),
-        isAdmin: data.isAdmin || isAdminEmail
+        id: data.id || data.Id || data.userId || data.UserId || "",
+        userName: data.fullName || data.fullNameEn || data.userName || data.UserName || userEmail || "User",
+        email: userEmail || "",
+        role: data.role || data.Role || (isAdminEmail ? "Admin" : "User"),
+        isAdmin: (data.role || data.Role || "").toLowerCase() === "admin" || isAdminEmail
       })
     } catch {
       setUser(null)
@@ -45,18 +47,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+
   useEffect(() => {
     fetchUser()
   }, [])
 
   const logout = async () => {
-    await ApiClient.post("api/auth/logout", {})
+    try {
+      await ApiClient.auth.logout()
+    } catch (err) {
+      console.error("Logout failed:", err)
+    }
     setUser(null)
   }
   return (
     <AuthContext.Provider
       value={{
         user,
+        isAuthenticated: !!user,
         loading,
         logout,
         refreshUser: fetchUser,
@@ -66,6 +74,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     </AuthContext.Provider>
   )
 }
+
 
 export function useAuth() {
   const ctx = useContext(AuthContext)

@@ -3,8 +3,6 @@
 import React from "react"
 
 import { useState } from "react"
-import { useAdminLanguage } from "@/context/admin-language-context"
-import { cn } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import {
@@ -23,6 +21,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 interface Column<T> {
   key: string
@@ -48,7 +47,6 @@ export function DataTable<T extends { id: string }>({
   pageSize = 10,
   onRowClick,
 }: DataTableProps<T>) {
-  const { t, dir } = useAdminLanguage()
   const [searchQuery, setSearchQuery] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(pageSize)
@@ -56,12 +54,12 @@ export function DataTable<T extends { id: string }>({
   // Filter data based on search
   const filteredData = searchKey
     ? data.filter((item) => {
-        const value = item[searchKey]
-        if (typeof value === "string") {
-          return value.toLowerCase().includes(searchQuery.toLowerCase())
-        }
-        return true
-      })
+      const value = item[searchKey]
+      if (typeof value === "string") {
+        return value.toLowerCase().includes(searchQuery.toLowerCase())
+      }
+      return true
+    })
     : data
 
   // Pagination
@@ -77,22 +75,19 @@ export function DataTable<T extends { id: string }>({
   return (
     <div className="space-y-4">
       {/* Search and Filters */}
-      <div className={cn("flex items-center gap-4", dir === "rtl" && "flex-row-reverse")}>
+      <div className="flex items-center gap-4">
         <div className="relative flex-1 max-w-sm">
           <Search
-            className={cn(
-              "absolute top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground",
-              dir === "rtl" ? "right-3" : "left-3"
-            )}
+            className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground"
           />
           <Input
-            placeholder={searchPlaceholder || t("common.searchPlaceholder")}
+            placeholder={searchPlaceholder || "Search..."}
             value={searchQuery}
             onChange={(e) => {
               setSearchQuery(e.target.value)
               setCurrentPage(1)
             }}
-            className={cn(dir === "rtl" ? "pr-9" : "pl-9")}
+            className="pl-9"
           />
         </div>
         <Select
@@ -106,10 +101,10 @@ export function DataTable<T extends { id: string }>({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="5">5 / {t("common.page")}</SelectItem>
-            <SelectItem value="10">10 / {t("common.page")}</SelectItem>
-            <SelectItem value="20">20 / {t("common.page")}</SelectItem>
-            <SelectItem value="50">50 / {t("common.page")}</SelectItem>
+            <SelectItem value="5">5 / page</SelectItem>
+            <SelectItem value="10">10 / page</SelectItem>
+            <SelectItem value="20">20 / page</SelectItem>
+            <SelectItem value="50">50 / page</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -123,7 +118,7 @@ export function DataTable<T extends { id: string }>({
                 <TableHead
                   key={column.key}
                   className={cn(
-                    dir === "rtl" ? "text-right" : "text-left",
+                    "text-left",
                     column.className
                   )}
                 >
@@ -136,7 +131,7 @@ export function DataTable<T extends { id: string }>({
             {paginatedData.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                  {t("common.noData")}
+                  No data found
                 </TableCell>
               </TableRow>
             ) : (
@@ -153,7 +148,7 @@ export function DataTable<T extends { id: string }>({
                     <TableCell
                       key={column.key}
                       className={cn(
-                        dir === "rtl" ? "text-right" : "text-left",
+                        "text-left",
                         column.className
                       )}
                     >
@@ -170,24 +165,18 @@ export function DataTable<T extends { id: string }>({
       </div>
 
       {/* Pagination */}
-      <div
-        className={cn(
-          "flex items-center justify-between",
-          dir === "rtl" && "flex-row-reverse"
-        )}
-      >
+      <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          {t("common.showing")} {startIndex + 1}-{Math.min(endIndex, filteredData.length)}{" "}
-          {t("common.of")} {filteredData.length} {t("common.entries")}
+          Showing {startIndex + 1}-{Math.min(endIndex, filteredData.length)} of {filteredData.length} entries
         </p>
-        <div className={cn("flex items-center gap-2", dir === "rtl" && "flex-row-reverse")}>
+        <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="icon"
             onClick={() => goToPage(1)}
             disabled={currentPage === 1}
           >
-            {dir === "rtl" ? <ChevronsRight className="h-4 w-4" /> : <ChevronsLeft className="h-4 w-4" />}
+            <ChevronsLeft className="h-4 w-4" />
           </Button>
           <Button
             variant="outline"
@@ -195,10 +184,10 @@ export function DataTable<T extends { id: string }>({
             onClick={() => goToPage(currentPage - 1)}
             disabled={currentPage === 1}
           >
-            {dir === "rtl" ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+            <ChevronLeft className="h-4 w-4" />
           </Button>
           <span className="text-sm">
-            {t("common.page")} {currentPage} {t("common.of")} {totalPages || 1}
+            Page {currentPage} of {totalPages || 1}
           </span>
           <Button
             variant="outline"
@@ -206,7 +195,7 @@ export function DataTable<T extends { id: string }>({
             onClick={() => goToPage(currentPage + 1)}
             disabled={currentPage >= totalPages}
           >
-            {dir === "rtl" ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+            <ChevronRight className="h-4 w-4" />
           </Button>
           <Button
             variant="outline"
@@ -214,7 +203,7 @@ export function DataTable<T extends { id: string }>({
             onClick={() => goToPage(totalPages)}
             disabled={currentPage >= totalPages}
           >
-            {dir === "rtl" ? <ChevronsLeft className="h-4 w-4" /> : <ChevronsRight className="h-4 w-4" />}
+            <ChevronsRight className="h-4 w-4" />
           </Button>
         </div>
       </div>

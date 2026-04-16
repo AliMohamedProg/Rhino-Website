@@ -2,14 +2,16 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { Trash2, Minus, Plus, ShoppingBag } from "lucide-react"
-import { Header } from "@/components/layout/header"
+import { Trash2, Minus, Plus, ShoppingBag, ArrowRight, CreditCard, ShieldCheck } from "lucide-react"
+import { Navbar } from "@/components/layout/Navbar"
 import { Footer } from "@/components/layout/footer"
 import { useLanguage } from "@/context/language-context"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import { formatPrice } from "@/lib/products"
 import { useEffect, useState } from "react"
+import { ApiClient } from "@/app/ApiHelper/ApiClient"
+import { getImageUrl } from "@/lib/utils"
 
 interface CartItem {
   id: string
@@ -36,93 +38,35 @@ export default function CartPage() {
   const [error, setError] = useState<string | null>(null)
   const [stockByItemId, setStockByItemId] = useState<Record<string, number>>({})
 
-  const normalizeCart = (data: any): Cart => {
-    const rawItems = data?.items ?? data?.Items ?? []
-    const items: CartItem[] = (rawItems as any[]).map((item) => ({
-      id: item.id ?? item.Id ?? "",
-      itemId: item.itemId ?? item.ItemId ?? item.productId ?? item.ProductId ?? "",
-      nameEn: item.nameEn ?? item.NameEn ?? "",
-      nameAr: item.nameAr ?? item.NameAr ?? "",
-      image: item.image ?? item.Image ?? "",
-      price: Number(item.price ?? item.Price ?? 0),
-      quantity: Number(item.quantity ?? item.Quantity ?? 1),
-      total: Number(item.total ?? item.Total ?? 0),
-      color: item.color ?? item.Color ?? "",
-    }))
-
-    return {
-      id: data?.id ?? data?.Id ?? "",
-      items,
-      cartTotal: Number(data?.cartTotal ?? data?.CartTotal ?? 0),
-    }
-  }
-
-  const toNumber = (value: unknown) => {
-    if (typeof value === "number") return Number.isFinite(value) ? value : 0
-    if (typeof value === "string") {
-      const cleaned = value.replace(/,/g, "")
-      const parsed = Number(cleaned)
-      return Number.isFinite(parsed) ? parsed : 0
-    }
-    return 0
-  }
-
-  const formatMoney = (amount: number) => {
-    const numeric = toNumber(amount)
-    const value = Math.round(numeric)
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-  }
-
-  // ====== Fetch Cart ======
   const fetchCart = async () => {
     try {
       setLoading(true)
-      const res = await fetch("https://localhost:7282/api/Cart", {
-        credentials: "include"
-      })
-
-      console.log("Cart API response status:", res.status)
-
-      if (!res.ok) {
-        if (res.status === 401) {
-          setError(language === "ar" ? "يرجى تسجيل الدخول" : "Please login")
-        } else {
-          setError(`Error: ${res.status}`)
-        }
-        return
-      }
-
-      const data = await res.json()
-      console.log("Cart API response data:", data)
-      const normalized = normalizeCart(data)
-      setCart(normalized)
-      if (normalized.items.length > 0) {
+      const data = await ApiClient.get<Cart>("api/Cart")
+      setCart(data)
+      
+      if (data.items.length > 0) {
         const stocks = await Promise.all(
-          normalized.items.map(async (item) => {
-            if (!item.itemId) return null
+          data.items.map(async (item) => {
             try {
-              const res = await fetch(`https://localhost:7282/api/Items/${item.itemId}`)
-              if (!res.ok) return null
-              const itemData = await res.json()
-              const stock = Number(itemData.stockNumber ?? itemData.StockNumber ?? 0)
-              return { id: item.itemId, stock: Number.isFinite(stock) ? stock : 0 }
+              const itemData: any = await ApiClient.get(`api/Items/${item.itemId}`)
+              return { id: item.itemId, stock: itemData.stockNumber ?? 0 }
             } catch {
               return null
             }
           })
         )
-        setStockByItemId((prev) => {
-          const next = { ...prev }
-          stocks.forEach((entry) => {
-            if (entry) next[entry.id] = entry.stock
-          })
-          return next
-        })
+        const stockMap: Record<string, number> = {}
+        stocks.forEach(s => { if(s) stockMap[s.id] = s.stock })
+        setStockByItemId(stockMap)
       }
       setError(null)
-    } catch (err) {
-      console.error("Failed to fetch cart:", err)
-      setError(language === "ar" ? "فشل في جلب السلة" : "Failed to fetch cart")
+    } catch (err: any) {
+      console.error(err)
+      if (err.message?.includes("401")) {
+        setError("Please login to view your cart")
+      } else {
+        setError("Your cart session is currently unavailable.")
+      }
     } finally {
       setLoading(false)
     }
@@ -130,200 +74,121 @@ export default function CartPage() {
 
   useEffect(() => {
     fetchCart()
-  }, [language])
+  }, [])
 
-  // ====== Add Item ======
-  const addItem = async (productId: string, quantity: number) => {
-    try {
-      const res = await fetch("https://localhost:7282/api/Cart/add-to-cart", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ productId, quantity })
-      })
-      if (res.ok) {
-        const updatedCart = await res.json()
-        const normalized = normalizeCart(updatedCart)
-        setCart(normalized)
-      }
-    } catch (err) {
-      console.error("Failed to add item:", err)
-    }
-  }
-
-  // ====== Update Quantity ======
   const updateQuantity = async (productId: string, quantity: number) => {
-    console.log("updateQuantity called with:", productId, quantity)
-    if (!productId) {
-      console.warn("updateQuantity aborted: missing productId")
-      return
-    }
     if (quantity < 1) return removeItem(productId)
-
     try {
-      console.log("Making API call to:", `https://localhost:7282/api/Cart/items/${productId}`)
-      const res = await fetch(`https://localhost:7282/api/Cart/items/${productId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ quantity })
-      })
-      console.log("Response status:", res.status)
-      if (res.ok) {
-        console.log("Update successful, refreshing cart")
-        fetchCart() // Refresh cart after update
-      } else {
-        console.error("Update failed with status:", res.status)
-      }
+      await ApiClient.patch(`api/Cart/items/${productId}`, { quantity })
+      fetchCart()
     } catch (err) {
-      console.error("Failed to update quantity:", err)
+      console.error(err)
+      toast.error("Failed to update quantity")
     }
   }
 
-  // ====== Remove Item ======
   const removeItem = async (productId: string) => {
     try {
-      const res = await fetch(`https://localhost:7282/api/Cart/item/delete/${productId}`, {
-        method: "DELETE",
-        credentials: "include"
-      })
-      if (res.ok) fetchCart() // Refresh cart after deletion
+      await ApiClient.delete(`api/Cart/item/delete/${productId}`)
+      fetchCart()
+      toast.success("Item removed from cart")
     } catch (err) {
-      console.error("Failed to remove item:", err)
+      console.error(err)
+      toast.error("Failed to remove item")
     }
   }
 
   const items = cart?.items || []
-  const subtotal = items.reduce((sum, item) => {
-    const lineTotal = toNumber(item.total)
-    const price = toNumber(item.price)
-    const qty = toNumber(item.quantity)
-    const computed = lineTotal > 0 ? lineTotal : price * qty
-    return sum + computed
-  }, 0)
-  const shipping = subtotal >= 1000 ? 0 : 50
+  const subtotal = cart?.cartTotal || 0
+  const shipping = subtotal >= 5000 ? 0 : 50
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col">
-        <Header />
-        <main className="flex-1 bg-secondary">
-          <div className="container mx-auto px-4 py-8">
-            <div className="flex items-center justify-center h-64">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-            </div>
-          </div>
+      <div className="min-h-screen flex flex-col bg-white">
+        <Navbar />
+        <main className="flex-1 flex items-center justify-center">
+          <div className="w-10 h-10 border-4 border-mahogany border-t-transparent rounded-full animate-spin" />
         </main>
-        <Footer />
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <Header />
-        <main className="flex-1 bg-secondary">
-          <div className="container mx-auto px-4 py-8">
-            <div className="bg-card rounded-lg border border-border p-12 text-center">
-              <ShoppingBag size={64} className="mx-auto text-muted-foreground mb-4" />
-              <h2 className="text-xl font-semibold text-foreground mb-2">{error}</h2>
-              <p className="text-muted-foreground mb-6">
-                {language === "ar" ? "سجل الدخول لاستخدام السلة" : "Login to use the cart"}
-              </p>
-              <Link href="/login">
-                <Button>{language === "ar" ? "تسجيل الدخول" : "Login"}</Button>
-              </Link>
-            </div>
-          </div>
-        </main>
-        <Footer />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-1 bg-secondary">
-        <div className="container mx-auto px-4 py-8">
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-8">{t("cart.title")}</h1>
+    <div className="min-h-screen flex flex-col bg-white">
+      <Navbar />
+      <main className="flex-1 mt-20 pb-20">
+        <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-12">
+          <div className="flex items-end justify-between mb-12">
+            <div>
+              <h1 className="text-5xl font-black text-black tracking-tight italic mb-2">Cart.</h1>
+              <p className="text-taupe text-[11px] font-bold tracking-[0.2em] uppercase">Review your selected pieces</p>
+            </div>
+            <p className="text-sm font-bold text-black">{items.length} {items.length === 1 ? 'Item' : 'Items'}</p>
+          </div>
 
-          {items.length === 0 ? (
-            <div className="bg-card rounded-lg border border-border p-12 text-center">
-              <ShoppingBag size={64} className="mx-auto text-muted-foreground mb-4" />
-              <h2 className="text-xl font-semibold text-foreground mb-2">{t("cart.empty")}</h2>
-              <p className="text-muted-foreground mb-6">
-                {language === "ar" ? "أضف بعض المنتجات لسلتك للبدء" : "Add some products to your cart to get started"}
-              </p>
+          {error || items.length === 0 ? (
+            <div className="bg-gray-50 rounded-[3rem] p-20 text-center border border-gray-100 italic shadow-inner">
+              <ShoppingBag size={48} className="mx-auto text-gray-200 mb-6" />
+              <h2 className="text-2xl font-bold text-black mb-4">
+                {error || "Your cart is currently awaiting your selection."}
+              </h2>
               <Link href="/">
-                <Button>{t("cart.continueShopping")}</Button>
+                <Button className="h-14 rounded-full bg-mahogany px-10 text-[11px] font-bold tracking-widest uppercase hover:scale-105 transition-all">
+                  Browse Collection
+                </Button>
               </Link>
             </div>
           ) : (
-            <div className="grid lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-2 space-y-4">
-                {items.map((item, index) => (
-                  <div key={`${item.id}-${index}`} className="bg-card rounded-lg border border-border p-4 flex gap-4">
-                    <div className="relative w-24 h-24 flex-shrink-0 bg-secondary rounded-lg overflow-hidden">
+            <div className="grid lg:grid-cols-12 gap-16">
+              {/* Product List */}
+              <div className="lg:col-span-8 space-y-10">
+                {items.map((item) => (
+                  <div key={item.id} className="group relative flex flex-col md:flex-row gap-8 pb-10 border-b border-gray-100">
+                    <div className="relative w-full md:w-48 aspect-square bg-gray-50 rounded-[2rem] overflow-hidden border border-gray-50">
                       <Image
-                        src={item.image || "/placeholder.svg"}
-                        alt={language === "ar" ? item.nameAr : item.nameEn}
+                        src={getImageUrl(item.image)}
+                        alt={item.nameEn}
                         fill
-                        className="object-cover"
+                        className="object-contain p-4 group-hover:scale-110 transition-transform duration-700"
                       />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <Link href={`/product/${item.itemId}`}>
-                        <h3 className="font-medium text-foreground hover:text-primary transition-colors line-clamp-2">
-                          {language === "ar" ? (item.nameAr && item.nameAr !== "string" ? item.nameAr : item.nameEn) : item.nameEn}
-                        </h3>
-                      </Link>
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="font-bold text-foreground">
-                          {formatPrice(item.price)} {t("products.price")}
-                        </span>
-                        {item.color && (
-                          <span className="text-sm text-muted-foreground ml-4">
-                            {language === "ar" ? "اللون:" : "Color:"} {item.color}
-                          </span>
-                        )}
+                    
+                    <div className="flex-1 flex flex-col justify-between py-2">
+                      <div className="space-y-1">
+                        <div className="flex justify-between items-start">
+                          <Link href={`/product/${item.itemId}`}>
+                            <h3 className="text-xl font-bold text-black hover:text-mahogany transition-colors">
+                              {item.nameEn}
+                            </h3>
+                          </Link>
+                          <p className="text-xl font-black text-black">{formatPrice(item.price)} EGP</p>
+                        </div>
+                        <p className="text-[11px] font-bold text-taupe tracking-widest uppercase">{item.color || "Standard Finish"}</p>
                       </div>
-                      <div className="flex items-center justify-between mt-3">
-                        <div className="flex items-center border border-border rounded-lg">
+
+                      <div className="flex items-center justify-between mt-8 md:mt-0">
+                        <div className="flex items-center bg-gray-50 rounded-full p-1 border border-gray-100">
                           <button
-                            type="button"
                             onClick={() => updateQuantity(item.itemId, item.quantity - 1)}
-                            className="w-8 h-8 flex items-center justify-center hover:bg-secondary transition-colors"
+                            className="w-10 h-10 flex items-center justify-center hover:bg-white rounded-full transition-all text-black hover:shadow-sm"
                           >
-                            <Minus size={14} />
+                            <Minus size={14} strokeWidth={3} />
                           </button>
-                          <span className="w-10 text-center text-sm font-medium">{item.quantity}</span>
+                          <span className="w-12 text-center text-sm font-black text-black">{item.quantity}</span>
                           <button
-                            type="button"
-                            onClick={() => {
-                              const maxStock = stockByItemId[item.itemId]
-                              if (maxStock && item.quantity >= maxStock) {
-                                toast.error(
-                                  language === "ar"
-                                    ? "لقد وصلت للحد الأقصى للمخزون"
-                                    : "You reached the maximum available stock"
-                                )
-                                return
-                              }
-                              updateQuantity(item.itemId, item.quantity + 1)
-                            }}
-                            className="w-8 h-8 flex items-center justify-center hover:bg-secondary transition-colors"
-                            disabled={!!stockByItemId[item.itemId] && item.quantity >= stockByItemId[item.itemId]}
+                            onClick={() => updateQuantity(item.itemId, item.quantity + 1)}
+                            className="w-10 h-10 flex items-center justify-center hover:bg-white rounded-full transition-all text-black hover:shadow-sm"
+                            disabled={stockByItemId[item.itemId] && item.quantity >= stockByItemId[item.itemId]}
                           >
-                            <Plus size={14} />
+                            <Plus size={14} strokeWidth={3} />
                           </button>
                         </div>
+                        
                         <button
                           onClick={() => removeItem(item.itemId)}
-                          className="text-muted-foreground hover:text-destructive transition-colors"
+                          className="flex items-center gap-2 text-[10px] font-black tracking-widest uppercase text-red-400 hover:text-red-600 transition-colors"
                         >
-                          <Trash2 size={18} />
+                          <Trash2 size={14} /> Remove
                         </button>
                       </div>
                     </div>
@@ -331,43 +196,55 @@ export default function CartPage() {
                 ))}
               </div>
 
-              <div className="lg:col-span-1">
-                <div className="bg-card rounded-lg border border-border p-6 sticky top-24">
-                  <h2 className="text-lg font-semibold text-foreground mb-4">{t("checkout.summary")}</h2>
-                  <div className="space-y-3 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">{t("cart.subtotal")}</span>
-                      <span className="font-medium text-foreground">
-                        {formatMoney(subtotal)} {t("products.price")}
-                      </span>
+              {/* Summary Side */}
+              <div className="lg:col-span-4 lg:sticky lg:top-24 h-fit">
+                <div className="bg-black text-white rounded-[3rem] p-10 shadow-2xl overflow-hidden relative">
+                  {/* Decorative background circle */}
+                  <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/5 rounded-full blur-3xl pointer-events-none" />
+                  
+                  <h2 className="text-2xl font-bold mb-10 italic">Summary.</h2>
+                  
+                  <div className="space-y-6 mb-12">
+                    <div className="flex justify-between items-center opacity-60">
+                      <span className="text-[11px] font-bold tracking-widest uppercase">Subtotal</span>
+                      <span className="text-sm font-bold">{formatPrice(subtotal)} EGP</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">{t("cart.shipping")}</span>
-                      <span className="font-medium text-foreground">
-                        {shipping === 0
-                          ? language === "ar"
-                            ? "مجاني"
-                            : "Free"
-                          : `${formatMoney(shipping)} ${t("products.price")}`}
-                      </span>
+                    <div className="flex justify-between items-center opacity-60">
+                      <span className="text-[11px] font-bold tracking-widest uppercase">Shipping</span>
+                      <span className="text-sm font-bold">{shipping === 0 ? "Complimentary" : `${formatPrice(shipping)} EGP`}</span>
                     </div>
-                    <div className="border-t border-border pt-3 flex justify-between">
-                      <span className="font-semibold text-foreground">{t("cart.total")}</span>
-                      <span className="font-bold text-lg text-foreground">
-                        {formatMoney(subtotal + shipping)} {t("products.price")}
-                      </span>
+                    <div className="pt-6 border-t border-white/10 flex justify-between items-end">
+                      <span className="text-[11px] font-bold tracking-widest uppercase mb-1">Total</span>
+                      <span className="text-4xl font-black text-mahogany">{formatPrice(subtotal + shipping)} EGP</span>
                     </div>
                   </div>
-                  <Link href="/checkout" className="block mt-6">
-                    <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                      {t("cart.checkout")}
-                    </Button>
-                  </Link>
-                  <Link href="/" className="block mt-3">
-                    <Button variant="outline" className="w-full bg-transparent">
-                      {t("cart.continueShopping")}
-                    </Button>
-                  </Link>
+
+                  <div className="space-y-4">
+                    <Link href="/checkout">
+                      <Button className="w-full h-16 rounded-full bg-white text-black hover:bg-mahogany hover:text-white text-[12px] font-black tracking-[0.2em] uppercase transition-all flex items-center justify-center gap-3">
+                        Express Checkout <ArrowRight size={16} />
+                      </Button>
+                    </Link>
+                    <Link href="/">
+                      <Button variant="ghost" className="w-full h-14 rounded-full border border-white/10 hover:bg-white/5 text-[10px] font-bold tracking-widest uppercase transition-all">
+                        Continue Selection
+                      </Button>
+                    </Link>
+                  </div>
+
+                  <div className="mt-10 flex items-center justify-between text-[10px] font-bold text-white/30 tracking-widest uppercase border-t border-white/5 pt-8">
+                     <span>Secure Payment</span>
+                     <div className="flex gap-4">
+                        <CreditCard size={14} />
+                        <ShieldCheck size={14} />
+                     </div>
+                  </div>
+                </div>
+
+                <div className="mt-8 bg-gray-50 rounded-[2rem] p-6 border border-gray-100">
+                    <p className="text-[10px] font-bold text-taupe uppercase tracking-widest leading-relaxed">
+                        Rhino ensures 100% authenticity and lifetime craftsmanship on every piece shipped.
+                    </p>
                 </div>
               </div>
             </div>
@@ -378,6 +255,7 @@ export default function CartPage() {
     </div>
   )
 }
+
 
 
 

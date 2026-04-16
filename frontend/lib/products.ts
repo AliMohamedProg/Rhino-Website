@@ -198,8 +198,13 @@ export function getProductsByCategory(category: string): Product[] {
   return products.filter((p) => p.category === category)
 }
 
-export function formatPrice(price: number): string {
-  return price.toLocaleString()
+export function formatPrice(price: number | string): string {
+  if (typeof price === 'string') {
+    // Remove commas, currency symbols, and spaces before parsing
+    price = price.replace(/[^\d.-]/g, '')
+  }
+  const n = typeof price === 'string' ? parseFloat(price) : price
+  return Math.round(n || 0).toLocaleString("en-US")
 }
 
 // Public Slider API
@@ -214,51 +219,131 @@ export interface PublicSlider {
   createdDate: string
 }
 
-export async function getPublicSliders(): Promise<PublicSlider[]> {
+export interface PublicCategory {
+  id: string
+  nameAr: string
+  nameEn: string
+  imageUrl: string
+  productsCount: number
+}
+
+export interface PublicProduct {
+  id: string
+  nameAr: string
+  nameEn: string
+  descriptionAr: string
+  descriptionEn: string
+  price: number
+  discountAmount?: number
+  mainImage: string
+  images: { imageUrl: string }[]
+  categoryId: string
+  stockNumber: number
+  colorsEn?: string
+  colorsAr?: string
+  materialEn?: string
+  materialAr?: string
+  currentState: number
+  createdDate?: string
+}
+
+async function fetchFromApi(endpoint: string) {
   try {
-    // Determine the base URL for the fetch call
-    let url = `${API_BASE_URL}/Slider`;
-    
+    const url = `${API_BASE_URL}/${endpoint}`;
     const isServer = typeof window === "undefined";
-    
-    // For local development on the server, we might need to bypass certificate checks
-    // or fallback to http if https fails on the server (common Node.js issue with self-signed certs)
+
     if (isServer && url.startsWith("https://localhost")) {
-      // In development, we can tell Node to ignore SSL issues for localhost
       process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     }
 
-    const response = await fetch(url, {
-      cache: "no-store",
-    })
-    
+    const response = await fetch(url, { cache: "no-store" });
+
     if (!response.ok) {
-      console.error(`[getPublicSliders] API responded with status: ${response.status}`);
-      throw new Error(`Failed to fetch sliders: ${response.status}`);
-    }
-    
-    const rawData = await response.json()
-    if (!Array.isArray(rawData)) {
-      console.warn("[getPublicSliders] API returned non-array data:", rawData);
-      return []
+      console.error(`[fetchFromApi] ${endpoint} failed: ${response.status}`);
+      return null;
     }
 
-    // Normalize property names (handle both camelCase and PascalCase)
-    const data: PublicSlider[] = rawData.map((item: any) => ({
-      id: item.id ?? item.Id ?? "",
-      titleAr: item.titleAr ?? item.TitleAr ?? "",
-      titleEn: item.titleEn ?? item.TitleEn ?? "",
-      imageUrl: item.imageUrl ?? item.ImageUrl ?? "",
-      currentState: item.currentState ?? item.CurrentState ?? 0,
-      createdDate: item.createdDate ?? item.CreatedDate ?? "",
-    }))
-
-    // Filter only active sliders (currentState > 0)
-    const activeSliders = data.filter((slider) => slider.currentState > 0);
-    console.log(`[getPublicSliders] Successfully fetched ${activeSliders.length} sliders`);
-    return activeSliders;
+    return await response.json();
   } catch (error) {
-    console.error("[getPublicSliders] Error fetching sliders:", error)
-    return []
+    console.error(`[fetchFromApi] ${endpoint} error:`, error);
+    return null;
   }
 }
+
+export async function getPublicSliders(): Promise<PublicSlider[]> {
+  const rawData = await fetchFromApi("Slider");
+  if (!Array.isArray(rawData)) return [];
+
+  return rawData.map((item: any) => ({
+    id: item.id ?? item.Id ?? "",
+    titleAr: item.titleAr ?? item.TitleAr ?? "",
+    titleEn: item.titleEn ?? item.TitleEn ?? "",
+    imageUrl: item.imageUrl ?? item.ImageUrl ?? "",
+    currentState: item.currentState ?? item.CurrentState ?? 0,
+    createdDate: item.createdDate ?? item.CreatedDate ?? "",
+  })).filter(s => s.currentState > 0);
+}
+
+export async function getPublicCategories(): Promise<PublicCategory[]> {
+  const rawData = await fetchFromApi("Category");
+  if (!Array.isArray(rawData)) return [];
+
+  return rawData.map((item: any) => ({
+    id: item.id ?? item.Id ?? "",
+    nameAr: item.nameAr ?? item.NameAr ?? "",
+    nameEn: item.nameEn ?? item.NameEn ?? "",
+    imageUrl: item.imageUrl ?? item.ImageUrl ?? "",
+    productsCount: item.productsCount ?? item.ProductsCount ?? 0,
+  }));
+}
+
+export async function getPublicProducts(): Promise<PublicProduct[]> {
+  const rawData = await fetchFromApi("Items");
+  if (!Array.isArray(rawData)) return [];
+
+  return rawData.map((item: any) => ({
+    id: item.id ?? item.Id ?? "",
+    nameAr: item.nameAr ?? item.NameAr ?? "",
+    nameEn: item.nameEn ?? item.NameEn ?? "",
+    descriptionAr: item.descriptionAr ?? item.DescriptionAr ?? "",
+    descriptionEn: item.descriptionEn ?? item.DescriptionEn ?? "",
+    price: item.price ?? item.Price ?? 0,
+    discountAmount: item.discountAmount ?? item.DiscountAmount ?? 0,
+    mainImage: item.mainImage ?? item.MainImage ?? "",
+    images: item.images ?? item.Images ?? [],
+    categoryId: item.categoryId ?? item.CategoryId ?? "",
+    stockNumber: item.stockNumber ?? item.StockNumber ?? 0,
+    colorsEn: item.colorsEn ?? item.ColorsEn ?? "",
+    colorsAr: item.colorsAr ?? item.ColorsAr ?? "",
+    materialEn: item.materialEn ?? item.MaterialEn ?? "",
+    materialAr: item.materialAr ?? item.MaterialAr ?? "",
+    currentState: item.currentState ?? item.CurrentState ?? 1,
+    createdDate: item.createdDate ?? item.CreatedDate ?? "",
+  })).filter(p => p.currentState > 0);
+}
+
+export async function getPublicBestSellers(): Promise<PublicProduct[]> {
+  const rawData = await fetchFromApi("Items/best-discounts");
+  if (!Array.isArray(rawData)) return [];
+
+  return rawData.map((item: any) => ({
+    id: item.id ?? item.Id ?? "",
+    nameAr: item.nameAr ?? item.NameAr ?? "",
+    nameEn: item.nameEn ?? item.NameEn ?? "",
+    descriptionAr: item.descriptionAr ?? item.DescriptionAr ?? "",
+    descriptionEn: item.descriptionEn ?? item.DescriptionEn ?? "",
+    price: item.price ?? item.Price ?? 0,
+    discountAmount: item.discountAmount ?? item.DiscountAmount ?? 0,
+    mainImage: item.mainImage ?? item.MainImage ?? "",
+    images: item.images ?? item.Images ?? [],
+    categoryId: item.categoryId ?? item.CategoryId ?? "",
+    stockNumber: item.stockNumber ?? item.StockNumber ?? 0,
+    colorsEn: item.colorsEn ?? item.ColorsEn ?? "",
+    colorsAr: item.colorsAr ?? item.ColorsAr ?? "",
+    materialEn: item.materialEn ?? item.MaterialEn ?? "",
+    materialAr: item.materialAr ?? item.MaterialAr ?? "",
+    currentState: item.currentState ?? item.CurrentState ?? 1,
+    createdDate: item.createdDate ?? item.CreatedDate ?? "",
+  })).filter(p => p.currentState > 0);
+}
+

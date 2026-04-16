@@ -9,16 +9,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Download, TrendingUp, TrendingDown, Users, ShoppingCart, DollarSign, Eye } from "lucide-react";
 
 export default function AnalyticsPage() {
-  const { t, isRTL } = useAdminLanguage();
-
-
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">{t("analytics")}</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Analytics</h1>
           <p className="text-muted-foreground">
-            {isRTL ? "تحليلات مفصلة لأداء متجرك" : "Detailed analytics for your store performance"}
+            Detailed analytics for your store performance
           </p>
         </div>
       </div>
@@ -29,7 +26,7 @@ export default function AnalyticsPage() {
             <CardContent className="h-[750px] p-0 relative">
               <div className="absolute top-4 right-4 z-10 flex gap-2">
                 <Button variant="secondary" onClick={() => window.open('https://lookerstudio.google.com/embed/reporting/a57ecd37-7283-47b9-aa03-3411c7dbcf1d/page/kIV1C', '_blank')}>
-                  {isRTL ? "فتح في نافذة جديدة" : "Open in New Tab"}
+                  Open in New Tab
                 </Button>
               </div>
               <iframe
@@ -50,7 +47,7 @@ export default function AnalyticsPage() {
             <CardContent className="h-[750px] p-0 relative">
               <div className="absolute top-4 right-4 z-10 flex gap-2">
                 <Button variant="secondary" onClick={() => window.open('https://lookerstudio.google.com/embed/reporting/da7dbee6-53a9-4d05-ae92-fbd06f6c8893/page/p_ev5o6t54bd', '_blank')}>
-                  {isRTL ? "فتح في نافذة جديدة" : "Open in New Tab"}
+                  Open in New Tab
                 </Button>
               </div>
               <iframe
@@ -71,7 +68,7 @@ export default function AnalyticsPage() {
             <CardContent className="h-[750px] p-0 relative">
               <div className="absolute top-4 right-4 z-10 flex gap-2">
                 <Button variant="secondary" onClick={() => window.open('https://lookerstudio.google.com/s/jRsBUMKJ1RY', '_blank')}>
-                  {isRTL ? "فتح في نافذة جديدة" : "Open in New Tab"}
+                  Open in New Tab
                 </Button>
               </div>
               <iframe width="100%" height="100%" src="https://lookerstudio.google.com/s/jRsBUMKJ1RY" frameBorder="0" allowFullScreen className="rounded-lg" />
@@ -84,7 +81,7 @@ export default function AnalyticsPage() {
             <CardContent className="h-[750px] p-0 relative">
               <div className="absolute top-4 right-4 z-10 flex gap-2">
                 <Button variant="secondary" onClick={() => window.open('https://lookerstudio.google.com/s/osrfW19gP_s', '_blank')}>
-                  {isRTL ? "فتح في نافذة جديدة" : "Open in New Tab"}
+                  Open in New Tab
                 </Button>
               </div>
               <iframe width="100%" height="100%" src="https://lookerstudio.google.com/s/osrfW19gP_s" frameBorder="0" allowFullScreen className="rounded-lg" />
@@ -95,3 +92,4 @@ export default function AnalyticsPage() {
     </div>
   );
 }
+

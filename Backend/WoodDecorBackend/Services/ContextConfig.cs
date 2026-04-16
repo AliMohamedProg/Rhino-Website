@@ -41,7 +41,7 @@ namespace Apis.Services
                     EmailConfirmed = true,
                     PhoneNumberConfirmed = true
                 };
-                var result = await user.CreateAsync(adminUser, "Admin@123");
+                var result = await user.CreateAsync(adminUser, "Admin#$12");
                 await user.AddToRoleAsync(adminUser, "Admin");
             }
             else

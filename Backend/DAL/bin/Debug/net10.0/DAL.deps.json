@@ -440,17 +440,17 @@
           "runtimes/win-arm64/native/Microsoft.Data.SqlClient.SNI.dll": {
             "rid": "win-arm64",
             "assetType": "native",
-            "fileVersion": "6.2.0.0"
+            "fileVersion": "0.0.0.0"
           },
           "runtimes/win-x64/native/Microsoft.Data.SqlClient.SNI.dll": {
             "rid": "win-x64",
             "assetType": "native",
-            "fileVersion": "6.2.0.0"
+            "fileVersion": "0.0.0.0"
           },
           "runtimes/win-x86/native/Microsoft.Data.SqlClient.SNI.dll": {
             "rid": "win-x86",
             "assetType": "native",
-            "fileVersion": "6.2.0.0"
+            "fileVersion": "0.0.0.0"
           }
         }
       },
@@ -843,10 +843,21 @@
       },
       "System.Configuration.ConfigurationManager/9.0.10": {
         "dependencies": {
+          "System.Diagnostics.EventLog": "9.0.10",
           "System.Security.Cryptography.ProtectedData": "9.0.10"
         },
         "runtime": {
           "lib/net9.0/System.Configuration.ConfigurationManager.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.1025.47515"
+          }
+        }
+      },
+      "System.Diagnostics.EventLog/9.0.10": {
+        "runtimeTargets": {
+          "runtimes/win/lib/net9.0/System.Diagnostics.EventLog.Messages.dll": {
+            "rid": "win",
+            "assetType": "runtime",
             "assemblyVersion": "9.0.0.0",
             "fileVersion": "9.0.1025.47515"
           }
@@ -1252,6 +1263,13 @@
       "sha512": "sha512-5CBhl5dWmckKEtvk8F6GXtmHxNBoqAC8xILxIntNm7AzHiXQ09CXSLhncIJ/cQWaiNYzLjHZCgtMfx9tkCKHdA==",
       "path": "system.configuration.configurationmanager/9.0.10",
       "hashPath": "system.configuration.configurationmanager.9.0.10.nupkg.sha512"
+    },
+    "System.Diagnostics.EventLog/9.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Jc+az1pTMujPLDn2j5eqSfzlO7j/T1K/LB7THxdfRWOxujE4zaitUqBs7sv1t6/xmmvpU6Xx3IofCs4owYH0yQ==",
+      "path": "system.diagnostics.eventlog/9.0.10",
+      "hashPath": "system.diagnostics.eventlog.9.0.10.nupkg.sha512"
     },
     "System.IdentityModel.Tokens.Jwt/7.7.1": {
       "type": "package",

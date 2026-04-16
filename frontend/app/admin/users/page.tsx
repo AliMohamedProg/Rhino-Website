@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
-import { useAdminLanguage } from "@/context/admin-language-context"
 import { cn } from "@/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -87,7 +86,6 @@ const mapApiUser = (apiUser: ApiUser, index: number): User => {
 }
 
 export default function UsersPage() {
-  const { t, language, dir } = useAdminLanguage()
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState(false)
@@ -121,28 +119,28 @@ export default function UsersPage() {
 
   const getRoleBadge = (role: User["role"]) => {
     const roleConfig = {
-      admin: { variant: "default" as const, labelEn: "Admin", labelAr: "مدير", className: "bg-red-500" },
-      manager: { variant: "default" as const, labelEn: "Manager", labelAr: "مشرف", className: "bg-blue-500" },
-      customer: { variant: "secondary" as const, labelEn: "Customer", labelAr: "عميل", className: "" },
+      admin: { variant: "default" as const, label: "Admin", className: "bg-red-500" },
+      manager: { variant: "default" as const, label: "Manager", className: "bg-blue-500" },
+      customer: { variant: "secondary" as const, label: "Customer", className: "" },
     }
     const config = roleConfig[role]
     return (
       <Badge variant={config.variant} className={config.className}>
-        {language === "ar" ? config.labelAr : config.labelEn}
+        {config.label}
       </Badge>
     )
   }
 
   const getStatusBadge = (status: User["status"]) => {
     const statusConfig = {
-      active: { variant: "default" as const, labelEn: "Active", labelAr: "نشط", className: "bg-emerald-500" },
-      inactive: { variant: "secondary" as const, labelEn: "Inactive", labelAr: "غير نشط", className: "" },
-      blocked: { variant: "destructive" as const, labelEn: "Blocked", labelAr: "محظور", className: "" },
+      active: { variant: "default" as const, label: "Active", className: "bg-emerald-500" },
+      inactive: { variant: "secondary" as const, label: "Inactive", className: "" },
+      blocked: { variant: "destructive" as const, label: "Blocked", className: "" },
     }
     const config = statusConfig[status]
     return (
       <Badge variant={config.variant} className={config.className}>
-        {language === "ar" ? config.labelAr : config.labelEn}
+        {config.label}
       </Badge>
     )
   }
@@ -216,8 +214,8 @@ export default function UsersPage() {
         <span className="text-muted-foreground">
           {user.joinDate && !Number.isNaN(new Date(user.joinDate).getTime())
             ? new Date(user.joinDate).toLocaleDateString(
-                language === "ar" ? "ar-EG" : "en-US"
-              )
+              language === "ar" ? "ar-EG" : "en-US"
+            )
             : (language === "ar" ? "غير متاح" : "N/A")}
         </span>
       ),
@@ -274,14 +272,14 @@ export default function UsersPage() {
             <DataTable
               data={users}
               columns={columns}
-            searchPlaceholder={language === "ar" ? "البحث عن مستخدم..." : "Search users..."}
+              searchPlaceholder={language === "ar" ? "البحث عن مستخدم..." : "Search users..."}
               searchKey="name"
             />
           )}
         </CardContent>
       </Card>
 
-  
+
     </div>
   )
 }

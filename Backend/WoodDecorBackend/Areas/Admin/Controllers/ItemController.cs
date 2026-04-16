@@ -96,7 +96,6 @@ namespace Apis.Areas.Admin.Controllers
                 {
                     mainImage = itemDto.Images[0].ImageUrl;
                 }
-
                 var item = new ItemDto()
                 {
                     CurrentState = 1,

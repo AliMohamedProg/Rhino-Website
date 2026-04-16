@@ -131,7 +131,6 @@ const mapApiOrder = (apiOrder: ApiOrder, index: number): Order => {
 }
 
 export default function OrdersPage() {
-  const { t, language, dir } = useAdminLanguage()
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState(false)
@@ -175,33 +174,33 @@ export default function OrdersPage() {
 
   const getStatusBadge = (status: Order["status"]) => {
     const statusConfig = {
-      pending: { variant: "secondary" as const, labelEn: "Pending", labelAr: "قيد الانتظار", className: "bg-yellow-500/20 text-yellow-600 dark:text-yellow-400" },
-      processing: { variant: "default" as const, labelEn: "Processing", labelAr: "قيد المعالجة", className: "bg-blue-500" },
-      shipped: { variant: "outline" as const, labelEn: "Shipped", labelAr: "تم الشحن", className: "border-blue-500 text-blue-500" },
-      delivered: { variant: "default" as const, labelEn: "Delivered", labelAr: "تم التوصيل", className: "bg-emerald-500" },
-      cancelled: { variant: "destructive" as const, labelEn: "Cancelled", labelAr: "ملغي", className: "" },
-      refunded: { variant: "secondary" as const, labelEn: "Refunded", labelAr: "مسترد", className: "" },
+      pending: { variant: "secondary" as const, label: "Pending", className: "bg-yellow-500/20 text-yellow-600 dark:text-yellow-400" },
+      processing: { variant: "default" as const, label: "Processing", className: "bg-blue-500" },
+      shipped: { variant: "outline" as const, label: "Shipped", className: "border-blue-500 text-blue-500" },
+      delivered: { variant: "default" as const, label: "Delivered", className: "bg-emerald-500" },
+      cancelled: { variant: "destructive" as const, label: "Cancelled", className: "" },
+      refunded: { variant: "secondary" as const, label: "Refunded", className: "" },
     }
-    const config = statusConfig[status]
+    const config = statusConfig[status] || statusConfig.pending
     return (
       <Badge variant={config.variant} className={config.className}>
-        {language === "ar" ? config.labelAr : config.labelEn}
+        {config.label}
       </Badge>
     )
   }
 
   const getPaymentStatusBadge = (paymentStatus: string) => {
     const status = paymentStatus || "Pending"
-    const statusConfig: Record<string, { labelEn: string, labelAr: string, className: string }> = {
-      Paid: { labelEn: "Paid", labelAr: "تم الدفع", className: "bg-emerald-500/10 text-emerald-600 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800" },
-      Pending: { labelEn: "Pending", labelAr: "قيد الانتظار", className: "bg-yellow-500/10 text-yellow-600 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800" },
-      Refunded: { labelEn: "Refunded", labelAr: "مسترد", className: "bg-purple-500/10 text-purple-600 border-purple-200 dark:bg-purple-900/20 dark:text-purple-400 dark:border-purple-800" },
-      Failed: { labelEn: "Failed", labelAr: "فشل", className: "bg-red-500/10 text-red-600 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800" },
+    const statusConfig: Record<string, { label: string, className: string }> = {
+      Paid: { label: "Paid", className: "bg-emerald-500/10 text-emerald-600 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800" },
+      Pending: { label: "Pending", className: "bg-yellow-500/10 text-yellow-600 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800" },
+      Refunded: { label: "Refunded", className: "bg-purple-500/10 text-purple-600 border-purple-200 dark:bg-purple-900/20 dark:text-purple-400 dark:border-purple-800" },
+      Failed: { label: "Failed", className: "bg-red-500/10 text-red-600 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800" },
     }
     const config = statusConfig[status] || statusConfig["Pending"]
     return (
       <Badge variant="outline" className={cn("font-medium", config.className)}>
-        {language === "ar" ? config.labelAr : config.labelEn}
+        {config.label}
       </Badge>
     )
   }
@@ -236,13 +235,13 @@ export default function OrdersPage() {
   }
 
   const formatCurrency = (amount: number) => {
-    return `${amount.toLocaleString()} ${t("common.egp")}`
+    return `${amount.toLocaleString()} EGP`
   }
 
   const columns = [
     {
       key: "orderNumber",
-      header: t("orders.orderNumber"),
+      header: "Order Number",
       render: (order: Order) => (
         <Link
           href={`/admin/orders/${order.id}`}
@@ -254,9 +253,9 @@ export default function OrdersPage() {
     },
     {
       key: "customer",
-      header: t("orders.customer"),
+      header: "Customer",
       render: (order: Order) => (
-        <div className={cn(dir === "rtl" && "text-right")}>
+        <div>
           <p className="font-medium">{order.customer.name}</p>
           <p className="text-sm text-muted-foreground">{order.customer.email}</p>
         </div>
@@ -264,23 +263,23 @@ export default function OrdersPage() {
     },
     {
       key: "items",
-      header: t("orders.items"),
+      header: "Items",
       render: (order: Order) => (
         <span className="text-muted-foreground">
-          {order.items.length} {language === "ar" ? "عنصر" : "items"}
+          {order.items.length} items
         </span>
       ),
     },
     {
       key: "total",
-      header: t("orders.total"),
+      header: "Total",
       render: (order: Order) => (
         <span className="font-medium">{formatCurrency(order.total)}</span>
       ),
     },
     {
       key: "paymentMethodName",
-      header: language === "ar" ? "طريقة الدفع" : "Payment Method",
+      header: "Payment Method",
       render: (order: Order) => (
         <div className="flex flex-col gap-1">
           <span className="text-sm font-medium">{order.paymentMethodName}</span>
@@ -290,23 +289,21 @@ export default function OrdersPage() {
     },
     {
       key: "status",
-      header: t("orders.status"),
+      header: "Status",
       render: (order: Order) => getStatusBadge(order.status),
     },
     {
       key: "date",
-      header: t("orders.date"),
+      header: "Date",
       render: (order: Order) => (
         <span className="text-muted-foreground">
-          {new Date(order.createdDate).toLocaleDateString(
-            language === "ar" ? "ar-EG" : "en-US"
-          )}
+          {new Date(order.createdDate).toLocaleDateString("en-US")}
         </span>
       ),
     },
     {
       key: "actions",
-      header: t("common.actions"),
+      header: "Actions",
       render: (order: Order) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -315,29 +312,29 @@ export default function OrdersPage() {
               <span className="sr-only">Actions</span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align={dir === "rtl" ? "start" : "end"}>
+          <DropdownMenuContent align="end">
             <DropdownMenuItem asChild>
               <Link href={`/admin/orders/${order.id}`}>
-                <Eye className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-                {t("orders.viewDetails")}
+                <Eye className="h-4 w-4 mr-2" />
+                View Details
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuLabel>{t("orders.updateStatus")}</DropdownMenuLabel>
+            <DropdownMenuLabel>Update Status</DropdownMenuLabel>
             <DropdownMenuItem onClick={() => handleStatusChange(order.id, "processing")}>
-              {language === "ar" ? "قيد المعالجة" : "Processing"}
+              Processing
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => handleStatusChange(order.id, "shipped")}>
-              {language === "ar" ? "تم الشحن" : "Shipped"}
+              Shipped
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => handleStatusChange(order.id, "delivered")}>
-              {language === "ar" ? "تم التوصيل" : "Delivered"}
+              Delivered
             </DropdownMenuItem>
             <DropdownMenuItem
               className="text-destructive"
               onClick={() => handleStatusChange(order.id, "cancelled")}
             >
-              {language === "ar" ? "ملغي" : "Cancelled"}
+              Cancelled
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -347,44 +344,39 @@ export default function OrdersPage() {
   ]
 
   const statusOptions = [
-    { value: "all", labelEn: "All", labelAr: "الكل" },
-    { value: "pending", labelEn: "Pending", labelAr: "قيد الانتظار" },
-    { value: "processing", labelEn: "Processing", labelAr: "قيد المعالجة" },
-    { value: "shipped", labelEn: "Shipped", labelAr: "تم الشحن" },
-    { value: "delivered", labelEn: "Delivered", labelAr: "تم التوصيل" },
-    { value: "cancelled", labelEn: "Cancelled", labelAr: "ملغي" },
+    { value: "all", label: "All" },
+    { value: "pending", label: "Pending" },
+    { value: "processing", label: "Processing" },
+    { value: "shipped", label: "Shipped" },
+    { value: "delivered", label: "Delivered" },
+    { value: "cancelled", label: "Cancelled" },
   ]
 
   return (
     <div className="space-y-6">
       {/* Page Header */}
       <div
-        className={cn(
-          "flex items-center justify-between",
-          dir === "rtl" && "flex-row-reverse"
-        )}
+        className="flex items-center justify-between"
       >
-        <div className={cn(dir === "rtl" && "text-right")}>
-          <h1 className="text-2xl font-bold tracking-tight">{t("orders.title")}</h1>
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Orders Management</h1>
           <p className="text-muted-foreground">
-            {language === "ar"
-              ? `إدارة ${orders.length} طلب`
-              : `Manage ${orders.length} orders`}
+            Manage {orders.length} orders
           </p>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              <Download className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-              {language === "ar" ? "تصدير" : "Export"}
+              <Download className="h-4 w-4 mr-2" />
+              Export
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={() => exportOrdersExcel()}>
-              {language === "ar" ? "تصدير إلى Excel" : "Export to Excel"}
+              Export to Excel
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => exportOrdersPdf()}>
-              {language === "ar" ? "تصدير إلى PDF" : "Export to PDF"}
+              Export to PDF
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -394,14 +386,11 @@ export default function OrdersPage() {
       <Card>
         <CardContent className="pt-6">
           <div
-            className={cn(
-              "flex items-center gap-4 mb-4",
-              dir === "rtl" && "flex-row-reverse"
-            )}
+            className="flex items-center gap-4 mb-4"
           >
-            <div className={cn("flex items-center gap-2", dir === "rtl" && "flex-row-reverse")}>
+            <div className="flex items-center gap-2">
               <Filter className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-medium">{t("common.filter")}:</span>
+              <span className="text-sm font-medium">Filter:</span>
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[180px]">
@@ -410,7 +399,7 @@ export default function OrdersPage() {
               <SelectContent>
                 {statusOptions.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
-                    {language === "ar" ? option.labelAr : option.labelEn}
+                    {option.label}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -419,11 +408,11 @@ export default function OrdersPage() {
 
           {loading ? (
             <div className="flex justify-center items-center h-48 text-muted-foreground animate-pulse">
-              {t("common.loading")}
+              Loading...
             </div>
           ) : loadError ? (
             <div className="flex justify-center items-center h-48 text-destructive">
-              {language === "ar" ? "فشل تحميل الطلبات." : "Failed to load orders."}
+              Failed to load orders.
             </div>
           ) : null}
 
@@ -431,7 +420,7 @@ export default function OrdersPage() {
             <DataTable
               data={filteredOrders}
               columns={columns}
-              searchPlaceholder={language === "ar" ? "البحث عن طلب..." : "Search orders..."}
+              searchPlaceholder="Search orders..."
               searchKey="orderNumber"
             />
           )}
@@ -440,3 +429,4 @@ export default function OrdersPage() {
     </div>
   )
 }
+

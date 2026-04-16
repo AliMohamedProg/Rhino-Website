@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using DAL.Context;
 using DAL.Contracts;
 using DAL.Exceptions;
-using DAL.Migrations;
+//using DAL.Migrations;
 using DAL.UserModel;
 using Domains;
 using Microsoft.AspNetCore.Identity;

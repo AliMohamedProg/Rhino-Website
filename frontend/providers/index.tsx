@@ -1,43 +1,35 @@
 "use client"
 
 import type { ReactNode } from "react"
-import { ThemeProvider } from "@/context/theme-context"
 import { LanguageProvider } from "@/context/language-context"
-import { LanguageFontWrapper } from "@/components/language-font-wrapper"
 import { WishlistProvider } from "@/context/wishlist-context"
 import { CartProvider } from "@/context/cart-context"
 import { AuthProvider } from "@/app/Context/auth-context"
 import AuthWrapper from "@/components/auth-wrapper"
 import { Toaster } from "@/components/ui/sonner"
 
-/** Font class names passed from root layout (server). */
 interface AppProvidersProps {
   children: ReactNode
-  geistClass?: string
-  cairoClass?: string
 }
 
 /**
  * Single composition of all app-level providers.
- * Keeps layout.tsx minimal and centralizes provider order.
+ * Includes multi-language support (English/Arabic).
  */
-export function AppProviders({ children, geistClass = "", cairoClass = "" }: AppProvidersProps) {
+export function AppProviders({ children }: AppProvidersProps) {
   return (
-    <ThemeProvider>
-      <LanguageProvider>
-        <LanguageFontWrapper geistClass={geistClass} cairoClass={cairoClass}>
-          <CartProvider>
-            <WishlistProvider>
-              <AuthProvider>
-                <AuthWrapper>
-                  {children}
-                  <Toaster richColors position="top-center" />
-                </AuthWrapper>
-              </AuthProvider>
-            </WishlistProvider>
-          </CartProvider>
-        </LanguageFontWrapper>
-      </LanguageProvider>
-    </ThemeProvider>
+    <LanguageProvider>
+      <CartProvider>
+        <WishlistProvider>
+          <AuthProvider>
+            <AuthWrapper>
+              {children}
+              <Toaster richColors position="top-center" />
+            </AuthWrapper>
+          </AuthProvider>
+        </WishlistProvider>
+      </CartProvider>
+    </LanguageProvider>
   )
 }
+

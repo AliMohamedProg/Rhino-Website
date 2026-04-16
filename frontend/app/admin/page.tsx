@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic"
 import { useEffect, useState } from "react"
-import { useAdminLanguage } from "@/context/admin-language-context"
 import { StatsCard } from "@/components/admin/stats-card"
 import { RecentOrdersTable } from "@/components/admin/recent-orders-table"
 import { TopProductsCard } from "@/components/admin/top-products-card"
@@ -30,8 +29,7 @@ interface DashboardData {
     date: string
   }[]
   topProducts: {
-    nameAr: string
-    nameEn: string
+    name: string
     totalSold: number
     price: number
     stock: number
@@ -57,7 +55,6 @@ const RevenueChart = dynamic(
 )
 
 export default function AdminDashboardPage() {
-  const { t, language, dir } = useAdminLanguage()
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null)
   const [initialSliders, setInitialSliders] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -84,12 +81,12 @@ export default function AdminDashboardPage() {
 
   const formatCurrency = (amount: number) => {
     if (amount >= 1000000) {
-      return `${(amount / 1000000).toFixed(2)}M ${t("common.egp")}`
+      return `${(amount / 1000000).toFixed(2)}M EGP`
     }
     if (amount >= 1000) {
-      return `${(amount / 1000).toFixed(1)}K ${t("common.egp")}`
+      return `${(amount / 1000).toFixed(1)}K EGP`
     }
-    return `${amount.toLocaleString()} ${t("common.egp")}`
+    return `${amount.toLocaleString()} EGP`
   }
 
   // Use API data only
@@ -114,7 +111,7 @@ export default function AdminDashboardPage() {
 
   const categoryChartData = dashboardData?.topCategories
     ? dashboardData.topCategories.map((item) => ({
-      name: language === "ar" ? item.nameAr : item.nameEn,
+      name: item.nameEn,
       value: item.totalSold,
     }))
     : []
@@ -156,9 +153,8 @@ export default function AdminDashboardPage() {
   // Convert dashboard top products to Product format
   const topProducts: Product[] = topProductsData
     ? topProductsData.map((product) => ({
-      id: `product-${product.nameEn}`,
-      nameEn: product.nameEn,
-      nameAr: product.nameAr,
+      id: `product-${product.name}`,
+      nameEn: product.name,
       descriptionEn: "",
       descriptionAr: "",
       price: product.price,
@@ -180,11 +176,11 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div className={cn("flex flex-col sm:flex-row sm:items-center justify-between gap-4", dir === "rtl" && "text-right")}>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">{t("dashboard.title")}</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Dashboard Overview</h1>
           <p className="text-muted-foreground">
-            {t("dashboard.welcome")}, Admin!
+            Welcome back, Admin! Here&apos;s what&apos;s happening with your store today.
           </p>
         </div>
       </div>
@@ -193,25 +189,25 @@ export default function AdminDashboardPage() {
       {/* Stats Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatsCard
-          title={t("dashboard.totalRevenue")}
+          title="Total Revenue"
           value={formatCurrency(stats?.totalRevenue || 0)}
           trend="up"
           icon={<DollarSign className="h-5 w-5" />}
         />
         <StatsCard
-          title={t("dashboard.totalOrders")}
+          title="Total Orders"
           value={stats?.totalOrders || 0}
           trend="up"
           icon={<ShoppingCart className="h-5 w-5" />}
         />
         <StatsCard
-          title={t("dashboard.totalProducts")}
+          title="Active Products"
           value={stats?.totalProducts || 0}
           trend="up"
           icon={<Package className="h-5 w-5" />}
         />
         <StatsCard
-          title={t("dashboard.totalUsers")}
+          title="Total Customers"
           value={stats?.totalUsers || 0}
           trend="up"
           icon={<Users className="h-5 w-5" />}
@@ -221,11 +217,11 @@ export default function AdminDashboardPage() {
       {/* Charts Row */}
       <div className="grid gap-4 lg:grid-cols-2">
         <AreaChartCard
-          title={t("dashboard.salesChart")}
+          title="Sales Performance"
           data={salesChartData}
         />
         <BarChartCard
-          title={t("dashboard.ordersChart")}
+          title="Order Volume"
           data={ordersChartData}
         />
       </div>
@@ -233,12 +229,12 @@ export default function AdminDashboardPage() {
       {/* Secondary Charts and Tables */}
       <div className="grid gap-4 lg:grid-cols-3">
         <PieChartCard
-          title={t("analytics.topCategories")}
+          title="Top Categories"
           data={categoryChartData}
           className="lg:col-span-1"
         />
         <RevenueChart
-          title={t("dashboard.revenueChart")}
+          title="Monthly Revenue"
           data={revenueChartData}
           className="lg:col-span-2 -mt-6 lg:-mt-0"
         />
@@ -252,3 +248,4 @@ export default function AdminDashboardPage() {
     </div>
   )
 }
+

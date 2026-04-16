@@ -1,124 +1,75 @@
-"use client"
-
-import Link from "next/link"
-import Image from "next/image"
-import { useEffect, useState } from "react"
-import { useLanguage } from "@/context/language-context"
-import { Facebook, Twitter, Instagram, Youtube, Contact } from "lucide-react"
-import { ApiClient } from "@/app/ApiHelper/ApiClient"
-
-interface Category {
-  id: string
-  nameAr: string
-  nameEn: string
-  currentState: number
-}
+import Image from "next/image";
 
 export function Footer() {
-  const { t, language } = useLanguage()
-  const [categories, setCategories] = useState<Category[]>([])
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const data = await ApiClient.get("api/category") as Category[]
-        setCategories((Array.isArray(data) ? data : []).filter((c) => c.currentState === 1))
-      } catch (error) {
-        console.error(error)
-      }
-    }
-
-    fetchCategories()
-  }, [])
-
-
   return (
-    <footer className="bg-primary text-primary-foreground">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-          {/* Logo & About */}
-          <div className="flex flex-col items-center md:items-start text-center md:text-start">
-            <div className="bg-primary-foreground rounded-lg flex items-center justify-center p-2 mb-3">
-              <Image
-                src="/images/logo-websait.png"
-                alt="Wood Decor Logo"
-                width={70}
-                height={70}
-                sizes="70px"
-                className="object-contain"
-              />
-            </div>
-            <span className="text-xl font-bold mb-3">
-              {language === "ar" ? "وود ديكور" : "Wood Decor"}
-            </span>
-            <p className="text-primary-foreground/80 text-sm mb-4">
-              {language === "ar"
-                ? "وجهتك الأولى للأثاث والديكور المنزلي في مصر"
-                : "Your #1 destination for furniture and home décor in Egypt"}
-            </p>
-            <div className="flex items-center gap-4">
-              <a href="https://www.facebook.com/wood.decor.eg" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
-                <Facebook size={20} />
-              </a>
-              <a href="https://www.instagram.com/wood.decor.eg/" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
-                <Instagram size={20} />
-              </a>
+    <footer className="bg-white pt-32 pb-16 px-8 border-t border-gray-100">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-16 md:gap-8">
+
+        {/* Brand Col */}
+        <div className="flex flex-col gap-8 max-w-xs">
+          <div className="relative w-40 h-10">
+            <Image
+              src="/Logo.png"
+              alt="RHINO"
+              fill
+              className="object-contain"
+            />
+          </div>
+          <p className="text-sm text-taupe leading-relaxed font-medium italic">
+            "CRAFTED WITH PRECISION, DESIGNED FOR LEGACY."
+          </p>
+          <p className="text-[13px] text-taupe leading-relaxed">
+            Every piece is a unique statement of luxury and minimalist design for your modern home and space.
+          </p>
+        </div>
+
+        {/* Links */}
+        <div className="flex flex-wrap gap-16 md:gap-32">
+
+          {/* Shop */}
+          <div className="flex flex-col gap-8">
+            <h4 className="text-[10px] font-bold tracking-[0.3em] text-mahogany uppercase">Shop</h4>
+            <div className="flex flex-col gap-5 text-[12px] font-bold text-taupe tracking-widest">
+              <a href="/products" className="hover:text-mahogany transition-colors">CATALOG</a>
+              <a href="#" className="hover:text-mahogany transition-colors">SPECIAL OFFERS</a>
+              <a href="/products" className="hover:text-mahogany transition-colors">FURNITURE</a>
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="text-center md:text-start">
-            <h3 className="text-lg font-bold mb-4">{language === "ar" ? "روابط سريعة" : "Quick Links"}</h3>
-            <ul className="space-y-2 text-sm text-primary-foreground/80">
-              <li><Link href="/" className="hover:text-primary-foreground transition-colors">{t("nav.home")}</Link></li>
-              <li><Link href="/product" className="hover:text-primary-foreground transition-colors">{t("nav.furniture")}</Link></li>
-              <li><Link href="/blog" className="hover:text-primary-foreground transition-colors">{language === "ar" ? "المدونة" : "Blog"}</Link></li>
-              <li><Link href="/careers" className="hover:text-primary-foreground transition-colors">{language === "ar" ? "الوظائف" : "Careers"}</Link></li>
-              <li><Link href="/contact" className="hover:text-primary-foreground transition-colors">{t("footer.contact")}</Link></li>
-              <li><Link href="/about" className="hover:text-primary-foreground transition-colors">{t("footer.about")}</Link></li>
-            </ul>
-          </div>
-
-          {/* Categories */}
-          <div className="text-center md:text-start">
-            <h3 className="text-lg font-bold mb-4">{language === "ar" ? "الأقسام" : "Categories"}</h3>
-            <ul className="space-y-2 text-sm text-primary-foreground/80">
-              {categories.length === 0 && (
-                <li className="text-primary-foreground/60">
-                  {language === "ar" ? "تحميل..." : "Loading..."}
-                </li>
-              )}
-
-              {categories.map((category) => (
-                <li key={category.id}>
-                  <Link
-                    href={`/category/${category.id}`}
-                    className="hover:text-primary-foreground transition-colors"
-                  >
-                    {language === "ar" ? category.nameAr : category.nameEn}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          {/* Company */}
+          <div className="flex flex-col gap-8">
+            <h4 className="text-[10px] font-bold tracking-[0.3em] text-mahogany uppercase">Company</h4>
+            <div className="flex flex-col gap-5 text-[12px] font-bold text-taupe tracking-widest">
+              <a href="#" className="hover:text-mahogany transition-colors">OUR STORY</a>
+              <a href="#" className="hover:text-mahogany transition-colors">CONTACT</a>
+              <a href="#" className="hover:text-mahogany transition-colors">CAREERS</a>
+            </div>
           </div>
 
           {/* Support */}
-          <div className="text-center md:text-start">
-            <h3 className="text-lg font-bold mb-4">{language === "ar" ? "الدعم" : "Support"}</h3>
-            <ul className="space-y-2 text-sm text-primary-foreground/80">
-              <li><Link href="/faq" className="hover:text-primary-foreground transition-colors">{t("footer.faq")}</Link></li>
-              <li><Link href="/privacy" className="hover:text-primary-foreground transition-colors">{t("footer.privacy")}</Link></li>
-              <li><Link href="/returns" className="hover:text-primary-foreground transition-colors">{language === "ar" ? "سياسة الاسترجاع" : "Returns Policy"}</Link></li>
-              <li><Link href="/terms" className="hover:text-primary-foreground transition-colors">{t("footer.terms")}</Link></li>
-            </ul>
+          <div className="flex flex-col gap-8">
+            <h4 className="text-[10px] font-bold tracking-[0.3em] text-mahogany uppercase">Support</h4>
+            <div className="flex flex-col gap-5 text-[12px] font-bold text-taupe tracking-widest">
+              <a href="#" className="hover:text-mahogany transition-colors">ORDERS</a>
+              <a href="#" className="hover:text-mahogany transition-colors">PRIVACY</a>
+              <a href="#" className="hover:text-mahogany transition-colors">SECURITY</a>
+            </div>
           </div>
-        </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-primary-foreground/20 mt-8 pt-8 text-center text-sm text-primary-foreground/60">
-          {t("footer.copyright")}
+        </div>
+      </div>
+
+      {/* Bottom Bar */}
+      <div className="max-w-7xl mx-auto mt-32 pt-10 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6">
+        <p className="text-[10px] font-bold text-taupe tracking-widest uppercase">
+          © {new Date().getFullYear()} Rhino Furniture Inc. All rights reserved.
+        </p>
+        <div className="flex items-center gap-6">
+          <div className="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-taupe hover:bg-mahogany hover:text-white cursor-pointer transition-all duration-300 text-xs font-bold">IN</div>
+          <div className="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-taupe hover:bg-mahogany hover:text-white cursor-pointer transition-all duration-300 text-xs font-bold">TW</div>
+          <div className="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-taupe hover:bg-mahogany hover:text-white cursor-pointer transition-all duration-300 text-xs font-bold">FB</div>
         </div>
       </div>
     </footer>
-  )
+  );
 }

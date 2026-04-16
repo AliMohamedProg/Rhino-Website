@@ -41,6 +41,11 @@ public partial class WoodDecorContext : IdentityDbContext<ApplicationUser>
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlServer(
+                "Server=localhost;Database=RhinoDB;User Id=sa;Password=SQLPassword1;TrustServerCertificate=True");
+        }
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

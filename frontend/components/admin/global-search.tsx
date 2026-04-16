@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { useAdminLanguage } from "@/context/admin-language-context";
 import {
   CommandDialog,
   CommandEmpty,
@@ -12,8 +11,8 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
-import { 
-  LayoutDashboard, Package, ShoppingCart, Users, FolderTree, 
+import {
+  LayoutDashboard, Package, ShoppingCart, Users, FolderTree,
   Settings, BarChart3, FileText, Tag, Warehouse, Star
 } from "lucide-react";
 
@@ -45,7 +44,6 @@ interface GlobalSearchProps {
 
 export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
   const router = useRouter();
-  const { isRTL } = useAdminLanguage();
 
   const runCommand = useCallback((command: () => void) => {
     onOpenChange(false);
@@ -66,10 +64,10 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
 
   return (
     <CommandDialog open={open} onOpenChange={onOpenChange}>
-      <CommandInput placeholder={isRTL ? "ابحث عن صفحة أو إجراء..." : "Search for a page or action..."} />
+      <CommandInput placeholder="Search for a page or action..." />
       <CommandList>
-        <CommandEmpty>{isRTL ? "لا توجد نتائج." : "No results found."}</CommandEmpty>
-        <CommandGroup heading={isRTL ? "التنقل" : "Navigation"}>
+        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandGroup heading="Navigation">
           {navigationItems.map((item) => (
             <CommandItem
               key={item.href}
@@ -77,12 +75,12 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
               onSelect={() => runCommand(() => router.push(item.href))}
             >
               <item.icon className="me-2 h-4 w-4" />
-              <span>{isRTL ? item.titleAr : item.title}</span>
+              <span>{item.title}</span>
             </CommandItem>
           ))}
         </CommandGroup>
         <CommandSeparator />
-        <CommandGroup heading={isRTL ? "إجراءات سريعة" : "Quick Actions"}>
+        <CommandGroup heading="Quick Actions">
           {quickActions.map((action) => (
             <CommandItem
               key={action.href}
@@ -90,7 +88,7 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
               onSelect={() => runCommand(() => router.push(action.href))}
             >
               <action.icon className="me-2 h-4 w-4" />
-              <span>{isRTL ? action.titleAr : action.title}</span>
+              <span>{action.title}</span>
             </CommandItem>
           ))}
         </CommandGroup>

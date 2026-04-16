@@ -17,8 +17,8 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import { formatPrice } from "@/lib/products"
-import { getImageUrl, cn } from "@/lib/utils"
-import { Header } from "@/components/layout/header"
+import { getImageUrl, cn, parseColors } from "@/lib/utils"
+import { Navbar } from "@/components/layout/Navbar"
 import { Footer } from "@/components/layout/footer"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
 
@@ -172,7 +172,7 @@ export default function ProductDetailsPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col bg-background">
-        <Header />
+        <Navbar />
         <div className="flex-1 flex items-center justify-center">
           <div className="flex flex-col items-center gap-4">
             <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin" />
@@ -187,7 +187,7 @@ export default function ProductDetailsPage() {
   if (!product) {
     return (
       <div className="min-h-screen flex flex-col bg-background">
-        <Header />
+        <Navbar />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-foreground mb-2">{language === "ar" ? "المنتج غير موجود" : "Product Not Found"}</h2>
@@ -200,12 +200,7 @@ export default function ProductDetailsPage() {
   }
 
   const discountedPrice = product.discountAmount > 0 ? product.price * (1 - product.discountAmount / 100) : product.price
-  const colorsArrayEn = product.colorsEn
-    ? product.colorsEn.split(",").map(c => c.trim())
-    : []
-  const colorsArrayAr = product.colorsAr
-    ? product.colorsAr.split(",").map(c => c.trim())
-    : []
+  const colors = parseColors(product.colorsEn)
 
   const productImages =
     product.images && product.images.length > 0
@@ -278,7 +273,7 @@ export default function ProductDetailsPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <Header />
+      <Navbar />
 
       <section className="container mx-auto px-4 py-12">
         {/* Breadcrumb */}
@@ -369,31 +364,40 @@ export default function ProductDetailsPage() {
               </div>
 
               {/* Colors */}
-              {colorsArrayEn.length > 0 && (
+              {colors.length > 0 && (
                 <div className="mb-6">
-                  <span className="text-gray-500 block mb-2">{language === "ar" ? "الألوان المتاحة:" : "Available Colors:"}</span>
-                  <div className="flex flex-wrap gap-2">
-                    {language === "ar" ? colorsArrayAr.map((color, index) => (
+                  <span className="text-gray-500 block mb-3 font-semibold uppercase tracking-wider text-xs">
+                    Select Finish
+                  </span>
+                  <div className="flex flex-wrap gap-4">
+                    {colors.map((color, index) => (
                       <button
                         key={index}
-                        onClick={() => setSelectedColor(color)}
-                        className={`px-4 py-2 border rounded-full text-sm font-medium transition-all ${selectedColor === color
-                          ? "border-primary bg-primary text-white"
-                          : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
-                          }`}
+                        onClick={() => setSelectedColor(color.name)}
+                        className="group flex flex-col items-center gap-2"
                       >
-                        {color}
-                      </button>
-                    )) : colorsArrayEn.map((color, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setSelectedColor(color)}
-                        className={`px-4 py-2 border rounded-full text-sm font-medium transition-all ${selectedColor === color
-                          ? "border-primary bg-primary text-white"
-                          : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
-                          }`}
-                      >
-                        {color}
+                        <div
+                          className={cn(
+                            "w-10 h-10 rounded-full border-2 transition-all duration-300 flex items-center justify-center",
+                            selectedColor === color.name
+                              ? "border-primary ring-2 ring-primary/20 scale-110 shadow-lg"
+                              : "border-gray-200 hover:border-gray-300 shadow-sm"
+                          )}
+                          style={{ backgroundColor: color.hex }}
+                        >
+                          {selectedColor === color.name && (
+                            <div className={cn(
+                              "w-2 h-2 rounded-full",
+                              color.hex.toLowerCase() === "#ffffff" || color.name.toLowerCase() === "white" ? "bg-black" : "bg-white"
+                            )} />
+                          )}
+                        </div>
+                        <span className={cn(
+                          "text-[10px] font-bold tracking-wide transition-colors uppercase",
+                          selectedColor === color.name ? "text-primary" : "text-gray-400"
+                        )}>
+                          {color.name}
+                        </span>
                       </button>
                     ))}
                   </div>
@@ -448,40 +452,26 @@ export default function ProductDetailsPage() {
               <div className="flex gap-3 mb-6">
                 <Button className="flex-1 bg-red-600 hover:bg-red-700 text-white shadow-md flex items-center justify-center gap-2 h-12 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={async () => {
-                    if ((colorsArrayEn.length > 0 || colorsArrayAr.length > 0) && !selectedColor) {
+                    if (colors.length > 0 && !selectedColor) {
                       alert(language === "ar" ? "يرجى اختيار اللون أولاً" : "Please select a color first");
                       return;
                     }
                     try {
-                      console.log("Adding to cart - productId:", product.id, "quantity:", quantity)
-                      const res = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")}/api/Cart/add-to-cart`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        credentials: "include",
-                        body: JSON.stringify({
-                          productId: product.id,
-                          quantity,
-                          color: selectedColor || "Default"
-                        })
-                      })
-                      console.log("Add to cart response status:", res.status)
-                      if (res.ok) {
-                        console.log("Item added successfully, redirecting to cart")
-                        window.location.href = "/cart"
-                      }
-                      else if (res.status === 401) window.location.href = "/login"
-                      else console.error("Failed to add to cart:", await res.text())
+                      await addItem(product.id, quantity, selectedColor || "Default")
+                      window.location.href = "/cart"
                     } catch (error) {
                       console.error("Failed to add to cart:", error)
                     }
                   }}
-                  disabled={!isInStock || ((colorsArrayEn.length > 0 || colorsArrayAr.length > 0) && !selectedColor)}
+
+                  disabled={!isInStock || (colors.length > 0 && !selectedColor)}
                 >
                   <ShoppingCart size={22} />
-                  {((colorsArrayEn.length > 0 || colorsArrayAr.length > 0) && !selectedColor) 
-                    ? (language === "ar" ? "اختر اللون" : "Select Color") 
+                  {(colors.length > 0 && !selectedColor)
+                    ? "Select Color"
                     : t("products.addToCart")}
                 </Button>
+
 
                 <Button
                   variant="outline"
@@ -559,25 +549,19 @@ export default function ProductDetailsPage() {
                       <span className="font-semibold">{language === "ar" ? product.materialAr : product.materialEn}</span>
                     </div>
                   )}
-                  {language === "ar" ? colorsArrayAr.length > 0 && (
+                  {colors.length > 0 && (
                     <div className="flex justify-between items-start py-2">
-                      <span className="text-gray-500">الألوان المتاحة</span>
+                      <span className="text-gray-500">Available Colors</span>
                       <div className="flex flex-wrap gap-2 justify-end">
-                        {colorsArrayAr.map((color, index) => (
-                          <span key={index} className="px-3 py-1 border rounded-full text-sm bg-gray-100">{color}</span>
-                        ))}
-                      </div>
-                    </div>
-                  ) : colorsArrayEn.length > 0 && (
-                    <div className="flex justify-between items-start py-2">
-                      <span className="text-gray-500"> Available Colors</span>
-                      <div className="flex flex-wrap gap-2 justify-end">
-                        {colorsArrayEn.map((color, index) => (
-                          <span key={index} className="px-3 py-1 border rounded-full text-sm bg-gray-100">{color}</span>
+                        {colors.map((color, index) => (
+                          <span key={index} className="px-3 py-1 border rounded-full text-sm bg-gray-100 font-medium">
+                            {color.name}
+                          </span>
                         ))}
                       </div>
                     </div>
                   )}
+
                 </div>
               </TabsContent>
 

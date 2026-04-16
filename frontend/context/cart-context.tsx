@@ -37,13 +37,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const cart = await ApiClient.get("api/Cart")
       if (cart && cart.items) {
         const mappedItems: CartItem[] = cart.items.map((item: any) => ({
-          id: item.id,
-          itemId: item.itemId,
-          name: { en: item.nameEn, ar: item.nameAr },
-          price: item.price,
-          image: item.image,
-          quantity: item.quantity,
-          total: item.total
+          id: item.id ?? item.Id ?? "",
+          itemId: item.itemId ?? item.ItemId ?? "",
+          name: { en: item.nameEn ?? item.NameEn ?? "", ar: item.nameAr ?? item.NameAr ?? "" },
+          price: item.price ?? item.Price ?? 0,
+          image: item.image ?? item.Image ?? "/placeholder.jpg",
+          quantity: item.quantity ?? item.Quantity ?? 0,
+          total: item.total ?? item.Total ?? 0
         }))
         setItems(mappedItems)
       } else {
@@ -62,17 +62,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const addItem = async (productId: string, quantity: number, color?: string) => {
+    console.log(`[CartContext] Adding item: ${productId}, qty: ${quantity}, color: ${color}`);
     try {
       await ApiClient.post("api/Cart/add-to-cart", { productId, quantity, color: color || "Default" })
+      console.log(`[CartContext] Successfully added item ${productId}`);
       await refreshCart()
     } catch (error) {
-      console.error("Failed to add item to cart:", error)
+      console.error("[CartContext] Failed to add item to cart:", error)
     }
   }
 
+
   const removeItem = async (productId: string) => {
     try {
-      await ApiClient.patch(`api/Cart/items/${productId}`, { quantity: 0 })
+      await ApiClient.delete(`api/Cart/item/delete/${productId}`)
       await refreshCart()
     } catch (error) {
       console.error("Failed to remove item from cart:", error)
@@ -87,6 +90,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       console.error("Failed to update cart item:", error)
     }
   }
+
 
   const clearCart = () => setItems([])
 

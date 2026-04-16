@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter, useParams } from "next/navigation"
 import Link from "next/link"
-import { Header } from "@/components/layout/header"
+import { Navbar } from "@/components/layout/Navbar"
 import { Footer } from "@/components/layout/footer"
 import { useLanguage } from "@/context/language-context"
 import { Card, CardContent } from "@/components/ui/card"
@@ -181,7 +181,7 @@ export default function OrderViewPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Header />
+        <Navbar />
         <main className="flex-1 flex items-center justify-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </main>
@@ -193,7 +193,7 @@ export default function OrderViewPage() {
   if (error || !order) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Header />
+        <Navbar />
         <main className="flex-1 flex flex-col items-center justify-center p-4">
           <h2 className="text-xl font-semibold mb-4 text-foreground">
             {language === "ar" ? "لم يتم العثور على الطلب" : "Order not found"}
@@ -209,7 +209,7 @@ export default function OrderViewPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
+      <Navbar />
       <main className="flex-1 bg-background">
         <div className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-between mb-6">
@@ -271,7 +271,7 @@ Payment Method: ${order.paymentStatus}
                       </div>
                       <div className="mt-2 text-right">{statusBadge(order.status, language)}</div>
                       {(order.status === "Pending" || order.status === "Processing") && (
-                         <div className="mt-4">
+                        <div className="mt-4">
                           <Button
                             variant="outline"
                             className="w-full border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 hover:border-red-300 transition-all duration-200 py-6 rounded-xl flex items-center justify-center gap-3 group shadow-sm bg-transparent"

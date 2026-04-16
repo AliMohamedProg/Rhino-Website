@@ -1,10 +1,9 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { cairo, geist } from "./fonts"
+import { geist, playfair, raleway } from "./fonts"
 import { GoogleAnalytics } from "@next/third-parties/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
-import { themeScript } from "@/lib/theme-script"
 import { AppProviders } from "@/providers"
 import { MessageCircle } from "lucide-react"
 
@@ -22,12 +21,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-      </head>
-      <body className="antialiased" suppressHydrationWarning>
-        <AppProviders geistClass={geist.className} cairoClass={cairo.className}>
+    <html lang="en">
+      <body className={`${geist.variable} ${raleway.variable} ${playfair.variable} antialiased bg-white text-black`} suppressHydrationWarning>
+        <AppProviders>
           {children}
         </AppProviders>
         <Analytics />
