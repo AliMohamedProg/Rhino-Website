@@ -154,20 +154,20 @@ export default function UsersPage() {
   }
 
   const formatCurrency = (amount: number) => {
-    return `${amount.toLocaleString()} ${t("common.egp")}`
+    return `${amount.toLocaleString()} EGP`
   }
 
   const columns = [
     {
       key: "user",
-      header: t("users.name"),
+      header: "User",
       render: (user: User) => (
-        <div className={cn("flex items-center gap-3", dir === "rtl" && "flex-row-reverse")}>
+        <div className={cn("flex items-center gap-3", "flex-row-reverse")}>
           <Avatar className="h-10 w-10">
             <AvatarImage src={user.avatar || "/placeholder-user.jpg"} alt={user.name} />
             <AvatarFallback>{user.name.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
-          <div className={cn(dir === "rtl" && "text-right")}>
+          <div className={cn("text-right")}>
             <p className="font-medium">{user.name}</p>
             <p className="text-sm text-muted-foreground">{user.email}</p>
           </div>
@@ -176,47 +176,42 @@ export default function UsersPage() {
     },
     {
       key: "phone",
-      header: t("users.phone"),
+      header: "Phone",
       render: (user: User) => (
         <span className="text-muted-foreground">
-          {user.phone || (language === "ar" ? "غير متاح" : "N/A")}
+          {user.phone || "N/A"}
         </span>
       ),
     },
     {
       key: "role",
-      header: t("users.role"),
+      header: "Role",
       render: (user: User) => getRoleBadge(user.role),
     },
     {
-      key: "status",
-      header: t("users.status"),
-      render: (user: User) => getStatusBadge(user.status),
-    },
-    {
       key: "totalOrders",
-      header: t("users.totalOrders"),
+      header: "Total Orders",
       render: (user: User) => (
         <span className="text-muted-foreground">{user.totalOrders}</span>
       ),
     },
     {
       key: "totalSpent",
-      header: t("users.totalSpent"),
+      header: "Total Spent",
       render: (user: User) => (
         <span className="font-medium">{formatCurrency(user.totalSpent)}</span>
       ),
     },
     {
       key: "joinDate",
-      header: t("users.joinDate"),
+      header: "Join Date",
       render: (user: User) => (
         <span className="text-muted-foreground">
           {user.joinDate && !Number.isNaN(new Date(user.joinDate).getTime())
             ? new Date(user.joinDate).toLocaleDateString(
-              language === "ar" ? "ar-EG" : "en-US"
+              "ar-EG"
             )
-            : (language === "ar" ? "غير متاح" : "N/A")}
+            : "N/A"}
         </span>
       ),
     },
@@ -227,31 +222,28 @@ export default function UsersPage() {
       {/* Page Header */}
       <div
         className={cn(
-          "flex items-center justify-between",
-          dir === "rtl" && "flex-row-reverse"
+          "flex items-center justify-between"
         )}
       >
-        <div className={cn(dir === "rtl" && "text-right")}>
-          <h1 className="text-2xl font-bold tracking-tight">{t("users.title")}</h1>
+        <div className={cn("text-right")}>
+          <h1 className="text-2xl font-bold tracking-tight">{"Users"}</h1>
           <p className="text-muted-foreground">
-            {language === "ar"
-              ? `إدارة ${users.length} مستخدم`
-              : `Manage ${users.length} users`}
+            {`Manage ${users.length} users`}
           </p>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              <Download className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-              {language === "ar" ? "تصدير" : "Export"}
+              <Download className={cn("h-4 w-4", "mr-2")} />
+              {"Export"}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={() => exportUsersExcel()}>
-              {language === "ar" ? "تصدير إلى Excel" : "Export to Excel"}
+              {"Export to Excel"}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => exportUsersPdf()}>
-              {language === "ar" ? "تصدير إلى PDF" : "Export to PDF"}
+              {"Export to PDF"}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -262,17 +254,17 @@ export default function UsersPage() {
         <CardContent className="pt-6">
           {loading ? (
             <div className="flex justify-center items-center h-48 text-muted-foreground animate-pulse">
-              {t("common.loading")}
+              {"Loading"}
             </div>
           ) : loadError ? (
             <div className="flex justify-center items-center h-48 text-destructive">
-              {language === "ar" ? "فشل تحميل المستخدمين." : "Failed to load users."}
+              {"Failed to load users."}
             </div>
           ) : (
             <DataTable
               data={users}
               columns={columns}
-              searchPlaceholder={language === "ar" ? "البحث عن مستخدم..." : "Search users..."}
+              searchPlaceholder={"Search users..."}
               searchKey="name"
             />
           )}
