@@ -3,8 +3,8 @@
 import Link from "next/link"
 import Image from "next/image"
 import { User, Package, Settings, LogOut, Moon, Sun, Globe, Heart, CreditCard, MapPin, Bell, Shield, HelpCircle } from "lucide-react"
-import { Navbar } from "@/components/layout/Navbar"
-import { Footer } from "@/components/layout/footer"
+import { Header } from "@/components/layout/Header"
+import { Footer } from "@/components/layout/Footer"
 import { useLanguage } from "@/context/language-context"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
@@ -76,7 +76,7 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <Navbar />
+      <Header />
       <main className="flex-1 w-full px-6 md:px-16 py-20 bg-[#FAFAFA]">
         <div className="max-w-[1800px] mx-auto">
           <header className="mb-16">

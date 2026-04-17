@@ -3,8 +3,8 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Trash2, Minus, Plus, ShoppingBag, ArrowRight, CreditCard, ShieldCheck } from "lucide-react"
-import { Navbar } from "@/components/layout/Navbar"
-import { Footer } from "@/components/layout/footer"
+import { Header } from "@/components/layout/Header"
+import { Footer } from "@/components/layout/Footer"
 import { useLanguage } from "@/context/language-context"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
@@ -105,7 +105,7 @@ export default function CartPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col bg-white">
-        <Navbar />
+        <Header />
         <main className="flex-1 flex items-center justify-center">
           <div className="w-10 h-10 border-4 border-mahogany border-t-transparent rounded-full animate-spin" />
         </main>
@@ -115,7 +115,7 @@ export default function CartPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <Navbar />
+      <Header />
       <main className="flex-1 mt-20 pb-20">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-12">
           <div className="flex items-end justify-between mb-12">

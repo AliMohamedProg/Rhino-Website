@@ -15,8 +15,8 @@ import {
   Info 
 } from "lucide-react"
 
-import { Navbar } from "@/components/layout/Navbar"
-import { Footer } from "@/components/layout/footer"
+import { Header } from "@/components/layout/Header"
+import { Footer } from "@/components/layout/Footer"
 import { useLanguage } from "@/context/language-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -193,7 +193,7 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <Navbar />
+      <Header />
 
       <main className="flex-1 mt-20">
         <div className="max-w-[1440px] mx-auto min-h-[calc(100vh-80px)] flex flex-col lg:flex-row">

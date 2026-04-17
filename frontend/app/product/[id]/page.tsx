@@ -18,8 +18,8 @@ import {
 } from "@/components/ui/tabs"
 import { formatPrice } from "@/lib/products"
 import { getImageUrl, cn, parseColors } from "@/lib/utils"
-import { Navbar } from "@/components/layout/Navbar"
-import { Footer } from "@/components/layout/footer"
+import { Header } from "@/components/layout/Header"
+import { Footer } from "@/components/layout/Footer"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
 
 type Product = {
@@ -172,7 +172,7 @@ export default function ProductDetailsPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col bg-background">
-        <Navbar />
+        <Header />
         <div className="flex-1 flex items-center justify-center">
           <div className="flex flex-col items-center gap-4">
             <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin" />
@@ -187,7 +187,7 @@ export default function ProductDetailsPage() {
   if (!product) {
     return (
       <div className="min-h-screen flex flex-col bg-background">
-        <Navbar />
+        <Header />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-foreground mb-2">{language === "ar" ? "المنتج غير موجود" : "Product Not Found"}</h2>
@@ -273,7 +273,7 @@ export default function ProductDetailsPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <Navbar />
+      <Header />
 
       <section className="container mx-auto px-4 py-12">
         {/* Breadcrumb */}

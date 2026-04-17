@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react"
 import { useRouter, useParams } from "next/navigation"
 import Link from "next/link"
-import { Navbar } from "@/components/layout/Navbar"
-import { Footer } from "@/components/layout/footer"
+import { Header } from "@/components/layout/Header"
+import { Footer } from "@/components/layout/Footer"
 import { useLanguage } from "@/context/language-context"
 import { Card, CardContent } from "@/components/ui/card"
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table"
@@ -181,7 +181,7 @@ export default function OrderViewPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Navbar />
+        <Header />
         <main className="flex-1 flex items-center justify-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </main>
@@ -193,7 +193,7 @@ export default function OrderViewPage() {
   if (error || !order) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Navbar />
+        <Header />
         <main className="flex-1 flex flex-col items-center justify-center p-4">
           <h2 className="text-xl font-semibold mb-4 text-foreground">
             {language === "ar" ? "لم يتم العثور على الطلب" : "Order not found"}
@@ -209,7 +209,7 @@ export default function OrderViewPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      <Header />
       <main className="flex-1 bg-background">
         <div className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-between mb-6">

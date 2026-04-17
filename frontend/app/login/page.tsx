@@ -2,8 +2,8 @@
 
 import React, { useState, useCallback } from "react"
 import Link from "next/link"
-import { Navbar } from "@/components/layout/Navbar"
-import { Footer } from "@/components/layout/footer"
+import { Header } from "@/components/layout/Header"
+import { Footer } from "@/components/layout/Footer"
 import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
 import { Button } from "@/components/ui/button"
@@ -37,7 +37,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <Navbar />
+      <Header />
       <main className="flex-1 flex items-center justify-center px-4 py-32">
         <div
           className="w-full max-w-md animate-in fade-in slide-in-from-bottom-4 duration-300"

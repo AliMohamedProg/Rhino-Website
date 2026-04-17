@@ -4,8 +4,8 @@ import { useEffect, useState, Suspense } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { CheckCircle, XCircle, Loader2 } from "lucide-react"
-import { Navbar } from "@/components/layout/Navbar"
-import { Footer } from "@/components/layout/footer"
+import { Header } from "@/components/layout/Header"
+import { Footer } from "@/components/layout/Footer"
 import { useLanguage } from "@/context/language-context"
 import { Button } from "@/components/ui/button"
 
@@ -109,7 +109,7 @@ function OrderSuccessContent() {
 export default function OrderSuccessPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <Navbar />
+      <Header />
       <main className="flex-1 bg-[#FDFDFD] flex items-center justify-center py-20">
         <Suspense fallback={<div className="text-mahogany font-bold">Initializing Success Page...</div>}>
           <OrderSuccessContent />

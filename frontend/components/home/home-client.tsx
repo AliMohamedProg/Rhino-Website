@@ -1,8 +1,8 @@
 "use client"
 
 import { Suspense } from "react"
-import { Navbar } from "@/components/layout/Navbar"
-import { Footer } from "@/components/layout/footer"
+import { Header } from "@/components/layout/Header"
+import { Footer } from "@/components/layout/Footer"
 import { Hero } from "@/components/home/Hero"
 import { DiscoverByStyle } from "@/components/home/DiscoverByStyle"
 import { NewCollections } from "@/components/home/NewCollection"
@@ -17,15 +17,15 @@ interface HomeClientProps {
   initialProducts: PublicProduct[]
 }
 
-export function HomeClient({ 
-  initialSliders, 
-  initialCategories, 
-  initialBestSellers, 
-  initialProducts 
+export function HomeClient({
+  initialSliders,
+  initialCategories,
+  initialBestSellers,
+  initialProducts
 }: HomeClientProps) {
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <Navbar />
+      <Header />
       <main className="flex-1">
         <Hero initialSliders={initialSliders} />
         <DiscoverByStyle initialCategories={initialCategories} />

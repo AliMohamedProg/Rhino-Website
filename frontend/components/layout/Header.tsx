@@ -25,7 +25,7 @@ const searchMockProducts = [
   { id: 6, title: "Eco-Conscious Sofa", image: "/grey.png", price: "$1,150.00" },
 ];
 
-export function Navbar() {
+export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);

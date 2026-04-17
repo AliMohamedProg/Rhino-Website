@@ -3,8 +3,8 @@
 import type React from "react"
 
 import { useState } from "react"
-import { Header } from "@/components/layout/header"
-import { Footer } from "@/components/layout/footer"
+import { Header } from "@/components/layout/Header"
+import { Footer } from "@/components/layout/Footer"
 import { useLanguage } from "@/context/language-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"

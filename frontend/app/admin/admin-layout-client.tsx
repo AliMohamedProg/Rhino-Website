@@ -63,10 +63,13 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
 }
 
 
+import { AdminLanguageProvider } from "@/context/admin-language-context"
+
 export function AdminLayoutClient({ children }: { children: React.ReactNode }) {
   return (
-
-    <AdminLayoutContent>{children}</AdminLayoutContent>
-
+    <AdminLanguageProvider>
+      <AdminLayoutContent>{children}</AdminLayoutContent>
+    </AdminLanguageProvider>
   )
 }
+
