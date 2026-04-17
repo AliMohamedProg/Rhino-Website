@@ -1,5 +1,5 @@
 // API Base URL
-const API_BASE_URL = ((process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")) + "/api/admin"
+const API_BASE_URL = ((process.env.NEXT_PUBLIC_API_URL || "https://rhino-web.runasp.net").replace(/\/+$/, "")) + "/api/admin"
 
 // Slider Interface
 export interface Slider {

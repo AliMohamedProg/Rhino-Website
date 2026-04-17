@@ -8,10 +8,17 @@ import {
   UserMeDto
 } from "./types";
 
-const BASE_URL = (process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "") + "/";
+const BASE_URL = (process.env.NEXT_PUBLIC_API_URL || "https://rhino-web.runasp.net").replace(/\/+$/, "");
+
+function buildUrl(path: string) {
+  const cleanPath = path.replace(/^\/+/, "");
+  return `${BASE_URL}/${cleanPath}`;
+}
 
 async function request<T>(method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE", url: string, body?: any): Promise<T> {
-  console.log(`[ApiClient] Request: ${method} ${BASE_URL}${url}`, body || "")
+  const fullUrl = buildUrl(url);
+  console.log(`[ApiClient] Request: ${method} ${fullUrl}`, body || "")
+
   const options: RequestInit = {
     method,
     headers: { "Content-Type": "application/json" },
@@ -22,28 +29,44 @@ async function request<T>(method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE", u
 
   let res;
   try {
-    res = await fetch(BASE_URL + url, options);
+    res = await fetch(fullUrl, options);
   } catch (err) {
     console.error(`[ApiClient] Request failed for ${url}:`, err);
-    throw new Error(`Failed to connect to API at ${BASE_URL}${url}`);
+    throw new Error(`Failed to connect to API at ${fullUrl}`);
   }
 
   // Handle 401 Unauthorized - attempt to refresh token
   if (res.status === 401) {
-    try {
-      const refreshRes = await fetch(BASE_URL + "api/Auth/RefreshAccessToken", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      });
+    const refreshEndpoints = [
+      "api/Auth/RefreshAccessToken",
+      "api/auth/RefreshAccessToken",
+      "api/Auth/refresh",
+      "api/auth/refresh",
+      "api/Auth/RefreshToken",
+    ];
 
-      if (refreshRes.ok) {
-        res = await fetch(BASE_URL + url, options);
-      } else {
-        throw new Error("Unauthorized, refresh failed");
+    let refreshSuccess = false;
+    for (const endpoint of refreshEndpoints) {
+      try {
+        const refreshRes = await fetch(buildUrl(endpoint), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+
+        if (refreshRes.ok) {
+          refreshSuccess = true;
+          break;
+        }
+      } catch (err) {
+        console.warn(`[ApiClient] Refresh attempt failed for ${endpoint}`);
       }
-    } catch (err) {
-      console.error("[ApiClient] Refresh failed:", err);
+    }
+
+    if (refreshSuccess) {
+      res = await fetch(fullUrl, options);
+    } else {
+      console.error("[ApiClient] All refresh attempts failed");
       throw new Error("Unauthorized");
     }
   }
@@ -144,8 +167,9 @@ export const ApiClient = {
     };
 
 
-    console.log(`[ApiClient] Uploading to: ${BASE_URL}${url}`);
-    const res = await fetch(BASE_URL + url, options);
+    const fullUrl = buildUrl(url);
+    console.log(`[ApiClient] Uploading to: ${fullUrl}`);
+    const res = await fetch(fullUrl, options);
 
     if (!res.ok) {
       const errorText = await res.text();

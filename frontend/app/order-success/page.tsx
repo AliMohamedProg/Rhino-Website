@@ -32,8 +32,7 @@ function OrderSuccessContent() {
         const pendingOrderId = localStorage.getItem("pendingOrderId")
         if (pendingOrderId && idParam) {
           try {
-            const rawUrl = (process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")
-            const apiUrl = rawUrl.includes("https://localhost:7282") ? "http://localhost:5213" : rawUrl
+            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "https://rhino-web.runasp.net").replace(/\/+$/, "")
             
             const res = await fetch(`${apiUrl}/api/order/mark-as-paid/${pendingOrderId}?transactionId=${idParam}`, {
               method: "POST",

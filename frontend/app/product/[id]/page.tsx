@@ -119,7 +119,7 @@ export default function ProductDetailsPage() {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const res = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")}/api/review/get-reviews?productId=${id}`)
+        const res = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://rhino-web.runasp.net").replace(/\/+$/, "")}/api/review/get-reviews?productId=${id}`)
         if (res.ok) {
           const data = await res.json()
           const emailToName = (email?: string) => {
@@ -222,7 +222,7 @@ export default function ProductDetailsPage() {
         rating: reviewRating
       }
 
-      const res = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")}/api/review/add-review`, {
+      const res = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://rhino-web.runasp.net").replace(/\/+$/, "")}/api/review/add-review`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

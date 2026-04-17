@@ -91,7 +91,7 @@ export default function OrderViewPage() {
         console.log(`Fetching order details for ID: ${id}`)
 
         // Using common fetch with credentials to ensure absolute URL and cookie handling
-        const res = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")}/api/order/${id}`, {
+        const res = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://rhino-web.runasp.net").replace(/\/+$/, "")}/api/order/${id}`, {
           credentials: "include"
         })
 
@@ -117,7 +117,7 @@ export default function OrderViewPage() {
             // If name or image is missing, fetch from Items API
             if (!normalized.nameEn || !normalized.nameAr || !normalized.image) {
               try {
-                const itemRes = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")}/api/items/${normalized.itemId}`, {
+                const itemRes = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://rhino-web.runasp.net").replace(/\/+$/, "")}/api/items/${normalized.itemId}`, {
                   credentials: "include"
                 });
                 if (itemRes.ok) {

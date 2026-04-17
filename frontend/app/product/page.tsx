@@ -127,7 +127,7 @@ export default function CategoryPage() {
 
       try {
         setAdding(true)
-        const res = await fetch("https://localhost:7282/api/Cart/add-to-cart", {
+        const res = await fetch("https://rhino-web.runasp.net/api/Cart/add-to-cart", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",

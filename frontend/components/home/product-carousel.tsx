@@ -57,7 +57,7 @@ function ProductCard({ product }: { product: ApiItem }) {
     try {
       setAdding(true)
       setError("")
-      const res = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")}/api/Cart/add-to-cart`, {
+      const res = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://rhino-web.runasp.net").replace(/\/+$/, "")}/api/Cart/add-to-cart`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

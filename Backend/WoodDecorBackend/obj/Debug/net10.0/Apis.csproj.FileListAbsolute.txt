@@ -729,3 +729,9 @@ C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/Backend/WoodDec
 /Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/obj/Debug/net10.0/Apis.pdb
 /Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/obj/Debug/net10.0/Apis.genruntimeconfig.cache
 /Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/obj/Debug/net10.0/ref/Apis.dll
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/bin/Debug/net10.0/publish_folder/web.config
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/bin/Debug/net10.0/publish_folder/Apis.deps.json
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/bin/Debug/net10.0/publish_folder/Apis.runtimeconfig.json
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/bin/Debug/net10.0/publish_folder/Apis.staticwebassets.endpoints.json
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/bin/Debug/net10.0/publish_folder/appsettings.Development.json
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/bin/Debug/net10.0/publish_folder/appsettings.json
