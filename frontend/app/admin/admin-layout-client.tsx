@@ -35,7 +35,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-background" dir="ltr">
+    <div className="min-h-screen bg-background" dir="ltr" data-theme="admin">
       {/* Desktop Sidebar */}
       <div className="hidden md:block">
         <AdminSidebar />

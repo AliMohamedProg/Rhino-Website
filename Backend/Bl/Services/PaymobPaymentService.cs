@@ -54,7 +54,7 @@ namespace Bl.Services
             // ── Build request body ─────────────────────────────────────────────
             var requestBody = new
             {
-                amount = amount * 100,          // EGP → Piasters
+                amount = amount,          // EGP → Piasters
                 currency = "EGP",
                 payment_methods = paymentMethods,
                 items = new[]
@@ -62,7 +62,7 @@ namespace Bl.Services
                     new
                     {
                         name     = "Order",
-                        amount   = amount * 100,
+                        amount   = amount,
                         quantity = 1
                     }
                 },
@@ -77,7 +77,7 @@ namespace Bl.Services
                 merchant_order_id = orderId,
                 extras = new { order_id = orderId },
                 // ← After payment, Paymob redirects to this URL with ?success=true/false&id=TX_ID
-                redirection_url = "http://localhost:3000/order-success"
+                redirection_url = "https://rhino-web-six.vercel.app/order-success"
             };
 
             // ── Call Paymob ────────────────────────────────────────────────────
