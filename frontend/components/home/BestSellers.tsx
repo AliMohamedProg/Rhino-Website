@@ -9,26 +9,28 @@ interface BestSellersProps {
 
 export function BestSellers({ initialBestSellers }: BestSellersProps) {
   // Map your original products to the Rhino ProductCard format in English only
-  const displayProducts = (initialBestSellers || []).slice(0, 3).map(p => ({
-    id: p.id,
-    badge: "FEATURED",
-    category: "TOP SELLING",
-    title: p.nameEn,
-    description: p.descriptionEn,
-    price: `${formatPrice(p.price)} EGP`,
-    originalPrice: p.discountAmount && p.discountAmount > 0 
-        ? `${formatPrice(Math.round(p.price / (1 - p.discountAmount / 100)))} EGP` 
-        : "",
-    rating: 4.8,
-    reviewsCount: 89,
-    mainImage: p.mainImage,
-    colorsRaw: p.colorsEn,
-  }));
+  const displayProducts = (initialBestSellers || []).slice(0, 3).map(p => {
+    const discount = p.discountAmount || 0;
+    const hasDiscount = discount > 0;
+    return {
+      id: p.id,
+      category: "TOP SELLING",
+      title: p.nameEn,
+      description: p.descriptionEn,
+      price: `${formatPrice(p.price)} EGP`,
+      discountAmount: discount,
+      originalPrice: hasDiscount ? `${formatPrice(Math.round(p.price / (1 - discount / 100)))} EGP` : undefined,
+      rating: 4.8,
+      reviewsCount: 89,
+      mainImage: p.mainImage,
+      colorsRaw: p.colorsEn,
+    };
+  });
 
 
 
   return (
-    <section className="py-24 px-8 bg-white" id="catalog">
+    <section className="py-24 px-8 bg-white min-h-screen" id="catalog">
       <div className="max-w-7xl mx-auto flex flex-col items-center">
 
         <div className="flex flex-col items-center gap-4 mb-20 text-center">

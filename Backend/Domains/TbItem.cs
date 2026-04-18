@@ -17,7 +17,8 @@ public partial class TbItem : BaseTable
 
     public decimal Price { get; set; }
 
-    public int? DiscountAmount { get; set; }
+
+public int? DiscountAmount { get; set; }
 
     public Guid CategoryId { get; set; }
 

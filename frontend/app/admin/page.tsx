@@ -174,12 +174,12 @@ export default function AdminDashboardPage() {
     : []
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border/50">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Dashboard Overview</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-3xl font-bold tracking-tight">Dashboard Overview</h1>
+          <p className="text-muted-foreground mt-1">
             Welcome back, Admin! Here&apos;s what&apos;s happening with your store today.
           </p>
         </div>
@@ -187,7 +187,7 @@ export default function AdminDashboardPage() {
 
 
       {/* Stats Cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <StatsCard
           title="Total Revenue"
           value={formatCurrency(stats?.totalRevenue || 0)}
@@ -215,7 +215,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Charts Row */}
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2">
         <AreaChartCard
           title="Sales Performance"
           data={salesChartData}
@@ -227,7 +227,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Secondary Charts and Tables */}
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3">
         <PieChartCard
           title="Top Categories"
           data={categoryChartData}
@@ -241,7 +241,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Recent Orders and Top Products */}
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3">
         <RecentOrdersTable orders={recentOrders} className="lg:col-span-2" />
         <TopProductsCard products={topProducts} className="lg:col-span-1" />
       </div>

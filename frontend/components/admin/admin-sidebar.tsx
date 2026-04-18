@@ -64,14 +64,14 @@ export function AdminSidebar() {
       <Link
         href={item.href}
         className={cn(
-          "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all hover:bg-sidebar-accent",
+          "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all hover:bg-primary/10 hover:text-primary group",
           active
-            ? "bg-sidebar-accent text-sidebar-accent-foreground"
+            ? "bg-primary text-primary-foreground shadow-sm"
             : "text-sidebar-foreground/70 hover:text-sidebar-foreground",
           collapsed && "justify-center px-2"
         )}
       >
-        <Icon className={cn("h-5 w-5 shrink-0", active && "text-primary")} />
+        <Icon className={cn("h-5 w-5 shrink-0 transition-transform group-hover:scale-110", active && "text-primary-foreground")} />
         {!collapsed && <span>{item.title}</span>}
       </Link>
     )
@@ -80,12 +80,12 @@ export function AdminSidebar() {
   return (
     <aside
       className={cn(
-        "fixed inset-y-0 left-0 z-50 flex flex-col border-r border-sidebar-border bg-sidebar transition-all duration-300",
+        "fixed inset-y-0 left-0 z-50 flex flex-col border-r border-sidebar-border bg-sidebar transition-all duration-300 shadow-lg",
         collapsed ? "w-16" : "w-64"
       )}
     >
       {/* Logo */}
-      <div className="flex h-16 items-center justify-between border-b border-sidebar-border px-4">
+      <div className="flex h-16 items-center justify-between border-b border-sidebar-border px-4 bg-gradient-to-r from-primary/5 to-transparent">
         {!collapsed && (
           <Link href="/admin" className="flex items-center gap-2">
             <Image
@@ -97,12 +97,12 @@ export function AdminSidebar() {
               className="object-contain"
               priority
             />
-            <span className="font-serif italic text-mahogany font-bold">Rhino Admin</span>
+            <span className="font-serif italic text-mahogany font-bold text-lg">Rhino Admin</span>
           </Link>
         )}
         {collapsed && (
           <Link href="/admin" className="mx-auto">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary shadow-md">
               <span className="text-sm font-bold text-primary-foreground">R</span>
             </div>
           </Link>
@@ -142,11 +142,11 @@ export function AdminSidebar() {
       </ScrollArea>
 
       {/* Collapse Button */}
-      <div className="border-t border-sidebar-border p-2">
+      <div className="border-t border-sidebar-border p-2 bg-muted/30">
         <Button
           variant="ghost"
           size="sm"
-          className="w-full justify-center"
+          className="w-full justify-center hover:bg-primary/10"
           onClick={() => setCollapsed(!collapsed)}
         >
           {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}

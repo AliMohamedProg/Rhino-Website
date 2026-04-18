@@ -38,12 +38,12 @@ interface ColorOption {
 
 interface ProductCardProps {
   id?: string;
-  badge?: string;
   category: string;
   title: string;
   description: string;
   price: string;
-  originalPrice: string;
+  originalPrice?: string;
+  discountAmount?: number;
   rating?: number;
   reviewsCount?: number;
   mainImage?: string;
@@ -54,12 +54,12 @@ interface ProductCardProps {
 
 export function ProductCard({
   id,
-  badge = "New Arrival",
   category = "PREMIUM FURNITURE",
   title,
   description,
   price,
   originalPrice,
+  discountAmount = 0,
   rating = 4.9,
   reviewsCount = 124,
   mainImage,
@@ -79,16 +79,12 @@ export function ProductCard({
     colors.find((c) => c.name === defaultColor) || colors[0]
   );
 
+  const hasDiscount = discountAmount > 0;
 
   return (
-    <div className="bg-white rounded-[2.5rem] p-6 flex flex-col gap-6 shadow-sm border border-gray-100 max-w-sm transition-all duration-300 hover:shadow-xl group">
+    <div className="bg-white rounded-[2.5rem] p-6 flex flex-col gap-6 shadow-sm border border-gray-100 max-w-sm transition-all duration-300 hover:shadow-xl group h-full">
       {/* Top Section with Image */}
       <div className="relative bg-[#F8F8F8] rounded-[2rem] aspect-[1.2/1] flex items-center justify-center p-4 overflow-hidden">
-        {/* Badge */}
-        <div className="absolute top-4 left-4 bg-[#333333] text-white text-[10px] font-bold px-4 py-2 rounded-full uppercase tracking-wider z-10">
-          {badge}
-        </div>
-
         {/* Wishlist Button */}
         <button className="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform z-10">
           <HeartIcon className="w-4 h-4 text-[#E53935] fill-[#E53935]" />
@@ -173,12 +169,31 @@ export function ProductCard({
         {/* Pricing & Cart */}
         <div className="flex items-center justify-between mt-2">
           <div className="flex flex-col">
-            <span className="text-[13px] text-[#A1A1A1] line-through font-medium">
-              {originalPrice}
+            {hasDiscount && originalPrice && (
+              <span className="text-[13px] text-[#A1A1A1] line-through font-medium">
+                {originalPrice}
+              </span>
+            )}
+            {hasDiscount && !originalPrice && price && (
+              <span className="text-[13px] text-[#A1A1A1] line-through font-medium">
+                {price}
+              </span>
+            )}
+            <span className={`text-3xl font-bold ${hasDiscount ? "text-red-600" : "text-black"}`}>
+              {hasDiscount 
+                ? (() => {
+                    // Parse and calculate discounted price from the passed price string
+                    const numPrice = parseFloat(price.replace(/[^0-9.]/g, '')) || 0;
+                    const discounted = Math.round(numPrice - (numPrice * discountAmount / 100));
+                    return `${discounted.toLocaleString()} EGP`;
+                  })()
+                : price}
             </span>
-            <span className="text-3xl font-bold text-black">
-              {price}
-            </span>
+            {hasDiscount && (
+              <span className="text-xs text-red-500 font-medium">
+                Save {discountAmount}%
+              </span>
+            )}
           </div>
           <button className="flex items-center gap-2 bg-mahogany text-white px-6 py-4 rounded-2xl hover:brightness-110 transition-all active:scale-95 shadow-lg">
             <ShoppingCartIcon className="w-5 h-5" />

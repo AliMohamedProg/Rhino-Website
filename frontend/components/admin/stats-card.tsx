@@ -24,16 +24,16 @@ export function StatsCard({ title, value, growth, icon, trend, className }: Stat
   }
 
   return (
-    <Card className={cn("overflow-hidden relative", className)}>
+    <Card className={cn("overflow-hidden relative border-l-4 border-l-primary shadow-sm hover:shadow-md transition-shadow duration-300", className)}>
       <CardContent className="p-6">
         <div className="flex items-start justify-between">
           <div className="space-y-2 pl-14 pr-0">
             <p className="text-sm font-medium text-muted-foreground">{title}</p>
-            <p className="text-2xl font-bold tracking-tight">{formatValue(value)}</p>
+            <p className="text-3xl font-bold tracking-tight">{formatValue(value)}</p>
             {growth !== undefined && (
               <div
                 className={cn(
-                  "flex items-center gap-1 text-sm",
+                  "flex items-center gap-1 text-sm font-medium",
                   trend === "up" ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"
                 )}
               >
@@ -47,7 +47,7 @@ export function StatsCard({ title, value, growth, icon, trend, className }: Stat
             )}
           </div>
           <div
-            className="rounded-lg bg-primary/10 p-3 text-primary transition-all duration-300 absolute start-4 top-1/2 -translate-y-1/2"
+            className="rounded-xl bg-primary/10 p-3 text-primary transition-all duration-300 absolute start-4 top-1/2 -translate-y-1/2"
           >
             {icon}
           </div>

@@ -8,26 +8,30 @@ interface NewCollectionsProps {
 }
 
 export function NewCollections({ initialProducts }: NewCollectionsProps) {
-    const displayProducts = (initialProducts || []).slice(0, 3).map(p => ({
-        id: p.id,
-        badge: "NEW",
-        category: "FURNITURE",
-        title: p.nameEn,
-        description: p.descriptionEn,
-        price: `${formatPrice(p.price)} EGP`,
-        originalPrice: p.discountAmount && p.discountAmount > 0 
-            ? `${formatPrice(Math.round(p.price / (1 - p.discountAmount / 100)))} EGP` 
-            : "",
-        rating: 4.9, 
-        reviewsCount: 124, 
-        mainImage: p.mainImage,
-        colorsRaw: p.colorsEn,
-    }));
+    const displayProducts = (initialProducts || []).slice(0, 3).map(p => {
+        const discount = p.discountAmount || 0;
+        const hasDiscount = discount > 0;
+        return {
+            id: p.id,
+            category: "FURNITURE",
+            title: p.nameEn,
+            description: p.descriptionEn,
+            price: `${formatPrice(p.price)} EGP`,
+            discountAmount: discount,
+            originalPrice: hasDiscount 
+                ? `${formatPrice(Math.round(p.price / (1 - discount / 100)))} EGP` 
+                : undefined,
+            rating: 4.9, 
+            reviewsCount: 124, 
+            mainImage: p.mainImage,
+            colorsRaw: p.colorsEn,
+        };
+    });
 
 
 
     return (
-        <section className="py-24 px-8 bg-blush">
+        <section className="py-24 px-8 bg-blush min-h-screen">
             <div className="max-w-7xl mx-auto flex flex-col">
 
                 <div className="flex flex-col gap-4 mb-20 px-2">
