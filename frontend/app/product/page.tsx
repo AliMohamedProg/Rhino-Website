@@ -274,11 +274,11 @@ export default function CategoryPage() {
     return <p className="text-center py-20">Loading...</p>
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col w-full">
       <Header />
 
-      <main className="flex-1 bg-background">
-        <div className="container mx-auto px-4 py-6">
+      <main className="flex-1 bg-background w-full min-h-0">
+        <div className="w-full max-w-none px-4 sm:px-6 lg:px-8 xl:px-10 py-6">
           <div className="flex flex-col lg:flex-row gap-6">
 
             {/* Sidebar */}
@@ -357,8 +357,8 @@ export default function CategoryPage() {
             </aside>
 
             {/* Products */}
-            <div className="flex-1">
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="flex-1 min-w-0">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
                 {filteredProducts.map((product) => (
                   <ProductGridCard key={product.id} product={product} />
                 ))}

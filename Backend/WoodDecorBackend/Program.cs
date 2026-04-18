@@ -24,7 +24,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend", policy =>
     {
         policy
-            .WithOrigins("https://69e1b87ac64d2003797bcc06--remarkable-bavarois-63b83e.netlify.app") // رابط الNext.js local dev
+            .WithOrigins("https://rhino-web.netlify.app") // رابط الNext.js local dev
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials(); // مهم لو بتستخدم cookies
