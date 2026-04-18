@@ -77,7 +77,7 @@ namespace Bl.Services
                 merchant_order_id = orderId,
                 extras = new { order_id = orderId },
                 // ← After payment, Paymob redirects to this URL with ?success=true/false&id=TX_ID
-                redirection_url = "https://rhino-web-six.vercel.app/order-success"
+                redirection_url = "http://localhost:3000/order-success"
             };
 
             // ── Call Paymob ────────────────────────────────────────────────────

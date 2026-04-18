@@ -57,7 +57,6 @@ const RevenueChart = dynamic(
 )
 
 export default function AdminDashboardPage() {
-  const { t, language, dir } = useAdminLanguage()
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null)
   const [initialSliders, setInitialSliders] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -67,7 +66,7 @@ export default function AdminDashboardPage() {
       try {
         setLoading(true)
         const [data, sliders] = await Promise.all([
-          ApiClient.get("api/admin/dashboard"),
+          ApiClient.get("api/admin/dashboard") as Promise<DashboardData>,
           getPublicSliders()
         ])
         if (data) setDashboardData(data)
@@ -84,168 +83,159 @@ export default function AdminDashboardPage() {
 
   const formatCurrency = (amount: number) => {
     if (amount >= 1000000) {
-      return `${(amount / 1000000).toFixed(2)}M ${t("common.egp")}`
+      return `${(amount / 1000000).toFixed(2)}M EGP`
     }
     if (amount >= 1000) {
-      return `${(amount / 1000).toFixed(1)}K ${t("common.egp")}`
+      return `${(amount / 1000).toFixed(1)}K EGP`
     }
-    return `${amount.toLocaleString()} ${t("common.egp")}`
+    return `${amount.toLocaleString()} EGP`
   }
 
-  // Use API data only
   const stats = dashboardData
   const recentOrdersData = dashboardData?.recentOrders || []
   const topProductsData = dashboardData?.topProducts || []
 
-  // Transform API data for charts
   const salesChartData = dashboardData?.monthlySales
     ? dashboardData.monthlySales.map((item) => ({
-      name: item.monthName,
-      value: item.total,
-    }))
+        name: item.monthName,
+        value: item.total,
+      }))
     : []
 
   const ordersChartData = dashboardData?.monthlyOrders
     ? dashboardData.monthlyOrders.map((item) => ({
-      name: item.monthName,
-      value: item.count,
-    }))
+        name: item.monthName,
+        value: item.count,
+      }))
     : []
 
   const categoryChartData = dashboardData?.topCategories
     ? dashboardData.topCategories.map((item) => ({
-      name: language === "ar" ? item.nameAr : item.nameEn,
-      value: item.totalSold,
-    }))
+        name: item.nameEn,
+        value: item.totalSold,
+      }))
     : []
 
-  // Revenue chart - use monthly sales data (same as sales chart since no daily data available)
   const revenueChartData = salesChartData
 
-  // Convert dashboard recent orders to Order format for the table
   const recentOrders: Order[] = recentOrdersData
     ? recentOrdersData.map((order, index) => ({
-      id: `order-${index}`,
-      orderNumber: order.orderNumber,
-      customer: {
-        id: `customer-${index}`,
-        name: order.customerName,
-        email: "",
-        phone: "",
-      },
-      items: [],
-      subtotal: order.total,
-      shipping: 0,
-      tax: 0,
-      discount: 0,
-      total: order.total,
-      status: (order.status?.toLowerCase() as Order["status"]) || "pending",
-      paymentMethod: "",
-      shippingAddress: {
-        street: "",
-        city: "",
-        state: "",
-        country: "",
-        postalCode: "",
-      },
-      createdDate: order.date || new Date().toISOString(),
-      updatedAt: order.date || new Date().toISOString(),
-    }))
+        id: `order-${index}`,
+        orderNumber: order.orderNumber,
+        paymentMethodName: "",
+        customer: {
+          id: `customer-${index}`,
+          name: order.customerName,
+          email: "",
+          phone: "",
+        },
+        items: [],
+        subtotal: order.total,
+        shipping: 0,
+        tax: 0,
+        discount: 0,
+        total: order.total,
+        status: (order.status?.toLowerCase() as Order["status"]) || "pending",
+        paymentMethod: "",
+        shippingAddress: {
+          street: "",
+          city: "",
+          state: "",
+          country: "",
+          postalCode: "",
+        },
+        createdDate: order.date || new Date().toISOString(),
+        updatedAt: order.date || new Date().toISOString(),
+      }))
     : []
 
-  // Convert dashboard top products to Product format
   const topProducts: Product[] = topProductsData
     ? topProductsData.map((product) => ({
-      id: `product-${product.nameEn}`,
-      nameEn: product.nameEn,
-      nameAr: product.nameAr,
-      descriptionEn: "",
-      descriptionAr: "",
-      price: product.price,
-      originalPrice: product.price,
-      stock: product.stock,
-      category: "",
-      categoryId: "",
-      status: "active" as const,
-      featured: true,
-      onSale: false,
-      images: ["/placeholder.jpg"],
-      mainImage: "/placeholder.jpg",
-      sku: "",
-      createdDate: "",
-      updatedAt: "",
-    }))
+        id: `product-${product.nameEn}`,
+        nameEn: product.nameEn,
+        nameAr: product.nameAr,
+        descriptionEn: "",
+        descriptionAr: "",
+        price: product.price,
+        originalPrice: product.price,
+        stock: product.stock,
+        category: "",
+        categoryId: "",
+        status: "active" as const,
+        featured: true,
+        onSale: false,
+        images: ["/placeholder.jpg"],
+        mainImage: "/placeholder.jpg",
+        sku: "",
+        createdDate: "",
+        updatedAt: "",
+      }))
     : []
 
   return (
     <div className="space-y-6">
-      {/* Page Header */}
-      <div className={cn("flex flex-col sm:flex-row sm:items-center justify-between gap-4", dir === "rtl" && "text-right")}>
+      <div className="relative overflow-hidden rounded-3xl border border-[#7B3F32]/12 bg-white/80 backdrop-blur-xl p-6 md:p-7 shadow-[0_14px_40px_rgba(0,0,0,0.06)]">
+        <div className="pointer-events-none absolute -top-16 -right-10 h-36 w-36 rounded-full bg-[#7B3F32]/10 blur-2xl" />
+        <div className="pointer-events-none absolute -bottom-14 -left-8 h-32 w-32 rounded-full bg-[#C1AFA0]/30 blur-2xl" />
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">{t("dashboard.title")}</h1>
-          <p className="text-muted-foreground">
-            {t("dashboard.welcome")}, Admin!
-          </p>
+          <p className="text-[11px] tracking-[0.2em] uppercase font-semibold text-[#8b7d73]">Overview</p>
+          <h1 className="text-3xl font-bold tracking-tight text-[#2f2219] mt-1">Dashboard</h1>
+          <p className="text-[#7c6f65] mt-1">Welcome back, Admin. Here is your latest performance snapshot.</p>
         </div>
       </div>
 
-
-      {/* Stats Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatsCard
-          title={t("dashboard.totalRevenue")}
+          title="Total Revenue"
           value={formatCurrency(stats?.totalRevenue || 0)}
           trend="up"
           icon={<DollarSign className="h-5 w-5" />}
         />
         <StatsCard
-          title={t("dashboard.totalOrders")}
+          title="Total Orders"
           value={stats?.totalOrders || 0}
           trend="up"
           icon={<ShoppingCart className="h-5 w-5" />}
         />
         <StatsCard
-          title={t("dashboard.totalProducts")}
+          title="Total Products"
           value={stats?.totalProducts || 0}
           trend="up"
           icon={<Package className="h-5 w-5" />}
         />
         <StatsCard
-          title={t("dashboard.totalUsers")}
+          title="Total Users"
           value={stats?.totalUsers || 0}
           trend="up"
           icon={<Users className="h-5 w-5" />}
         />
       </div>
 
-      {/* Charts Row */}
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-5 lg:grid-cols-2">
         <AreaChartCard
-          title={t("dashboard.salesChart")}
+          title="Sales Overview"
           data={salesChartData}
         />
         <BarChartCard
-          title={t("dashboard.ordersChart")}
+          title="Orders Overview"
           data={ordersChartData}
         />
       </div>
 
-      {/* Secondary Charts and Tables */}
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-5 lg:grid-cols-3">
         <PieChartCard
-          title={t("analytics.topCategories")}
+          title="Top Categories"
           data={categoryChartData}
           className="lg:col-span-1"
         />
         <RevenueChart
-          title={t("dashboard.revenueChart")}
+          title="Revenue Overview"
           data={revenueChartData}
           className="lg:col-span-2 -mt-6 lg:-mt-0"
         />
       </div>
 
-      {/* Recent Orders and Top Products */}
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-5 lg:grid-cols-3">
         <RecentOrdersTable orders={recentOrders} className="lg:col-span-2" />
         <TopProductsCard products={topProducts} className="lg:col-span-1" />
       </div>

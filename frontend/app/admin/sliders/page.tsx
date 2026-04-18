@@ -1,11 +1,9 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react"
-import { useAdminLanguage } from "@/context/admin-language-context"
 import { cn, getImageUrl } from "@/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import type { Slider } from "@/lib/admin-data"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
 import {
@@ -38,7 +36,6 @@ import { Plus, MoreHorizontal, Pencil, Trash2, ImageIcon, Upload, Loader2 } from
 import Image from "next/image"
 
 export default function SlidersPage() {
-  const { t, language, dir } = useAdminLanguage()
   const [sliders, setSliders] = useState<Slider[]>([])
   const [loading, setLoading] = useState(true)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
@@ -47,11 +44,10 @@ export default function SlidersPage() {
   const [addDialogOpen, setAddDialogOpen] = useState(false)
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [editingSlider, setEditingSlider] = useState<Slider | null>(null)
-  const [formData, setFormData] = useState({
-    titleAr: "",
-    titleEn: "",
-    imageUrl: "",
-  })
+   const [formData, setFormData] = useState({
+     titleEn: "",
+     imageUrl: "",
+   })
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [uploading, setUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -59,9 +55,8 @@ export default function SlidersPage() {
   const fetchSliders = async () => {
     try {
       setLoading(true)
-      const { getSliders } = await import("@/lib/admin-data")
-      const data = await getSliders()
-      setSliders(data)
+      const data = await ApiClient.get("api/admin/Sliders")
+      setSliders(Array.isArray(data) ? data : [])
     } catch (err) {
       console.error("Failed to fetch sliders:", err)
     } finally {
@@ -73,28 +68,26 @@ export default function SlidersPage() {
     fetchSliders()
   }, [])
 
-  const handleAdd = () => {
-    setFormData({ titleAr: "", titleEn: "", imageUrl: "" })
-    setSelectedFile(null)
-    setAddDialogOpen(true)
-  }
+   const handleAdd = () => {
+     setFormData({ titleEn: "", imageUrl: "" })
+     setSelectedFile(null)
+     setAddDialogOpen(true)
+   }
 
-  const handleEdit = (slider: Slider) => {
-    setEditingSlider(slider)
-    setFormData({
-      titleAr: slider.titleAr,
-      titleEn: slider.titleEn,
-      imageUrl: slider.imageUrl,
-    })
-    setSelectedFile(null)
-    setEditDialogOpen(true)
-  }
+   const handleEdit = (slider: Slider) => {
+     setEditingSlider(slider)
+     setFormData({
+       titleEn: slider.titleEn,
+       imageUrl: slider.imageUrl,
+     })
+     setSelectedFile(null)
+     setEditDialogOpen(true)
+   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
       setSelectedFile(file)
-      // Create a preview URL
       const previewUrl = URL.createObjectURL(file)
       setFormData({ ...formData, imageUrl: previewUrl })
     }
@@ -102,12 +95,9 @@ export default function SlidersPage() {
 
   const handleUpload = async () => {
     if (!selectedFile) return null
-
     try {
       setUploading(true)
-      // CORRECT ENDPOINT: The previous "api/Image/upload" is incorrect for your backend
       const result = await ApiClient.upload("api/Upload", selectedFile)
-      // Check both 'url' (returned by current UploadController) and 'imageUrl'
       return result?.url || result?.imageUrl || result
     } catch (error) {
       console.error("Error uploading image:", error)
@@ -124,11 +114,9 @@ export default function SlidersPage() {
 
   const confirmDelete = async () => {
     if (!sliderToDelete) return
-
     try {
       setLoading(true)
-      const { deleteSlider } = await import("@/lib/admin-data")
-      await deleteSlider(sliderToDelete.id)
+      await ApiClient.post(`api/admin/Sliders/delete-slider/${sliderToDelete.id}`, {})
       setDeleteDialogOpen(false)
       setSliderToDelete(null)
       await fetchSliders()
@@ -144,12 +132,11 @@ export default function SlidersPage() {
       setLoading(true)
       await ApiClient.post(`api/admin/Sliders/delete-all-sliders`, {})
       setDeleteAllDialogOpen(false)
-      alert(language === "ar" ? "تم حذف جميع الشرائح بنجاح" : "All sliders deleted successfully")
+      alert("All sliders deleted successfully")
       await fetchSliders()
     } catch (err: any) {
       console.error("Failed to delete all sliders:", err)
-      const errorMsg = err.message || JSON.stringify(err)
-      alert((language === "ar" ? "فشل الحذف: " : "Delete failed: ") + errorMsg)
+      alert("Delete failed: " + (err.message || JSON.stringify(err)))
     } finally {
       setLoading(false)
     }
@@ -158,39 +145,30 @@ export default function SlidersPage() {
   const handleSubmitAdd = async () => {
     try {
       setLoading(true)
-
       let imageUrl = ""
-
-      // If a file was selected, upload it first
       if (selectedFile) {
         const uploadedUrl = await handleUpload()
-        if (uploadedUrl) {
-          imageUrl = uploadedUrl
-        } else {
-          alert(language === "ar" ? "فشل رفع الصورة. يرجى المحاولة مرة أخرى." : "Image upload failed. Please try again.")
+        if (uploadedUrl) imageUrl = uploadedUrl
+        else {
+          alert("Image upload failed. Please try again.")
           return
         }
       } else {
         imageUrl = formData.imageUrl
       }
-
-      // CRITICAL: Block blob URLs from being saved
       if (imageUrl.startsWith("blob:")) {
-        alert(language === "ar" ? "خطأ في معالجة الصورة. يرجى اختيار الصورة مرة أخرى." : "Incomplete image processing. Please re-select the image.")
+        alert("Incomplete image processing. Please re-select the image.")
         return
       }
-
       if (!imageUrl) {
-        alert(language === "ar" ? "الصورة مطلوبة" : "Image is required")
+        alert("Image is required")
         return
       }
-
-      const { addSlider } = await import("@/lib/admin-data")
-      await addSlider({
-        titleAr: formData.titleAr,
-        titleEn: formData.titleEn,
-        imageUrl,
-      })
+       await ApiClient.post("api/admin/Sliders/add-slider", {
+         titleAr: "",
+         titleEn: formData.titleEn,
+         imageUrl,
+       })
       setAddDialogOpen(false)
       setSelectedFile(null)
       await fetchSliders()
@@ -203,41 +181,31 @@ export default function SlidersPage() {
 
   const handleSubmitEdit = async () => {
     if (!editingSlider) return
-
     try {
       setLoading(true)
-
       let imageUrl = formData.imageUrl
-
-      // If a new file was selected, upload it first
       if (selectedFile) {
         const uploadedUrl = await handleUpload()
-        if (uploadedUrl) {
-          imageUrl = uploadedUrl
-        } else {
-          alert(language === "ar" ? "فشل رفع الصورة. يرجى المحاولة مرة أخرى." : "Image upload failed. Please try again.")
+        if (uploadedUrl) imageUrl = uploadedUrl
+        else {
+          alert("Image upload failed. Please try again.")
           return
         }
       }
-
-      // CRITICAL: Block blob URLs from being saved
       if (imageUrl.startsWith("blob:")) {
-        alert(language === "ar" ? "خطأ في معالجة الصورة. يرجى اختيار الصورة مرة أخرى." : "Incomplete image processing. Please re-select the image.")
+        alert("Incomplete image processing. Please re-select the image.")
         return
       }
-
       if (!imageUrl) {
-        alert(language === "ar" ? "الصورة مطلوبة" : "Image is required")
+        alert("Image is required")
         return
       }
-
-      const { editSlider } = await import("@/lib/admin-data")
-      await editSlider({
-        id: editingSlider.id,
-        titleAr: formData.titleAr,
-        titleEn: formData.titleEn,
-        imageUrl,
-      })
+       await ApiClient.post("api/admin/Sliders/edit-slider", {
+         id: editingSlider.id,
+         titleAr: "",
+         titleEn: formData.titleEn,
+         imageUrl,
+       })
       setEditDialogOpen(false)
       setEditingSlider(null)
       setSelectedFile(null)
@@ -249,86 +217,61 @@ export default function SlidersPage() {
     }
   }
 
-  const isFormValid = () => {
-    return formData.titleAr.trim() && formData.titleEn.trim() && (formData.imageUrl.trim() || selectedFile)
-  }
+   const isFormValid = () => formData.titleEn.trim()
 
   return (
-    <div className={cn("space-y-6", dir === "rtl" && "font-arabic")}>
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">
-            {language === "ar" ? "الشرائح" : "Sliders"}
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            {language === "ar"
-              ? "إدارة شرائح الصفحة الرئيسية"
-              : "Manage homepage sliders"}
-          </p>
+          <h1 className="text-2xl font-bold text-slate-900">Sliders</h1>
+          <p className="text-slate-500">Manage {sliders.length} sliders</p>
         </div>
         <div className="flex items-center gap-2">
           {sliders.length > 0 && (
-            <Button variant="destructive" onClick={() => setDeleteAllDialogOpen(true)} className={dir === "rtl" ? "flex-row-reverse" : ""}>
-              <Trash2 className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-              {language === "ar" ? "حذف الكل" : "Delete All"}
+            <Button variant="destructive" className={"bg-red-700 "} onClick={() => setDeleteAllDialogOpen(true)}>
+              <Trash2 className="h-4 w-4 mr-2 text-white" />
+              Delete All
             </Button>
           )}
-          <Button onClick={handleAdd} className={dir === "rtl" ? "flex-row-reverse" : ""}>
-            <Plus className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-            {language === "ar" ? "إضافة شريحة" : "Add Slider"}
+          <Button onClick={handleAdd} className="bg-indigo-600 hover:bg-indigo-700">
+            <Plus className="h-4 w-4 mr-2" />
+            Add Slider
           </Button>
         </div>
       </div>
 
-      {loading && !sliders.length ? (
-        <div className="flex items-center justify-center h-64">
-          <div className="text-muted-foreground">
-            {language === "ar" ? "جاري التحميل..." : "Loading..."}
-          </div>
-        </div>
+      {loading ? (
+        <div className="flex justify-center items-center h-48 text-slate-500">Loading...</div>
       ) : sliders.length === 0 ? (
         <Card>
-          <CardContent className="flex flex-col items-center justify-center h-64">
-            <ImageIcon className="h-12 w-12 text-muted-foreground mb-4" />
-            <p className="text-muted-foreground">
-              {language === "ar" ? "لا توجد شرائح" : "No sliders found"}
-            </p>
-            <Button onClick={handleAdd} className="mt-4">
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <ImageIcon className="h-12 w-12 text-slate-300 mb-4" />
+            <p className="text-slate-500 mb-4">No sliders found</p>
+            <Button onClick={handleAdd} className="bg-indigo-600 hover:bg-indigo-700">
               <Plus className="h-4 w-4 mr-2" />
-              {language === "ar" ? "إضافة شريحة الأولى" : "Add First Slider"}
+              Add Your First Slider
             </Button>
           </CardContent>
         </Card>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {sliders.map((slider) => (
-            <Card key={slider.id} className="overflow-hidden">
-              <div className="relative aspect-video bg-muted">
+            <Card key={slider.id} className="overflow-hidden border-slate-200/60 bg-white/80 backdrop-blur-sm">
+              <div className="relative aspect-video bg-slate-100">
                 {slider.imageUrl ? (
-                  <Image
-                    src={getImageUrl(slider.imageUrl)}
-                    alt={language === "ar" ? slider.titleAr : slider.titleEn}
-                    fill
-                    className="object-cover"
-                  />
+                  <Image src={getImageUrl(slider.imageUrl)} alt={slider.titleEn} fill className="object-cover" />
                 ) : (
                   <div className="flex items-center justify-center h-full">
-                    <ImageIcon className="h-12 w-12 text-muted-foreground" />
+                    <ImageIcon className="h-12 w-12 text-slate-300" />
                   </div>
                 )}
               </div>
               <CardContent className="p-4">
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
-                    <h3 className="font-semibold">
-                      {language === "ar" ? slider.titleAr : slider.titleEn}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      {slider.createdDate
-                        ? new Date(slider.createdDate).toLocaleDateString(
-                            language === "ar" ? "ar-EG" : "en-US"
-                          )
-                        : "-"}
+                    <h3 className="font-semibold text-slate-900">{slider.titleEn}</h3>
+                    <p className="text-sm text-slate-500">
+                      {slider.createdDate ? new Date(slider.createdDate).toLocaleDateString("en-US") : "-"}
                     </p>
                   </div>
                   <DropdownMenu>
@@ -340,14 +283,11 @@ export default function SlidersPage() {
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem onClick={() => handleEdit(slider)}>
                         <Pencil className="h-4 w-4 mr-2" />
-                        {language === "ar" ? "تعديل" : "Edit"}
+                        Edit
                       </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => handleDelete(slider)}
-                        className="text-destructive"
-                      >
+                      <DropdownMenuItem onClick={() => handleDelete(slider)} className="text-red-600">
                         <Trash2 className="h-4 w-4 mr-2" />
-                        {language === "ar" ? "حذف" : "Delete"}
+                        Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -358,250 +298,101 @@ export default function SlidersPage() {
         </div>
       )}
 
-      {/* Add Dialog */}
       <Dialog open={addDialogOpen} onOpenChange={setAddDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>
-              {language === "ar" ? "إضافة شريحة جديدة" : "Add New Slider"}
-            </DialogTitle>
-            <DialogDescription>
-              {language === "ar"
-                ? "أضف شريحة جديدة للصفحة الرئيسية"
-                : "Add a new slider to the homepage"}
-            </DialogDescription>
+            <DialogTitle>Add New Slider</DialogTitle>
+            <DialogDescription>Add a new slider to the homepage</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="titleEn">
-                {language === "ar" ? "العنوان بالإنجليزية" : "Title (English)"}
-              </Label>
-              <Input
-                id="titleEn"
-                value={formData.titleEn}
-                onChange={(e) =>
-                  setFormData({ ...formData, titleEn: e.target.value })
-                }
-                placeholder="Enter title in English"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="titleAr">
-                {language === "ar" ? "العنوان بالعربية" : "Title (Arabic)"}
-              </Label>
-              <Input
-                id="titleAr"
-                value={formData.titleAr}
-                onChange={(e) =>
-                  setFormData({ ...formData, titleAr: e.target.value })
-                }
-                placeholder="أدخل العنوان بالعربية"
-                dir="rtl"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>
-                {language === "ar" ? "الصورة" : "Image"}
-              </Label>
+           <div className="space-y-4 py-4">
+             <div className="space-y-2">
+               <Label htmlFor="titleEn">Title</Label>
+               <Input id="titleEn" value={formData.titleEn} onChange={(e) => setFormData({ ...formData, titleEn: e.target.value })} placeholder="Enter title" />
+             </div>
+             <div className="space-y-2">
+               <Label>Image</Label>
               <div className="flex items-center gap-4">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  ref={fileInputRef}
-                  className="hidden"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={uploading}
-                >
-                  {uploading ? (
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  ) : (
-                    <Upload className="h-4 w-4 mr-2" />
-                  )}
-                  {language === "ar" ? "اختر صورة" : "Choose Image"}
+                <input type="file" accept="image/*" onChange={handleFileChange} ref={fileInputRef} className="hidden" />
+                <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
+                  {uploading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Upload className="h-4 w-4 mr-2" />}
+                  Choose Image
                 </Button>
-                {selectedFile && (
-                  <span className="text-sm text-muted-foreground">
-                    {selectedFile.name}
-                  </span>
-                )}
+                {selectedFile && <span className="text-sm text-slate-500">{selectedFile.name}</span>}
               </div>
               {formData.imageUrl && (
                 <div className="relative mt-2 aspect-video w-full overflow-hidden rounded-md border">
-                  <img
-                    src={formData.imageUrl}
-                    alt="Preview"
-                    className="h-full w-full object-cover"
-                  />
+                  <img src={formData.imageUrl} alt="Preview" className="h-full w-full object-cover" />
                 </div>
               )}
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setAddDialogOpen(false)}>
-              {language === "ar" ? "إلغاء" : "Cancel"}
-            </Button>
-            <Button onClick={handleSubmitAdd} disabled={!isFormValid() || uploading}>
-              {uploading ? (
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              ) : null}
-              {language === "ar" ? "إضافة" : "Add"}
+            <Button variant="outline" onClick={() => setAddDialogOpen(false)}>Cancel</Button>
+            <Button onClick={handleSubmitAdd} disabled={!isFormValid() || uploading} className="bg-indigo-600 hover:bg-indigo-700">
+              {uploading ? "Saving..." : "Add Slider"}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Edit Dialog */}
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>
-              {language === "ar" ? "تعديل الشريحة" : "Edit Slider"}
-            </DialogTitle>
-            <DialogDescription>
-              {language === "ar"
-                ? "تعديل بيانات الشريحة"
-                : "Update slider information"}
-            </DialogDescription>
+            <DialogTitle>Edit Slider</DialogTitle>
+            <DialogDescription>Edit slider details below</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="editTitleEn">
-                {language === "ar" ? "العنوان بالإنجليزية" : "Title (English)"}
-              </Label>
-              <Input
-                id="editTitleEn"
-                value={formData.titleEn}
-                onChange={(e) =>
-                  setFormData({ ...formData, titleEn: e.target.value })
-                }
-                placeholder="Enter title in English"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="editTitleAr">
-                {language === "ar" ? "العنوان بالعربية" : "Title (Arabic)"}
-              </Label>
-              <Input
-                id="editTitleAr"
-                value={formData.titleAr}
-                onChange={(e) =>
-                  setFormData({ ...formData, titleAr: e.target.value })
-                }
-                placeholder="أدخل العنوان بالعربية"
-                dir="rtl"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>
-                {language === "ar" ? "الصورة" : "Image"}
-              </Label>
+           <div className="space-y-4 py-4">
+             <div className="space-y-2">
+               <Label htmlFor="editTitleEn">Title</Label>
+               <Input id="editTitleEn" value={formData.titleEn} onChange={(e) => setFormData({ ...formData, titleEn: e.target.value })} placeholder="Enter title" />
+             </div>
+             <div className="space-y-2">
+               <Label>Image</Label>
               <div className="flex items-center gap-4">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  ref={fileInputRef}
-                  className="hidden"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={uploading}
-                >
-                  {uploading ? (
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  ) : (
-                    <Upload className="h-4 w-4 mr-2" />
-                  )}
-                  {language === "ar" ? "اختر صورة" : "Choose Image"}
+                <input type="file" accept="image/*" onChange={handleFileChange} ref={fileInputRef} className="hidden" />
+                <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
+                  {uploading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Upload className="h-4 w-4 mr-2" />}
+                  Change Image
                 </Button>
-                {selectedFile && (
-                  <span className="text-sm text-muted-foreground">
-                    {selectedFile.name}
-                  </span>
-                )}
               </div>
               {formData.imageUrl && (
                 <div className="relative mt-2 aspect-video w-full overflow-hidden rounded-md border">
-                  <img
-                    src={formData.imageUrl}
-                    alt="Preview"
-                    className="h-full w-full object-cover"
-                  />
+                  <img src={formData.imageUrl} alt="Preview" className="h-full w-full object-cover" />
                 </div>
               )}
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setEditDialogOpen(false)}>
-              {language === "ar" ? "إلغاء" : "Cancel"}
-            </Button>
-            <Button onClick={handleSubmitEdit} disabled={!isFormValid() || uploading}>
-              {uploading ? (
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              ) : null}
-              {language === "ar" ? "حفظ" : "Save"}
+            <Button variant="outline" onClick={() => setEditDialogOpen(false)}>Cancel</Button>
+            <Button onClick={handleSubmitEdit} disabled={!isFormValid() || uploading} className="bg-indigo-600 hover:bg-indigo-700">
+              {uploading ? "Saving..." : "Save Changes"}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle className={cn(dir === "rtl" && "text-right")}>
-              {language === "ar" ? "حذف الشريحة" : "Delete Slider"}
-            </AlertDialogTitle>
-            <AlertDialogDescription className={cn(dir === "rtl" && "text-right")}>
-              {language === "ar"
-                ? "هل أنت متأكد من حذف هذه الشريحة؟ لا يمكن التراجع عن هذا الإجراء."
-                : "Are you sure you want to delete this slider? This action cannot be undone."}
-            </AlertDialogDescription>
+            <AlertDialogTitle>Delete Slider</AlertDialogTitle>
+            <AlertDialogDescription>Are you sure you want to delete "{sliderToDelete?.titleEn}"? This action cannot be undone.</AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className={cn(dir === "rtl" && "flex-row-reverse")}>
-            <AlertDialogCancel>
-              {language === "ar" ? "إلغاء" : "Cancel"}
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={confirmDelete}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              {language === "ar" ? "حذف" : "Delete"}
-            </AlertDialogAction>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-red-600 hover:bg-red-700">Delete</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* Delete All Confirmation Dialog */}
       <AlertDialog open={deleteAllDialogOpen} onOpenChange={setDeleteAllDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle className={cn(dir === "rtl" && "text-right")}>
-              {language === "ar" ? "حذف جميع الشرائح" : "Delete All Sliders"}
-            </AlertDialogTitle>
-            <AlertDialogDescription className={cn(dir === "rtl" && "text-right")}>
-              {language === "ar"
-                ? "هل أنت متأكد من حذف جميع الشرائح؟ لا يمكن التراجع عن هذا الإجراء."
-                : "Are you sure you want to delete all sliders? This action cannot be undone."}
-            </AlertDialogDescription>
+            <AlertDialogTitle>Delete All Sliders</AlertDialogTitle>
+            <AlertDialogDescription>Are you sure you want to delete all sliders? This action cannot be undone.</AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className={cn(dir === "rtl" && "flex-row-reverse")}>
-            <AlertDialogCancel>
-              {language === "ar" ? "إلغاء" : "Cancel"}
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={confirmDeleteAll}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              {language === "ar" ? "حذف الكل" : "Delete All"}
-            </AlertDialogAction>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDeleteAll} className="bg-red-600 hover:bg-red-700">Delete All</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

@@ -1,8 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useAdminLanguage } from "@/context/admin-language-context"
-import { cn, getImageUrl } from "@/lib/utils"
+import { getImageUrl } from "@/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -32,7 +31,6 @@ import Link from "next/link"
 import { exportItemsExcel, exportItemsPdf } from "@/app/ApiHelper/ExportApi"
 
 export default function ProductsPage() {
-  const { t, language, dir } = useAdminLanguage()
   const [products, setProducts] = useState<Product[]>([])
   const [categories, setCategories] = useState<AdminCategoryDto[]>([])
   const [loading, setLoading] = useState(true)
@@ -43,46 +41,31 @@ export default function ProductsPage() {
   const fetchProducts = async () => {
     try {
       setLoading(true)
-      const [items, categories] = await Promise.all([
+      const [items, categoriesData] = await Promise.all([
         ApiClient.get("api/admin/Item"),
         ApiClient.get("api/admin/Categories"),
       ])
-
-      const mapped = (items as AdminItemDto[]).map((item) =>
-        mapAdminItemToProduct(item, categories as AdminCategoryDto[])
-      )
-      setCategories(categories as AdminCategoryDto[])
+      const mapped = (items as AdminItemDto[]).map((item) => mapAdminItemToProduct(item, categoriesData as AdminCategoryDto[]))
+      setCategories(categoriesData as AdminCategoryDto[])
       setProducts(mapped)
-    } catch (err) {
-      console.error("Failed to fetch products:", err)
-    } finally {
-      setLoading(false)
-    }
+    } catch (err) { console.error("Failed to fetch products:", err) }
+    finally { setLoading(false) }
   }
 
-  useEffect(() => {
-    fetchProducts()
-  }, [])
+  useEffect(() => { fetchProducts() }, [])
 
-  const handleDelete = (product: Product) => {
-    setProductToDelete(product)
-    setDeleteDialogOpen(true)
-  }
+  const handleDelete = (product: Product) => { setProductToDelete(product); setDeleteDialogOpen(true) }
 
   const confirmDelete = async () => {
     if (!productToDelete) return
-
     try {
       setLoading(true)
       await ApiClient.post(`api/admin/Item/delete-item/${productToDelete.id}`, {})
       setDeleteDialogOpen(false)
       setProductToDelete(null)
       await fetchProducts()
-    } catch (err) {
-      console.error("Failed to delete product:", err)
-    } finally {
-      setLoading(false)
-    }
+    } catch (err) { console.error("Failed to delete product:", err) }
+    finally { setLoading(false) }
   }
 
   const confirmDeleteAll = async () => {
@@ -90,262 +73,132 @@ export default function ProductsPage() {
       setLoading(true)
       await ApiClient.post(`api/admin/Item/delete-all-items`, {})
       setDeleteAllDialogOpen(false)
-      alert(language === "ar" ? "تم حذف جميع المنتجات بنجاح" : "All products deleted successfully")
       await fetchProducts()
-    } catch (err: any) {
-      console.error("Failed to delete all products:", err)
-      const errorMsg = err.message || JSON.stringify(err)
-      alert((language === "ar" ? "فشل الحذف: " : "Delete failed: ") + errorMsg)
-    } finally {
-      setLoading(false)
-    }
+    } catch (err: any) { console.error("Failed to delete all products:", err) }
+    finally { setLoading(false) }
   }
 
   const getStatusBadge = (status: Product["status"]) => {
     const statusConfig = {
-      active: { variant: "default" as const, labelEn: "Active", labelAr: "نشط", className: "bg-emerald-500" },
-      inactive: { variant: "secondary" as const, labelEn: "Inactive", labelAr: "غير نشط", className: "" },
-      draft: { variant: "outline" as const, labelEn: "Draft", labelAr: "مسودة", className: "" },
+      active: { label: "Active", className: "bg-emerald-100 text-emerald-700 border-emerald-200" },
+      inactive: { label: "Inactive", className: "bg-slate-100 text-slate-600 border-slate-200" },
+      draft: { label: "Draft", className: "bg-amber-100 text-amber-700 border-amber-200" },
     }
     const config = statusConfig[status]
-    return (
-      <Badge variant={config.variant} className={config.className}>
-        {language === "ar" ? config.labelAr : config.labelEn}
-      </Badge>
-    )
+    return <Badge className={`border ${config.className}`}>{config.label}</Badge>
   }
 
-  const formatCurrency = (amount: number) => {
-    return `${amount.toLocaleString()} ${t("common.egp")}`
-  }
+  const formatCurrency = (amount: number) => `${amount.toLocaleString()} EGP`
 
   const columns = [
-    {
-      key: "product",
-      header: t("products.productName"),
-      render: (product: Product) => (
-        <div className={cn("flex items-center gap-3", dir === "rtl" && "flex-row-reverse")}>
-          <div className="relative h-12 w-12 overflow-hidden rounded-lg bg-muted shrink-0">
-            <Image
-              src={getImageUrl(product.mainImage || product.images[0])}
-              alt={language === "ar" ? product.nameAr : product.nameEn}
-              fill
-              className="object-cover"
-            />
-          </div>
-          <div className={cn(dir === "rtl" && "text-right")}>
-            <p className="font-medium">
-              {language === "ar" ? product.nameAr : product.nameEn}
-            </p>
-            {product.colorsEn && product.colorsEn.trim().length > 0 && (
-              <p className="text-sm text-muted-foreground">
-                {language === "ar" ? "الألوان: " : "Colors: "}
-                {language === "ar" ? product.colorsAr : product.colorsEn}
-              </p>
-            )}
-            {product.materialEn && product.materialEn.trim().length > 0 && (
-              <p className="text-sm text-muted-foreground">
-                {language === "ar" ? "المادة: " : "Material: "}
-                {language === "ar" ? product.materialAr : product.materialEn}
-              </p>
-            )}
-          </div>
+    { key: "product", header: "Product Name", render: (product: Product) => (
+      <div className="flex items-center gap-3">
+        <div className="relative h-12 w-12 overflow-hidden rounded-lg bg-slate-100 shrink-0">
+          <Image src={getImageUrl(product.mainImage || product.images[0])} alt={product.nameEn} fill className="object-cover" />
         </div>
-      ),
-    },
-    {
-      key: "category",
-      header: t("products.category"),
-      render: (product: Product) => {
-        const category = categories.find((cat) => cat.id === product.categoryId)
-        const label = language === "ar" ? category?.nameAr : category?.nameEn
-        return <span className="text-muted-foreground">{label || product.category}</span>
-      },
-    },
-    {
-      key: "price",
-      header: t("products.price"),
-      render: (product: Product) => (
-        <div className={cn(dir === "rtl" && "text-right")}>
-          <p className="font-medium">{formatCurrency(product.price)}</p>
-          {product.originalPrice && (
-            <p className="text-sm text-muted-foreground line-through">
-              {formatCurrency(product.originalPrice)}
-            </p>
-          )}
+        <div>
+          <p className="font-medium text-slate-900">{product.nameEn}</p>
+          {product.colorsEn && product.colorsEn.trim().length > 0 && <p className="text-sm text-slate-500">Colors: {product.colorsEn}</p>}
+          {product.materialEn && product.materialEn.trim().length > 0 && <p className="text-sm text-slate-500">Material: {product.materialEn}</p>}
         </div>
-      ),
-    },
-    {
-      key: "stock",
-      header: t("products.stock"),
-      render: (product: Product) => (
-        <span
-          className={cn(
-            "font-medium",
-            product.stock <= 10 && "text-destructive"
-          )}
-        >
-          {product.stock}
-        </span>
-      ),
-    },
-    {
-      key: "status",
-      header: t("products.status"),
-      render: (product: Product) => getStatusBadge(product.status),
-    },
-    {
-      key: "actions",
-      header: t("common.actions"),
-      render: (product: Product) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">Actions</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align={dir === "rtl" ? "start" : "end"}>
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/products/${product.id}`}>
-                <Eye className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-                {t("common.view")}
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/products/${product.id}/edit`}>
-                <Pencil className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-                {t("common.edit")}
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="text-destructive"
-              onClick={() => handleDelete(product)}
-            >
-              <Trash2 className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-              {t("products.deleteProduct")}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ),
-      className: "w-[70px]",
-    },
+      </div>
+    )},
+    { key: "category", header: "Category", render: (product: Product) => {
+      const category = categories.find((cat) => cat.id === product.categoryId)
+      return <span className="text-slate-500">{category?.nameEn || product.category}</span>
+    }},
+    { key: "price", header: "Price", render: (product: Product) => (
+      <div>
+        <p className="font-semibold text-slate-900">{formatCurrency(product.price)}</p>
+        {product.originalPrice && <p className="text-sm text-slate-400 line-through">{formatCurrency(product.originalPrice)}</p>}
+      </div>
+    )},
+    { key: "stock", header: "Stock", render: (product: Product) => (
+      <span className={`font-semibold ${product.stock <= 10 ? "text-red-600" : "text-indigo-600"}`}>{product.stock}</span>
+    )},
+    { key: "status", header: "Status", render: (product: Product) => getStatusBadge(product.status) },
+    { key: "actions", header: "Actions", render: (product: Product) => (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-indigo-50"><MoreHorizontal className="h-4 w-4" /></Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="bg-white">
+          <DropdownMenuItem asChild className="hover:bg-indigo-50 cursor-pointer">
+            <Link href={`/admin/products/${product.id}`}><Eye className="h-4 w-4 mr-2 text-indigo-600" /><span className="text-indigo-600">View</span></Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild className="hover:bg-indigo-50 cursor-pointer">
+            <Link href={`/admin/products/${product.id}/edit`}><Pencil className="h-4 w-4 mr-2 text-indigo-600" /><span className="text-indigo-600">Edit</span></Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleDelete(product)} className="hover:bg-red-50 cursor-pointer">
+            <Trash2 className="h-4 w-4 mr-2 text-red-600" /><span className="text-red-600">Delete</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    ), className: "w-[70px]" }
   ]
 
   return (
     <div className="space-y-6">
-      {/* Page Header */}
-      <div
-        className={cn(
-          "flex items-center justify-between",
-          dir === "rtl" && "flex-row-reverse"
-        )}
-      >
-        <div className={cn(dir === "rtl" && "text-right")}>
-          <h1 className="text-2xl font-bold tracking-tight">{t("products.title")}</h1>
-          <p className="text-muted-foreground">
-            {language === "ar"
-              ? `إدارة ${products.length} منتج`
-              : `Manage ${products.length} products`}
-          </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">Products</h1>
+          <p className="text-slate-500">Manage {products.length} products</p>
         </div>
         <div className="flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline">
-                <Download className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-                {language === "ar" ? "تصدير" : "Export"}
+              <Button variant="outline" className="border-slate-200 hover:bg-slate-50 hover:border-indigo-300">
+                <Download className="h-4 w-4 mr-2" />Export
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => exportItemsExcel()}>
-                {language === "ar" ? "تصدير إلى Excel" : "Export to Excel"}
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => exportItemsPdf()}>
-                {language === "ar" ? "تصدير إلى PDF" : "Export to PDF"}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
+            {/*<DropdownMenuContent align="end" className="bg-white">*/}
+            {/*  <DropdownMenuItem onClick={() => exportItemsExcel()} className="hover:bg-indigo-50 cursor-pointer">Export to Excel</DropdownMenuItem>*/}
+            {/*  <DropdownMenuItem onClick={() => exportItemsPdf()} className="hover:bg-indigo-50 cursor-pointer">Export to PDF</DropdownMenuItem>*/}
+            {/*</DropdownMenuContent>*/}
           </DropdownMenu>
           {products.length > 0 && (
-            <Button variant="destructive" onClick={() => setDeleteAllDialogOpen(true)}>
-              <Trash2 className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-              {language === "ar" ? "حذف الكل" : "Delete All"}
+            <Button variant="destructive" onClick={() => setDeleteAllDialogOpen(true)} className="bg-red-600 hover:bg-red-700">
+              <Trash2 className="h-4 w-4 mr-2" />Delete All
             </Button>
           )}
-          <Button asChild>
-            <Link href="/admin/products/new" className={cn("flex items-center gap-2", dir === "rtl" && "flex-row-reverse")}>
-              <Plus className="h-4 w-4" />
-              {t("products.addProduct")}
-            </Link>
+          <Button asChild className="bg-indigo-600 hover:bg-indigo-700">
+            <Link href="/admin/products/new" className="flex items-center gap-2"><Plus className="h-4 w-4" />Add Product</Link>
           </Button>
         </div>
       </div>
 
-      {/* Products Table */}
-      <Card>
+      <Card className="border-slate-200/60 bg-white/80 backdrop-blur-sm">
         <CardContent className="pt-6">
           {loading ? (
-            <div className="flex justify-center items-center h-48 text-muted-foreground animate-pulse">
-              {language === "ar" ? "جاري التحميل..." : "Loading products..."}
-            </div>
+            <div className="flex justify-center items-center h-48 text-slate-500 animate-pulse">Loading products...</div>
           ) : (
-            <DataTable
-              data={products}
-              columns={columns}
-              searchPlaceholder={language === "ar" ? "البحث عن منتج..." : "Search products..."}
-              searchKey="nameEn"
-            />
+            <DataTable data={products} columns={columns} searchPlaceholder="Search products..." searchKey="nameEn" />
           )}
         </CardContent>
       </Card>
 
-      {/* Delete Confirmation Dialog */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent>
+        <AlertDialogContent className="bg-white">
           <AlertDialogHeader>
-            <AlertDialogTitle className={cn(dir === "rtl" && "text-right")}>
-              {t("products.deleteProduct")}
-            </AlertDialogTitle>
-            <AlertDialogDescription className={cn(dir === "rtl" && "text-right")}>
-              {language === "ar"
-                ? `هل أنت متأكد من حذف "${productToDelete?.nameAr}"؟ لا يمكن التراجع عن هذا الإجراء.`
-                : `Are you sure you want to delete "${productToDelete?.nameEn}"? This action cannot be undone.`}
-            </AlertDialogDescription>
+            <AlertDialogTitle className="text-slate-900">Delete Product</AlertDialogTitle>
+            <AlertDialogDescription className="text-slate-500">Are you sure you want to delete "{productToDelete?.nameEn}"? This action cannot be undone.</AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className={cn(dir === "rtl" && "flex-row-reverse")}>
-            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={confirmDelete}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              {t("products.deleteProduct")}
-            </AlertDialogAction>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="border-slate-200 hover:bg-slate-50">Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-red-600 hover:bg-red-700">Delete</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* Delete All Confirmation Dialog */}
       <AlertDialog open={deleteAllDialogOpen} onOpenChange={setDeleteAllDialogOpen}>
-        <AlertDialogContent>
+        <AlertDialogContent className="bg-white">
           <AlertDialogHeader>
-            <AlertDialogTitle className={cn(dir === "rtl" && "text-right")}>
-              {language === "ar" ? "حذف جميع المنتجات" : "Delete All Products"}
-            </AlertDialogTitle>
-            <AlertDialogDescription className={cn(dir === "rtl" && "text-right")}>
-              {language === "ar"
-                ? "هل أنت متأكد من حذف جميع المنتجات؟ لا يمكن التراجع عن هذا الإجراء."
-                : "Are you sure you want to delete all products? This action cannot be undone."}
-            </AlertDialogDescription>
+            <AlertDialogTitle className="text-slate-900">Delete All Products</AlertDialogTitle>
+            <AlertDialogDescription className="text-slate-500">Are you sure you want to delete all products? This action cannot be undone.</AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className={cn(dir === "rtl" && "flex-row-reverse")}>
-            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={confirmDeleteAll}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              {language === "ar" ? "حذف الكل" : "Delete All"}
-            </AlertDialogAction>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="border-slate-200 hover:bg-slate-50">Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDeleteAll} className="bg-red-600 hover:bg-red-700">Delete All</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
-import { useAdminLanguage } from "@/context/admin-language-context"
-import { cn } from "@/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -15,27 +13,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { exportUsersExcel, exportUsersPdf } from "@/app/ApiHelper/ExportApi"
-import { MoreHorizontal, Pencil, Trash2, Shield, Ban, CheckCircle, Download } from "lucide-react"
+import { MoreHorizontal, Download } from "lucide-react"
 
 type ApiUser = {
   id?: string
@@ -87,89 +67,88 @@ const mapApiUser = (apiUser: ApiUser, index: number): User => {
 }
 
 export default function UsersPage() {
-  const { t, language, dir } = useAdminLanguage()
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState(false)
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [editingUser, setEditingUser] = useState<User | null>(null)
 
-  useEffect(() => {
-    let isMounted = true
+   useEffect(() => {
+     let isMounted = true
 
-    const fetchUsers = async () => {
-      try {
-        setLoading(true)
-        setLoadError(false)
-        const data = await ApiClient.get("api/admin/users/get-all")
-        const list = Array.isArray(data) ? data : []
-        const mapped = list.map((user: ApiUser, index: number) => mapApiUser(user, index))
-        if (isMounted) setUsers(mapped)
-      } catch (err) {
-        console.error("Failed to fetch users:", err)
-        if (isMounted) setLoadError(true)
-      } finally {
-        if (isMounted) setLoading(false)
-      }
-    }
+     const fetchUsers = async () => {
+       try {
+         setLoading(true)
+         setLoadError(false)
+         const data = await ApiClient.get("api/admin/users/get-all")
+         const list = Array.isArray(data)
+           ? data
+           : Array.isArray(data?.users)
+             ? data.users
+             : Array.isArray(data?.data)
+               ? data.data
+               : []
+         const mapped = list.map((user: ApiUser, index: number) => mapApiUser(user, index))
+         if (isMounted) setUsers(mapped)
+       } catch (err) {
+         console.error("Failed to fetch users:", err)
+         // Show error but allow page to load with empty list
+         if (isMounted) {
+           setLoadError(true)
+           setUsers([])
+         }
+       } finally {
+         if (isMounted) setLoading(false)
+       }
+     }
 
-    fetchUsers()
-    return () => {
-      isMounted = false
-    }
-  }, [])
+     fetchUsers()
+     return () => {
+       isMounted = false
+     }
+   }, [])
 
   const getRoleBadge = (role: User["role"]) => {
     const roleConfig = {
-      admin: { variant: "default" as const, labelEn: "Admin", labelAr: "مدير", className: "bg-red-500" },
-      manager: { variant: "default" as const, labelEn: "Manager", labelAr: "مشرف", className: "bg-blue-500" },
-      customer: { variant: "secondary" as const, labelEn: "Customer", labelAr: "عميل", className: "" },
+      admin: { variant: "default" as const, label: "Admin", className: "bg-red-500" },
+      manager: { variant: "default" as const, label: "Manager", className: "bg-blue-500" },
+      customer: { variant: "secondary" as const, label: "Customer", className: "" },
     }
     const config = roleConfig[role]
     return (
       <Badge variant={config.variant} className={config.className}>
-        {language === "ar" ? config.labelAr : config.labelEn}
+        {config.label}
       </Badge>
     )
   }
 
   const getStatusBadge = (status: User["status"]) => {
     const statusConfig = {
-      active: { variant: "default" as const, labelEn: "Active", labelAr: "نشط", className: "bg-emerald-500" },
-      inactive: { variant: "secondary" as const, labelEn: "Inactive", labelAr: "غير نشط", className: "" },
-      blocked: { variant: "destructive" as const, labelEn: "Blocked", labelAr: "محظور", className: "" },
+      active: { variant: "default" as const, label: "Active", className: "bg-emerald-500" },
+      inactive: { variant: "secondary" as const, label: "Inactive", className: "" },
+      blocked: { variant: "destructive" as const, label: "Blocked", className: "" },
     }
     const config = statusConfig[status]
     return (
       <Badge variant={config.variant} className={config.className}>
-        {language === "ar" ? config.labelAr : config.labelEn}
+        {config.label}
       </Badge>
     )
   }
 
-  const handleStatusChange = (userId: string, newStatus: User["status"]) => {
-    setUsers(
-      users.map((user) =>
-        user.id === userId ? { ...user, status: newStatus } : user
-      )
-    )
-  }
-
   const formatCurrency = (amount: number) => {
-    return `${amount.toLocaleString()} ${t("common.egp")}`
+    return `${amount.toLocaleString()} EGP`
   }
 
   const columns = [
     {
       key: "user",
-      header: t("users.name"),
+      header: "Name",
       render: (user: User) => (
-        <div className={cn("flex items-center gap-3", dir === "rtl" && "flex-row-reverse")}>
+        <div className="flex items-center gap-3">
           <Avatar className="h-10 w-10">
             <AvatarImage src={user.avatar || "/placeholder-user.jpg"} alt={user.name} />
             <AvatarFallback>{user.name.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
-          <div className={cn(dir === "rtl" && "text-right")}>
+          <div>
             <p className="font-medium">{user.name}</p>
             <p className="text-sm text-muted-foreground">{user.email}</p>
           </div>
@@ -178,47 +157,45 @@ export default function UsersPage() {
     },
     {
       key: "phone",
-      header: t("users.phone"),
+      header: "Phone",
       render: (user: User) => (
         <span className="text-muted-foreground">
-          {user.phone || (language === "ar" ? "غير متاح" : "N/A")}
+          {user.phone || "N/A"}
         </span>
       ),
     },
     {
       key: "role",
-      header: t("users.role"),
+      header: "Role",
       render: (user: User) => getRoleBadge(user.role),
     },
     {
       key: "status",
-      header: t("users.status"),
+      header: "Status",
       render: (user: User) => getStatusBadge(user.status),
     },
     {
       key: "totalOrders",
-      header: t("users.totalOrders"),
+      header: "Orders",
       render: (user: User) => (
         <span className="text-muted-foreground">{user.totalOrders}</span>
       ),
     },
     {
       key: "totalSpent",
-      header: t("users.totalSpent"),
+      header: "Spent",
       render: (user: User) => (
         <span className="font-medium">{formatCurrency(user.totalSpent)}</span>
       ),
     },
     {
       key: "joinDate",
-      header: t("users.joinDate"),
+      header: "Join Date",
       render: (user: User) => (
         <span className="text-muted-foreground">
           {user.joinDate && !Number.isNaN(new Date(user.joinDate).getTime())
-            ? new Date(user.joinDate).toLocaleDateString(
-                language === "ar" ? "ar-EG" : "en-US"
-              )
-            : (language === "ar" ? "غير متاح" : "N/A")}
+            ? new Date(user.joinDate).toLocaleDateString("en-US")
+            : "N/A"}
         </span>
       ),
     },
@@ -226,62 +203,54 @@ export default function UsersPage() {
 
   return (
     <div className="space-y-6">
-      {/* Page Header */}
-      <div
-        className={cn(
-          "flex items-center justify-between",
-          dir === "rtl" && "flex-row-reverse"
-        )}
-      >
-        <div className={cn(dir === "rtl" && "text-right")}>
-          <h1 className="text-2xl font-bold tracking-tight">{t("users.title")}</h1>
-          <p className="text-muted-foreground">
-            {language === "ar"
-              ? `إدارة ${users.length} مستخدم`
-              : `Manage ${users.length} users`}
-          </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900">Users</h1>
+          <p className="text-gray-500">Manage {users.length} users</p>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              <Download className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-              {language === "ar" ? "تصدير" : "Export"}
+              <Download className="h-4 w-4 mr-2" />
+              Export
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={() => exportUsersExcel()}>
-              {language === "ar" ? "تصدير إلى Excel" : "Export to Excel"}
+              Export to Excel
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => exportUsersPdf()}>
-              {language === "ar" ? "تصدير إلى PDF" : "Export to PDF"}
+              Export to PDF
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
 
-      {/* Users Table */}
-      <Card>
-        <CardContent className="pt-6">
-          {loading ? (
-            <div className="flex justify-center items-center h-48 text-muted-foreground animate-pulse">
-              {t("common.loading")}
-            </div>
-          ) : loadError ? (
-            <div className="flex justify-center items-center h-48 text-destructive">
-              {language === "ar" ? "فشل تحميل المستخدمين." : "Failed to load users."}
-            </div>
-          ) : (
-            <DataTable
-              data={users}
-              columns={columns}
-            searchPlaceholder={language === "ar" ? "البحث عن مستخدم..." : "Search users..."}
-              searchKey="name"
-            />
-          )}
-        </CardContent>
-      </Card>
-
-  
+       <Card>
+         <CardContent className="pt-6">
+           {loading ? (
+             <div className="flex justify-center items-center h-48 text-muted-foreground animate-pulse">
+               Loading users...
+             </div>
+           ) : loadError ? (
+             <div className="flex flex-col justify-center items-center h-48 text-destructive gap-2">
+               <p>Unable to load users from the server.</p>
+               <p className="text-sm text-muted-foreground">The API endpoint may not be available yet.</p>
+             </div>
+           ) : users.length === 0 ? (
+             <div className="flex justify-center items-center h-48 text-muted-foreground">
+               No users found
+             </div>
+           ) : (
+             <DataTable
+               data={users}
+               columns={columns}
+               searchPlaceholder="Search users..."
+               searchKey="name"
+             />
+           )}
+         </CardContent>
+       </Card>
     </div>
   )
 }

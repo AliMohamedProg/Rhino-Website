@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { type Order } from "@/lib/admin-data"
-import { ArrowLeft, ArrowRight, Printer, Download, Mail, Phone, MapPin } from "lucide-react"
+import { ArrowLeft, Printer, Download, Mail, Phone, MapPin } from "lucide-react"
 
 type ApiOrderItem = {
   itemId?: string
@@ -147,14 +147,14 @@ const mapApiOrder = (apiOrder: ApiOrder): Order => {
 }
 
 export default function OrderDetailPage() {
-  const params = useParams()
-  const id = params.id as string
-  const { t, language, dir } = useAdminLanguage()
+   const params = useParams()
+   const id = params.id as string
+   const { t } = useAdminLanguage()
 
-  const [order, setOrder] = useState<Order | null>(null)
-  const [status, setStatus] = useState<Order["status"]>("pending")
-  const [loading, setLoading] = useState(true)
-  const [loadError, setLoadError] = useState(false)
+   const [order, setOrder] = useState<Order | null>(null)
+   const [status, setStatus] = useState<Order["status"]>("pending")
+   const [loading, setLoading] = useState(true)
+   const [loadError, setLoadError] = useState(false)
 
   useEffect(() => {
     if (!id) return
@@ -195,24 +195,24 @@ export default function OrderDetailPage() {
     )
   }
 
-  if (loadError) {
-    return (
-      <div className="flex flex-col items-center justify-center py-12 text-destructive">
-        {language === "ar" ? "فشل تحميل الطلب." : "Failed to load order."}
-      </div>
-    )
-  }
+   if (loadError) {
+     return (
+       <div className="flex flex-col items-center justify-center py-12 text-destructive">
+         Failed to load order.
+       </div>
+     )
+   }
 
-  if (!order) {
-    return (
-      <div className="flex flex-col items-center justify-center py-12">
-        <h2 className="text-xl font-semibold">{language === "ar" ? "الطلب غير موجود" : "Order not found"}</h2>
-        <Button asChild className="mt-4">
-          <Link href="/admin/orders">{t("common.back")}</Link>
-        </Button>
-      </div>
-    )
-  }
+   if (!order) {
+     return (
+       <div className="flex flex-col items-center justify-center py-12">
+         <h2 className="text-xl font-semibold">Order not found</h2>
+         <Button asChild className="mt-4">
+           <Link href="/admin/orders">Back</Link>
+         </Button>
+       </div>
+     )
+   }
 
   const getStatusBadge = (status: Order["status"]) => {
     const statusConfig = {
@@ -223,56 +223,51 @@ export default function OrderDetailPage() {
       cancelled: { variant: "destructive" as const, labelEn: "Cancelled", labelAr: "ملغي", className: "" },
       refunded: { variant: "secondary" as const, labelEn: "Refunded", labelAr: "مسترد", className: "" },
     }
-    const config = statusConfig[status]
-    return (
-      <Badge variant={config.variant} className={config.className}>
-        {language === "ar" ? config.labelAr : config.labelEn}
-      </Badge>
-    )
-  }
+     const config = statusConfig[status]
+     return (
+       <Badge variant={config.variant} className={config.className}>
+         {config.labelEn}
+       </Badge>
+     )
+   }
 
-  const formatCurrency = (amount: number) => {
-    return `${amount.toLocaleString()} ${t("common.egp")}`
-  }
+   const formatCurrency = (amount: number) => {
+     return `${amount.toLocaleString()} ${t("common.egp")}`
+   }
 
-  const statusOptions = [
-    { value: "pending", labelEn: "Pending", labelAr: "قيد الانتظار" },
-    { value: "processing", labelEn: "Processing", labelAr: "قيد المعالجة" },
-    { value: "shipped", labelEn: "Shipped", labelAr: "تم الشحن" },
-    { value: "delivered", labelEn: "Delivered", labelAr: "تم التوصيل" },
-    { value: "cancelled", labelEn: "Cancelled", labelAr: "ملغي" },
-    { value: "refunded", labelEn: "Refunded", labelAr: "مسترد" },
-  ]
+   const statusOptions = [
+     { value: "pending", label: "Pending" },
+     { value: "processing", label: "Processing" },
+     { value: "shipped", label: "Shipped" },
+     { value: "delivered", label: "Delivered" },
+     { value: "cancelled", label: "Cancelled" },
+     { value: "refunded", label: "Refunded" },
+   ]
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div
-        className={cn(
-          "flex items-center justify-between",
-          dir === "rtl" && "flex-row-reverse"
-        )}
-      >
-        <div className={cn("flex items-center gap-4", dir === "rtl" && "flex-row-reverse")}>
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/admin/orders">
-              {dir === "rtl" ? <ArrowRight className="h-5 w-5" /> : <ArrowLeft className="h-5 w-5" />}
-            </Link>
-          </Button>
-          <div className={cn(dir === "rtl" && "text-right")}>
-            <div className={cn("flex items-center gap-3", dir === "rtl" && "flex-row-reverse")}>
-              <h1 className="text-2xl font-bold tracking-tight">{order.orderNumber}</h1>
-              {getStatusBadge(status)}
-            </div>
-            <p className="text-muted-foreground">
-              {new Date(order.createdDate).toLocaleDateString(
-                language === "ar" ? "ar-EG" : "en-US",
-                { dateStyle: "full" }
-              )}
-            </p>
-          </div>
-        </div>
-        <div className={cn("flex items-center gap-2", dir === "rtl" && "flex-row-reverse")}>
+       {/* Header */}
+       <div className="flex items-center justify-between">
+         <div className="flex items-center gap-4">
+           <Button variant="ghost" size="icon" asChild>
+             <Link href="/admin/orders">
+               <ArrowLeft className="h-5 w-5" />
+             </Link>
+           </Button>
+           <div>
+             <div className="flex items-center gap-3">
+               <h1 className="text-2xl font-bold tracking-tight">{order.orderNumber}</h1>
+               {getStatusBadge(status)}
+             </div>
+             <p className="text-muted-foreground">
+               {new Date(order.createdDate).toLocaleDateString(
+                 "en-US",
+                 { dateStyle: "full" }
+               )}
+             </p>
+           </div>
+         </div>
+         <div className="flex items-center gap-2">
           <Button variant="outline" size="icon" onClick={() => window.print()}>
             <Printer className="h-4 w-4" />
           </Button>
@@ -315,155 +310,154 @@ Payment Method: ${order.paymentMethod}
         {/* Main Content */}
         <div className="space-y-6 lg:col-span-2">
           {/* Order Items */}
-          <Card>
-            <CardHeader>
-              <CardTitle className={cn(dir === "rtl" && "text-right")}>
-                {t("orders.items")} ({order.items.length})
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {order.items.map((item, index) => (
-                  <div
-                    key={index}
-                    className={cn(
-                      "flex items-center justify-between py-3",
-                      index < order.items.length - 1 && "border-b",
-                      dir === "rtl" && "flex-row-reverse"
-                    )}
-                  >
-                    <div className={cn(dir === "rtl" && "text-right")}>
-                      <p className="font-medium">{item.productName}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {t("cart.quantity")}: {item.quantity} x {formatCurrency(item.price)}
-                      </p>
-                    </div>
-                    <span className="font-semibold">
-                      {formatCurrency(item.quantity * item.price)}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+           <Card>
+             <CardHeader>
+               <CardTitle>
+                 {t("orders.items")} ({order.items.length})
+               </CardTitle>
+             </CardHeader>
+             <CardContent>
+               <div className="space-y-4">
+                 {order.items.map((item, index) => (
+                   <div
+                     key={index}
+                     className={cn(
+                       "flex items-center justify-between py-3",
+                       index < order.items.length - 1 && "border-b"
+                     )}
+                   >
+                     <div>
+                       <p className="font-medium">{item.productName}</p>
+                       <p className="text-sm text-muted-foreground">
+                         {t("cart.quantity")}: {item.quantity} x {formatCurrency(item.price)}
+                       </p>
+                     </div>
+                     <span className="font-semibold">
+                       {formatCurrency(item.quantity * item.price)}
+                     </span>
+                   </div>
+                 ))}
+               </div>
+             </CardContent>
+           </Card>
 
-          {/* Order Summary */}
-          <Card>
-            <CardHeader>
-              <CardTitle className={cn(dir === "rtl" && "text-right")}>
-                {t("checkout.summary")}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className={cn("flex items-center justify-between", dir === "rtl" && "flex-row-reverse")}>
-                <span className="text-muted-foreground">{t("orders.subtotal")}</span>
-                <span>{formatCurrency(order.subtotal)}</span>
-              </div>
-              <div className={cn("flex items-center justify-between", dir === "rtl" && "flex-row-reverse")}>
-                <span className="text-muted-foreground">{t("orders.shipping")}</span>
-                <span>{order.shipping === 0 ? (language === "ar" ? "مجاني" : "Free") : formatCurrency(order.shipping)}</span>
-              </div>
-              <div className={cn("flex items-center justify-between", dir === "rtl" && "flex-row-reverse")}>
-                <span className="text-muted-foreground">{t("orders.tax")}</span>
-                <span>{formatCurrency(order.tax)}</span>
-              </div>
-              {order.discount > 0 && (
-                <div className={cn("flex items-center justify-between text-emerald-600", dir === "rtl" && "flex-row-reverse")}>
-                  <span>{t("orders.discount")}</span>
-                  <span>-{formatCurrency(order.discount)}</span>
+           {/* Order Summary */}
+           <Card>
+             <CardHeader>
+               <CardTitle>
+                 {t("checkout.summary")}
+               </CardTitle>
+             </CardHeader>
+             <CardContent className="space-y-3">
+               <div className="flex items-center justify-between">
+                 <span className="text-muted-foreground">{t("orders.subtotal")}</span>
+                 <span>{formatCurrency(order.subtotal)}</span>
+               </div>
+               <div className="flex items-center justify-between">
+                 <span className="text-muted-foreground">{t("orders.shipping")}</span>
+                 <span>{order.shipping === 0 ? "Free" : formatCurrency(order.shipping)}</span>
+               </div>
+               <div className="flex items-center justify-between">
+                 <span className="text-muted-foreground">{t("orders.tax")}</span>
+                 <span>{formatCurrency(order.tax)}</span>
+               </div>
+               {order.discount > 0 && (
+                 <div className="flex items-center justify-between text-emerald-600">
+                   <span>{t("orders.discount")}</span>
+                   <span>-{formatCurrency(order.discount)}</span>
                 </div>
-              )}
-              <Separator />
-              <div className={cn("flex items-center justify-between font-semibold text-lg", dir === "rtl" && "flex-row-reverse")}>
-                <span>{t("orders.total")}</span>
-                <span>{formatCurrency(order.total)}</span>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+               )}
+               <Separator />
+               <div className="flex items-center justify-between font-semibold text-lg">
+                 <span>{t("orders.total")}</span>
+                 <span>{formatCurrency(order.total)}</span>
+               </div>
+             </CardContent>
+           </Card>
+         </div>
 
-        {/* Sidebar */}
-        <div className="space-y-6">
-          {/* Update Status */}
-          <Card>
-            <CardHeader>
-              <CardTitle className={cn(dir === "rtl" && "text-right")}>
-                {t("orders.updateStatus")}
-              </CardTitle>
-            </CardHeader>
+         {/* Sidebar */}
+         <div className="space-y-6">
+           {/* Update Status */}
+           <Card>
+             <CardHeader>
+               <CardTitle>
+                 {t("orders.updateStatus")}
+               </CardTitle>
+             </CardHeader>
             <CardContent>
               <Select value={status} onValueChange={(value) => setStatus(value as Order["status"])}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  {statusOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {language === "ar" ? option.labelAr : option.labelEn}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
+                 <SelectContent>
+                   {statusOptions.map((option) => (
+                     <SelectItem key={option.value} value={option.value}>
+                       {option.label}
+                     </SelectItem>
+                   ))}
+                 </SelectContent>
               </Select>
               <Button className="w-full mt-4">{t("common.save")}</Button>
             </CardContent>
           </Card>
 
-          {/* Customer Info */}
-          <Card>
-            <CardHeader>
-              <CardTitle className={cn(dir === "rtl" && "text-right")}>
-                {t("orders.customer")}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className={cn(dir === "rtl" && "text-right")}>
-                <p className="font-medium">{order.customer.name}</p>
-              </div>
-              <div className={cn("flex items-center gap-2 text-sm", dir === "rtl" && "flex-row-reverse")}>
-                <Mail className="h-4 w-4 text-muted-foreground" />
-                <span>{order.customer.email}</span>
-              </div>
-              <div className={cn("flex items-center gap-2 text-sm", dir === "rtl" && "flex-row-reverse")}>
-                <Phone className="h-4 w-4 text-muted-foreground" />
-                <span dir="ltr">{order.customer.phone}</span>
-              </div>
-            </CardContent>
+           {/* Customer Info */}
+           <Card>
+             <CardHeader>
+               <CardTitle>
+                 {t("orders.customer")}
+               </CardTitle>
+             </CardHeader>
+             <CardContent className="space-y-4">
+               <div>
+                 <p className="font-medium">{order.customer.name}</p>
+               </div>
+               <div className="flex items-center gap-2 text-sm">
+                 <Mail className="h-4 w-4 text-muted-foreground" />
+                 <span>{order.customer.email}</span>
+               </div>
+               <div className="flex items-center gap-2 text-sm">
+                 <Phone className="h-4 w-4 text-muted-foreground" />
+                 <span>{order.customer.phone}</span>
+               </div>
+             </CardContent>
           </Card>
 
-          {/* Shipping Address */}
-          <Card>
-            <CardHeader>
-              <CardTitle className={cn(dir === "rtl" && "text-right")}>
-                {t("orders.shippingAddress")}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className={cn("flex gap-2", dir === "rtl" && "flex-row-reverse")}>
-                <MapPin className="h-4 w-4 text-muted-foreground mt-1 shrink-0" />
-                <div className={cn(dir === "rtl" && "text-right")}>
-                  <p>{order.shippingAddress.street}</p>
-                  <p>
-                    {order.shippingAddress.city}, {order.shippingAddress.state}
-                  </p>
-                  <p>
-                    {order.shippingAddress.country} {order.shippingAddress.postalCode}
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+           {/* Shipping Address */}
+           <Card>
+             <CardHeader>
+               <CardTitle>
+                 {t("orders.shippingAddress")}
+               </CardTitle>
+             </CardHeader>
+             <CardContent>
+               <div className="flex gap-2">
+                 <MapPin className="h-4 w-4 text-muted-foreground mt-1 shrink-0" />
+                 <div>
+                   <p>{order.shippingAddress.street}</p>
+                   <p>
+                     {order.shippingAddress.city}, {order.shippingAddress.state}
+                   </p>
+                   <p>
+                     {order.shippingAddress.country} {order.shippingAddress.postalCode}
+                   </p>
+                 </div>
+               </div>
+             </CardContent>
+           </Card>
 
-          {/* Payment Method */}
-          <Card>
-            <CardHeader>
-              <CardTitle className={cn(dir === "rtl" && "text-right")}>
-                {t("orders.paymentMethod")}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>{order.paymentMethod}</p>
-            </CardContent>
-          </Card>
+           {/* Payment Method */}
+           <Card>
+             <CardHeader>
+               <CardTitle>
+                 {t("orders.paymentMethod")}
+               </CardTitle>
+             </CardHeader>
+             <CardContent>
+               <p>{order.paymentMethod}</p>
+             </CardContent>
+           </Card>
         </div>
       </div>
     </div>

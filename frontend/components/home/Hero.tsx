@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getPublicSliders, type PublicSlider } from "@/lib/products";
 import { getImageUrl } from "@/lib/utils";
 import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const fallbackBanners = [
   {
@@ -92,14 +93,28 @@ export function Hero({ initialSliders }: { initialSliders?: PublicSlider[] }) {
                   <h1 className="text-5xl md:text-8xl font-serif text-white mb-8 leading-tight italic animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
                     {banner.title}
                   </h1>
-                  <button className="bg-white text-mahogany hover:bg-mahogany hover:text-white transition-all duration-500 px-12 py-5 rounded-full text-[10px] font-bold tracking-[0.4em] uppercase shadow-2xl hover:scale-105 active:scale-95 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-500">
-                    Shop Collection
-                  </button>
                 </div>
               </div>
             </div>
           </div>
         ))}
+
+        {/* Navigation Arrows */}
+        <button
+          onClick={() => setCurrentSlide((prev) => (prev - 1 + banners.length) % banners.length)}
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/70 hover:bg-white text-mahogany p-2 rounded-full transition-all opacity-0 group-hover:opacity-100"
+          aria-label="Previous slide"
+        >
+          <ChevronLeft size={24} />
+        </button>
+
+        <button
+          onClick={() => setCurrentSlide((prev) => (prev + 1) % banners.length)}
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/70 hover:bg-white text-mahogany p-2 rounded-full transition-all opacity-0 group-hover:opacity-100"
+          aria-label="Next slide"
+        >
+          <ChevronRight size={24} />
+        </button>
 
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-4 z-20">
           {banners.map((_, index) => (

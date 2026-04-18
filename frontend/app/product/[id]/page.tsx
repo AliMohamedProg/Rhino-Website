@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useEffect, useState } from "react"
+import { type FormEvent, useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Image from "next/image"
 import { ShoppingCart, Heart, Star, ArrowLeft, ArrowRight, Share2, Check, X } from "lucide-react"
@@ -102,6 +102,8 @@ export default function ProductDetailsPage() {
   const [reviewText, setReviewText] = useState("")
   const [reviewTitle, setReviewTitle] = useState("")
   const [reviewRating, setReviewRating] = useState(5)
+  const [reviewError, setReviewError] = useState("")
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false)
 
   // Fetch product
   useEffect(() => {
@@ -207,10 +209,10 @@ export default function ProductDetailsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col bg-background">
+      <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#f8efe6] via-[#f7efe7] to-[#f5ebe0]">
         <Header />
         <div className="flex-1 flex items-center justify-center">
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-4 rounded-3xl border border-white/70 bg-white/80 px-10 py-12 backdrop-blur-sm shadow-[0_20px_50px_rgba(0,0,0,0.08)]">
             <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin" />
             <p className="text-lg text-muted-foreground">{language === "ar" ? "جاري التحميل..." : "Loading..."}</p>
           </div>
@@ -222,12 +224,12 @@ export default function ProductDetailsPage() {
 
   if (!product) {
     return (
-      <div className="min-h-screen flex flex-col bg-background">
+      <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#f8efe6] via-[#f7efe7] to-[#f5ebe0]">
         <Header />
         <div className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-foreground mb-2">{language === "ar" ? "المنتج غير موجود" : "Product Not Found"}</h2>
-            <p className="text-muted-foreground">{language === "ar" ? "عذراً، لم نتمكن من العثور على هذا المنتج" : "Sorry, we couldn't find this product"}</p>
+          <div className="text-center rounded-3xl border border-white/70 bg-white/80 px-10 py-12 backdrop-blur-sm shadow-[0_20px_50px_rgba(0,0,0,0.08)]">
+            <h2 className="text-2xl font-bold text-[#2f2219] mb-2">{language === "ar" ? "المنتج غير موجود" : "Product Not Found"}</h2>
+            <p className="text-[#6f6157]">{language === "ar" ? "عذراً، لم نتمكن من العثور على هذا المنتج" : "Sorry, we couldn't find this product"}</p>
           </div>
         </div>
         <Footer />
@@ -247,14 +249,24 @@ export default function ProductDetailsPage() {
   const increment = () => setQuantity(q => Math.min(q + 1, maxQty))
   const decrement = () => setQuantity(q => Math.max(1, q - 1))
 
-  const submitReview = async () => {
-    if (!reviewText.trim() || !reviewTitle.trim()) return
+  const submitReview = async (event?: FormEvent<HTMLFormElement>) => {
+    event?.preventDefault()
+    const normalizedTitle = reviewTitle.trim()
+    const normalizedReviewText = reviewText.trim()
+
+    if (!normalizedTitle || !normalizedReviewText) {
+      setReviewError(language === "ar" ? "يرجى إدخال العنوان والتعليق." : "Please enter both title and comment.")
+      return
+    }
+
+    setReviewError("")
+    setIsSubmittingReview(true)
 
     try {
       const payload = {
         productId: id,
-        title: reviewTitle,
-        review: reviewText,
+        title: normalizedTitle,
+        review: normalizedReviewText,
         rating: reviewRating
       }
 
@@ -276,10 +288,10 @@ export default function ProductDetailsPage() {
 
         const newReview: Review = {
           id: r?.id || Date.now().toString(),
-          title: reviewTitle,
+          title: normalizedTitle,
           date: new Date().toISOString().split("T")[0],
           rating: reviewRating,
-          text: reviewText,
+          text: normalizedReviewText,
           userName: language === "ar" ? "أنت" : "You",
         }
         setReviews([newReview, ...reviews])
@@ -295,6 +307,8 @@ export default function ProductDetailsPage() {
       }
     } catch (err) {
       console.error("Error submitting review:", err)
+    } finally {
+      setIsSubmittingReview(false)
     }
   }
 
@@ -308,26 +322,26 @@ export default function ProductDetailsPage() {
   const isInStock = product.stockNumber > 0
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#f8efe6] via-[#f7efe7] to-[#f5ebe0]">
       <Header />
 
-      <section className="container mx-auto px-4 py-12">
+      <section className="container mx-auto px-4 pt-28 md:pt-32 pb-12">
         {/* Breadcrumb */}
-        <div className="mb-6 text-sm text-muted-foreground">
+        <div className="mb-6 text-sm text-muted-foreground inline-flex items-center rounded-full border border-[#7B3F32]/15 bg-white/80 px-4 py-2 backdrop-blur-sm">
           <span>{language === "ar" ? "الرئيسية" : "Home"}</span>
           <span className="mx-2">/</span>
           <span>{language === "ar" ? "المنتجات" : "Products"}</span>
           <span className="mx-2">/</span>
-          <span className="text-gray-900">{language === "ar" ? product.nameAr : product.nameEn}</span>
+          <span className="text-[#3D2B1F] font-medium">{language === "ar" ? product.nameAr : product.nameEn}</span>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12">
+        <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
 
           {/* Product Image Gallery */}
           <div className="space-y-4">
             {/* Main Image */}
             <div
-              className="relative h-[450px] bg-card rounded-xl shadow-md overflow-hidden flex items-center justify-center cursor-zoom-in"
+              className="relative h-[450px] bg-white/75 rounded-3xl border border-white/70 shadow-[0_20px_60px_rgba(0,0,0,0.08)] overflow-hidden flex items-center justify-center cursor-zoom-in backdrop-blur-sm"
               onClick={() => setIsZoomed(!isZoomed)}
             >
               <Image
@@ -337,12 +351,12 @@ export default function ProductDetailsPage() {
                 className={`object-cover transition-transform duration-300 ${isZoomed ? "scale-150" : "scale-100"}`}
               />
               {product.discountAmount > 0 && (
-                <span className="absolute top-4 left-4 bg-red-500 text-white px-4 py-1.5 rounded-lg font-medium text-sm shadow-lg">
+                <span className="absolute top-4 left-4 bg-red-500 text-white px-4 py-1.5 rounded-full font-medium text-sm shadow-lg">
                   {language === "ar" ? `خصم ${product.discountAmount}` : `-${product.discountAmount}`}
                 </span>
               )}
               {/* Stock Badge */}
-              <div className={`absolute top-4 right-4 px-3 py-1.5 rounded-lg font-medium text-sm shadow-lg flex items-center gap-1.5 ${isInStock ? "bg-green-500 text-white" : "bg-red-500 text-white"}`}>
+              <div className={`absolute top-4 right-4 px-3 py-1.5 rounded-full font-medium text-sm shadow-lg flex items-center gap-1.5 ${isInStock ? "bg-green-500 text-white" : "bg-red-500 text-white"}`}>
                 {isInStock ? <Check size={14} /> : <X size={14} />}
                 {isInStock ? (language === "ar" ? "متوفر" : "In Stock") : (language === "ar" ? "غير متوفر" : "Out of Stock")}
               </div>
@@ -354,7 +368,7 @@ export default function ProductDetailsPage() {
                 <button
                   key={index}
                   onClick={() => setSelectedImageIndex(index)}
-                  className={`relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${selectedImageIndex === index ? "border-primary ring-2 ring-primary/30" : "border-gray-200 hover:border-gray-300"
+                  className={`relative w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all bg-white/80 ${selectedImageIndex === index ? "border-primary ring-2 ring-primary/30" : "border-[#7B3F32]/15 hover:border-[#7B3F32]/35"
                     }`}
                 >
                   <Image
@@ -369,10 +383,10 @@ export default function ProductDetailsPage() {
           </div>
 
           {/* Product Info */}
-          <div className="flex flex-col justify-between">
+          <div className="flex flex-col justify-between rounded-3xl border border-white/70 bg-white/75 backdrop-blur-xl p-6 md:p-8 shadow-[0_18px_60px_rgba(0,0,0,0.06)]">
             {/* Title */}
             <div>
-              <h1 className="text-3xl md:text-4xl font-extrabold mb-4 text-gray-900">
+              <h1 className="text-3xl md:text-4xl font-extrabold mb-4 text-[#2f2219]">
                 {language === "ar" ? product.nameAr : product.nameEn}
               </h1>
 
@@ -380,9 +394,9 @@ export default function ProductDetailsPage() {
 
               {/* Price */}
               <div className="flex items-center gap-4 mb-6">
-                <span className="text-4xl font-bold text-foreground">{formatPrice(discountedPrice)}</span>
+                <span className="text-4xl font-bold text-[#7B3F32]">{formatPrice(discountedPrice)} EGP</span>
                 {product.discountAmount > 0 && (
-                  <span className="text-xl line-through text-gray-400">{formatPrice(product.price)}</span>
+                  <span className="text-xl line-through text-gray-400">{formatPrice(product.price)} EGP</span>
                 )}
                 {product.discountAmount > 0 && (
                   <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
@@ -393,7 +407,7 @@ export default function ProductDetailsPage() {
 
               {/* Stock */}
               <div className="mb-6">
-                <span className="text-gray-500">{language === "ar" ? "الكمية المتوفرة:" : "Stock:"} </span>
+                <span className="text-[#6f6157]">{language === "ar" ? "الكمية المتوفرة:" : "Stock:"} </span>
                 <span className={`font-semibold ${isInStock ? "text-green-600" : "text-red-500"}`}>
                   {product.stockNumber} {language === "ar" ? "قطعة" : "items"}
                 </span>
@@ -402,7 +416,7 @@ export default function ProductDetailsPage() {
               {/* Colors */}
               {colors.length > 0 && (
                 <div className="mb-6">
-                  <span className="text-gray-500 block mb-3 font-semibold uppercase tracking-wider text-xs">
+                  <span className="text-[#6f6157] block mb-3 font-semibold uppercase tracking-wider text-xs">
                     Select Finish
                   </span>
                   <div className="flex flex-wrap gap-4">
@@ -417,7 +431,7 @@ export default function ProductDetailsPage() {
                             "w-10 h-10 rounded-full border-2 transition-all duration-300 flex items-center justify-center",
                             selectedColor === color.name
                               ? "border-primary ring-2 ring-primary/20 scale-110 shadow-lg"
-                              : "border-gray-200 hover:border-gray-300 shadow-sm"
+                              : "border-[#7B3F32]/15 hover:border-[#7B3F32]/35 shadow-sm"
                           )}
                           style={{ backgroundColor: color.hex }}
                         >
@@ -430,7 +444,7 @@ export default function ProductDetailsPage() {
                         </div>
                         <span className={cn(
                           "text-[10px] font-bold tracking-wide transition-colors uppercase",
-                          selectedColor === color.name ? "text-primary" : "text-gray-400"
+                          selectedColor === color.name ? "text-primary" : "text-[#8c7b6f]"
                         )}>
                           {color.name}
                         </span>
@@ -443,9 +457,9 @@ export default function ProductDetailsPage() {
               {/* Material */}
               {product.materialEn && product.materialEn.trim().length > 0 && (
                 <div className="mb-6">
-                  <span className="text-gray-500 block mb-2">{t("products.material")}:</span>
+                  <span className="text-[#6f6157] block mb-2">{t("products.material")}:</span>
                   <div className="flex flex-wrap gap-2">
-                    <span className="px-4 py-2 border rounded-full text-sm font-medium bg-gray-50 text-gray-700">
+                    <span className="px-4 py-2 border border-[#7B3F32]/15 rounded-full text-sm font-medium bg-white text-[#3D2B1F]">
                       {language === "ar" ? product.materialAr : product.materialEn}
                     </span>
                   </div>
@@ -454,8 +468,8 @@ export default function ProductDetailsPage() {
 
               {/* Quantity Selector */}
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-gray-500">{language === "ar" ? "الكمية:" : "Quantity:"}</span>
-                <div className="flex items-center border rounded-lg">
+                <span className="text-[#6f6157]">{language === "ar" ? "الكمية:" : "Quantity:"}</span>
+                <div className="flex items-center border border-[#7B3F32]/15 rounded-xl bg-white">
                   <Button
                     variant="ghost"
                     type="button"
@@ -486,7 +500,7 @@ export default function ProductDetailsPage() {
 
               {/* Add to Cart & Wishlist */}
               <div className="flex gap-3 mb-6">
-                <Button className="flex-1 bg-red-600 hover:bg-red-700 text-white shadow-md flex items-center justify-center gap-2 h-12 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                <Button className="flex-1 bg-[#7B3F32] hover:bg-[#5f3026] text-white shadow-[0_10px_24px_rgba(123,63,50,0.35)] flex items-center justify-center gap-2 h-12 text-lg rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={async () => {
                     if (colors.length > 0 && !selectedColor) {
                       alert(language === "ar" ? "يرجى اختيار اللون أولاً" : "Please select a color first");
@@ -511,14 +525,14 @@ export default function ProductDetailsPage() {
 
                 <Button
                   variant="outline"
-                  className="flex items-center justify-center h-12 px-4"
+                  className="flex items-center justify-center h-12 px-4 rounded-2xl border-[#7B3F32]/20 bg-white/80"
                   onClick={() =>
                     toggleItem({
                       id: product.id,
                       name: { ar: product.nameAr, en: product.nameEn },
                       price: discountedPrice,
                       originalPrice: product.price,
-                      image: "/placeholder.svg",
+                      image: product.mainImage || "/placeholder.svg",
                     })
                   }
                 >
@@ -530,7 +544,7 @@ export default function ProductDetailsPage() {
 
                 <Button
                   variant="outline"
-                  className="flex items-center justify-center h-12 px-4"
+                  className="flex items-center justify-center h-12 px-4 rounded-2xl border-[#7B3F32]/20 bg-white/80"
                   onClick={handleShare}
                 >
                   {showCopied ? (
@@ -544,22 +558,22 @@ export default function ProductDetailsPage() {
 
             {/* Tabs */}
             <Tabs defaultValue="description" className="w-full mt-4">
-              <TabsList className="w-full justify-start border-b rounded-none mb-4 h-auto p-0 bg-transparent">
+              <TabsList className="w-full justify-start rounded-2xl mb-4 h-auto p-1 bg-white border border-[#7B3F32]/10">
                 <TabsTrigger
                   value="description"
-                  className="rounded-t-lg border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-2"
+                  className="rounded-xl border border-transparent data-[state=active]:border-[#7B3F32]/20 data-[state=active]:bg-[#f7efe7] px-4 py-2"
                 >
                   {t("products.description")}
                 </TabsTrigger>
                 <TabsTrigger
                   value="specification"
-                  className="rounded-t-lg border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-2"
+                  className="rounded-xl border border-transparent data-[state=active]:border-[#7B3F32]/20 data-[state=active]:bg-[#f7efe7] px-4 py-2"
                 >
                   {language === "ar" ? "المواصفات" : "Specification"}
                 </TabsTrigger>
                 <TabsTrigger
                   value="reviews"
-                  className="rounded-t-lg border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-2"
+                  className="rounded-xl border border-transparent data-[state=active]:border-[#7B3F32]/20 data-[state=active]:bg-[#f7efe7] px-4 py-2"
                 >
                   {language === "ar" ? "التقييمات" : "Reviews"} ({reviews.length})
                 </TabsTrigger>
@@ -567,30 +581,30 @@ export default function ProductDetailsPage() {
 
               {/* Description */}
               <TabsContent value="description" className="pt-4">
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                  <p className="text-gray-700 leading-relaxed text-lg">{language === "ar" ? product.descriptionAr : product.descriptionEn}</p>
+                <div className="bg-white/85 rounded-2xl p-6 shadow-sm border border-[#7B3F32]/10 backdrop-blur-sm">
+                  <p className="text-[#4b3d34] leading-relaxed text-lg">{language === "ar" ? product.descriptionAr : product.descriptionEn}</p>
                 </div>
               </TabsContent>
 
               {/* Specification */}
               <TabsContent value="specification" className="pt-4">
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 space-y-4">
-                  <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                    <span className="text-gray-500">{language === "ar" ? "الكمية المتوفرة" : "Stock Available"}</span>
+                <div className="bg-white/85 rounded-2xl p-6 shadow-sm border border-[#7B3F32]/10 space-y-4 backdrop-blur-sm">
+                  <div className="flex justify-between items-center py-2 border-b border-[#7B3F32]/10">
+                    <span className="text-[#6f6157]">{language === "ar" ? "الكمية المتوفرة" : "Stock Available"}</span>
                     <span className="font-semibold">{product.stockNumber}</span>
                   </div>
                   {product.materialEn && (
-                    <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                      <span className="text-gray-500">{language === "ar" ? "الخامة" : "Material"}</span>
+                    <div className="flex justify-between items-center py-2 border-b border-[#7B3F32]/10">
+                      <span className="text-[#6f6157]">{language === "ar" ? "الخامة" : "Material"}</span>
                       <span className="font-semibold">{language === "ar" ? product.materialAr : product.materialEn}</span>
                     </div>
                   )}
                   {colors.length > 0 && (
                     <div className="flex justify-between items-start py-2">
-                      <span className="text-gray-500">Available Colors</span>
+                      <span className="text-[#6f6157]">Available Colors</span>
                       <div className="flex flex-wrap gap-2 justify-end">
                         {colors.map((color, index) => (
-                          <span key={index} className="px-3 py-1 border rounded-full text-sm bg-gray-100 font-medium">
+                          <span key={index} className="px-3 py-1 border border-[#7B3F32]/10 rounded-full text-sm bg-white font-medium text-[#3D2B1F]">
                             {color.name}
                           </span>
                         ))}
@@ -607,54 +621,65 @@ export default function ProductDetailsPage() {
 
                   {/* Add Review */}
                   <Button
-                    className="w-full mb-4 bg-blue-600 hover:bg-blue-700"
+                    className="w-full mb-4 text-white bg-[#7B3F32] hover:bg-[#5f3026] rounded-2xl"
                     onClick={() => setShowReviewForm(prev => !prev)}
                   >
                     {language === "ar" ? "إضافة تقييم" : "Add Review"}
                   </Button>
 
                   {showReviewForm && (
-                    <div className="border p-5 rounded-xl space-y-3 mb-6 bg-white shadow-sm">
+                    <form onSubmit={submitReview} className="border border-[#7B3F32]/10 p-5 rounded-2xl space-y-3 mb-6 bg-white/85 shadow-sm backdrop-blur-sm">
                       <div>
-                        <label className="block text-sm font-medium mb-1">{language === "ar" ? "العنوان" : "Title"}</label>
+                        <label className="block text-sm font-medium mb-1 text-[#4b3d34]">{language === "ar" ? "العنوان" : "Title"}</label>
                         <input
                           type="text"
-                          className="w-full border p-2 rounded-lg"
+                          className="w-full border border-[#7B3F32]/15 p-2 rounded-xl bg-white"
                           placeholder={language === "ar" ? "أدخل عنوان التقييم" : "Enter review title"}
                           value={reviewTitle}
                           onChange={e => setReviewTitle(e.target.value)}
+                          required
+                          maxLength={120}
                         />
                       </div>
                       <div className="flex items-center gap-2">
-                        <span>{language === "ar" ? "التقييم:" : "Rating:"}</span>
+                        <span className="text-[#4b3d34]">{language === "ar" ? "التقييم:" : "Rating:"}</span>
                         <div className="flex gap-1">
                           {[1, 2, 3, 4, 5].map(i => (
-                            <button key={i} onClick={() => setReviewRating(i)}>
+                            <button type="button" key={i} onClick={() => setReviewRating(i)}>
                               <Star size={24} className={i <= reviewRating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"} />
                             </button>
                           ))}
                         </div>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium mb-1">{language === "ar" ? "التعليق" : "Comment"}</label>
+                        <label className="block text-sm font-medium mb-1 text-[#4b3d34]">{language === "ar" ? "التعليق" : "Comment"}</label>
                         <textarea
-                          className="w-full border p-2 rounded-lg"
+                          className="w-full border border-[#7B3F32]/15 p-2 rounded-xl bg-white"
                           rows={3}
                           placeholder={language === "ar" ? "اكتب تجربتك مع المنتج" : "Share your experience with this product"}
                           value={reviewText}
                           onChange={e => setReviewText(e.target.value)}
+                          required
+                          maxLength={1000}
                         />
                       </div>
+                      {reviewError && <p className="text-sm text-red-600">{reviewError}</p>}
                       <div className="flex gap-2">
-                        <Button onClick={submitReview}>{language === "ar" ? "إرسال" : "Submit"}</Button>
-                        <Button variant="outline" onClick={() => setShowReviewForm(false)}>{language === "ar" ? "إلغاء" : "Cancel"}</Button>
+                        <Button type="submit" disabled={isSubmittingReview}>
+                          {isSubmittingReview
+                            ? (language === "ar" ? "جاري الإرسال..." : "Submitting...")
+                            : (language === "ar" ? "إرسال" : "Submit")}
+                        </Button>
+                        <Button type="button" variant="outline" onClick={() => setShowReviewForm(false)}>
+                          {language === "ar" ? "إلغاء" : "Cancel"}
+                        </Button>
                       </div>
-                    </div>
+                    </form>
                   )}
 
                   {/* Carousel */}
                   {reviews.length > 0 && (
-                    <div className="relative bg-white rounded-xl p-6 shadow-sm border border-gray-100 overflow-visible">
+                    <div className="relative bg-white/85 rounded-2xl p-6 shadow-sm border border-[#7B3F32]/10 overflow-visible backdrop-blur-sm">
                       <div className="overflow-hidden">
                         <div
                           className="flex transition-transform duration-300"
@@ -665,12 +690,12 @@ export default function ProductDetailsPage() {
                               <div className="space-y-3">
                                 <div className="flex items-start justify-between">
                                   <div>
-                                    <h4 className="font-semibold text-lg text-gray-900">{r.title}</h4>
-                                    <p className="text-sm text-gray-500">{r.userName} · {r.date}</p>
+                                    <h4 className="font-semibold text-lg text-[#2f2219]">{r.title}</h4>
+                                    <p className="text-sm text-[#7b6e65]">{r.userName} · {r.date}</p>
                                   </div>
                                   <Stars value={r.rating} />
                                 </div>
-                                <p className="text-gray-700">{r.text}</p>
+                                <p className="text-[#4b3d34]">{r.text}</p>
                               </div>
                             </div>
                           ))}
@@ -683,14 +708,14 @@ export default function ProductDetailsPage() {
                           <button
                             onClick={prevReview}
                             disabled={currentReviewIndex === 0}
-                            className="absolute -left-4 md:-left-10 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white shadow-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="absolute -left-4 md:-left-10 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white shadow-md hover:bg-[#f7efe7] disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             <ArrowLeft size={20} />
                           </button>
                           <button
                             onClick={nextReview}
                             disabled={currentReviewIndex === reviews.length - 1}
-                            className="absolute -right-4 md:-right-10 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white shadow-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="absolute -right-4 md:-right-10 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white shadow-md hover:bg-[#f7efe7] disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             <ArrowRight size={20} />
                           </button>

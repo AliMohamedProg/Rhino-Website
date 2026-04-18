@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
   SearchIcon,
@@ -11,20 +11,13 @@ import {
   ChevronDownIcon,
   MenuIcon,
   XIcon,
-  HeartIcon,
-  StarIcon,
-  ShoppingCartIcon,
 } from "@/components/layout/LucideIcons";
-import { ProductCard } from "@/components/ui/ProductCard";
 import { useAuth } from "@/app/Context/auth-context";
 import { useCart } from "@/context/cart-context";
+import { useLanguage } from "@/context/language-context";
 import { ApiClient } from "@/app/ApiHelper/ApiClient";
-
-const searchMockProducts = [
-  { id: 4, title: "Marble Dining Table", image: "/grey.png", price: "$2,199.00" },
-  { id: 5, title: "Ergonomic Study Chair", image: "/cafe.png", price: "$450.00" },
-  { id: 6, title: "Eco-Conscious Sofa", image: "/grey.png", price: "$1,150.00" },
-];
+import { formatPrice } from "@/lib/products";
+import { getImageUrl } from "@/lib/utils";
 
 interface Category {
   id: string;
@@ -33,15 +26,27 @@ interface Category {
   currentState?: number;
 }
 
+interface SearchProduct {
+  id: string;
+  nameAr: string;
+  nameEn: string;
+  descriptionAr?: string;
+  descriptionEn?: string;
+  price: number;
+  mainImage?: string;
+}
+
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
+  const { language } = useLanguage();
   const { user, isAuthenticated, loading } = useAuth();
   const { itemCount } = useCart();
   const [categories, setCategories] = useState<Category[]>([]);
+  const [searchProducts, setSearchProducts] = useState<SearchProduct[]>([]);
 
   const isAdmin =
     isAuthenticated &&
@@ -50,11 +55,23 @@ export function Header() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      router.push(`/products?q=${encodeURIComponent(searchQuery)}`);
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
       setIsSearchOpen(false);
       setIsMobileMenuOpen(false);
     }
   };
+
+  const filteredSearchProducts = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return [];
+    return searchProducts
+      .filter((p) =>
+        [p.nameEn, p.nameAr, p.descriptionEn, p.descriptionAr]
+          .filter(Boolean)
+          .some((value) => String(value).toLowerCase().includes(q))
+      )
+      .slice(0, 6);
+  }, [searchProducts, searchQuery]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -92,10 +109,48 @@ export function Header() {
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    const fetchProductsForSearch = async () => {
+      try {
+        const data = await ApiClient.get<any[]>("api/Items");
+        if (!Array.isArray(data)) {
+          setSearchProducts([]);
+          return;
+        }
+
+        const normalized = data
+          .map((item) => ({
+            id: (item.id ?? item.Id ?? "").toString(),
+            nameEn: item.nameEn ?? item.NameEn ?? "",
+            nameAr: item.nameAr ?? item.NameAr ?? "",
+            descriptionEn: item.descriptionEn ?? item.DescriptionEn ?? "",
+            descriptionAr: item.descriptionAr ?? item.DescriptionAr ?? "",
+            price: Number(item.price ?? item.Price ?? 0),
+            mainImage: item.mainImage ?? item.MainImage ?? item.image ?? item.Image ?? "",
+          }))
+          .filter((item) => Boolean(item.id) && (item.nameEn || item.nameAr));
+
+        setSearchProducts(normalized);
+      } catch (error) {
+        console.error("Failed to fetch search products:", error);
+        setSearchProducts([]);
+      }
+    };
+
+    fetchProductsForSearch();
+  }, []);
+
+  const sortedCategories = useMemo(
+    () =>
+      [...categories].sort((a, b) =>
+        (a.nameEn || "").localeCompare(b.nameEn || "", "en", { sensitivity: "base" })
+      ),
+    [categories]
+  );
+
   return (
     <>
-      <nav className={`fixed top-0 left-0 w-full z-[100] px-6 md:px-8 py-4 flex items-center justify-between transition-all duration-300 bg-white ${isScrolled || isMobileMenuOpen ? "bg-white/90 backdrop-blur-md shadow-sm" : "bg-transparent"
-        }`}>
+      <nav className={`fixed top-0 left-0 w-full z-[100] px-6 md:px-8 py-4 flex items-center justify-between transition-all duration-300 bg-white border-b border-[#7B3F32]/10 ${isScrolled || isMobileMenuOpen ? "shadow-sm" : ""}`}>
         {/* Mobile Menu Button */}
         <div className="md:hidden flex-1">
           <button
@@ -136,14 +191,14 @@ export function Header() {
 
             {/* Dropdown Menu */}
             <div className="absolute top-full left-1/2 -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 pt-4">
-              <div className="bg-white/95 backdrop-blur-xl border border-gray-100 rounded-[2.5rem] p-10 shadow-[0_20px_50px_rgba(0,0,0,0.1)] w-72 flex flex-col gap-5">
-                {categories.slice(0, 6).map((category) => (
+              <div className="bg-white border border-gray-100 rounded-[2.5rem] p-10 shadow-[0_20px_50px_rgba(0,0,0,0.1)] w-80 flex flex-col gap-5">
+                {sortedCategories.map((category) => (
                   <Link
                     key={category.id}
                     href={`/category/${category.id}`}
                     className="hover:text-mahogany transition-colors block text-taupe/60 text-[11px] font-bold tracking-[0.2em]"
                   >
-                    {(category.nameEn || "CATEGORY").toUpperCase()}
+                    {((language === "ar" ? category.nameAr : category.nameEn) || category.nameEn || category.nameAr || "CATEGORY").toUpperCase()}
                   </Link>
                 ))}
 
@@ -163,7 +218,7 @@ export function Header() {
           <Link href="/products" className="hover:text-mahogany transition-all hover:scale-110">
             CATALOG
           </Link>
-          <Link href="#our-story" className="hover:text-[#3D2B1F] transition-all hover:scale-110">
+          <Link href="/#our-story" className="hover:text-[#3D2B1F] transition-all hover:scale-110">
             OUR STORY
           </Link>
         </div>
@@ -190,8 +245,8 @@ export function Header() {
 
                 {searchQuery.length > 0 && (
                   <div className="absolute top-full right-0 mt-4 w-72 bg-white rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] p-4 flex flex-col gap-2 z-[110] border border-sand/30">
-                    {searchMockProducts.filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase())).length > 0 ? (
-                      searchMockProducts.filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase())).slice(0, 4).map(product => (
+                    {filteredSearchProducts.length > 0 ? (
+                      filteredSearchProducts.map(product => (
                         <Link
                           key={product.id}
                           href={`/product/${product.id}`}
@@ -199,11 +254,11 @@ export function Header() {
                           className="flex items-center gap-4 p-2 hover:bg-blush rounded-2xl transition-colors text-left"
                         >
                           <div className="w-12 h-12 bg-blush rounded-xl relative overflow-hidden shrink-0">
-                            <Image src={product.image} fill alt={product.title} className="object-contain p-2" />
+                            <Image src={getImageUrl(product.mainImage)} fill alt={(language === "ar" ? product.nameAr : product.nameEn) || product.nameEn || product.nameAr} className="object-contain p-2" />
                           </div>
                           <div className="flex-1 overflow-hidden">
-                            <p className="text-[11px] font-bold text-mahogany truncate block hover:text-clip hover:overflow-visible">{product.title}</p>
-                            <p className="text-[10px] text-taupe block font-medium tracking-wider">{product.price}</p>
+                            <p className="text-[11px] font-bold text-mahogany truncate block hover:text-clip hover:overflow-visible">{(language === "ar" ? product.nameAr : product.nameEn) || product.nameEn || product.nameAr}</p>
+                            <p className="text-[10px] text-taupe block font-medium tracking-wider">{formatPrice(product.price)} EGP</p>
                           </div>
                         </Link>
                       ))
@@ -280,19 +335,19 @@ export function Header() {
           <div className="flex flex-col items-center gap-4">
             <span className="text-mahogany">COLLECTIONS</span>
             <div className="flex flex-col items-center gap-2 text-[10px] text-taupe">
-              {categories.slice(0, 6).map((category) => (
+              {sortedCategories.map((category) => (
                 <Link
                   key={category.id}
                   href={`/category/${category.id}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  {(category.nameEn || "Category").toUpperCase()}
+                  {((language === "ar" ? category.nameAr : category.nameEn) || category.nameEn || category.nameAr || "Category").toUpperCase()}
                 </Link>
               ))}
             </div>
           </div>
           <Link href="/products" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-mahogany">CATALOG</Link>
-          <Link href="#our-story" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-mahogany">OUR STORY</Link>
+          <Link href="/#our-story" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-mahogany">OUR STORY</Link>
 
           <div className="mt-10 w-40 h-px bg-sand/20"></div>
 
@@ -312,8 +367,8 @@ export function Header() {
 
             {searchQuery.length > 0 && (
               <div className="absolute top-full left-0 w-full mt-3 bg-white rounded-[2rem] shadow-2xl p-3 flex flex-col z-[110] border border-sand/30">
-                {searchMockProducts.filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase())).length > 0 ? (
-                  searchMockProducts.filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase())).slice(0, 3).map(product => (
+                {filteredSearchProducts.length > 0 ? (
+                  filteredSearchProducts.slice(0, 3).map(product => (
                     <Link
                       key={product.id}
                       href={`/product/${product.id}`}
@@ -321,11 +376,11 @@ export function Header() {
                       className="flex items-center gap-4 p-3 hover:bg-blush rounded-2xl transition-colors text-left"
                     >
                       <div className="w-12 h-12 bg-blush rounded-xl relative overflow-hidden shrink-0">
-                        <Image src={product.image} fill alt={product.title} className="object-contain p-2" />
+                        <Image src={getImageUrl(product.mainImage)} fill alt={(language === "ar" ? product.nameAr : product.nameEn) || product.nameEn || product.nameAr} className="object-contain p-2" />
                       </div>
                       <div className="flex-1 overflow-hidden">
-                        <p className="text-[11px] font-bold text-mahogany truncate block">{product.title}</p>
-                        <p className="text-[10px] text-taupe block font-medium tracking-wider">{product.price}</p>
+                        <p className="text-[11px] font-bold text-mahogany truncate block">{(language === "ar" ? product.nameAr : product.nameEn) || product.nameEn || product.nameAr}</p>
+                        <p className="text-[10px] text-taupe block font-medium tracking-wider">{formatPrice(product.price)} EGP</p>
                       </div>
                     </Link>
                   ))

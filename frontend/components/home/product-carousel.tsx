@@ -45,40 +45,47 @@ function ProductCard({ product }: { product: ApiItem }) {
   // Take up to 3 colors to display
   const displayColors = language === "ar" ? colorsAr : colorsEn
 
-  const handleAddToCart = async (e: React.MouseEvent) => {
-    e.preventDefault() // Prevent navigation to product page
-    e.stopPropagation()
+   const handleAddToCart = async (e: React.MouseEvent) => {
+     e.preventDefault() // Prevent navigation to product page
+     e.stopPropagation()
 
-    if (colorsEn.length > 0 && !selectedColor) {
-      toast.error(language === "ar" ? "يرجى اختيار لون قبل الإضافة للسلة" : "Please select a color before adding to cart")
-      return
-    }
+     if (colorsEn.length > 0 && !selectedColor) {
+       toast.error(language === "ar" ? "يرجى اختيار لون قبل الإضافة للسلة" : "Please select a color before adding to cart")
+       return
+     }
 
-    try {
-      setAdding(true)
-      setError("")
-      const res = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://rhino-web.runasp.net").replace(/\/+$/, "")}/api/Cart/add-to-cart`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          productId: product.id,
-          quantity,
-          color: selectedColor || "Default"
-        })
-      })
+     try {
+       setAdding(true)
+       setError("")
+       const res = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://rhino-web.runasp.net").replace(/\/+$/, "")}/api/Cart/add-to-cart`, {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         credentials: "include",
+         body: JSON.stringify({
+           productId: product.id,
+           quantity,
+           color: selectedColor || "Default"
+         })
+       })
 
-      if (res.ok) {
-        window.location.href = "/cart"
-      } else if (res.status === 401) {
-        window.location.href = "/login"
-      }
-    } catch (error) {
-      console.error("Failed to add to cart:", error)
-    } finally {
-      setAdding(false)
-    }
-  }
+       if (res.ok) {
+         toast.success(language === "ar" ? "تمت الإضافة إلى السلة" : "Added to cart successfully")
+         // Wait a moment before redirecting to allow cart to update
+         setTimeout(() => {
+           window.location.href = "/cart"
+         }, 500)
+       } else if (res.status === 401) {
+         window.location.href = "/login"
+       } else {
+         toast.error(language === "ar" ? "فشل الإضافة إلى السلة" : "Failed to add to cart")
+       }
+     } catch (error) {
+       console.error("Failed to add to cart:", error)
+       toast.error(language === "ar" ? "حدث خطأ أثناء الإضافة" : "An error occurred")
+     } finally {
+       setAdding(false)
+     }
+   }
 
   return (
     <div className="flex-shrink-0 w-[280px] bg-card rounded-lg border overflow-hidden hover:shadow-lg transition-shadow flex flex-col">

@@ -1,10 +1,9 @@
 "use client"
 
 import React from "react"
-
 import { Card, CardContent } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
-import { TrendingUp, TrendingDown, LucideIcon } from "lucide-react"
+import { TrendingUp, TrendingDown } from "lucide-react"
 
 interface StatsCardProps {
   title: string
@@ -18,52 +17,41 @@ interface StatsCardProps {
 
 export function StatsCard({ title, value, growth, icon, trend, className, iconColor }: StatsCardProps) {
   const formatValue = (val: string | number) => {
-    if (typeof val === "number") {
-      return val.toLocaleString()
-    }
+    if (typeof val === "number") return val.toLocaleString()
     return val
   }
 
-  const iconBgColor = iconColor || "bg-admin-primary"
+  const colorMap: Record<string, string> = {
+    "bg-blue-500": "from-blue-500 to-blue-600",
+    "bg-emerald-500": "from-emerald-500 to-emerald-600",
+    "bg-amber-500": "from-amber-500 to-amber-600",
+    "bg-purple-500": "from-purple-500 to-purple-600",
+    "bg-rose-500": "from-rose-500 to-rose-600",
+    "bg-cyan-500": "from-cyan-500 to-cyan-600",
+  }
+
+  const gradientClass = colorMap[iconColor || "bg-indigo-500"] || "from-indigo-500 to-purple-600"
 
   return (
-    <Card className={cn(
-      "overflow-hidden relative border border-admin-card-border shadow-sm hover:shadow-lg transition-all duration-300 group",
-      className
-    )}>
-      <CardContent className="p-6">
-        <div className="flex items-start justify-between">
-          <div className="space-y-2 pl-16 pr-0">
-            <p className="text-sm font-medium text-admin-text-secondary">{title}</p>
-            <p className="text-3xl font-bold tracking-tight text-admin-text-primary">{formatValue(value)}</p>
+    <Card className={cn("overflow-hidden border-[#7B3F32]/12 bg-white/85 backdrop-blur-sm shadow-[0_10px_30px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_40px_rgba(123,63,50,0.12)] transition-all duration-300", className)}>
+      <CardContent className="p-5">
+        <div className="flex items-center gap-4">
+          <div className={cn("flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br shadow-lg", gradientClass)}>
+            {icon}
+          </div>
+          <div className="flex-1">
+            <p className="text-sm font-medium text-[#7c6f65]">{title}</p>
+            <p className="text-2xl font-bold text-[#2f2219] mt-0.5">{formatValue(value)}</p>
             {growth !== undefined && (
-              <div
-                className={cn(
-                  "flex items-center gap-1 text-sm font-medium",
-                  trend === "up" ? "text-admin-success" : "text-admin-danger"
-                )}
-              >
-                {trend === "up" ? (
-                  <TrendingUp className="h-4 w-4" />
-                ) : (
-                  <TrendingDown className="h-4 w-4" />
-                )}
+              <div className={cn("flex items-center gap-1 text-xs font-medium mt-1", trend === "up" ? "text-emerald-600" : "text-rose-600")}>
+                {trend === "up" ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
                 <span>{growth > 0 ? "+" : ""}{growth}%</span>
-                <span className="text-admin-text-muted text-xs ml-1">vs last month</span>
+                <span className="text-[#9b8d83] ml-1">vs last month</span>
               </div>
             )}
           </div>
-          <div
-            className={cn(
-              "rounded-xl p-4 text-white transition-all duration-300 absolute start-4 top-1/2 -translate-y-1/2 shadow-lg",
-              iconBgColor
-            )}
-          >
-            {icon}
-          </div>
         </div>
       </CardContent>
-      <div className="h-1 bg-gradient-to-r from-transparent via-admin-primary/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
     </Card>
   )
 }

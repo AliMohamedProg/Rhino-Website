@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input"
 import { formatPrice } from "@/lib/products"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
 import { getImageUrl, cn } from "@/lib/utils"
+import { toast } from "sonner"
 
 interface CartItem {
   id: string
@@ -106,14 +107,22 @@ export default function CheckoutPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!cart || cart.items.length === 0) {
-      toast.error("Your cart is empty")
+    if (!cart || !cart.items || cart.items.length === 0) {
+      toast.error("Your cart is empty. Please add items to your cart first.")
+      router.push("/cart")
       return
     }
     
     setIsSubmitting(true)
 
     try {
+      // Refresh cart data to ensure it's up-to-date before creating order
+      const refreshCart = await ApiClient.get<Cart>("api/Cart")
+      if (!refreshCart || !refreshCart.items || refreshCart.items.length === 0) {
+        throw new Error("Cart is empty! Please add items to your cart.")
+      }
+      setCart(refreshCart)
+
       // Sanitize phone number to strictly max 11 digits for backend validation
       const sanitizedPhone = formData.phone.replace(/\D/g, "").slice(-11)
 
@@ -136,6 +145,9 @@ export default function CheckoutPage() {
 
       // The backend might return order with PascalCase Id or camelCase id
       const orderId = order.id || order.Id || order.ID
+
+      // Save orderId immediately - cart may be cleared after order creation
+      localStorage.setItem("pendingOrderId", orderId)
 
       // 2. COD flow
       if (paymentMethod === "cod") {
@@ -161,17 +173,23 @@ export default function CheckoutPage() {
       )
 
       if (paymentData.redirectUrl) {
-        localStorage.setItem("pendingOrderId", orderId)
         window.location.href = paymentData.redirectUrl
         return
       }
 
     } catch (err: any) {
       console.error("Checkout submission error:", err)
-      if (err.message?.includes("Cart is empty")) {
-        toast.error("Your order was initiated, but the cart was cleared. Please check your profile or contact support if payment failed.")
+      const errorMsg = err.message || "Unknown error"
+      if (errorMsg.includes("Cart is empty")) {
+        const savedOrderId = localStorage.getItem("pendingOrderId")
+        if (savedOrderId) {
+          toast.error("Order created! Cart was cleared. Check your profile for order status.")
+        } else {
+          toast.error("Your cart is empty. Please add items to your cart first.")
+        }
       } else {
-        toast.error(`Order failed: ${err.message || "Please check your information and try again."}`)
+        localStorage.removeItem("pendingOrderId")
+        toast.error(`Order failed: ${errorMsg}`)
       }
     } finally {
       setIsSubmitting(false)

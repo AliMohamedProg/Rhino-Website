@@ -257,8 +257,11 @@ const adminTranslations: Translations = {
   "reviews.approved": { en: "Approved", ar: "موافق عليه" },
   "reviews.pending": { en: "Pending", ar: "قيد المراجعة" },
   "reviews.rejected": { en: "Rejected", ar: "مرفوض" },
-  "reviews.approve": { en: "Approve", ar: "موافقة" },
-  "reviews.reject": { en: "Reject", ar: "رفض" },
+   "reviews.approve": { en: "Approve", ar: "موافقة" },
+   "reviews.reject": { en: "Reject", ar: "رفض" },
+
+   // Checkout
+   "checkout.summary": { en: "Order Summary", ar: "ملخص الطلب" },
 }
 
 interface AdminLanguageContextType {
@@ -272,11 +275,11 @@ interface AdminLanguageContextType {
 const AdminLanguageContext = createContext<AdminLanguageContextType | undefined>(undefined)
 
 export function AdminLanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>("ar")
+  const [language, setLanguage] = useState<Language>("en")
 
   useEffect(() => {
     const savedLang = localStorage.getItem("admin-language") as Language
-    if (savedLang === "ar") {
+    if (savedLang === "en" || savedLang === "ar") {
       setLanguage(savedLang)
     }
   }, [])
@@ -284,7 +287,7 @@ export function AdminLanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     localStorage.setItem("admin-language", language)
     document.documentElement.lang = language
-    document.documentElement.dir = language === "ar" ? "rtl" : "ltr"
+    document.documentElement.dir = "ltr"
   }, [language])
 
   const t = (key: string): string => {
@@ -293,8 +296,8 @@ export function AdminLanguageProvider({ children }: { children: ReactNode }) {
     return translation[language] || translation["en"] || key
   }
 
-  const dir = language === "ar" ? "rtl" : "ltr"
-  const isRTL = language === "ar"
+  const dir: "ltr" | "rtl" = "ltr"
+  const isRTL = false
 
   return (
     <AdminLanguageContext.Provider value={{ language, setLanguage, t, dir, isRTL }}>

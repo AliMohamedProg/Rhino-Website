@@ -45,9 +45,9 @@ export function AreaChartCard({
   const tickColor = "#ffffff"
 
   return (
-    <Card className={cn("overflow-hidden", className)}>
+    <Card className={cn("overflow-hidden border-[#7B3F32]/12 bg-white/85 backdrop-blur-sm shadow-[0_10px_30px_rgba(0,0,0,0.06)]", className)}>
       <CardHeader className="pb-2">
-        <CardTitle className="text-base font-medium">
+        <CardTitle className="text-base font-medium text-[#2f2219]">
           {title}
         </CardTitle>
       </CardHeader>
@@ -124,9 +124,9 @@ export function BarChartCard({
   const barColor = color
 
   return (
-    <Card className={cn("overflow-hidden", className)}>
+    <Card className={cn("overflow-hidden border-[#7B3F32]/12 bg-white/85 backdrop-blur-sm shadow-[0_10px_30px_rgba(0,0,0,0.06)]", className)}>
       <CardHeader className="pb-2">
-        <CardTitle className="text-base font-medium">
+        <CardTitle className="text-base font-medium text-[#2f2219]">
           {title}
         </CardTitle>
       </CardHeader>
@@ -178,9 +178,9 @@ export function PieChartCard({ title, data, className }: PieChartCardProps) {
   const legendColor = "hsl(var(--foreground))"
 
   return (
-    <Card className={cn("overflow-hidden", className)}>
+    <Card className={cn("overflow-hidden border-[#7B3F32]/12 bg-white/85 backdrop-blur-sm shadow-[0_10px_30px_rgba(0,0,0,0.06)]", className)}>
       <CardHeader className="pb-2">
-        <CardTitle className="text-base font-medium">
+        <CardTitle className="text-base font-medium text-[#2f2219]">
           {title}
         </CardTitle>
       </CardHeader>
@@ -240,9 +240,9 @@ export function RevenueChart({ title, data, className }: RevenueChartProps) {
   const barColor = "hsl(var(--primary))"
 
   return (
-    <Card className={cn("overflow-hidden", className)}>
+    <Card className={cn("overflow-hidden border-[#7B3F32]/12 bg-white/85 backdrop-blur-sm shadow-[0_10px_30px_rgba(0,0,0,0.06)]", className)}>
       <CardHeader className="pb-2">
-        <CardTitle className="text-base font-medium">
+        <CardTitle className="text-base font-medium text-[#2f2219]">
           {title}
         </CardTitle>
       </CardHeader>
@@ -284,4 +284,3 @@ export function RevenueChart({ title, data, className }: RevenueChartProps) {
     </Card>
   )
 }
-

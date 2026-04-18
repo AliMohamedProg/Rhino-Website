@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import { ArrowRightIcon } from "@/components/layout/LucideIcons"
 import { getPublicCategories, type PublicCategory } from "@/lib/products"
 
@@ -27,10 +28,17 @@ const FALLBACK_STYLES = [
   },
 ]
 
-export function DiscoverByStyle() {
-  const [styles, setStyles] = useState<PublicCategory[]>([])
+interface DiscoverByStyleProps {
+  initialCategories?: PublicCategory[]
+}
+
+export function DiscoverByStyle({ initialCategories = [] }: DiscoverByStyleProps) {
+  const [styles, setStyles] = useState<PublicCategory[]>(
+    initialCategories.filter((category) => category.nameEn)
+  )
 
   useEffect(() => {
+    if (initialCategories.length > 0) return
     let active = true
 
     const loadCategories = async () => {
@@ -47,7 +55,7 @@ export function DiscoverByStyle() {
     return () => {
       active = false
     }
-  }, [])
+  }, [initialCategories])
 
   const items = styles.length > 0 ? styles : FALLBACK_STYLES
 
@@ -64,8 +72,9 @@ export function DiscoverByStyle() {
 
         <div className="flex overflow-x-auto pb-12 snap-x snap-mandatory w-full no-scrollbar gap-8 px-4 md:px-20">
           {items.map((style) => (
-            <div
+            <Link
               key={style.id}
+              href={styles.length > 0 ? `/category/${encodeURIComponent(style.id)}` : "/product"}
               className="group relative flex-shrink-0 w-[80vw] md:w-[320px] aspect-[3/5] rounded-[3rem] overflow-hidden cursor-pointer snap-center shadow-lg transition-all duration-500 hover:shadow-2xl"
             >
               {/* Image */}
@@ -90,7 +99,7 @@ export function DiscoverByStyle() {
                   <ArrowRightIcon className="w-3 h-3 text-taupe" />
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

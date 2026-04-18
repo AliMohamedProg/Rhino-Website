@@ -1,22 +1,21 @@
 "use client"
 
-import { useState, useEffect, useMemo, type MouseEvent } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { useParams } from "next/navigation"
-import Link from "next/link"
-import Image from "next/image"
 import { Header } from "@/components/layout/Header"
 import { Footer } from "@/components/layout/Footer"
 import { useLanguage } from "@/context/language-context"
+import { useCart } from "@/context/cart-context"
+import { useWishlist } from "@/context/wishlist-context"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Slider } from "@/components/ui/slider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { toast } from "sonner"
-import { ShoppingCart, ChevronUp, ChevronDown, Filter } from "lucide-react"
+import { ChevronUp, ChevronDown, Filter } from "lucide-react"
 import { formatPrice } from "@/lib/products"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
-import { getImageUrl } from "@/lib/utils"
+import { ProductCard } from "@/components/ui/ProductCard"
 
 interface Item {
   id: string
@@ -38,14 +37,22 @@ interface Category {
   nameEn: string
 }
 
+interface ReviewStats {
+  average: number
+  count: number
+}
+
 export default function CategoryPage() {
   const params = useParams()
   const categoryId = params.slug as string
 
-  const { language, t } = useLanguage()
+  const { language } = useLanguage()
+  const { addItem } = useCart()
+  const { toggleItem, isInWishlist } = useWishlist()
 
   const [products, setProducts] = useState<Item[]>([])
   const [categories, setCategories] = useState<Category[]>([])
+  const [loading, setLoading] = useState(true)
   const [hideOutOfStock, setHideOutOfStock] = useState(false)
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500000])
   const [sortBy, setSortBy] = useState("featured")
@@ -53,10 +60,13 @@ export default function CategoryPage() {
   const [priceOpen, setPriceOpen] = useState(true)
   const [categoryOpen, setCategoryOpen] = useState(true)
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  const [activeCategoryId, setActiveCategoryId] = useState<string>("")
+  const [reviewStatsByProductId, setReviewStatsByProductId] = useState<Record<string, ReviewStats>>({})
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true)
         const [itemsData, categoriesData] = await Promise.all([
           ApiClient.get<any[]>("api/Items"),
           ApiClient.get<any[]>("api/Category"),
@@ -93,15 +103,64 @@ export default function CategoryPage() {
           colorsEn: item.colorsEn ?? item.ColorsEn ?? item.colors ?? item.Colors ?? "",
           colorsAr: item.colorsAr ?? item.ColorsAr ?? item.colors ?? item.Colors ?? "",
         })) as Item[]
-        setProducts(normalized.filter((item) => item.categoryId === targetCategoryId))
+        setActiveCategoryId(targetCategoryId)
+        setProducts(normalized)
         setSelectedCategories([targetCategoryId])
 
       } catch (err) {
         console.error(err)
+      } finally {
+        setLoading(false)
       }
     }
     fetchData()
   }, [categoryId])
+
+  useEffect(() => {
+    if (products.length === 0) {
+      setReviewStatsByProductId({})
+      return
+    }
+
+    let cancelled = false
+    const apiBase = (process.env.NEXT_PUBLIC_API_URL || "https://rhino-web.runasp.net").replace(/\/+$/, "")
+    const productIds = Array.from(new Set(products.map((p) => p.id).filter(Boolean)))
+
+    const fetchReviewStats = async () => {
+      const entries = await Promise.all(
+        productIds.map(async (productId) => {
+          try {
+            const res = await fetch(`${apiBase}/api/review/get-reviews?productId=${encodeURIComponent(productId)}`)
+            if (!res.ok) return [productId, null] as const
+            const data = await res.json()
+            const ratings = (Array.isArray(data) ? data : [])
+              .map((r: any) => Number(r.rating ?? r.Rating ?? 0))
+              .filter((n: number) => Number.isFinite(n) && n > 0)
+            const count = ratings.length
+            const average = count > 0
+              ? Math.round((ratings.reduce((sum: number, n: number) => sum + n, 0) / count) * 10) / 10
+              : 0
+            return [productId, { average, count }] as const
+          } catch {
+            return [productId, null] as const
+          }
+        })
+      )
+
+      if (cancelled) return
+
+      const nextStats: Record<string, ReviewStats> = {}
+      for (const [productId, stats] of entries) {
+        if (stats) nextStats[productId] = stats
+      }
+      setReviewStatsByProductId(nextStats)
+    }
+
+    fetchReviewStats()
+    return () => {
+      cancelled = true
+    }
+  }, [products])
 
   const filteredProducts = useMemo(() => {
     let result = [...products]
@@ -115,186 +174,82 @@ export default function CategoryPage() {
     switch (sortBy) {
       case "price-low": result.sort((a, b) => a.price - b.price); break
       case "price-high": result.sort((a, b) => b.price - a.price); break
-      case "rating": result.sort((a, b) => b.overallRating - a.overallRating); break
+      case "rating":
+        result.sort(
+          (a, b) =>
+            (reviewStatsByProductId[b.id]?.average ?? b.overallRating) -
+            (reviewStatsByProductId[a.id]?.average ?? a.overallRating)
+        )
+        break
     }
 
     return result
-  }, [products, hideOutOfStock, priceRange, selectedCategories, sortBy])
+  }, [products, hideOutOfStock, priceRange, selectedCategories, sortBy, reviewStatsByProductId])
+
+  const categoryNameById = useMemo(
+    () =>
+      categories.reduce<Record<string, string>>((acc, cat) => {
+        acc[cat.id] = language === "ar" ? cat.nameAr : cat.nameEn
+        return acc
+      }, {}),
+    [categories, language]
+  )
+
+  const activeCategoryName =
+    categoryNameById[activeCategoryId] ||
+    categoryNameById[categoryId] ||
+    (language === "ar" ? "التصنيف" : "Category")
 
   const resetFilters = () => {
     setHideOutOfStock(false)
     setPriceRange([0, 500000])
-    setSelectedCategories([categoryId])
+    setSelectedCategories([activeCategoryId || categoryId])
+    setSortBy("featured")
   }
-
-  const CategoryProductCard = ({ product }: { product: Item }) => {
-    const [selectedColor, setSelectedColor] = useState("")
-    const [adding, setAdding] = useState(false)
-
-    const colorsEn = product.colorsEn
-      ? product.colorsEn.split(",").map((c) => c.trim()).filter(Boolean)
-      : []
-    const colorsAr = product.colorsAr
-      ? product.colorsAr.split(",").map((c) => c.trim()).filter(Boolean)
-      : []
-    const colors = language === "ar" ? colorsAr : colorsEn
-    const displayColors = colors
-    const discountedPrice = product.discountAmount > 0 ? product.price * (1 - product.discountAmount / 100) : product.price
-    const isInStock = product.stockNumber > 0
-
-    const handleAddToCart = async (e: MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault()
-      e.stopPropagation()
-
-      if (colorsEn.length > 0 && !selectedColor) {
-        toast.error(
-          language === "ar"
-            ? "يرجى اختيار لون قبل الإضافة للسلة"
-            : "Please select a color before adding to cart"
-        )
-        return
-      }
-
-      try {
-        setAdding(true)
-        const res = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://rhino-web.runasp.net").replace(/\/+$/, "")}/api/Cart/add-to-cart`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({
-            productId: product.id,
-            quantity: 1,
-            color: selectedColor || "Default",
-          }),
-        })
-
-        if (res.ok) {
-          window.location.href = "/cart"
-        } else if (res.status === 401) {
-          window.location.href = "/login"
-        }
-      } catch (error) {
-        console.error("Failed to add to cart:", error)
-      } finally {
-        setAdding(false)
-      }
-    }
-
-    return (
-      <div className="group bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg transition-shadow flex flex-col">
-        <Link href={`/product/${product.id}`} className="block relative h-48 md:h-56 bg-secondary">
-          <Image
-            src={getImageUrl(product.mainImage)}
-            alt={language === "ar" ? product.nameAr : product.nameEn}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            loading="lazy"
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-          />
-
-          {product.discountAmount > 0 && (
-            <span className="absolute top-2 start-2 bg-red-600 text-xs px-2 py-1 rounded text-white font-medium">
-              {language === "ar" ? `${product.discountAmount}%-` : `-${product.discountAmount}%`}
-            </span>
-          )}
-
-          <span
-            className={`absolute bottom-2 start-2 px-2 py-1 text-xs rounded font-medium ${
-              isInStock ? "bg-green-500 text-white" : "bg-gray-500 text-white"
-            }`}
-          >
-            {isInStock
-              ? language === "ar" ? "متاح" : "In Stock"
-              : language === "ar" ? "غير متاح" : "Out of Stock"}
-          </span>
-        </Link>
-
-        <div className="p-3 md:p-4 flex flex-col flex-1">
-          <Link href={`/product/${product.id}`}>
-            <h3 className="font-medium text-foreground text-sm md:text-base line-clamp-2 mb-2 hover:text-primary transition-colors">
-              {language === "ar" ? product.nameAr : product.nameEn}
-            </h3>
-          </Link>
-
-          <div className="flex gap-2 mb-3">
-            <span className="font-bold text-foreground">
-              {formatPrice(discountedPrice)} {t("products.price")}
-            </span>
-            {product.discountAmount > 0 && (
-              <span className="line-through text-sm text-muted-foreground">
-                {formatPrice(product.price)}
-              </span>
-            )}
-          </div>
-
-          {displayColors.length > 0 && (
-            <div className="mb-3">
-              <div className="flex flex-wrap gap-2">
-                {displayColors.map((color, idx) => (
-                  <button
-                    key={idx}
-                    onClick={(e) => {
-                      e.preventDefault()
-                      setSelectedColor(color)
-                    }}
-                    className={`px-2 py-1 text-xs border rounded transition-all ${
-                      selectedColor === color
-                        ? "bg-primary text-primary-foreground border-primary"
-                        : "bg-background hover:bg-muted"
-                    }`}
-                    title={color}
-                  >
-                    {color}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="mt-auto">
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full"
-              onClick={handleAddToCart}
-              disabled={adding}
-            >
-              <ShoppingCart size={16} className="me-2" />
-              {adding
-                ? language === "ar" ? "جاري الإضافة..." : "Adding..."
-                : t("products.addToCart")}
-            </Button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
 
-      <main className="flex-1 bg-background">
-        <div className="container mx-auto px-4 py-6 min-h-screen">
+      <main className="flex-1 bg-gradient-to-b from-[#f8efe6] via-[#f7efe7] to-[#f5ebe0] pt-24 md:pt-28">
+        <div className="container mx-auto px-4 py-8 min-h-screen">
+          <div className="relative overflow-hidden rounded-3xl border border-white/60 bg-white/70 backdrop-blur-xl p-6 md:p-8 shadow-[0_20px_60px_rgba(123,63,50,0.08)] mb-6">
+            <div className="absolute -top-16 -right-16 h-40 w-40 rounded-full bg-[#7B3F32]/10 blur-2xl" />
+            <div className="absolute -bottom-16 -left-10 h-40 w-40 rounded-full bg-[#C1AFA0]/30 blur-2xl" />
+            <p className="text-[11px] tracking-[0.25em] text-[#7B3F32]/70 font-semibold uppercase">
+              {language === "ar" ? "تسوق حسب التصنيف" : "Shop By Category"}
+            </p>
+            <h1 className="text-3xl md:text-4xl font-bold text-[#3D2B1F] mt-2">{activeCategoryName}</h1>
+            <div className="flex flex-wrap items-center gap-3 mt-4">
+              <span className="inline-flex items-center rounded-full bg-white/90 px-4 py-1.5 text-sm text-[#7B3F32] border border-[#7B3F32]/15">
+                {filteredProducts.length} {language === "ar" ? "منتج" : "products"}
+              </span>
+              {hideOutOfStock && (
+                <span className="inline-flex items-center rounded-full bg-[#7B3F32] text-white px-4 py-1.5 text-sm">
+                  {language === "ar" ? "المتاح فقط" : "In stock only"}
+                </span>
+              )}
+            </div>
+          </div>
+
           <div className="flex flex-col lg:flex-row gap-6">
 
             {/* Sidebar */}
             <aside className="w-full lg:w-72">
-              <div className="bg-card border rounded-lg p-4 sticky top-4">
+              <div className="bg-white/80 border border-white/60 rounded-2xl p-5 sticky top-28 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.06)]">
 
-                <div className="flex items-center gap-2 mb-6">
-                  <Filter size={18} />
-                  <span className="font-semibold">{language === "ar" ? "تصفية" : "Filter"}</span>
+                <div className="flex items-center gap-2 mb-6 pb-4 border-b border-[#7B3F32]/10">
+                  <Filter size={18} className="text-[#7B3F32]" />
+                  <span className="font-semibold tracking-wide text-[#3D2B1F]">{language === "ar" ? "تصفية" : "Filter"}</span>
                 </div>
 
                 {/* Availability */}
                 <Collapsible open={availabilityOpen} onOpenChange={setAvailabilityOpen}>
-                  <CollapsibleTrigger className="flex justify-between w-full py-2">
+                  <CollapsibleTrigger className="flex justify-between items-center w-full py-2.5 px-2 rounded-xl hover:bg-[#7B3F32]/5 transition-colors text-[#3D2B1F]">
                     {language === "ar" ? "التوافر" : "Availability"} {availabilityOpen ? <ChevronUp /> : <ChevronDown />}
                   </CollapsibleTrigger>
-                  <CollapsibleContent className="py-2">
-                    <label className="flex items-center gap-2">
+                  <CollapsibleContent className="py-2 px-2">
+                    <label className="flex items-center gap-2 text-sm text-[#5A4A40]">
                       <Checkbox
                         checked={hideOutOfStock}
                         onCheckedChange={(v) => setHideOutOfStock(!!v)}
@@ -306,10 +261,10 @@ export default function CategoryPage() {
 
                 {/* Price */}
                 <Collapsible open={priceOpen} onOpenChange={setPriceOpen}>
-                  <CollapsibleTrigger className="flex justify-between w-full py-2">
+                  <CollapsibleTrigger className="flex justify-between items-center w-full py-2.5 px-2 rounded-xl hover:bg-[#7B3F32]/5 transition-colors text-[#3D2B1F]">
                     {language === "ar" ? "السعر" : "Price"} {priceOpen ? <ChevronUp /> : <ChevronDown />}
                   </CollapsibleTrigger>
-                  <CollapsibleContent className="py-2">
+                  <CollapsibleContent className="py-2 px-2">
                     <Slider value={priceRange} onValueChange={(v) => setPriceRange(v as [number, number])} max={500000} step={500} />
                     <div className="flex justify-between mt-2 text-sm text-muted-foreground">
                       <span>{formatPrice(priceRange[0])}</span>
@@ -320,12 +275,12 @@ export default function CategoryPage() {
 
                 {/* Categories */}
                 <Collapsible open={categoryOpen} onOpenChange={setCategoryOpen}>
-                  <CollapsibleTrigger className="flex justify-between w-full py-2">
+                  <CollapsibleTrigger className="flex justify-between items-center w-full py-2.5 px-2 rounded-xl hover:bg-[#7B3F32]/5 transition-colors text-[#3D2B1F]">
                     {language === "ar" ? "التصنيفات" : "Categories"} {categoryOpen ? <ChevronUp /> : <ChevronDown />}
                   </CollapsibleTrigger>
                   <CollapsibleContent className="space-y-2 py-2">
                     {categories.map((cat) => (
-                      <label key={cat.id} className="flex items-center gap-2">
+                      <label key={cat.id} className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-[#7B3F32]/5 transition-colors text-sm text-[#5A4A40]">
                         <Checkbox
                           checked={selectedCategories.includes(cat.id)}
                           onCheckedChange={() =>
@@ -342,7 +297,7 @@ export default function CategoryPage() {
 
 
 
-                <Button onClick={resetFilters} variant="outline" className="w-full mt-4">
+                <Button onClick={resetFilters} variant="outline" className="w-full mt-5 rounded-xl border-[#7B3F32]/20 hover:bg-[#7B3F32] hover:text-white transition-colors">
                   {language === "ar" ? "إعادة تعيين" : "Reset"}
                 </Button>
               </div>
@@ -350,10 +305,10 @@ export default function CategoryPage() {
 
             {/* Products */}
             <div className="flex-1">
-              <div className="flex justify-between mb-4">
-                <h1 className="text-2xl font-bold">{language === "ar" ? "المنتجات" : "Products"}</h1>
+              <div className="flex items-center justify-between gap-3 mb-5 p-4 rounded-2xl border border-white/60 bg-white/70 backdrop-blur-sm">
+                <h2 className="text-xl md:text-2xl font-bold text-[#3D2B1F]">{language === "ar" ? "المنتجات" : "Products"}</h2>
                 <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-40">
+                  <SelectTrigger className="w-44 rounded-xl border-[#7B3F32]/20 bg-white/80">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -365,11 +320,74 @@ export default function CategoryPage() {
                 </Select>
               </div>
 
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredProducts.map((product) => (
-                  <CategoryProductCard key={product.id} product={product} />
-                ))}
-              </div>
+              {loading ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className="rounded-3xl border border-white/60 bg-white/70 p-6 min-h-[460px] animate-pulse"
+                    >
+                      <div className="h-56 rounded-2xl bg-[#7B3F32]/10 mb-6" />
+                      <div className="h-4 w-2/5 bg-[#7B3F32]/10 rounded mb-4" />
+                      <div className="h-7 w-4/5 bg-[#7B3F32]/15 rounded mb-3" />
+                      <div className="h-4 w-full bg-[#7B3F32]/10 rounded mb-2" />
+                      <div className="h-4 w-3/4 bg-[#7B3F32]/10 rounded" />
+                    </div>
+                  ))}
+                </div>
+              ) : filteredProducts.length === 0 ? (
+                <div className="rounded-3xl border border-white/60 bg-white/75 backdrop-blur-sm p-10 text-center shadow-[0_10px_40px_rgba(0,0,0,0.06)]">
+                  <h3 className="text-2xl font-bold text-[#3D2B1F] mb-2">{language === "ar" ? "لا توجد منتجات" : "No products found"}</h3>
+                  <p className="text-[#7B3F32]/75 mb-6">
+                    {language === "ar"
+                      ? "جرّب تغيير الفلاتر للعثور على نتائج."
+                      : "Try adjusting your filters to find matching products."}
+                  </p>
+                  <Button onClick={resetFilters} className="rounded-xl bg-[#7B3F32] hover:bg-[#5e3127] text-white">
+                    {language === "ar" ? "إعادة تعيين الفلاتر" : "Reset Filters"}
+                  </Button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredProducts.map((product) => (
+                    <ProductCard
+                      key={product.id}
+                      id={product.id}
+                      category={(categoryNameById[product.categoryId] || "FURNITURE").toUpperCase()}
+                      title={language === "ar" ? product.nameAr : product.nameEn}
+                      description={language === "ar" ? product.nameAr : product.nameEn}
+                      price={`${formatPrice(product.price)} EGP`}
+                      discountAmount={product.discountAmount || 0}
+                      originalPrice={
+                        product.discountAmount > 0
+                          ? `${formatPrice(Math.round(product.price / (1 - product.discountAmount / 100)))} EGP`
+                          : undefined
+                      }
+                      rating={reviewStatsByProductId[product.id]?.average ?? product.overallRating ?? 0}
+                      reviewsCount={reviewStatsByProductId[product.id]?.count ?? 0}
+                      mainImage={product.mainImage}
+                      colorsRaw={product.colorsEn}
+                      isWishlisted={isInWishlist(product.id)}
+                      onAddToCart={async (productId, selectedColorName) => {
+                        await addItem(productId, 1, selectedColorName)
+                      }}
+                      onToggleWishlist={(productId) => {
+                        const discountedPrice =
+                          product.discountAmount > 0
+                            ? product.price * (1 - product.discountAmount / 100)
+                            : product.price
+                        toggleItem({
+                          id: productId,
+                          name: { ar: product.nameAr, en: product.nameEn },
+                          price: discountedPrice,
+                          originalPrice: product.discountAmount > 0 ? product.price : undefined,
+                          image: product.mainImage || "/placeholder.svg",
+                        })
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
 
           </div>

@@ -2,11 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
-import { useAdminLanguage } from "@/context/admin-language-context"
-import { cn } from "@/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { DataTable } from "@/components/admin/data-table"
 import { type Category } from "@/lib/admin-data"
 import {
@@ -35,21 +32,10 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Switch } from "@/components/ui/switch"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Plus, MoreHorizontal, Pencil, Trash2, Download } from "lucide-react"
-import { ar } from "date-fns/locale"
 import { exportCategoriesExcel, exportCategoriesPdf } from "@/app/ApiHelper/ExportApi"
 
 export default function CategoriesPage() {
-  const { t, language, dir } = useAdminLanguage()
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -57,441 +43,201 @@ export default function CategoriesPage() {
   const [deleteAllDialogOpen, setDeleteAllDialogOpen] = useState(false)
   const [editingCategory, setEditingCategory] = useState<Category | null>(null)
   const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null)
-  const [formData, setFormData] = useState({
-    nameEn: "",
-    nameAr: "",
-    imageUrl: "",
-  })
+   const [formData, setFormData] = useState({ nameEn: "", description: "" })
+  const [imageUrl, setImageUrl] = useState("")
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
-  useEffect(() => {
-    if (editingCategory) {
-      setFormData({
-        nameEn: editingCategory.nameEn,
-        nameAr: editingCategory.nameAr,
-        imageUrl: editingCategory.imageUrl || "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop",
-      })
-    } else if (dialogOpen) {
-      setFormData({
-        nameEn: "",
-        nameAr: "",
-        imageUrl: "",
-      })
-      setSelectedFile(null)
-    }
-  }, [editingCategory, dialogOpen])
+   useEffect(() => {
+     if (editingCategory) {
+       setFormData({ nameEn: editingCategory.nameEn, description: "" })
+       setImageUrl(editingCategory.imageUrl || "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop")
+     } else if (dialogOpen) {
+       setFormData({ nameEn: "", description: "" })
+       setImageUrl("")
+       setSelectedFile(null)
+     }
+   }, [editingCategory, dialogOpen])
 
   const handleSave = async () => {
     try {
       setLoading(true)
-
-      let finalImageUrl = formData.imageUrl
+      let finalImageUrl = imageUrl
       if (selectedFile) {
         const uploadRes = await ApiClient.upload("api/upload", selectedFile)
         finalImageUrl = uploadRes.url
       }
-
-      if (editingCategory) {
-        await ApiClient.post("api/admin/Categories/edit-category", {
-          id: editingCategory.id,
-          nameEn: formData.nameEn,
-          nameAr: formData.nameAr,
-          imageUrl: finalImageUrl,
-          currentState: 1,
-        })
-      } else {
-        await ApiClient.post("api/admin/Categories/add-category", {
-          nameEn: formData.nameEn,
-          nameAr: formData.nameAr,
-          imageUrl: finalImageUrl,
-          currentState: 1,
-        })
-      }
+       if (editingCategory) {
+         await ApiClient.post("api/admin/Categories/edit-category", { id: editingCategory.id, nameEn: formData.nameEn, nameAr: "", imageUrl: finalImageUrl, currentState: 1 })
+       } else {
+         await ApiClient.post("api/admin/Categories/add-category", { nameEn: formData.nameEn, nameAr: "", imageUrl: finalImageUrl, currentState: 1 })
+       }
       setDialogOpen(false)
       fetchCategories()
-    } catch (err) {
-      console.error("Failed to save category:", err)
-    } finally {
-      setLoading(false)
-    }
+    } catch (err) { console.error("Failed to save category:", err) }
+    finally { setLoading(false) }
   }
 
   const fetchCategories = async () => {
     try {
       setLoading(true)
-
-      // Debug: Fetch 'me' endpoint to see current user permissions
-      const me = await ApiClient.get("api/auth/me")
-      console.log("Current Auth State:", me)
-
       const data = await ApiClient.get("api/admin/Categories")
-      setCategories(data)
-    } catch (err) {
-      console.error("Failed to fetch categories:", err)
-    } finally {
-      setLoading(false)
-    }
+      setCategories(Array.isArray(data) ? data : [])
+    } catch (err) { console.error("Failed to fetch categories:", err) }
+    finally { setLoading(false) }
   }
 
-  useEffect(() => {
-    fetchCategories()
-  }, [])
+  useEffect(() => { fetchCategories() }, [])
 
-
-
-  const handleDelete = (category: Category) => {
-    setCategoryToDelete(category)
-    setDeleteDialogOpen(true)
-  }
+  const handleDelete = (category: Category) => { setCategoryToDelete(category); setDeleteDialogOpen(true) }
 
   const confirmDelete = async () => {
-    if (!categoryToDelete) {
-      console.warn("[Page] confirmDelete called but categoryToDelete is null")
-      return
-    }
-
-    // Loud debug for the user
-    alert(`Starting delete for: ${categoryToDelete.nameEn}\nID: ${categoryToDelete.id}`)
-
-    console.log("[Page] confirmDelete triggered for:", categoryToDelete)
-
+    if (!categoryToDelete) return
     try {
       setLoading(true)
-      const url = `api/admin/Categories/delete-category/${categoryToDelete.id}`
-      console.log(`[Page] Calling POST ${url}`)
-
-      const response = await ApiClient.post(url, {})
-      console.log("[Page] Delete successful, response:", response)
-
+      await ApiClient.post(`api/admin/Categories/delete-category/${categoryToDelete.id}`, {})
       setDeleteDialogOpen(false)
       setCategoryToDelete(null)
-      alert(language === "ar" ? "تم الحذف بنجاح" : "Deleted successfully")
-
-      // Refresh the list from server
       await fetchCategories()
-    } catch (err: any) {
-      console.error("[Page] Critical: Delete API failed", err)
-      const errorMsg = err.message || JSON.stringify(err)
-      alert((language === "ar" ? "فشل الحذف: " : "Delete failed: ") + errorMsg)
-    } finally {
-      setLoading(false)
-    }
+    } catch (err: any) { console.error("Delete failed", err); alert("Delete failed: " + (err.message || "Unknown error")) }
+    finally { setLoading(false) }
   }
 
   const confirmDeleteAll = async () => {
     try {
       setLoading(true)
-      const url = `api/admin/Categories/delete-all-categories`
-      await ApiClient.post(url, {})
+      await ApiClient.post(`api/admin/Categories/delete-all-categories`, {})
       setDeleteAllDialogOpen(false)
-      alert(language === "ar" ? "تم حذف جميع الفئات بنجاح" : "All categories deleted successfully")
       await fetchCategories()
-    } catch (err: any) {
-      console.error("[Page] Critical: Delete All API failed", err)
-      const errorMsg = err.message || JSON.stringify(err)
-      alert((language === "ar" ? "فشل الحذف: " : "Delete failed: ") + errorMsg)
-    } finally {
-      setLoading(false)
-    }
+    } catch (err: any) { console.error("Delete failed", err); alert("Delete failed: " + (err.message || "Unknown error")) }
+    finally { setLoading(false) }
   }
 
   const columns = [
-    {
-      key: "image",
-      header: language === "ar" ? "الصورة" : "Image",
-      render: (category: Category) => (
-        <div className="h-12 w-12 rounded-md overflow-hidden bg-muted flex items-center justify-center">
-          {category.imageUrl ? (
-            <img
-              src={category.imageUrl}
-              alt={category.nameEn}
-              className="h-full w-full object-cover"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop"
-              }}
-            />
-          ) : (
-            <div className="text-[10px] text-muted-foreground">No Img</div>
-          )}
-        </div>
-      ),
-    },
-    {
-      key: "name",
-      header: language === "ar" ? "الاسم الفئة بالانجليزي" : "CategoryName in english",
-      render: (category: Category) => (
-        <div className={cn(dir === "rtl" && "text-right")}>
-          <p className="font-medium">
-            {category.nameEn}
-          </p>
-        </div>
-      ),
-    },
-    {
-      key: "name",
-      header: language === "ar" ? "الاسم الفئة بالعربية" : "CategoryName in arabic",
-      render: (category: Category) => (
-        <div className={cn(dir === "rtl" && "text-right")}>
-          <p className="font-medium">
-            {category.nameAr}
-          </p>
-        </div>
-      ),
-    },
-    {
-      key: "products",
-      header: t("categories.products"),
-      render: (category: Category) => (
-        <span className="font-medium">{category.productsCount}</span>
-      ),
-    },
-    {
-      key: "createdDate",
-      header: language === "ar" ? "تاريخ الإنشاء" : "Created",
-      render: (category: Category) => (
-        <span className="text-muted-foreground">
-          {new Date(category.createdDate).toLocaleDateString(
-            language === "ar" ? "ar-EG" : "en-US"
-          )}
-        </span>
-      ),
-    },
-    {
-      key: "actions",
-      header: t("common.actions"),
-      render: (category: Category) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">Actions</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align={dir === "rtl" ? "start" : "end"}>
-            <DropdownMenuItem
-              onClick={() => {
-                setEditingCategory(category)
-                setDialogOpen(true)
-              }}
-            >
-              <Pencil className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-              {t("categories.editCategory")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="text-destructive"
-              onClick={() => handleDelete(category)}
-            >
-              <Trash2 className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-              {t("categories.deleteCategory")}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ),
-      className: "w-[70px]",
-    },
+    { key: "image", header: "Image", render: (category: Category) => (
+      <div className="h-12 w-12 rounded-lg overflow-hidden bg-slate-100 flex items-center justify-center">
+        {category.imageUrl ? <img src={category.imageUrl} alt={category.nameEn} className="h-full w-full object-cover" onError={(e) => {(e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop"}} /> : <span className="text-xs text-slate-400">No Img</span>}
+      </div>
+    )},
+    { key: "nameEn", header: "Name (English)", render: (category: Category) => <span className="font-medium text-slate-900">{category.nameEn}</span> },
+    { key: "createdDate", header: "Created", render: (category: Category) => <span className="text-slate-500">{new Date(category.createdDate).toLocaleDateString("en-US")}</span> },
+    { key: "actions", header: "Actions", render: (category: Category) => (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-indigo-50">
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="bg-white">
+          <DropdownMenuItem onClick={() => { setEditingCategory(category); setDialogOpen(true) }} className="hover:bg-indigo-50 cursor-pointer">
+            <Pencil className="h-4 w-4 mr-2 text-indigo-600" />
+            <span className="text-indigo-600">Edit</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleDelete(category)} className="hover:bg-red-50 cursor-pointer">
+            <Trash2 className="h-4 w-4 mr-2 text-red-600" />
+            <span className="text-red-600">Delete</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    ), className: "w-[70px]" }
   ]
 
   return (
     <div className="space-y-6">
-      {/* Page Header */}
-      <div
-        className={cn(
-          "flex items-center justify-between",
-          dir === "rtl" && "flex-row-reverse"
-        )}
-      >
-        <div className={cn(dir === "rtl" && "text-right")}>
-          <h1 className="text-2xl font-bold tracking-tight">{t("categories.title")}</h1>
-          <p className="text-muted-foreground">
-            {language === "ar"
-              ? `إدارة ${categories.length} فئة`
-              : `Manage ${categories.length} categories`}
-          </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">Categories</h1>
+          <p className="text-slate-500">Manage {categories.length} categories</p>
         </div>
         <div className="flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline">
-                <Download className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-                {language === "ar" ? "تصدير" : "Export"}
-              </Button>
+              {/*<Button variant="outline" className="border-slate-200 hover:bg-slate-50 hover:border-indigo-300">*/}
+              {/*  <Download className="h-4 w-4 mr-2" />*/}
+              {/*  Export*/}
+              {/*</Button>*/}
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => exportCategoriesExcel()}>
-                {language === "ar" ? "تصدير إلى Excel" : "Export to Excel"}
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => exportCategoriesPdf()}>
-                {language === "ar" ? "تصدير إلى PDF" : "Export to PDF"}
-              </DropdownMenuItem>
+            <DropdownMenuContent align="end" className="bg-white">
+              <DropdownMenuItem onClick={() => exportCategoriesExcel()} className="hover:bg-indigo-50 cursor-pointer">Export to Excel</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => exportCategoriesPdf()} className="hover:bg-indigo-50 cursor-pointer">Export to PDF</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           {categories.length > 0 && (
-            <Button variant="destructive" onClick={() => setDeleteAllDialogOpen(true)}>
-              <Trash2 className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-              {language === "ar" ? "حذف الكل" : "Delete All"}
+            <Button variant="destructive" onClick={() => setDeleteAllDialogOpen(true)} className="bg-red-600 hover:bg-red-700">
+              <Trash2 className="h-4 w-4 mr-2" />
+              Delete All
             </Button>
           )}
-          <Button onClick={() => { setEditingCategory(null); setDialogOpen(true) }}>
-            <Plus className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-            {t("categories.addCategory")}
+          <Button onClick={() => { setEditingCategory(null); setDialogOpen(true) }} className="bg-indigo-600 hover:bg-indigo-700">
+            <Plus className="h-4 w-4 mr-2" />
+            Add Category
           </Button>
         </div>
       </div>
 
-      {/* Categories Table */}
-      <Card>
+      <Card className="border-slate-200/60 bg-white/80 backdrop-blur-sm">
         <CardContent className="pt-6">
           {loading ? (
-            <div className="flex justify-center items-center h-48 text-muted-foreground animate-pulse">
-              {language === "ar" ? "جاري التحميل..." : "Loading categories..."}
-            </div>
+            <div className="flex justify-center items-center h-48 text-slate-500 animate-pulse">Loading categories...</div>
           ) : (
-            <DataTable
-              data={categories}
-              columns={columns}
-              searchPlaceholder={language === "ar" ? "البحث عن فئة..." : "Search categories..."}
-              searchKey="nameEn"
-            />
+            <DataTable data={categories} columns={columns} searchPlaceholder="Search categories..." searchKey="nameEn" />
           )}
         </CardContent>
       </Card>
 
-      {/* Add/Edit Category Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="sm:max-w-[500px] bg-white">
           <DialogHeader>
-            <DialogTitle className={cn(dir === "rtl" && "text-right")}>
-              {editingCategory ? t("categories.editCategory") : t("categories.addCategory")}
-            </DialogTitle>
-            <DialogDescription className={cn(dir === "rtl" && "text-right")}>
-              {editingCategory
-                ? language === "ar"
-                  ? "تعديل بيانات الفئة"
-                  : "Edit category details"
-                : language === "ar"
-                  ? "إضافة فئة جديدة"
-                  : "Add a new category to the store"}
-            </DialogDescription>
+            <DialogTitle className="text-slate-900">{editingCategory ? "Edit Category" : "Add Category"}</DialogTitle>
+            <DialogDescription className="text-slate-500">{editingCategory ? "Edit category details below." : "Add a new category to your store."}</DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="nameEn">{t("categories.categoryNameEn")}</Label>
-                <Input
-                  id="nameEn"
-                  value={formData.nameEn}
-                  onChange={(e) => setFormData({ ...formData, nameEn: e.target.value })}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="nameAr">{t("categories.categoryNameAr")}</Label>
-                <Input
-                  id="nameAr"
-                  value={formData.nameAr}
-                  onChange={(e) => setFormData({ ...formData, nameAr: e.target.value })}
-                  dir="rtl"
-                />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="image">{language === "ar" ? "صورة الفئة" : "Category Image"}</Label>
-              <Input
-                id="image"
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0]
-                  if (file) setSelectedFile(file)
-                }}
-              />
+           <div className="grid gap-4 py-4">
+             <div className="space-y-2">
+               <Label htmlFor="nameEn" className="text-slate-700">Name</Label>
+               <Input id="nameEn" value={formData.nameEn} onChange={(e) => setFormData({ ...formData, nameEn: e.target.value })} className="border-slate-200 focus:border-indigo-500 focus:ring-indigo-500" />
+             </div>
+             <div className="space-y-2">
+               <Label className="text-slate-700">Category Image</Label>
+              <Input id="image" type="file" accept="image/*" onChange={(e) => { const file = e.target.files?.[0]; if (file) setSelectedFile(file) }} className="border-slate-200" />
               {selectedFile ? (
-                <div className="mt-2 h-24 w-24 rounded-md overflow-hidden border bg-muted">
-                  <img
-                    src={URL.createObjectURL(selectedFile)}
-                    alt="Preview"
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-              ) : formData.imageUrl && (
-                <div className="mt-2 h-24 w-24 rounded-md overflow-hidden border bg-muted">
-                  <img
-                    src={formData.imageUrl}
-                    alt="Current"
-                    className="h-full w-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop"
-                    }}
-                  />
-                </div>
+                <div className="mt-2 h-24 w-24 rounded-lg overflow-hidden border bg-slate-50"><img src={URL.createObjectURL(selectedFile)} alt="Preview" className="h-full w-full object-cover" /></div>
+              ) : imageUrl && (
+                <div className="mt-2 h-24 w-24 rounded-lg overflow-hidden border bg-slate-50"><img src={imageUrl} alt="Current" className="h-full w-full object-cover" onError={(e) => {(e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop"}} /></div>
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="imageUrl">{language === "ar" ? "أو رابط الصورة" : "Or Image URL"}</Label>
-              <Input
-                id="imageUrl"
-                placeholder="https://..."
-                value={formData.imageUrl}
-                onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-              />
+              <Label htmlFor="imageUrl" className="text-slate-700">Or Image URL</Label>
+              <Input id="imageUrl" placeholder="https://..." value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} className="border-slate-200 focus:border-indigo-500 focus:ring-indigo-500" />
             </div>
           </div>
-          <DialogFooter className={cn(dir === "rtl" && "flex-row-reverse")}>
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>
-              {t("common.cancel")}
-            </Button>
-            <Button onClick={handleSave} disabled={loading}>
-              {loading ? (language === "ar" ? "جاري الحفظ..." : "Saving...") : t("common.save")}
-            </Button>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-slate-200 hover:bg-slate-50">Cancel</Button>
+            <Button onClick={handleSave} disabled={loading} className="bg-indigo-600 hover:bg-indigo-700">{loading ? "Saving..." : "Save"}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent>
+        <AlertDialogContent className="bg-white">
           <AlertDialogHeader>
-            <AlertDialogTitle className={cn(dir === "rtl" && "text-right")}>
-              {t("categories.deleteCategory")}
-            </AlertDialogTitle>
-            <AlertDialogDescription className={cn(dir === "rtl" && "text-right")}>
-              {language === "ar"
-                ? `هل أنت متأكد من حذف "${categoryToDelete?.nameAr}"؟ لا يمكن التراجع عن هذا الإجراء.`
-                : `Are you sure you want to delete "${categoryToDelete?.nameEn}"? This action cannot be undone.`}
-            </AlertDialogDescription>
+            <AlertDialogTitle className="text-slate-900">Delete Category</AlertDialogTitle>
+            <AlertDialogDescription className="text-slate-500">Are you sure you want to delete "{categoryToDelete?.nameEn}"? This action cannot be undone.</AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className={cn(dir === "rtl" && "flex-row-reverse")}>
-            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={confirmDelete}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              {t("categories.deleteCategory")}
-            </AlertDialogAction>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="border-slate-200 hover:bg-slate-50">Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-red-600 hover:bg-red-700">Delete</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* Delete All Confirmation Dialog */}
       <AlertDialog open={deleteAllDialogOpen} onOpenChange={setDeleteAllDialogOpen}>
-        <AlertDialogContent>
+        <AlertDialogContent className="bg-white">
           <AlertDialogHeader>
-            <AlertDialogTitle className={cn(dir === "rtl" && "text-right")}>
-              {language === "ar" ? "حذف جميع الفئات" : "Delete All Categories"}
-            </AlertDialogTitle>
-            <AlertDialogDescription className={cn(dir === "rtl" && "text-right")}>
-              {language === "ar"
-                ? "هل أنت متأكد من حذف جميع الفئات؟ لا يمكن التراجع عن هذا الإجراء."
-                : "Are you sure you want to delete all categories? This action cannot be undone."}
-            </AlertDialogDescription>
+            <AlertDialogTitle className="text-slate-900">Delete All Categories</AlertDialogTitle>
+            <AlertDialogDescription className="text-slate-500">Are you sure you want to delete all categories? This action cannot be undone.</AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className={cn(dir === "rtl" && "flex-row-reverse")}>
-            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={confirmDeleteAll}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              {language === "ar" ? "حذف الكل" : "Delete All"}
-            </AlertDialogAction>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="border-slate-200 hover:bg-slate-50">Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDeleteAll} className="bg-red-600 hover:bg-red-700">Delete All</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

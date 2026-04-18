@@ -24,7 +24,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend", policy =>
     {
         policy
-            .WithOrigins("https://rhino-web-six.vercel.app") // رابط الNext.js local dev
+            .WithOrigins("http://localhost:3000") // رابط الNext.js local dev
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials(); // مهم لو بتستخدم cookies

@@ -3,8 +3,8 @@ import type { Metadata } from "next"
 import { AdminLayoutClient } from "./admin-layout-client"
 
 export const metadata: Metadata = {
-  title: "Admin Panel - Wood Decor",
-  description: "Admin dashboard for Wood Decor e-commerce platform",
+  title: "Admin Panel - rhino",
+  description: "Admin dashboard for Rhino e-commerce platform",
 }
 
 export default function AdminLayout({

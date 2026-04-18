@@ -38,40 +38,38 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     return Array.from(new Set(list))
   }
 
-  const [formData, setFormData] = useState({
-    nameEn: product?.nameEn || "",
-    descriptionEn: product?.descriptionEn || "",
-    price: product?.originalPrice ?? product?.price ?? 0,
-    discountAmount: product?.discountAmount ?? 0,
-    stock: product?.stock || 0,
-    categoryId: product?.categoryId || "",
-    images: buildInitialImages(product),
-    mainImage: product?.mainImage || product?.images?.[0] || "",
-    colorsEn: product?.colorsEn || "",
-    materialEn: product?.materialEn || "",
-    isSeller: product?.isSeller || false,
-  })
+   const [formData, setFormData] = useState({
+     nameEn: product?.nameEn || "",
+     descriptionEn: product?.descriptionEn || "",
+     price: product?.originalPrice ?? product?.price ?? 0,
+     discountAmount: product?.discountAmount ?? 0,
+     stock: product?.stock || 0,
+     categoryId: product?.categoryId || "",
+     images: buildInitialImages(product),
+     mainImage: product?.mainImage || product?.images?.[0] || "",
+     colorsEn: product?.colorsEn || "",
+     materialEn: product?.materialEn || "",
+   })
 
   const [categories, setCategories] = useState<AdminCategoryDto[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
 
-  useEffect(() => {
-    if (!product) return
-    setFormData({
-      nameEn: product.nameEn || "",
-      descriptionEn: product.descriptionEn || "",
-      price: product.originalPrice ?? product.price ?? 0,
-      discountAmount: product.discountAmount ?? 0,
-      stock: product.stock || 0,
-      categoryId: product.categoryId || "",
-      images: buildInitialImages(product),
-      mainImage: product.mainImage || product.images?.[0] || "",
-      colorsEn: product?.colorsEn || "",
-      materialEn: product?.materialEn || "",
-      isSeller: product?.isSeller || false,
-    })
-  }, [product])
+   useEffect(() => {
+     if (!product) return
+     setFormData({
+       nameEn: product.nameEn || "",
+       descriptionEn: product.descriptionEn || "",
+       price: product.originalPrice ?? product.price ?? 0,
+       discountAmount: product.discountAmount ?? 0,
+       stock: product.stock || 0,
+       categoryId: product.categoryId || "",
+       images: buildInitialImages(product),
+       mainImage: product.mainImage || product.images?.[0] || "",
+       colorsEn: product?.colorsEn || "",
+       materialEn: product?.materialEn || "",
+     })
+   }, [product])
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -112,31 +110,30 @@ export function ProductForm({ product, mode }: ProductFormProps) {
         mode === "edit" && product?.status === "inactive" ? 0 : 1
       const colorsCheckEn = validateColorsInputEn(formData.colorsEn)
       if (!colorsCheckEn.valid) {
-        alert("Please enter colors in the correct format: color,color,color")
+        alert("Please enter colors in the correct format: color,color,color (no spaces, use letters, numbers, hyphens only)")
         setIsSubmitting(false)
         return
       }
 
-      const materialValEn = (formData.materialEn || "").trim()
-      const payload = {
-        id: product?.id || "00000000-0000-0000-0000-000000000000",
-        nameEn: formData.nameEn,
-        nameAr: "", // Removed from form
-        descriptionEn: formData.descriptionEn,
-        descriptionAr: "", // Removed from form
-        price: formData.price,
-        discountAmount,
-        stockNumber: formData.stock,
-        categoryId: formData.categoryId,
-        colorsEn: colorsCheckEn.normalized,
-        colorsAr: "", // Removed from form
-        materialEn: materialValEn,
-        materialAr: "", // Removed from form
-        mainImage,
-        images: formData.images.map((url) => ({ imageUrl: url })),
-        currentState,
-        isSeller: formData.isSeller,
-      }
+       const materialValEn = (formData.materialEn || "").trim()
+       const payload = {
+         id: product?.id || "00000000-0000-0000-0000-000000000000",
+         nameEn: formData.nameEn,
+         nameAr: "", // Removed from form
+         descriptionEn: formData.descriptionEn,
+         descriptionAr: "", // Removed from form
+         price: formData.price,
+         discountAmount,
+         stockNumber: formData.stock,
+         categoryId: formData.categoryId,
+         colorsEn: colorsCheckEn.normalized,
+         colorsAr: "", // Removed from form
+         materialEn: materialValEn,
+         materialAr: "", // Removed from form
+         mainImage,
+         images: formData.images.map((url) => ({ imageUrl: url })),
+         currentState,
+       }
 
 
       if (mode === "create") {
@@ -223,10 +220,20 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     const standardizedStr = value.replace(/،/g, ",")
     const trimmed = standardizedStr.trim()
     if (!trimmed) return { valid: true, normalized: "" }
-    const parts = trimmed.split(",").map((part) => part.trim())
-    const hasEmpty = parts.some((part) => part.length === 0)
-    const regex = /^[A-Za-z\s0-9\-]+(,[A-Za-z\s0-9\-]+)*$/
-    if (hasEmpty || !regex.test(trimmed)) return { valid: false, normalized: trimmed }
+    
+    // Remove all spaces first
+    const noSpaces = trimmed.replace(/\s+/g, "")
+    const parts = noSpaces.split(",").map((part) => part.trim()).filter(Boolean)
+    
+    if (parts.length === 0) return { valid: true, normalized: "" }
+    
+    // Validate that each part is valid (letters, numbers, hyphens only)
+    const regex = /^[A-Za-z0-9\-]+$/
+    const allValid = parts.every(part => regex.test(part))
+    
+    if (!allValid) return { valid: false, normalized: noSpaces }
+    
+    // Return normalized colors without spaces
     return { valid: true, normalized: parts.join(",") }
   }
 
@@ -477,12 +484,12 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                 />
                 {showColorsErrorEn && (
                   <p className="text-xs text-destructive">
-                    Format: color,color,color
+                    Format: color,color,color (no spaces allowed, use letters, numbers, and hyphens only)
                   </p>
                 )}
                 {!showColorsErrorEn && (
                   <p className="text-xs text-muted-foreground">
-                    Separate each color with a comma.
+                    Separate each color with a comma. No spaces allowed. Example: red,blue,dark-green
                   </p>
                 )}
               </div>
@@ -495,21 +502,11 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                   value={formData.materialEn}
                   onChange={(e) => handleChange("materialEn", e.target.value)}
                   placeholder="Enter material (e.g. Wood)"
-                />
-              </div>
-              <div className="flex items-center gap-2 pt-2">
-                <Checkbox
-                  id="isSeller"
-                  checked={formData.isSeller}
-                  onCheckedChange={(checked) => handleChange("isSeller", checked === true)}
-                />
-                <Label htmlFor="isSeller" className="text-sm font-normal cursor-pointer">
-                  Show in Seller Section
-                </Label>
-              </div>
+                 />
+               </div>
 
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
         </div>
       </div>
     </form>

@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export function OurStory() {
     return (
-        <section className="relative py-64 px-8 min-h-[700px] flex items-center justify-center w-full overflow-hidden border-y border-gray-100">
+        <section id="our-story" className="relative py-64 px-8 min-h-[700px] flex items-center justify-center w-full overflow-hidden border-y border-gray-100 scroll-mt-28">
             {/* Background Image */}
             <div className="absolute inset-0 z-0 scale-105">
                 <Image

@@ -15,43 +15,32 @@ interface RecentOrdersTableProps {
 
 export function RecentOrdersTable({ orders, className }: RecentOrdersTableProps) {
   const getStatusBadge = (status: Order["status"]) => {
-    const statusConfig = {
-      pending: { variant: "secondary" as const, label: "Pending" },
-      processing: { variant: "default" as const, label: "Processing" },
-      shipped: { variant: "outline" as const, label: "Shipped" },
-      delivered: { variant: "default" as const, label: "Delivered" },
-      cancelled: { variant: "destructive" as const, label: "Cancelled" },
-      refunded: { variant: "secondary" as const, label: "Refunded" },
+    const statusConfig: Record<string, { className: string; label: string }> = {
+      pending: { className: "bg-amber-100 text-amber-700 border-amber-200", label: "Pending" },
+      processing: { className: "bg-blue-100 text-blue-700 border-blue-200", label: "Processing" },
+      shipped: { className: "bg-purple-100 text-purple-700 border-purple-200", label: "Shipped" },
+      delivered: { className: "bg-emerald-100 text-emerald-700 border-emerald-200", label: "Delivered" },
+      cancelled: { className: "bg-rose-100 text-rose-700 border-rose-200", label: "Cancelled" },
+      refunded: { className: "bg-slate-100 text-slate-700 border-slate-200", label: "Refunded" },
     }
-
     const config = statusConfig[status] || statusConfig.pending
     return (
-      <Badge
-        variant={config.variant}
-        className={cn(
-          status === "delivered" && "bg-emerald-500 hover:bg-emerald-600",
-          status === "processing" && "bg-blue-500 hover:bg-blue-600"
-        )}
-      >
+      <Badge className={cn("border font-medium text-xs", config.className)}>
         {config.label}
       </Badge>
     )
   }
 
-  const formatCurrency = (amount: number) => {
-    return `${amount.toLocaleString()} EGP`
-  }
+  const formatCurrency = (amount: number) => `${amount.toLocaleString()} EGP`
 
   return (
-    <Card className={cn("overflow-hidden", className)}>
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-base font-medium">
-          Recent Orders
-        </CardTitle>
-        <Button variant="ghost" size="sm" asChild>
-          <Link href="/admin/orders" className="flex items-center gap-1">
+    <Card className={cn("border-[#7B3F32]/12 bg-white/85 backdrop-blur-sm shadow-[0_10px_30px_rgba(0,0,0,0.06)] overflow-hidden", className)}>
+      <CardHeader className="flex flex-row items-center justify-between pb-3 border-b border-[#7B3F32]/10 bg-[#fbf5ef]">
+        <CardTitle className="text-base font-semibold text-[#2f2219]">Recent Orders</CardTitle>
+        <Button variant="ghost" size="sm" asChild className="text-[#7B3F32] hover:text-[#5f3026] hover:bg-[#f5e9dd]">
+          <Link href="/admin/orders" className="flex items-center gap-1 text-sm font-medium">
             View All
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="w-4 h-4" />
           </Link>
         </Button>
       </CardHeader>
@@ -59,50 +48,29 @@ export function RecentOrdersTable({ orders, className }: RecentOrdersTableProps)
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b bg-muted/50">
-                <th className="px-4 py-3 text-sm font-medium text-muted-foreground text-left">
-                  Order Number
-                </th>
-                <th className="px-4 py-3 text-sm font-medium text-muted-foreground text-left">
-                  Customer
-                </th>
-                <th className="px-4 py-3 text-sm font-medium text-muted-foreground text-left">
-                  Total
-                </th>
-                <th className="px-4 py-3 text-sm font-medium text-muted-foreground text-left">
-                  Status
-                </th>
-                <th className="px-4 py-3 text-sm font-medium text-muted-foreground text-left">
-                  Date
-                </th>
+              <tr className="bg-[#f7efe7]">
+                <th className="px-4 py-3 text-xs font-semibold text-[#7c6f65] uppercase tracking-wider text-left">Order</th>
+                <th className="px-4 py-3 text-xs font-semibold text-[#7c6f65] uppercase tracking-wider text-left">Customer</th>
+                <th className="px-4 py-3 text-xs font-semibold text-[#7c6f65] uppercase tracking-wider text-left">Total</th>
+                <th className="px-4 py-3 text-xs font-semibold text-[#7c6f65] uppercase tracking-wider text-left">Status</th>
+                <th className="px-4 py-3 text-xs font-semibold text-[#7c6f65] uppercase tracking-wider text-left">Date</th>
               </tr>
             </thead>
             <tbody>
               {orders.slice(0, 5).map((order) => (
-                <tr key={order.id} className="border-b last:border-0 hover:bg-muted/50">
-                  <td className="px-4 py-3 text-left">
-                    <Link
-                      href={`/admin/orders/${order.id}`}
-                      className="font-medium text-primary hover:underline"
-                    >
+                <tr key={order.id} className="border-b border-[#7B3F32]/8 hover:bg-[#fdf8f3] transition-colors">
+                  <td className="px-4 py-3">
+                    <Link href={`/admin/orders/${order.id}`} className="font-medium text-[#2f2219] hover:text-[#7B3F32] transition-colors">
                       {order.orderNumber}
                     </Link>
                   </td>
-                  <td className="px-4 py-3 text-left">
-                    <div>
-                      <p className="font-medium">{order.customer.name}</p>
-                      <p className="text-sm text-muted-foreground">{order.customer.email}</p>
-                    </div>
+                  <td className="px-4 py-3">
+                    <p className="font-medium text-[#2f2219]">{order.customer.name}</p>
+                    <p className="text-sm text-[#85776d]">{order.customer.email}</p>
                   </td>
-                  <td className="px-4 py-3 font-medium text-left">
-                    {formatCurrency(order.total)}
-                  </td>
-                  <td className="px-4 py-3 text-left">
-                    {getStatusBadge(order.status)}
-                  </td>
-                  <td className="px-4 py-3 text-muted-foreground text-left">
-                    {new Date(order.createdDate).toLocaleDateString("en-US")}
-                  </td>
+                  <td className="px-4 py-3 font-semibold text-[#2f2219]">{formatCurrency(order.total)}</td>
+                  <td className="px-4 py-3">{getStatusBadge(order.status)}</td>
+                  <td className="px-4 py-3 text-sm text-[#85776d]">{new Date(order.createdDate).toLocaleDateString("en-US")}</td>
                 </tr>
               ))}
             </tbody>
@@ -112,5 +80,3 @@ export function RecentOrdersTable({ orders, className }: RecentOrdersTableProps)
     </Card>
   )
 }
-
-

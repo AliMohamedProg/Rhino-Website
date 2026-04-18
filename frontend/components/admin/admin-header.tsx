@@ -36,7 +36,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
       <GlobalSearch open={searchOpen} onOpenChange={setSearchOpen} />
       <header
         className={cn(
-          "sticky top-0 z-40 flex h-16 items-center justify-between gap-4 border-b border-admin-header-border bg-admin-header-bg/95 backdrop-blur-sm px-4 md:px-6 shadow-sm"
+          "sticky top-0 z-40 flex h-16 items-center justify-between gap-4 border-b border-admin-header-border bg-white px-4 md:px-6"
         )}
         role="banner"
       >
@@ -44,7 +44,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden hover:bg-admin-primary/10 hover:text-admin-primary focus-visible:ring-2 focus-visible:ring-admin-primary focus-visible:ring-offset-2"
+            className="md:hidden hover:bg-admin-sidebar-hover"
             onClick={onMenuClick}
           >
             <Menu className="h-5 w-5" />
@@ -53,13 +53,13 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
 
           <Button
             variant="outline"
-            className="relative flex-1 max-w-md justify-start text-admin-text-muted bg-transparent border-admin-card-border hover:bg-admin-primary/5 hover:border-admin-primary hover:text-admin-primary focus-visible:ring-2 focus-visible:ring-admin-primary focus-visible:ring-offset-2 transition-all duration-200"
+            className="relative flex-1 max-w-md justify-start text-admin-text-secondary bg-muted border-border hover:bg-secondary hover:border-admin-sidebar-hover hover:text-admin-text-primary transition-all duration-200"
             onClick={() => setSearchOpen(true)}
           >
             <Search className="h-4 w-4 me-2" />
             <span className="hidden sm:inline">Search products, orders, users...</span>
             <span className="sm:hidden">Search...</span>
-            <Kbd className="ms-auto hidden sm:inline-flex bg-muted text-muted-foreground">
+            <Kbd className="ms-auto hidden sm:inline-flex bg-secondary text-admin-text-secondary">
               <span className="text-xs">⌘</span>K
             </Kbd>
           </Button>
@@ -71,10 +71,10 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="relative hover:bg-admin-primary/10 hover:text-admin-primary focus-visible:ring-2 focus-visible:ring-admin-primary focus-visible:ring-offset-2"
+                className="relative hover:bg-secondary"
               >
-                <Bell className="h-5 w-5" />
-                <span className="absolute top-1 right-1 h-2.5 w-2.5 bg-admin-danger rounded-full border-2 border-admin-header-bg" />
+                <Bell className="h-5 w-5 text-admin-text-secondary" />
+                <span className="absolute top-1 right-1 h-2.5 w-2.5 bg-red-500 rounded-full border-2 border-white" />
                 <span className="sr-only">Notifications</span>
               </Button>
             </DropdownMenuTrigger>
@@ -101,11 +101,11 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
+               <Button
                 variant="ghost"
-                className="flex items-center gap-2 px-2 hover:bg-admin-primary/10 focus-visible:ring-2 focus-visible:ring-admin-primary focus-visible:ring-offset-2"
+                className="flex items-center gap-2 px-2 hover:bg-secondary"
               >
-                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-admin-primary to-blue-600 flex items-center justify-center">
+                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-admin-primary to-indigo-500 flex items-center justify-center">
                   <User className="h-4 w-4 text-white" />
                 </div>
                 <span className="hidden lg:inline text-sm font-medium text-admin-text-primary">
@@ -130,8 +130,8 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                 Settings
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem 
-                className="cursor-pointer text-admin-danger focus:text-admin-danger"
+               <DropdownMenuItem 
+                className="cursor-pointer text-destructive focus:text-destructive"
                 onClick={logout}
               >
                 <LogOut className="mr-2 h-4 w-4" />

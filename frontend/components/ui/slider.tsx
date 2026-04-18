@@ -11,8 +11,9 @@ function Slider({
   value,
   min = 0,
   max = 100,
+  variant = "default",
   ...props
-}: React.ComponentProps<typeof SliderPrimitive.Root>) {
+}: React.ComponentProps<typeof SliderPrimitive.Root> & { variant?: "default" | "admin" }) {
   const _values = React.useMemo(
     () =>
       Array.isArray(value)
@@ -22,6 +23,11 @@ function Slider({
           : [min, max],
     [value, defaultValue, min, max],
   )
+
+  const rangeColor = variant === "admin" ? "bg-admin-primary" : "bg-[#B65E49]"
+  const trackColor = variant === "admin" ? "bg-muted" : "bg-[#ead8c9]"
+  const thumbBorderColor = variant === "admin" ? "border-admin-primary" : "border-[#B65E49]"
+  const thumbRingColor = variant === "admin" ? "ring-admin-primary/40" : "ring-[#B65E49]/35"
 
   return (
     <SliderPrimitive.Root
@@ -38,14 +44,18 @@ function Slider({
     >
       <SliderPrimitive.Track
         data-slot="slider-track"
-        className={
-          'bg-muted relative grow overflow-hidden rounded-full data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5'
-        }
+        className={cn(
+          trackColor,
+          'relative grow overflow-hidden rounded-full data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5'
+        )}
       >
         <SliderPrimitive.Range
           data-slot="slider-range"
           className={
-            'bg-primary absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full'
+            cn(
+              'absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full',
+              rangeColor
+            )
           }
         />
       </SliderPrimitive.Track>
@@ -53,7 +63,11 @@ function Slider({
         <SliderPrimitive.Thumb
           data-slot="slider-thumb"
           key={index}
-          className="border-primary ring-ring/50 block size-4 shrink-0 rounded-full border bg-white shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
+          className={cn(
+            thumbBorderColor,
+            thumbRingColor,
+            "block size-4 shrink-0 rounded-full border bg-white shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
+          )}
         />
       ))}
     </SliderPrimitive.Root>

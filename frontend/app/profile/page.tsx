@@ -26,7 +26,6 @@ interface Order {
 
 const menuItems = [
   { key: "profile.orders", icon: Package },
-  { key: "profile.settings", icon: Settings },
 ]
 
 export default function ProfilePage() {
@@ -244,65 +243,6 @@ export default function ProfilePage() {
             )}
 
 
-            {/* Settings Tab */}
-            {activeTab === "profile.settings" && (
-              <div className="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-12 border border-sand/30 backdrop-blur-sm">
-                <header className="mb-12">
-                  <h3 className="text-3xl font-serif text-mahogany italic flex items-center gap-4">
-                    <Settings size={28} className="text-mahogany/40" />
-                    {language === "ar" ? "الإعدادات" : "Preferences"}
-                  </h3>
-                </header>
-
-                <div className="space-y-12">
-                  {/* Language Selection */}
-                  <div className="bg-[#FDFDFD] p-10 rounded-[2rem] border border-sand/20">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
-                      <div>
-                        <h4 className="text-xl font-serif text-mahogany italic mb-1 flex items-center gap-3">
-                          <Globe size={18} className="text-taupe opacity-40" />
-                          {language === "ar" ? "اللغة" : "Language"}
-                        </h4>
-                        <p className="text-[10px] text-taupe font-bold tracking-widest uppercase opacity-60">
-                          Select your preferred interface language
-                        </p>
-                      </div>
-
-                      <div className="flex gap-4">
-                        <button
-                          onClick={() => setLanguage("en")}
-                          className={`px-8 py-4 rounded-full text-[10px] font-black tracking-widest uppercase transition-all duration-300 ${language === "en"
-                              ? "bg-mahogany text-white shadow-lg"
-                              : "bg-white text-taupe border border-sand/30 hover:border-mahogany/30"
-                            }`}
-                        >
-                          English
-                        </button>
-                        <button
-                          onClick={() => setLanguage("ar")}
-                          className={`px-8 py-4 rounded-full text-[10px] font-black tracking-widest uppercase transition-all duration-300 ${language === "ar"
-                              ? "bg-mahogany text-white shadow-lg"
-                              : "bg-white text-taupe border border-sand/30 hover:border-mahogany/30"
-                            }`}
-                        >
-                          العربية
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Security/Privacy Note */}
-                  <div className="p-8 border border-dashed border-sand/60 rounded-[2rem] text-center">
-                    <Shield size={24} className="mx-auto text-taupe opacity-30 mb-4" />
-                    <p className="text-[9px] text-taupe font-bold tracking-widest uppercase opacity-40 max-w-sm mx-auto">
-                      Your data is encrypted and secure. We never share your personal information.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-
           </div>
 
         </div>
@@ -315,7 +255,6 @@ export default function ProfilePage() {
 function getArabicLabel(key: string): string {
   const labels: Record<string, string> = {
     "profile.orders": "الطلبات",
-    "profile.settings": "الإعدادات",
   }
   return labels[key] || key
 }

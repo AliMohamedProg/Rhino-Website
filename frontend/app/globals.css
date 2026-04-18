@@ -24,19 +24,19 @@
 }
 
 :root[data-theme="admin"] {
-  --admin-sidebar: #1a1f2e;
+  --admin-sidebar: #0f172a;
   --admin-sidebar-foreground: #e2e8f0;
-  --admin-sidebar-active: #3b82f6;
+  --admin-sidebar-active: #6366f1;
   --admin-sidebar-active-foreground: #ffffff;
-  --admin-sidebar-border: #2d3748;
-  --admin-sidebar-hover: #2d3748;
+  --admin-sidebar-border: #1e293b;
+  --admin-sidebar-hover: #1e293b;
   --admin-header-bg: #ffffff;
   --admin-header-border: #e2e8f0;
-  --admin-content-bg: #f8fafc;
+  --admin-content-bg: #f1f5f9;
   --admin-card-bg: #ffffff;
   --admin-card-border: #e2e8f0;
-  --admin-primary: #3b82f6;
-  --admin-primary-hover: #2563eb;
+  --admin-primary: #6366f1;
+  --admin-primary-hover: #4f46e5;
   --admin-success: #10b981;
   --admin-warning: #f59e0b;
   --admin-danger: #ef4444;
@@ -129,12 +129,12 @@ h6 {
   --ring: var(--admin-primary);
   --radius: 0.5rem;
   
-  --sidebar: var(--admin-sidebar);
-  --sidebar-foreground: var(--admin-sidebar-foreground);
+  --sidebar: #ffffff;
+  --sidebar-foreground: #475569;
   --sidebar-primary: var(--admin-sidebar-active);
-  --sidebar-primary-foreground: var(--admin-sidebar-active-foreground);
-  --sidebar-hover: var(--admin-sidebar-hover);
-  --sidebar-border: var(--admin-sidebar-border);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-hover: #f1f5f9;
+  --sidebar-border: #e2e8f0;
 }
 
 .admin-focus-ring:focus-visible {
