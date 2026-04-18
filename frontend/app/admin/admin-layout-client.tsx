@@ -4,7 +4,6 @@ import React from "react"
 
 import { AdminLanguageProvider, useAdminLanguage } from "@/context/admin-language-context"
 import { cairo } from "@/app/fonts"
-import { ThemeProvider } from "@/context/theme-context"
 import { AdminSidebar } from "@/components/admin/admin-sidebar"
 import { AdminHeader } from "@/components/admin/admin-header"
 import { cn } from "@/lib/utils"
@@ -71,10 +70,8 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
 
 export function AdminLayoutClient({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider>
-      <AdminLanguageProvider>
-        <AdminLayoutContent>{children}</AdminLayoutContent>
-      </AdminLanguageProvider>
-    </ThemeProvider>
+    <AdminLanguageProvider>
+      <AdminLayoutContent>{children}</AdminLayoutContent>
+    </AdminLanguageProvider>
   )
 }
