@@ -1,0 +1,33 @@
+
+
+# === Databases / Docker ===
+# Prevent local database files or Docker volumes from being committed
+.db-data/
+postgres-data/
+sqlserver-data/
+*.db
+*.sqlite
+docker-compose.override.yml
+
+# === Large Files (WoodDecor Specific) ===
+# Based on your previous error, let's keep archives out
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# === Operating System Files ===
+# macOS files (Crucial since you're on a MacBook Air)
+.DS_Store
+.AppleDouble
+.LSOverride
+# Windows files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# === Tools / NuGet ===
+project.lock.json
+project.fragment.lock.json
+artifacts/
+*.nupkg
