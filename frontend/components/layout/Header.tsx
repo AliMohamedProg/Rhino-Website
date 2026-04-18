@@ -18,12 +18,20 @@ import {
 import { ProductCard } from "@/components/ui/ProductCard";
 import { useAuth } from "@/app/Context/auth-context";
 import { useCart } from "@/context/cart-context";
+import { ApiClient } from "@/app/ApiHelper/ApiClient";
 
 const searchMockProducts = [
   { id: 4, title: "Marble Dining Table", image: "/grey.png", price: "$2,199.00" },
   { id: 5, title: "Ergonomic Study Chair", image: "/cafe.png", price: "$450.00" },
   { id: 6, title: "Eco-Conscious Sofa", image: "/grey.png", price: "$1,150.00" },
 ];
+
+interface Category {
+  id: string;
+  nameAr?: string;
+  nameEn?: string;
+  currentState?: number;
+}
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -33,6 +41,7 @@ export function Header() {
   const router = useRouter();
   const { user, isAuthenticated, loading } = useAuth();
   const { itemCount } = useCart();
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const isAdmin =
     isAuthenticated &&
@@ -53,6 +62,34 @@ export function Header() {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await ApiClient.get<any[]>("api/Category");
+        if (!Array.isArray(data)) {
+          setCategories([]);
+          return;
+        }
+
+        const normalized = data
+          .map((cat) => ({
+            id: cat.id ?? cat.Id ?? "",
+            nameEn: cat.nameEn ?? cat.NameEn ?? "",
+            nameAr: cat.nameAr ?? cat.NameAr ?? "",
+            currentState: cat.currentState ?? cat.CurrentState ?? 1,
+          }))
+          .filter((cat) => Boolean(cat.id) && cat.currentState > 0);
+
+        setCategories(normalized);
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+        setCategories([]);
+      }
+    };
+
+    fetchCategories();
   }, []);
 
   return (
@@ -100,11 +137,15 @@ export function Header() {
             {/* Dropdown Menu */}
             <div className="absolute top-full left-1/2 -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 pt-4">
               <div className="bg-white/95 backdrop-blur-xl border border-gray-100 rounded-[2.5rem] p-10 shadow-[0_20px_50px_rgba(0,0,0,0.1)] w-72 flex flex-col gap-5">
-                <Link href="#" className="hover:text-mahogany transition-colors block text-taupe/60 text-[11px] font-bold tracking-[0.2em]">DINING ROOM</Link>
-                <Link href="#" className="hover:text-mahogany transition-colors block text-taupe/60 text-[11px] font-bold tracking-[0.2em]">LIVING ROOM</Link>
-                <Link href="#" className="hover:text-mahogany transition-colors block text-taupe/60 text-[11px] font-bold tracking-[0.2em]">BEDROOM</Link>
-                <Link href="#" className="hover:text-mahogany transition-colors block text-taupe/60 text-[11px] font-bold tracking-[0.2em]">OFFICE</Link>
-                <Link href="#" className="hover:text-mahogany transition-colors block text-taupe/60 text-[11px] font-bold tracking-[0.2em]">OUTDOOR</Link>
+                {categories.slice(0, 6).map((category) => (
+                  <Link
+                    key={category.id}
+                    href={`/category/${category.id}`}
+                    className="hover:text-mahogany transition-colors block text-taupe/60 text-[11px] font-bold tracking-[0.2em]"
+                  >
+                    {(category.nameEn || "CATEGORY").toUpperCase()}
+                  </Link>
+                ))}
 
                 <div className="w-full h-px bg-gray-50 my-1"></div>
 
@@ -239,9 +280,15 @@ export function Header() {
           <div className="flex flex-col items-center gap-4">
             <span className="text-mahogany">COLLECTIONS</span>
             <div className="flex flex-col items-center gap-2 text-[10px] text-taupe">
-              <Link href="#" onClick={() => setIsMobileMenuOpen(false)}>DINING ROOM</Link>
-              <Link href="#" onClick={() => setIsMobileMenuOpen(false)}>LIVING ROOM</Link>
-              <Link href="#" onClick={() => setIsMobileMenuOpen(false)}>BEDROOM</Link>
+              {categories.slice(0, 6).map((category) => (
+                <Link
+                  key={category.id}
+                  href={`/category/${category.id}`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {(category.nameEn || "Category").toUpperCase()}
+                </Link>
+              ))}
             </div>
           </div>
           <Link href="/products" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-mahogany">CATALOG</Link>

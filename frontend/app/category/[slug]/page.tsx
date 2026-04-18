@@ -16,6 +16,7 @@ import { toast } from "sonner"
 import { ShoppingCart, ChevronUp, ChevronDown, Filter } from "lucide-react"
 import { formatPrice } from "@/lib/products"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
+import { getImageUrl } from "@/lib/utils"
 
 interface Item {
   id: string
@@ -56,16 +57,44 @@ export default function CategoryPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // fetch products by category
-        const data: any[] = await ApiClient.get(`api/Category/${categoryId}`)
-        const normalized = data.map((item) => ({
+        const [itemsData, categoriesData] = await Promise.all([
+          ApiClient.get<any[]>("api/Items"),
+          ApiClient.get<any[]>("api/Category"),
+        ])
+
+        const normalizedCategories = (Array.isArray(categoriesData) ? categoriesData : [])
+          .map((cat) => ({
+            id: cat.id ?? cat.Id ?? "",
+            nameAr: cat.nameAr ?? cat.NameAr ?? "",
+            nameEn: cat.nameEn ?? cat.NameEn ?? "",
+          }))
+          .filter((cat) => Boolean(cat.id))
+
+        setCategories(normalizedCategories)
+
+        const matchedCategory = normalizedCategories.find(
+          (cat) =>
+            cat.id === categoryId ||
+            cat.nameEn?.toLowerCase() === categoryId.toLowerCase()
+        )
+        const targetCategoryId = matchedCategory?.id ?? categoryId
+
+        const normalized = (Array.isArray(itemsData) ? itemsData : []).map((item) => ({
           ...item,
+          id: item.id ?? item.Id ?? "",
+          nameAr: item.nameAr ?? item.NameAr ?? "",
+          nameEn: item.nameEn ?? item.NameEn ?? "",
+          price: item.price ?? item.Price ?? 0,
+          stockNumber: item.stockNumber ?? item.StockNumber ?? 0,
+          categoryId: item.categoryId ?? item.CategoryId ?? "",
+          overallRating: item.overallRating ?? item.OverallRating ?? 0,
           discountAmount: item.discountAmount ?? item.DiscountAmount ?? 0,
           mainImage: item.mainImage ?? item.MainImage ?? item.image ?? item.Image ?? "",
           colorsEn: item.colorsEn ?? item.ColorsEn ?? item.colors ?? item.Colors ?? "",
           colorsAr: item.colorsAr ?? item.ColorsAr ?? item.colors ?? item.Colors ?? "",
         })) as Item[]
-        setProducts(normalized)
+        setProducts(normalized.filter((item) => item.categoryId === targetCategoryId))
+        setSelectedCategories([targetCategoryId])
 
       } catch (err) {
         console.error(err)
@@ -94,8 +123,8 @@ export default function CategoryPage() {
 
   const resetFilters = () => {
     setHideOutOfStock(false)
-    setPriceRange([0, 50000])
-    setSelectedCategories([])
+    setPriceRange([0, 500000])
+    setSelectedCategories([categoryId])
   }
 
   const CategoryProductCard = ({ product }: { product: Item }) => {
@@ -155,7 +184,7 @@ export default function CategoryPage() {
       <div className="group bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg transition-shadow flex flex-col">
         <Link href={`/product/${product.id}`} className="block relative h-48 md:h-56 bg-secondary">
           <Image
-            src={product.mainImage || "/placeholder.svg"}
+            src={getImageUrl(product.mainImage)}
             alt={language === "ar" ? product.nameAr : product.nameEn}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -281,11 +310,33 @@ export default function CategoryPage() {
                     {language === "ar" ? "السعر" : "Price"} {priceOpen ? <ChevronUp /> : <ChevronDown />}
                   </CollapsibleTrigger>
                   <CollapsibleContent className="py-2">
-                    <Slider value={priceRange} onValueChange={(v) => setPriceRange(v as [number, number])} max={50000} step={500} />
+                    <Slider value={priceRange} onValueChange={(v) => setPriceRange(v as [number, number])} max={500000} step={500} />
                     <div className="flex justify-between mt-2 text-sm text-muted-foreground">
                       <span>{formatPrice(priceRange[0])}</span>
                       <span>{formatPrice(priceRange[1])}</span>
                     </div>
+                  </CollapsibleContent>
+                </Collapsible>
+
+                {/* Categories */}
+                <Collapsible open={categoryOpen} onOpenChange={setCategoryOpen}>
+                  <CollapsibleTrigger className="flex justify-between w-full py-2">
+                    {language === "ar" ? "التصنيفات" : "Categories"} {categoryOpen ? <ChevronUp /> : <ChevronDown />}
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="space-y-2 py-2">
+                    {categories.map((cat) => (
+                      <label key={cat.id} className="flex items-center gap-2">
+                        <Checkbox
+                          checked={selectedCategories.includes(cat.id)}
+                          onCheckedChange={() =>
+                            setSelectedCategories((prev) =>
+                              prev.includes(cat.id) ? prev.filter((c) => c !== cat.id) : [...prev, cat.id]
+                            )
+                          }
+                        />
+                        {language === "ar" ? cat.nameAr : cat.nameEn}
+                      </label>
+                    ))}
                   </CollapsibleContent>
                 </Collapsible>
 

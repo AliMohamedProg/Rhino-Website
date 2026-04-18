@@ -53,6 +53,21 @@ interface Category {
   nameEn: string
 }
 
+function getColorNamesFromApi(item: any, language: "en" | "ar"): string[] {
+  const source = item?.colors ?? item?.Colors
+  if (!Array.isArray(source)) return []
+
+  return source
+    .map((color: any) => {
+      if (typeof color === "string") return color.trim()
+      if (language === "ar") {
+        return (color?.nameAr ?? color?.NameAr ?? color?.nameEn ?? color?.NameEn ?? "").trim()
+      }
+      return (color?.nameEn ?? color?.NameEn ?? color?.nameAr ?? color?.NameAr ?? "").trim()
+    })
+    .filter(Boolean)
+}
+
 export default function CategoryPage() {
   const params = useParams()
   const categoryId = params.slug as string
@@ -80,8 +95,14 @@ export default function CategoryPage() {
           ...item,
           discountAmount: item.discountAmount ?? item.DiscountAmount ?? 0,
           mainImage: item.mainImage ?? item.MainImage ?? item.image ?? item.Image ?? "",
-          colorsEn: item.colorsEn ?? item.ColorsEn ?? item.colors ?? item.Colors ?? "",
-          colorsAr: item.colorsAr ?? item.ColorsAr ?? item.colors ?? item.Colors ?? "",
+          colorsEn:
+            item.colorsEn ??
+            item.ColorsEn ??
+            getColorNamesFromApi(item, "en").join(","),
+          colorsAr:
+            item.colorsAr ??
+            item.ColorsAr ??
+            getColorNamesFromApi(item, "ar").join(","),
         })) as Item[]
         setProducts(normalized)
 
@@ -277,12 +298,12 @@ export default function CategoryPage() {
     <div className="min-h-screen flex flex-col w-full">
       <Header />
 
-      <main className="flex-1 bg-background w-full min-h-0">
+      <main className="flex-1 bg-background w-full min-h-0 pt-24 md:pt-28">
         <div className="w-full max-w-none px-4 sm:px-6 lg:px-8 xl:px-10 py-6">
           <div className="flex flex-col lg:flex-row gap-6">
 
             {/* Sidebar */}
-            <aside className="w-full lg:w-72">
+            <aside className="w-full h-full lg:w-72">
               <div className="bg-card border rounded-lg p-4 sticky top-4">
 
                 <div className="flex items-center gap-2 mb-6">

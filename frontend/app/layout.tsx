@@ -8,7 +8,7 @@ import { AppProviders } from "@/providers"
 import { MessageCircle } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Wood Decor - Your Home, Your Style",
+  title: "Rhino website - Your Home, Your Style",
   description: "Shop furniture and home décor online. Transform your living space with quality products.",
   icons: {
     icon: "/images/logo-websait.png",
