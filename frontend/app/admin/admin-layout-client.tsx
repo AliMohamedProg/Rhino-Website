@@ -70,8 +70,10 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
 
 export function AdminLayoutClient({ children }: { children: React.ReactNode }) {
   return (
+
     <AdminLanguageProvider>
       <AdminLayoutContent>{children}</AdminLayoutContent>
     </AdminLanguageProvider>
+
   )
 }
