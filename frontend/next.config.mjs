@@ -18,8 +18,6 @@ const nextConfig = {
   },
   // Enable React compiler optimizations
   reactStrictMode: false,
-  // Faster dev builds with SWC minification
-  swcMinify: true,
   // Reduce bundle size
   // Note: disabled modularizeImports for lucide-react as the icon files don't match the expected pattern
   // The optimizePackageImports option below handles tree-shaking instead
