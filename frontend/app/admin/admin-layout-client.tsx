@@ -1,7 +1,10 @@
 "use client"
 
 import React from "react"
+
+import { AdminLanguageProvider, useAdminLanguage } from "@/context/admin-language-context"
 import { cairo } from "@/app/fonts"
+import { ThemeProvider } from "@/context/theme-context"
 import { AdminSidebar } from "@/components/admin/admin-sidebar"
 import { AdminHeader } from "@/components/admin/admin-header"
 import { cn } from "@/lib/utils"
@@ -12,6 +15,7 @@ import { useRouter } from "next/navigation"
 import Loading from "@/app/loading"
 
 function AdminLayoutContent({ children }: { children: React.ReactNode }) {
+  const { dir, language } = useAdminLanguage()
   const { user, loading } = useAuth()
   const router = useRouter()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -35,7 +39,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-background" dir="ltr" data-theme="admin">
+    <div className={cn("min-h-screen bg-background", language === "ar" && cairo.className)} dir={dir}>
       {/* Desktop Sidebar */}
       <div className="hidden md:block">
         <AdminSidebar />
@@ -44,7 +48,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
       {/* Mobile Sidebar */}
       <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
         <SheetContent
-          side="left"
+          side={dir === "rtl" ? "right" : "left"}
           className="w-64 p-0"
         >
           <AdminSidebar />
@@ -53,7 +57,10 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
 
       {/* Main Content */}
       <div
-        className="flex min-h-screen flex-col transition-all duration-300 md:ml-64"
+        className={cn(
+          "flex min-h-screen flex-col transition-all duration-300",
+          dir === "rtl" ? "md:mr-64" : "md:ml-64"
+        )}
       >
         <AdminHeader onMenuClick={() => setMobileMenuOpen(true)} />
         <main className="flex-1 p-4 md:p-6">{children}</main>
@@ -62,14 +69,12 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   )
 }
 
-
-import { AdminLanguageProvider } from "@/context/admin-language-context"
-
 export function AdminLayoutClient({ children }: { children: React.ReactNode }) {
   return (
-    <AdminLanguageProvider>
-      <AdminLayoutContent>{children}</AdminLayoutContent>
-    </AdminLanguageProvider>
+    <ThemeProvider>
+      <AdminLanguageProvider>
+        <AdminLayoutContent>{children}</AdminLayoutContent>
+      </AdminLanguageProvider>
+    </ThemeProvider>
   )
 }
-

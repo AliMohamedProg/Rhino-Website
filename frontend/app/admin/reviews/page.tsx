@@ -22,6 +22,7 @@ import { ApiClient } from "@/app/ApiHelper/ApiClient";
 
 
 export default function ReviewsPage() {
+  const { t, isRTL } = useAdminLanguage();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [ratingFilter, setRatingFilter] = useState("all");
@@ -46,7 +47,10 @@ export default function ReviewsPage() {
   }, []);
 
   const handleDeleteReview = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this review?")) return;
+    if (!confirm(isRTL
+      ? "هل أنت متأكد من حذف هذه المراجعة؟"
+      : "Are you sure you want to delete this review?"
+    )) return;
 
     try {
       await ApiClient.post(
@@ -58,7 +62,7 @@ export default function ReviewsPage() {
 
     } catch (err) {
       console.error("Failed to delete review:", err);
-      alert("Failed to delete review");
+      alert(isRTL ? "فشل حذف المراجعة" : "Failed to delete review");
     }
   };
 
@@ -94,9 +98,9 @@ export default function ReviewsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Reviews</h1>
+        <h1 className="text-2xl font-bold tracking-tight">{isRTL ? "المراجعات" : "Reviews"}</h1>
         <p className="text-muted-foreground">
-          Manage and monitor customer reviews
+          {isRTL ? "إدارة ومراقبة مراجعات العملاء" : "Manage and monitor customer reviews"}
         </p>
       </div>
 
@@ -109,7 +113,7 @@ export default function ReviewsPage() {
             <div className="relative flex-1">
               <Search className="absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search reviews..."
+                placeholder={isRTL ? "البحث في المراجعات..." : "Search reviews..."}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="ps-9"
@@ -117,15 +121,15 @@ export default function ReviewsPage() {
             </div>
             <Select value={ratingFilter} onValueChange={setRatingFilter}>
               <SelectTrigger className="w-full sm:w-[150px]">
-                <SelectValue placeholder="Rating" />
+                <SelectValue placeholder={isRTL ? "التقييم" : "Rating"} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Ratings</SelectItem>
-                <SelectItem value="5">5 Stars</SelectItem>
-                <SelectItem value="4">4 Stars</SelectItem>
-                <SelectItem value="3">3 Stars</SelectItem>
-                <SelectItem value="2">2 Stars</SelectItem>
-                <SelectItem value="1">1 Star</SelectItem>
+                <SelectItem value="all">{isRTL ? "كل التقييمات" : "All Ratings"}</SelectItem>
+                <SelectItem value="5">5 {isRTL ? "نجوم" : "Stars"}</SelectItem>
+                <SelectItem value="4">4 {isRTL ? "نجوم" : "Stars"}</SelectItem>
+                <SelectItem value="3">3 {isRTL ? "نجوم" : "Stars"}</SelectItem>
+                <SelectItem value="2">2 {isRTL ? "نجوم" : "Stars"}</SelectItem>
+                <SelectItem value="1">1 {isRTL ? "نجمة" : "Star"}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -140,7 +144,7 @@ export default function ReviewsPage() {
           </div>
         ) : filteredReviews.length === 0 ? (
           <p className="text-center text-muted-foreground py-10">
-            No reviews found
+            {isRTL ? "لا توجد مراجعات" : "No reviews found"}
           </p>
         ) : (
           filteredReviews.map((review) => (
@@ -154,7 +158,7 @@ export default function ReviewsPage() {
                     <div className="flex-1 space-y-1">
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="font-medium text-sm">
-                          {review.customer?.email || review.email || review.userEmail || "User"}
+                          {review.customer?.email || review.email || review.userEmail || (isRTL ? "مستخدم" : "User")}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -172,7 +176,7 @@ export default function ReviewsPage() {
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteReview(review.id)}>
                         <Trash2 className="h-4 w-4 me-2" />
-                        Delete
+                        {isRTL ? "حذف" : "Delete"}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -189,7 +193,9 @@ export default function ReviewsPage() {
                       className="h-12 w-12 rounded object-cover"
                     />
                     <span className="text-sm font-medium">
-                      {(review.product?.nameEn || review.productNameEn || review.product?.name || review.productName || "Product")}
+                      {isRTL
+                        ? (review.product?.nameAr || review.productNameAr || review.product?.name || review.productName || "منتج")
+                        : (review.product?.nameEn || review.productNameEn || review.product?.name || review.productName || "Product")}
                     </span>
                   </div>
                   <p className="mt-1 text-sm text-muted-foreground">{review.review}</p>
@@ -204,4 +210,3 @@ export default function ReviewsPage() {
     </div>
   );
 }
-

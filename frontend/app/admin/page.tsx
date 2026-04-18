@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic"
 import { useEffect, useState } from "react"
+import { useAdminLanguage } from "@/context/admin-language-context"
 import { StatsCard } from "@/components/admin/stats-card"
 import { RecentOrdersTable } from "@/components/admin/recent-orders-table"
 import { TopProductsCard } from "@/components/admin/top-products-card"
@@ -29,7 +30,8 @@ interface DashboardData {
     date: string
   }[]
   topProducts: {
-    name: string
+    nameAr: string
+    nameEn: string
     totalSold: number
     price: number
     stock: number
@@ -55,6 +57,7 @@ const RevenueChart = dynamic(
 )
 
 export default function AdminDashboardPage() {
+  const { t, language, dir } = useAdminLanguage()
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null)
   const [initialSliders, setInitialSliders] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -81,12 +84,12 @@ export default function AdminDashboardPage() {
 
   const formatCurrency = (amount: number) => {
     if (amount >= 1000000) {
-      return `${(amount / 1000000).toFixed(2)}M EGP`
+      return `${(amount / 1000000).toFixed(2)}M ${t("common.egp")}`
     }
     if (amount >= 1000) {
-      return `${(amount / 1000).toFixed(1)}K EGP`
+      return `${(amount / 1000).toFixed(1)}K ${t("common.egp")}`
     }
-    return `${amount.toLocaleString()} EGP`
+    return `${amount.toLocaleString()} ${t("common.egp")}`
   }
 
   // Use API data only
@@ -111,7 +114,7 @@ export default function AdminDashboardPage() {
 
   const categoryChartData = dashboardData?.topCategories
     ? dashboardData.topCategories.map((item) => ({
-      name: item.nameEn,
+      name: language === "ar" ? item.nameAr : item.nameEn,
       value: item.totalSold,
     }))
     : []
@@ -153,8 +156,9 @@ export default function AdminDashboardPage() {
   // Convert dashboard top products to Product format
   const topProducts: Product[] = topProductsData
     ? topProductsData.map((product) => ({
-      id: `product-${product.name}`,
-      nameEn: product.name,
+      id: `product-${product.nameEn}`,
+      nameEn: product.nameEn,
+      nameAr: product.nameAr,
       descriptionEn: "",
       descriptionAr: "",
       price: product.price,
@@ -174,40 +178,40 @@ export default function AdminDashboardPage() {
     : []
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border/50">
+      <div className={cn("flex flex-col sm:flex-row sm:items-center justify-between gap-4", dir === "rtl" && "text-right")}>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard Overview</h1>
-          <p className="text-muted-foreground mt-1">
-            Welcome back, Admin! Here&apos;s what&apos;s happening with your store today.
+          <h1 className="text-2xl font-bold tracking-tight">{t("dashboard.title")}</h1>
+          <p className="text-muted-foreground">
+            {t("dashboard.welcome")}, Admin!
           </p>
         </div>
       </div>
 
 
       {/* Stats Cards */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatsCard
-          title="Total Revenue"
+          title={t("dashboard.totalRevenue")}
           value={formatCurrency(stats?.totalRevenue || 0)}
           trend="up"
           icon={<DollarSign className="h-5 w-5" />}
         />
         <StatsCard
-          title="Total Orders"
+          title={t("dashboard.totalOrders")}
           value={stats?.totalOrders || 0}
           trend="up"
           icon={<ShoppingCart className="h-5 w-5" />}
         />
         <StatsCard
-          title="Active Products"
+          title={t("dashboard.totalProducts")}
           value={stats?.totalProducts || 0}
           trend="up"
           icon={<Package className="h-5 w-5" />}
         />
         <StatsCard
-          title="Total Customers"
+          title={t("dashboard.totalUsers")}
           value={stats?.totalUsers || 0}
           trend="up"
           icon={<Users className="h-5 w-5" />}
@@ -215,37 +219,36 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Charts Row */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2">
         <AreaChartCard
-          title="Sales Performance"
+          title={t("dashboard.salesChart")}
           data={salesChartData}
         />
         <BarChartCard
-          title="Order Volume"
+          title={t("dashboard.ordersChart")}
           data={ordersChartData}
         />
       </div>
 
       {/* Secondary Charts and Tables */}
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-4 lg:grid-cols-3">
         <PieChartCard
-          title="Top Categories"
+          title={t("analytics.topCategories")}
           data={categoryChartData}
           className="lg:col-span-1"
         />
         <RevenueChart
-          title="Monthly Revenue"
+          title={t("dashboard.revenueChart")}
           data={revenueChartData}
           className="lg:col-span-2 -mt-6 lg:-mt-0"
         />
       </div>
 
       {/* Recent Orders and Top Products */}
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-4 lg:grid-cols-3">
         <RecentOrdersTable orders={recentOrders} className="lg:col-span-2" />
         <TopProductsCard products={topProducts} className="lg:col-span-1" />
       </div>
     </div>
   )
 }
-

@@ -38,6 +38,7 @@ import { Plus, MoreHorizontal, Pencil, Trash2, ImageIcon, Upload, Loader2 } from
 import Image from "next/image"
 
 export default function SlidersPage() {
+  const { t, language, dir } = useAdminLanguage()
   const [sliders, setSliders] = useState<Slider[]>([])
   const [loading, setLoading] = useState(true)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
@@ -47,10 +48,10 @@ export default function SlidersPage() {
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [editingSlider, setEditingSlider] = useState<Slider | null>(null)
   const [formData, setFormData] = useState({
+    titleAr: "",
     titleEn: "",
     imageUrl: "",
   })
-
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [uploading, setUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -73,7 +74,7 @@ export default function SlidersPage() {
   }, [])
 
   const handleAdd = () => {
-    setFormData({ titleEn: "", imageUrl: "" })
+    setFormData({ titleAr: "", titleEn: "", imageUrl: "" })
     setSelectedFile(null)
     setAddDialogOpen(true)
   }
@@ -81,6 +82,7 @@ export default function SlidersPage() {
   const handleEdit = (slider: Slider) => {
     setEditingSlider(slider)
     setFormData({
+      titleAr: slider.titleAr,
       titleEn: slider.titleEn,
       imageUrl: slider.imageUrl,
     })
@@ -92,6 +94,7 @@ export default function SlidersPage() {
     const file = e.target.files?.[0]
     if (file) {
       setSelectedFile(file)
+      // Create a preview URL
       const previewUrl = URL.createObjectURL(file)
       setFormData({ ...formData, imageUrl: previewUrl })
     }
@@ -102,7 +105,9 @@ export default function SlidersPage() {
 
     try {
       setUploading(true)
+      // CORRECT ENDPOINT: The previous "api/Image/upload" is incorrect for your backend
       const result = await ApiClient.upload("api/Upload", selectedFile)
+      // Check both 'url' (returned by current UploadController) and 'imageUrl'
       return result?.url || result?.imageUrl || result
     } catch (error) {
       console.error("Error uploading image:", error)
@@ -139,17 +144,16 @@ export default function SlidersPage() {
       setLoading(true)
       await ApiClient.post(`api/admin/Sliders/delete-all-sliders`, {})
       setDeleteAllDialogOpen(false)
-      alert("All sliders deleted successfully")
+      alert(language === "ar" ? "تم حذف جميع الشرائح بنجاح" : "All sliders deleted successfully")
       await fetchSliders()
     } catch (err: any) {
       console.error("Failed to delete all sliders:", err)
       const errorMsg = err.message || JSON.stringify(err)
-      alert("Delete failed: " + errorMsg)
+      alert((language === "ar" ? "فشل الحذف: " : "Delete failed: ") + errorMsg)
     } finally {
       setLoading(false)
     }
   }
-
 
   const handleSubmitAdd = async () => {
     try {
@@ -157,31 +161,33 @@ export default function SlidersPage() {
 
       let imageUrl = ""
 
+      // If a file was selected, upload it first
       if (selectedFile) {
         const uploadedUrl = await handleUpload()
         if (uploadedUrl) {
           imageUrl = uploadedUrl
         } else {
-          alert("Image upload failed. Please try again.")
+          alert(language === "ar" ? "فشل رفع الصورة. يرجى المحاولة مرة أخرى." : "Image upload failed. Please try again.")
           return
         }
       } else {
         imageUrl = formData.imageUrl
       }
 
+      // CRITICAL: Block blob URLs from being saved
       if (imageUrl.startsWith("blob:")) {
-        alert("Incomplete image processing. Please re-select the image.")
+        alert(language === "ar" ? "خطأ في معالجة الصورة. يرجى اختيار الصورة مرة أخرى." : "Incomplete image processing. Please re-select the image.")
         return
       }
 
       if (!imageUrl) {
-        alert("Image is required")
+        alert(language === "ar" ? "الصورة مطلوبة" : "Image is required")
         return
       }
 
       const { addSlider } = await import("@/lib/admin-data")
       await addSlider({
-        titleAr: "", // Removed from form
+        titleAr: formData.titleAr,
         titleEn: formData.titleEn,
         imageUrl,
       })
@@ -203,30 +209,32 @@ export default function SlidersPage() {
 
       let imageUrl = formData.imageUrl
 
+      // If a new file was selected, upload it first
       if (selectedFile) {
         const uploadedUrl = await handleUpload()
         if (uploadedUrl) {
           imageUrl = uploadedUrl
         } else {
-          alert("Image upload failed. Please try again.")
+          alert(language === "ar" ? "فشل رفع الصورة. يرجى المحاولة مرة أخرى." : "Image upload failed. Please try again.")
           return
         }
       }
 
+      // CRITICAL: Block blob URLs from being saved
       if (imageUrl.startsWith("blob:")) {
-        alert("Incomplete image processing. Please re-select the image.")
+        alert(language === "ar" ? "خطأ في معالجة الصورة. يرجى اختيار الصورة مرة أخرى." : "Incomplete image processing. Please re-select the image.")
         return
       }
 
       if (!imageUrl) {
-        alert("Image is required")
+        alert(language === "ar" ? "الصورة مطلوبة" : "Image is required")
         return
       }
 
       const { editSlider } = await import("@/lib/admin-data")
       await editSlider({
         id: editingSlider.id,
-        titleAr: "", // Removed from form
+        titleAr: formData.titleAr,
         titleEn: formData.titleEn,
         imageUrl,
       })
@@ -241,32 +249,33 @@ export default function SlidersPage() {
     }
   }
 
-
   const isFormValid = () => {
-    return formData.titleEn.trim() && (formData.imageUrl.trim() || selectedFile)
+    return formData.titleAr.trim() && formData.titleEn.trim() && (formData.imageUrl.trim() || selectedFile)
   }
 
   return (
-    <div className="space-y-6">
+    <div className={cn("space-y-6", dir === "rtl" && "font-arabic")}>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">
-            Sliders Management
+            {language === "ar" ? "الشرائح" : "Sliders"}
           </h1>
           <p className="text-muted-foreground mt-1">
-            Manage homepage sliders
+            {language === "ar"
+              ? "إدارة شرائح الصفحة الرئيسية"
+              : "Manage homepage sliders"}
           </p>
         </div>
         <div className="flex items-center gap-2">
           {sliders.length > 0 && (
-            <Button variant="destructive" onClick={() => setDeleteAllDialogOpen(true)}>
-              <Trash2 className="h-4 w-4 mr-2" />
-              Delete All
+            <Button variant="destructive" onClick={() => setDeleteAllDialogOpen(true)} className={dir === "rtl" ? "flex-row-reverse" : ""}>
+              <Trash2 className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
+              {language === "ar" ? "حذف الكل" : "Delete All"}
             </Button>
           )}
-          <Button onClick={handleAdd}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add Slider
+          <Button onClick={handleAdd} className={dir === "rtl" ? "flex-row-reverse" : ""}>
+            <Plus className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
+            {language === "ar" ? "إضافة شريحة" : "Add Slider"}
           </Button>
         </div>
       </div>
@@ -274,7 +283,7 @@ export default function SlidersPage() {
       {loading && !sliders.length ? (
         <div className="flex items-center justify-center h-64">
           <div className="text-muted-foreground">
-            Loading...
+            {language === "ar" ? "جاري التحميل..." : "Loading..."}
           </div>
         </div>
       ) : sliders.length === 0 ? (
@@ -282,11 +291,11 @@ export default function SlidersPage() {
           <CardContent className="flex flex-col items-center justify-center h-64">
             <ImageIcon className="h-12 w-12 text-muted-foreground mb-4" />
             <p className="text-muted-foreground">
-              No sliders found
+              {language === "ar" ? "لا توجد شرائح" : "No sliders found"}
             </p>
             <Button onClick={handleAdd} className="mt-4">
               <Plus className="h-4 w-4 mr-2" />
-              Add First Slider
+              {language === "ar" ? "إضافة شريحة الأولى" : "Add First Slider"}
             </Button>
           </CardContent>
         </Card>
@@ -298,7 +307,7 @@ export default function SlidersPage() {
                 {slider.imageUrl ? (
                   <Image
                     src={getImageUrl(slider.imageUrl)}
-                    alt={slider.titleEn}
+                    alt={language === "ar" ? slider.titleAr : slider.titleEn}
                     fill
                     className="object-cover"
                   />
@@ -312,11 +321,13 @@ export default function SlidersPage() {
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
                     <h3 className="font-semibold">
-                      {slider.titleEn}
+                      {language === "ar" ? slider.titleAr : slider.titleEn}
                     </h3>
                     <p className="text-sm text-muted-foreground">
                       {slider.createdDate
-                        ? new Date(slider.createdDate).toLocaleDateString("en-US")
+                        ? new Date(slider.createdDate).toLocaleDateString(
+                            language === "ar" ? "ar-EG" : "en-US"
+                          )
                         : "-"}
                     </p>
                   </div>
@@ -329,14 +340,14 @@ export default function SlidersPage() {
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem onClick={() => handleEdit(slider)}>
                         <Pencil className="h-4 w-4 mr-2" />
-                        Edit
+                        {language === "ar" ? "تعديل" : "Edit"}
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => handleDelete(slider)}
                         className="text-destructive"
                       >
                         <Trash2 className="h-4 w-4 mr-2" />
-                        Delete
+                        {language === "ar" ? "حذف" : "Delete"}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -352,16 +363,18 @@ export default function SlidersPage() {
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>
-              Add New Slider
+              {language === "ar" ? "إضافة شريحة جديدة" : "Add New Slider"}
             </DialogTitle>
             <DialogDescription>
-              Add a new slider to the homepage
+              {language === "ar"
+                ? "أضف شريحة جديدة للصفحة الرئيسية"
+                : "Add a new slider to the homepage"}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <Label htmlFor="titleEn">
-                Title
+                {language === "ar" ? "العنوان بالإنجليزية" : "Title (English)"}
               </Label>
               <Input
                 id="titleEn"
@@ -369,12 +382,26 @@ export default function SlidersPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, titleEn: e.target.value })
                 }
-                placeholder="Enter title"
+                placeholder="Enter title in English"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="titleAr">
+                {language === "ar" ? "العنوان بالعربية" : "Title (Arabic)"}
+              </Label>
+              <Input
+                id="titleAr"
+                value={formData.titleAr}
+                onChange={(e) =>
+                  setFormData({ ...formData, titleAr: e.target.value })
+                }
+                placeholder="أدخل العنوان بالعربية"
+                dir="rtl"
               />
             </div>
             <div className="space-y-2">
               <Label>
-                Image
+                {language === "ar" ? "الصورة" : "Image"}
               </Label>
               <div className="flex items-center gap-4">
                 <input
@@ -395,7 +422,7 @@ export default function SlidersPage() {
                   ) : (
                     <Upload className="h-4 w-4 mr-2" />
                   )}
-                  Choose Image
+                  {language === "ar" ? "اختر صورة" : "Choose Image"}
                 </Button>
                 {selectedFile && (
                   <span className="text-sm text-muted-foreground">
@@ -416,13 +443,13 @@ export default function SlidersPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setAddDialogOpen(false)}>
-              Cancel
+              {language === "ar" ? "إلغاء" : "Cancel"}
             </Button>
             <Button onClick={handleSubmitAdd} disabled={!isFormValid() || uploading}>
               {uploading ? (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
               ) : null}
-              Add
+              {language === "ar" ? "إضافة" : "Add"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -433,16 +460,18 @@ export default function SlidersPage() {
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>
-              Edit Slider
+              {language === "ar" ? "تعديل الشريحة" : "Edit Slider"}
             </DialogTitle>
             <DialogDescription>
-              Update slider information
+              {language === "ar"
+                ? "تعديل بيانات الشريحة"
+                : "Update slider information"}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <Label htmlFor="editTitleEn">
-                Title
+                {language === "ar" ? "العنوان بالإنجليزية" : "Title (English)"}
               </Label>
               <Input
                 id="editTitleEn"
@@ -450,12 +479,26 @@ export default function SlidersPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, titleEn: e.target.value })
                 }
-                placeholder="Enter title"
+                placeholder="Enter title in English"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="editTitleAr">
+                {language === "ar" ? "العنوان بالعربية" : "Title (Arabic)"}
+              </Label>
+              <Input
+                id="editTitleAr"
+                value={formData.titleAr}
+                onChange={(e) =>
+                  setFormData({ ...formData, titleAr: e.target.value })
+                }
+                placeholder="أدخل العنوان بالعربية"
+                dir="rtl"
               />
             </div>
             <div className="space-y-2">
               <Label>
-                Image
+                {language === "ar" ? "الصورة" : "Image"}
               </Label>
               <div className="flex items-center gap-4">
                 <input
@@ -476,7 +519,7 @@ export default function SlidersPage() {
                   ) : (
                     <Upload className="h-4 w-4 mr-2" />
                   )}
-                  Choose Image
+                  {language === "ar" ? "اختر صورة" : "Choose Image"}
                 </Button>
                 {selectedFile && (
                   <span className="text-sm text-muted-foreground">
@@ -497,13 +540,13 @@ export default function SlidersPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setEditDialogOpen(false)}>
-              Cancel
+              {language === "ar" ? "إلغاء" : "Cancel"}
             </Button>
             <Button onClick={handleSubmitEdit} disabled={!isFormValid() || uploading}>
               {uploading ? (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
               ) : null}
-              Save
+              {language === "ar" ? "حفظ" : "Save"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -513,22 +556,24 @@ export default function SlidersPage() {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>
-              Delete Slider
+            <AlertDialogTitle className={cn(dir === "rtl" && "text-right")}>
+              {language === "ar" ? "حذف الشريحة" : "Delete Slider"}
             </AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete this slider? This action cannot be undone.
+            <AlertDialogDescription className={cn(dir === "rtl" && "text-right")}>
+              {language === "ar"
+                ? "هل أنت متأكد من حذف هذه الشريحة؟ لا يمكن التراجع عن هذا الإجراء."
+                : "Are you sure you want to delete this slider? This action cannot be undone."}
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
+          <AlertDialogFooter className={cn(dir === "rtl" && "flex-row-reverse")}>
             <AlertDialogCancel>
-              Cancel
+              {language === "ar" ? "إلغاء" : "Cancel"}
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDelete}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Delete
+              {language === "ar" ? "حذف" : "Delete"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -538,22 +583,24 @@ export default function SlidersPage() {
       <AlertDialog open={deleteAllDialogOpen} onOpenChange={setDeleteAllDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>
-              Delete All Sliders
+            <AlertDialogTitle className={cn(dir === "rtl" && "text-right")}>
+              {language === "ar" ? "حذف جميع الشرائح" : "Delete All Sliders"}
             </AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete all sliders? This action cannot be undone.
+            <AlertDialogDescription className={cn(dir === "rtl" && "text-right")}>
+              {language === "ar"
+                ? "هل أنت متأكد من حذف جميع الشرائح؟ لا يمكن التراجع عن هذا الإجراء."
+                : "Are you sure you want to delete all sliders? This action cannot be undone."}
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
+          <AlertDialogFooter className={cn(dir === "rtl" && "flex-row-reverse")}>
             <AlertDialogCancel>
-              Cancel
+              {language === "ar" ? "إلغاء" : "Cancel"}
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDeleteAll}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Delete All
+              {language === "ar" ? "حذف الكل" : "Delete All"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -561,4 +608,3 @@ export default function SlidersPage() {
     </div>
   )
 }
-
