@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Instagram, Facebook, Twitter } from "lucide-react";
 
 export function Footer() {
   return (
@@ -38,11 +39,9 @@ export function Footer() {
 
           {/* Company */}
           <div className="flex flex-col gap-8">
-            <h4 className="text-[10px] font-bold tracking-[0.3em] text-mahogany uppercase">Company</h4>
             <div className="flex flex-col gap-5 text-[12px] font-bold text-taupe tracking-widest">
               <a href="#" className="hover:text-mahogany transition-colors">OUR STORY</a>
-              <a href="#" className="hover:text-mahogany transition-colors">CONTACT</a>
-              <a href="#" className="hover:text-mahogany transition-colors">CAREERS</a>
+              <a href="https://wa.me/201070065192" className="hover:text-mahogany transition-colors">CONTACT</a>
             </div>
           </div>
         </div>
@@ -53,6 +52,11 @@ export function Footer() {
         <p className="text-[10px] font-bold text-taupe tracking-widest uppercase">
           © {new Date().getFullYear()} Rhino Furniture Inc. All rights reserved.
         </p>
+        <div className="flex items-center gap-6">
+          <div className="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-taupe hover:bg-mahogany hover:text-white cursor-pointer transition-all duration-300 text-xs font-bold"><Instagram /></div>
+          <div className="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-taupe hover:bg-mahogany hover:text-white cursor-pointer transition-all duration-300 text-xs font-bold"><Facebook /></div>
+          <div className="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-taupe hover:bg-mahogany hover:text-white cursor-pointer transition-all duration-300 text-xs font-bold"><Twitter /></div>
+        </div>
       </div>
     </footer>
   );
