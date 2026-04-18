@@ -49,6 +49,38 @@ type Review = {
   userName: string
 }
 
+function normalizeColorNames(value: unknown): string[] {
+  if (!Array.isArray(value)) return []
+  return value
+    .map((entry: any) => {
+      if (typeof entry === "string") return entry.trim()
+      return (entry?.nameEn ?? entry?.NameEn ?? "").trim()
+    })
+    .filter(Boolean)
+}
+
+function buildDisplayColors(product: Product, language: "ar" | "en") {
+  const rawString = language === "ar"
+    ? (product.colorsAr || product.colorsEn || "")
+    : (product.colorsEn || product.colorsAr || "")
+  const parsed = parseColors(rawString)
+
+  const unique = new Map<string, { name: string; hex: string }>()
+  parsed.forEach((c) => unique.set(c.name.toLowerCase(), c))
+
+  if (unique.size === 0 && rawString.trim().length > 0) {
+    rawString
+      .split(",")
+      .map((c) => c.trim())
+      .filter(Boolean)
+      .forEach((name) => {
+        unique.set(name.toLowerCase(), { name, hex: name })
+      })
+  }
+
+  return Array.from(unique.values())
+}
+
 export default function ProductDetailsPage() {
   const { id } = useParams<{ id: string }>()
   const { language, t } = useLanguage()
@@ -95,6 +127,8 @@ export default function ProductDetailsPage() {
 
         const normalizedProduct = {
           ...data,
+          colorsEn: data.colorsEn ?? data.ColorsEn ?? normalizeColorNames(colorsValue).join(","),
+          colorsAr: data.colorsAr ?? data.ColorsAr ?? "",
           colors: colorsValue,
           material: data.material ?? data.Material ?? "",
           images: uniqueImages,
@@ -105,6 +139,8 @@ export default function ProductDetailsPage() {
         }
 
         setProduct(normalizedProduct)
+        const defaultColors = buildDisplayColors(normalizedProduct, language === "ar" ? "ar" : "en")
+        setSelectedColor(defaultColors[0]?.name || "")
       } catch (err) {
         console.error(err)
       } finally {
@@ -200,7 +236,7 @@ export default function ProductDetailsPage() {
   }
 
   const discountedPrice = product.discountAmount > 0 ? product.price * (1 - product.discountAmount / 100) : product.price
-  const colors = parseColors(product.colorsEn)
+  const colors = buildDisplayColors(product, language === "ar" ? "ar" : "en")
 
   const productImages =
     product.images && product.images.length > 0

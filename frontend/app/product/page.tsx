@@ -1,9 +1,6 @@
 "use client"
 
-import { useState, useEffect, useMemo, type MouseEvent } from "react"
-import { useParams } from "next/navigation"
-import Link from "next/link"
-import Image from "next/image"
+import { useState, useEffect, useMemo } from "react"
 import { Header } from "@/components/layout/Header"
 import { Footer } from "@/components/layout/Footer"
 import { useLanguage } from "@/context/language-context"
@@ -22,21 +19,17 @@ import {
   CollapsibleContent,
   CollapsibleTrigger
 } from "@/components/ui/collapsible"
-import {
-  ShoppingCart,
-  ChevronUp,
-  ChevronDown,
-  Filter,
-} from "lucide-react"
-import { toast } from "sonner"
+import { ChevronUp, ChevronDown, Filter } from "lucide-react"
 import { formatPrice } from "@/lib/products"
-import { getImageUrl } from "@/lib/utils"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
+import { ProductCard } from "@/components/ui/ProductCard"
 
 interface Item {
   id: string
   nameAr: string
   nameEn: string
+  descriptionAr?: string
+  descriptionEn?: string
   price: number
   discountAmount: number // decimal ex: 0.25
   stockNumber: number
@@ -69,10 +62,7 @@ function getColorNamesFromApi(item: any, language: "en" | "ar"): string[] {
 }
 
 export default function CategoryPage() {
-  const params = useParams()
-  const categoryId = params.slug as string
-
-  const { language, t } = useLanguage()
+  const { language } = useLanguage()
 
   const [products, setProducts] = useState<Item[]>([])
   const [categories, setCategories] = useState<Category[]>([])
@@ -93,6 +83,15 @@ export default function CategoryPage() {
         const items = await ApiClient.get("api/Items")
         const normalized = (items as any[]).map((item) => ({
           ...item,
+          id: item.id ?? item.Id ?? "",
+          nameAr: item.nameAr ?? item.NameAr ?? "",
+          nameEn: item.nameEn ?? item.NameEn ?? "",
+          descriptionAr: item.descriptionAr ?? item.DescriptionAr ?? "",
+          descriptionEn: item.descriptionEn ?? item.DescriptionEn ?? "",
+          price: item.price ?? item.Price ?? 0,
+          stockNumber: item.stockNumber ?? item.StockNumber ?? 0,
+          overallRating: item.overallRating ?? item.OverallRating ?? 0,
+          categoryId: item.categoryId ?? item.CategoryId ?? "",
           discountAmount: item.discountAmount ?? item.DiscountAmount ?? 0,
           mainImage: item.mainImage ?? item.MainImage ?? item.image ?? item.Image ?? "",
           colorsEn:
@@ -116,150 +115,16 @@ export default function CategoryPage() {
     }
 
     fetchData()
-  }, [categoryId])
+  }, [])
 
-  const ProductGridCard = ({ product }: { product: Item }) => {
-    const [selectedColor, setSelectedColor] = useState("")
-    const [adding, setAdding] = useState(false)
-
-    const colorsEn = product.colorsEn
-      ? product.colorsEn.split(",").map((c) => c.trim()).filter(Boolean)
-      : []
-    const colorsAr = product.colorsAr
-      ? product.colorsAr.split(",").map((c) => c.trim()).filter(Boolean)
-      : []
-    const colors = language === "ar" ? colorsAr : colorsEn
-    const displayColors = colors
-    const discountedPrice = product.discountAmount > 0 ? product.price * (1 - product.discountAmount / 100) : product.price
-    const isInStock = product.stockNumber > 0
-
-    const handleAddToCart = async (e: MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault()
-      e.stopPropagation()
-
-      if (colorsEn.length > 0 && !selectedColor) {
-        toast.error(
-          language === "ar"
-            ? "يرجى اختيار لون قبل الإضافة للسلة"
-            : "Please select a color before adding to cart"
-        )
-        return
-      }
-
-      try {
-        setAdding(true)
-        const res = await fetch("https://rhino-web.runasp.net/api/Cart/add-to-cart", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({
-            productId: product.id,
-            quantity: 1,
-            color: selectedColor || "Default",
-          }),
-        })
-
-        if (res.ok) {
-          window.location.href = "/cart"
-        } else if (res.status === 401) {
-          window.location.href = "/login"
-        }
-      } catch (error) {
-        console.error("Failed to add to cart:", error)
-      } finally {
-        setAdding(false)
-      }
-    }
-
-    return (
-      <div className="group bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg transition-shadow flex flex-col">
-        <Link href={`/product/${product.id}`} className="block relative h-48 md:h-56 bg-secondary">
-          <Image
-            src={getImageUrl(product.mainImage)}
-            alt={language === "ar" ? product.nameAr : product.nameEn}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            loading="lazy"
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-          />
-
-          {product.discountAmount > 0 && (
-            <span className="absolute top-2 start-2 bg-red-600 text-xs px-2 py-1 rounded text-white font-medium">
-              {language === "ar" ? `${product.discountAmount}%-` : `-${product.discountAmount}%`}
-            </span>
-          )}
-
-          <span
-            className={`absolute bottom-2 start-2 px-2 py-1 text-xs rounded font-medium ${
-              isInStock ? "bg-green-500 text-white" : "bg-gray-500 text-white"
-            }`}
-          >
-            {isInStock
-              ? language === "ar" ? "متاح" : "In Stock"
-              : language === "ar" ? "غير متاح" : "Out of Stock"}
-          </span>
-        </Link>
-
-        <div className="p-3 md:p-4 flex flex-col flex-1">
-          <Link href={`/product/${product.id}`}>
-            <h3 className="font-medium text-foreground text-sm md:text-base line-clamp-2 mb-2 hover:text-primary transition-colors">
-              {language === "ar" ? product.nameAr : product.nameEn}
-            </h3>
-          </Link>
-
-          <div className="flex gap-2 mb-3">
-            <span className="font-bold text-foreground">
-              {formatPrice(discountedPrice)} {t("products.price")}
-            </span>
-            {product.discountAmount > 0 && (
-              <span className="line-through text-sm text-muted-foreground">
-                {formatPrice(product.price)}
-              </span>
-            )}
-          </div>
-
-          {displayColors.length > 0 && (
-            <div className="mb-3">
-              <div className="flex flex-wrap gap-2">
-                {displayColors.map((color, idx) => (
-                  <button
-                    key={idx}
-                    onClick={(e) => {
-                      e.preventDefault()
-                      setSelectedColor(color)
-                    }}
-                    className={`px-2 py-1 text-xs border rounded transition-all ${
-                      selectedColor === color
-                        ? "bg-primary text-primary-foreground border-primary"
-                        : "bg-background hover:bg-muted"
-                    }`}
-                    title={color}
-                  >
-                    {color}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="mt-auto">
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full"
-              onClick={handleAddToCart}
-              disabled={adding}
-            >
-              <ShoppingCart size={16} className="me-2" />
-              {adding
-                ? language === "ar" ? "جاري الإضافة..." : "Adding..."
-                : t("products.addToCart")}
-            </Button>
-          </div>
-        </div>
-      </div>
-    )
-  }
+  const categoryNameById = useMemo(
+    () =>
+      categories.reduce<Record<string, string>>((acc, cat) => {
+        acc[cat.id] = language === "ar" ? cat.nameAr : cat.nameEn
+        return acc
+      }, {}),
+    [categories, language]
+  )
 
   const filteredProducts = useMemo(() => {
     let result = [...products]
@@ -381,7 +246,28 @@ export default function CategoryPage() {
             <div className="flex-1 min-w-0">
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
                 {filteredProducts.map((product) => (
-                  <ProductGridCard key={product.id} product={product} />
+                  <ProductCard
+                    key={product.id}
+                    id={product.id}
+                    category={(categoryNameById[product.categoryId] || "FURNITURE").toUpperCase()}
+                    title={language === "ar" ? product.nameAr : product.nameEn}
+                    description={
+                      language === "ar"
+                        ? product.descriptionAr || product.nameAr
+                        : product.descriptionEn || product.nameEn
+                    }
+                    price={`${formatPrice(product.price)} EGP`}
+                    discountAmount={product.discountAmount || 0}
+                    originalPrice={
+                      product.discountAmount > 0
+                        ? `${formatPrice(Math.round(product.price / (1 - product.discountAmount / 100)))} EGP`
+                        : undefined
+                    }
+                    rating={product.overallRating || 4.8}
+                    reviewsCount={89}
+                    mainImage={product.mainImage}
+                    colorsRaw={product.colorsEn}
+                  />
                 ))}
               </div>
             </div>
