@@ -99,6 +99,7 @@ export interface Product {
   sku: string
   createdDate: string
   updatedAt: string
+  isSeller?: boolean
 }
 
 export interface Order {

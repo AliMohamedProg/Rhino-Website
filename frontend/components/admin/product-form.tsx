@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Checkbox } from "@/components/ui/checkbox"
 import type { Product } from "@/lib/admin-data"
 import type { AdminCategoryDto } from "@/lib/admin-items"
 import { ArrowLeft, ArrowRight, Upload, X } from "lucide-react"
@@ -48,6 +49,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     mainImage: product?.mainImage || product?.images?.[0] || "",
     colorsEn: product?.colorsEn || "",
     materialEn: product?.materialEn || "",
+    isSeller: product?.isSeller || false,
   })
 
   const [categories, setCategories] = useState<AdminCategoryDto[]>([])
@@ -67,6 +69,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
       mainImage: product.mainImage || product.images?.[0] || "",
       colorsEn: product?.colorsEn || "",
       materialEn: product?.materialEn || "",
+      isSeller: product?.isSeller || false,
     })
   }, [product])
 
@@ -132,6 +135,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
         mainImage,
         images: formData.images.map((url) => ({ imageUrl: url })),
         currentState,
+        isSeller: formData.isSeller,
       }
 
 
@@ -203,7 +207,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     }))
   }
 
-  const handleChange = (field: string, value: string | number | string[]) => {
+  const handleChange = (field: string, value: string | number | string[] | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
@@ -492,6 +496,16 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                   onChange={(e) => handleChange("materialEn", e.target.value)}
                   placeholder="Enter material (e.g. Wood)"
                 />
+              </div>
+              <div className="flex items-center gap-2 pt-2">
+                <Checkbox
+                  id="isSeller"
+                  checked={formData.isSeller}
+                  onCheckedChange={(checked) => handleChange("isSeller", checked === true)}
+                />
+                <Label htmlFor="isSeller" className="text-sm font-normal cursor-pointer">
+                  Show in Seller Section
+                </Label>
               </div>
 
             </CardContent>

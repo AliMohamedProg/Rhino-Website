@@ -735,3 +735,15 @@ C:/Users/HP - Victus/Downloads/Furniture Store Ecommerce Website/Backend/WoodDec
 /Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/bin/Debug/net10.0/publish_folder/Apis.staticwebassets.endpoints.json
 /Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/bin/Debug/net10.0/publish_folder/appsettings.Development.json
 /Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/bin/Debug/net10.0/publish_folder/appsettings.json
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/bin/Debug/net10.0/publish_Archive/publish_folder/web.config
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/bin/Debug/net10.0/publish_Archive/web.config
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/bin/Debug/net10.0/publish_Archive/Apis.deps.json
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/bin/Debug/net10.0/publish_Archive/Apis.runtimeconfig.json
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/bin/Debug/net10.0/publish_Archive/Apis.staticwebassets.endpoints.json
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/bin/Debug/net10.0/publish_Archive/appsettings.Development.json
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/bin/Debug/net10.0/publish_Archive/appsettings.json
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/bin/Debug/net10.0/publish_Archive/publish_folder/Apis.deps.json
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/bin/Debug/net10.0/publish_Archive/publish_folder/Apis.runtimeconfig.json
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/bin/Debug/net10.0/publish_Archive/publish_folder/Apis.staticwebassets.endpoints.json
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/bin/Debug/net10.0/publish_Archive/publish_folder/appsettings.Development.json
+/Users/mac/Downloads/Furniture Store Ecommerce Website/Backend/WoodDecorBackend/bin/Debug/net10.0/publish_Archive/publish_folder/appsettings.json

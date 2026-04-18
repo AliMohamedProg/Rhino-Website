@@ -21,6 +21,7 @@ export interface AdminItemDto {
   colors?: string | null
   material?: string | null
   createdDate?: string | null
+  isSeller?: boolean
 }
 
 export interface AdminCategoryDto {
@@ -76,5 +77,6 @@ export const mapAdminItemToProduct = (
     updatedAt: item.createdDate ?? new Date().toISOString(),
     mainImage: item.mainImage ?? imageUrls[0] ?? "",
     discountAmount: discount,
+    isSeller: item.isSeller ?? false,
   }
 }
