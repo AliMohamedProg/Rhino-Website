@@ -45,17 +45,6 @@ export function Footer() {
               <a href="#" className="hover:text-mahogany transition-colors">CAREERS</a>
             </div>
           </div>
-
-          {/* Support */}
-          <div className="flex flex-col gap-8">
-            <h4 className="text-[10px] font-bold tracking-[0.3em] text-mahogany uppercase">Support</h4>
-            <div className="flex flex-col gap-5 text-[12px] font-bold text-taupe tracking-widest">
-              <a href="#" className="hover:text-mahogany transition-colors">ORDERS</a>
-              <a href="#" className="hover:text-mahogany transition-colors">PRIVACY</a>
-              <a href="#" className="hover:text-mahogany transition-colors">SECURITY</a>
-            </div>
-          </div>
-
         </div>
       </div>
 
@@ -64,11 +53,6 @@ export function Footer() {
         <p className="text-[10px] font-bold text-taupe tracking-widest uppercase">
           © {new Date().getFullYear()} Rhino Furniture Inc. All rights reserved.
         </p>
-        <div className="flex items-center gap-6">
-          <div className="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-taupe hover:bg-mahogany hover:text-white cursor-pointer transition-all duration-300 text-xs font-bold">IN</div>
-          <div className="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-taupe hover:bg-mahogany hover:text-white cursor-pointer transition-all duration-300 text-xs font-bold">TW</div>
-          <div className="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-taupe hover:bg-mahogany hover:text-white cursor-pointer transition-all duration-300 text-xs font-bold">FB</div>
-        </div>
       </div>
     </footer>
   );
