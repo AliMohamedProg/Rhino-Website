@@ -71,40 +71,40 @@ export default function UsersPage() {
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState(false)
 
-   useEffect(() => {
-     let isMounted = true
+  useEffect(() => {
+    let isMounted = true
 
-     const fetchUsers = async () => {
-       try {
-         setLoading(true)
-         setLoadError(false)
-         const data = await ApiClient.get("api/admin/users/get-all")
-         const list = Array.isArray(data)
-           ? data
-           : Array.isArray(data?.users)
-             ? data.users
-             : Array.isArray(data?.data)
-               ? data.data
-               : []
-         const mapped = list.map((user: ApiUser, index: number) => mapApiUser(user, index))
-         if (isMounted) setUsers(mapped)
-       } catch (err) {
-         console.error("Failed to fetch users:", err)
-         // Show error but allow page to load with empty list
-         if (isMounted) {
-           setLoadError(true)
-           setUsers([])
-         }
-       } finally {
-         if (isMounted) setLoading(false)
-       }
-     }
+    const fetchUsers = async () => {
+      try {
+        setLoading(true)
+        setLoadError(false)
+        const data = await ApiClient.get("api/admin/users/get-all")
+        const list = Array.isArray(data)
+          ? data
+          : Array.isArray(data?.users)
+            ? data.users
+            : Array.isArray(data?.data)
+              ? data.data
+              : []
+        const mapped = list.map((user: ApiUser, index: number) => mapApiUser(user, index))
+        if (isMounted) setUsers(mapped)
+      } catch (err) {
+        console.error("Failed to fetch users:", err)
+        // Show error but allow page to load with empty list
+        if (isMounted) {
+          setLoadError(true)
+          setUsers([])
+        }
+      } finally {
+        if (isMounted) setLoading(false)
+      }
+    }
 
-     fetchUsers()
-     return () => {
-       isMounted = false
-     }
-   }, [])
+    fetchUsers()
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   const getRoleBadge = (role: User["role"]) => {
     const roleConfig = {
@@ -208,7 +208,7 @@ export default function UsersPage() {
           <h1 className="text-2xl font-bold tracking-tight text-gray-900">Users</h1>
           <p className="text-gray-500">Manage {users.length} users</p>
         </div>
-        <DropdownMenu>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
               <Download className="h-4 w-4 mr-2" />
@@ -223,34 +223,34 @@ export default function UsersPage() {
               Export to PDF
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
       </div>
 
-       <Card>
-         <CardContent className="pt-6">
-           {loading ? (
-             <div className="flex justify-center items-center h-48 text-muted-foreground animate-pulse">
-               Loading users...
-             </div>
-           ) : loadError ? (
-             <div className="flex flex-col justify-center items-center h-48 text-destructive gap-2">
-               <p>Unable to load users from the server.</p>
-               <p className="text-sm text-muted-foreground">The API endpoint may not be available yet.</p>
-             </div>
-           ) : users.length === 0 ? (
-             <div className="flex justify-center items-center h-48 text-muted-foreground">
-               No users found
-             </div>
-           ) : (
-             <DataTable
-               data={users}
-               columns={columns}
-               searchPlaceholder="Search users..."
-               searchKey="name"
-             />
-           )}
-         </CardContent>
-       </Card>
+      <Card>
+        <CardContent className="pt-6">
+          {loading ? (
+            <div className="flex justify-center items-center h-48 text-muted-foreground animate-pulse">
+              Loading users...
+            </div>
+          ) : loadError ? (
+            <div className="flex flex-col justify-center items-center h-48 text-destructive gap-2">
+              <p>Unable to load users from the server.</p>
+              <p className="text-sm text-muted-foreground">The API endpoint may not be available yet.</p>
+            </div>
+          ) : users.length === 0 ? (
+            <div className="flex justify-center items-center h-48 text-muted-foreground">
+              No users found
+            </div>
+          ) : (
+            <DataTable
+              data={users}
+              columns={columns}
+              searchPlaceholder="Search users..."
+              searchKey="name"
+            />
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }

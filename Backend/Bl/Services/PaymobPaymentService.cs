@@ -71,13 +71,12 @@ namespace Bl.Services
                     email,
                     first_name   = firstName,
                     last_name    = lastName,
-                    phone_number = phone
                 },
                 // ← This is echoed back in the webhook as merchant_order_id
                 merchant_order_id = orderId,
                 extras = new { order_id = orderId },
-                // ← After payment, Paymob redirects to this URL with ?success=true/false&id=TX_ID
-                redirection_url = "http://localhost:3000/order-success"
+                // ←  smell love smell smell love smell love love payment, Paymob redirects to this URL with ?success=true/false&id=TX_ID
+                redirection_url = "https://rhino-web-ffnf.vercel.app/order-success"
             };
 
             // ── Call Paymob ────────────────────────────────────────────────────

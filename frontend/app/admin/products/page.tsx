@@ -91,50 +91,60 @@ export default function ProductsPage() {
   const formatCurrency = (amount: number) => `${amount.toLocaleString()} EGP`
 
   const columns = [
-    { key: "product", header: "Product Name", render: (product: Product) => (
-      <div className="flex items-center gap-3">
-        <div className="relative h-12 w-12 overflow-hidden rounded-lg bg-slate-100 shrink-0">
-          <Image src={getImageUrl(product.mainImage || product.images[0])} alt={product.nameEn} fill className="object-cover" />
+    {
+      key: "product", header: "Product Name", render: (product: Product) => (
+        <div className="flex items-center gap-3">
+          <div className="relative h-12 w-12 overflow-hidden rounded-lg bg-slate-100 shrink-0">
+            <Image src={getImageUrl(product.mainImage || product.images[0])} alt={product.nameEn} fill className="object-cover" />
+          </div>
+          <div>
+            <p className="font-medium text-slate-900">{product.nameEn}</p>
+            {product.colorsEn && product.colorsEn.trim().length > 0 && <p className="text-sm text-slate-500">Colors: {product.colorsEn}</p>}
+            {product.materialEn && product.materialEn.trim().length > 0 && <p className="text-sm text-slate-500">Material: {product.materialEn}</p>}
+          </div>
         </div>
+      )
+    },
+    {
+      key: "category", header: "Category", render: (product: Product) => {
+        const category = categories.find((cat) => cat.id === product.categoryId)
+        return <span className="text-slate-500">{category?.nameEn || product.category}</span>
+      }
+    },
+    {
+      key: "price", header: "Price", render: (product: Product) => (
         <div>
-          <p className="font-medium text-slate-900">{product.nameEn}</p>
-          {product.colorsEn && product.colorsEn.trim().length > 0 && <p className="text-sm text-slate-500">Colors: {product.colorsEn}</p>}
-          {product.materialEn && product.materialEn.trim().length > 0 && <p className="text-sm text-slate-500">Material: {product.materialEn}</p>}
+          <p className="font-semibold text-slate-900">{formatCurrency(product.price)}</p>
+          {product.originalPrice && <p className="text-sm text-slate-400 line-through">{formatCurrency(product.originalPrice)}</p>}
         </div>
-      </div>
-    )},
-    { key: "category", header: "Category", render: (product: Product) => {
-      const category = categories.find((cat) => cat.id === product.categoryId)
-      return <span className="text-slate-500">{category?.nameEn || product.category}</span>
-    }},
-    { key: "price", header: "Price", render: (product: Product) => (
-      <div>
-        <p className="font-semibold text-slate-900">{formatCurrency(product.price)}</p>
-        {product.originalPrice && <p className="text-sm text-slate-400 line-through">{formatCurrency(product.originalPrice)}</p>}
-      </div>
-    )},
-    { key: "stock", header: "Stock", render: (product: Product) => (
-      <span className={`font-semibold ${product.stock <= 10 ? "text-red-600" : "text-indigo-600"}`}>{product.stock}</span>
-    )},
+      )
+    },
+    {
+      key: "stock", header: "Stock", render: (product: Product) => (
+        <span className={`font-semibold ${product.stock <= 10 ? "text-red-600" : "text-indigo-600"}`}>{product.stock}</span>
+      )
+    },
     { key: "status", header: "Status", render: (product: Product) => getStatusBadge(product.status) },
-    { key: "actions", header: "Actions", render: (product: Product) => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-indigo-50"><MoreHorizontal className="h-4 w-4" /></Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="bg-white">
-          <DropdownMenuItem asChild className="hover:bg-indigo-50 cursor-pointer">
-            <Link href={`/admin/products/${product.id}`}><Eye className="h-4 w-4 mr-2 text-indigo-600" /><span className="text-indigo-600">View</span></Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild className="hover:bg-indigo-50 cursor-pointer">
-            <Link href={`/admin/products/${product.id}/edit`}><Pencil className="h-4 w-4 mr-2 text-indigo-600" /><span className="text-indigo-600">Edit</span></Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleDelete(product)} className="hover:bg-red-50 cursor-pointer">
-            <Trash2 className="h-4 w-4 mr-2 text-red-600" /><span className="text-red-600">Delete</span>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    ), className: "w-[70px]" }
+    {
+      key: "actions", header: "Actions", render: (product: Product) => (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-indigo-50"><MoreHorizontal className="h-4 w-4" /></Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="bg-white">
+            <DropdownMenuItem asChild className="hover:bg-indigo-50 cursor-pointer">
+              <Link href={`/admin/products/${product.id}`}><Eye className="h-4 w-4 mr-2 text-indigo-600" /><span className="text-indigo-600">View</span></Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild className="hover:bg-indigo-50 cursor-pointer">
+              <Link href={`/admin/products/${product.id}/edit`}><Pencil className="h-4 w-4 mr-2 text-indigo-600" /><span className="text-indigo-600">Edit</span></Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleDelete(product)} className="hover:bg-red-50 cursor-pointer">
+              <Trash2 className="h-4 w-4 mr-2 text-red-600" /><span className="text-red-600">Delete</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ), className: "w-[70px]"
+    }
   ]
 
   return (
@@ -145,17 +155,17 @@ export default function ProductsPage() {
           <p className="text-slate-500">Manage {products.length} products</p>
         </div>
         <div className="flex items-center gap-2">
-          <DropdownMenu>
+          {/* <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="border-slate-200 hover:bg-slate-50 hover:border-indigo-300">
                 <Download className="h-4 w-4 mr-2" />Export
               </Button>
             </DropdownMenuTrigger>
-            {/*<DropdownMenuContent align="end" className="bg-white">*/}
-            {/*  <DropdownMenuItem onClick={() => exportItemsExcel()} className="hover:bg-indigo-50 cursor-pointer">Export to Excel</DropdownMenuItem>*/}
-            {/*  <DropdownMenuItem onClick={() => exportItemsPdf()} className="hover:bg-indigo-50 cursor-pointer">Export to PDF</DropdownMenuItem>*/}
-            {/*</DropdownMenuContent>*/}
-          </DropdownMenu>
+            <DropdownMenuContent align="end" className="bg-white">
+              <DropdownMenuItem onClick={() => exportItemsExcel()} className="hover:bg-indigo-50 cursor-pointer">Export to Excel</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => exportItemsPdf()} className="hover:bg-indigo-50 cursor-pointer">Export to PDF</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu> */}
           {products.length > 0 && (
             <Button variant="destructive" onClick={() => setDeleteAllDialogOpen(true)} className="bg-red-600 hover:bg-red-700">
               <Trash2 className="h-4 w-4 mr-2" />Delete All

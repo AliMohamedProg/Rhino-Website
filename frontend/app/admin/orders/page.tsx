@@ -134,20 +134,22 @@ export default function OrdersPage() {
     { key: "paymentMethodName", header: "Payment", render: (order: Order) => <div className="flex flex-col gap-1"><span className="text-sm font-medium text-slate-900">{order.paymentMethodName}</span>{getPaymentStatusBadge(order.paymentMethod)}</div> },
     { key: "status", header: "Status", render: (order: Order) => getStatusBadge(order.status) },
     { key: "date", header: "Date", render: (order: Order) => <span className="text-slate-500">{new Date(order.createdDate).toLocaleDateString("en-US")}</span> },
-    { key: "actions", header: "Actions", render: (order: Order) => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-indigo-50"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="bg-white">
-          <DropdownMenuItem asChild className="hover:bg-indigo-50 cursor-pointer"><Link href={`/admin/orders/${order.id}`}><Eye className="h-4 w-4 mr-2 text-indigo-600" /><span className="text-indigo-600">View Details</span></Link></DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuLabel className="text-slate-500">Update Status</DropdownMenuLabel>
-          <DropdownMenuItem onClick={() => handleStatusChange(order.id, "processing")} className="hover:bg-indigo-50 cursor-pointer">Processing</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleStatusChange(order.id, "shipped")} className="hover:bg-indigo-50 cursor-pointer">Shipped</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleStatusChange(order.id, "delivered")} className="hover:bg-indigo-50 cursor-pointer">Delivered</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleStatusChange(order.id, "cancelled")} className="hover:bg-red-50 cursor-pointer text-red-600">Cancelled</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    ), className: "w-[70px]" }
+    {
+      key: "actions", header: "Actions", render: (order: Order) => (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-indigo-50"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="bg-white">
+            <DropdownMenuItem asChild className="hover:bg-indigo-50 cursor-pointer"><Link href={`/admin/orders/${order.id}`}><Eye className="h-4 w-4 mr-2 text-indigo-600" /><span className="text-indigo-600">View Details</span></Link></DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel className="text-slate-500">Update Status</DropdownMenuLabel>
+            <DropdownMenuItem onClick={() => handleStatusChange(order.id, "processing")} className="hover:bg-indigo-50 cursor-pointer">Processing</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleStatusChange(order.id, "shipped")} className="hover:bg-indigo-50 cursor-pointer">Shipped</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleStatusChange(order.id, "delivered")} className="hover:bg-indigo-50 cursor-pointer">Delivered</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleStatusChange(order.id, "cancelled")} className="hover:bg-red-50 cursor-pointer text-red-600">Cancelled</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ), className: "w-[70px]"
+    }
   ]
 
   const statusOptions = [{ value: "all", label: "All" }, { value: "pending", label: "Pending" }, { value: "processing", label: "Processing" }, { value: "shipped", label: "Shipped" }, { value: "delivered", label: "Delivered" }, { value: "cancelled", label: "Cancelled" }]
@@ -156,15 +158,15 @@ export default function OrdersPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div><h1 className="text-2xl font-bold text-slate-900">Orders</h1><p className="text-slate-500">Manage {orders.length} orders</p></div>
-        <DropdownMenu>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="border-slate-200 hover:bg-slate-50 hover:border-indigo-300"><Download className="h-4 w-4 mr-2" />Export</Button>
           </DropdownMenuTrigger>
-          {/*<DropdownMenuContent align="end" className="bg-white">*/}
-          {/*  <DropdownMenuItem onClick={() => exportOrdersExcel()} className="hover:bg-indigo-50 cursor-pointer">Export to Excel</DropdownMenuItem>*/}
-          {/*  <DropdownMenuItem onClick={() => exportOrdersPdf()} className="hover:bg-indigo-50 cursor-pointer">Export to PDF</DropdownMenuItem>*/}
-          {/*</DropdownMenuContent>*/}
-        </DropdownMenu>
+          <DropdownMenuContent align="end" className="bg-white">
+            <DropdownMenuItem onClick={() => exportOrdersExcel()} className="hover:bg-indigo-50 cursor-pointer">Export to Excel</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => exportOrdersPdf()} className="hover:bg-indigo-50 cursor-pointer">Export to PDF</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu> */}
       </div>
 
       <Card className="border-slate-200/60 bg-white/80 backdrop-blur-sm">
