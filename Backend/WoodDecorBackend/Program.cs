@@ -151,8 +151,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseRouting();
 app.UseCors("AllowFrontend");
+app.UseRouting();
 app.UseStaticFiles(); // Serve files from wwwroot
 app.UseStaticFiles(new StaticFileOptions
 {

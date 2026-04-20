@@ -38,7 +38,7 @@ namespace Bl.Services
                 Id = Guid.NewGuid(),
                 UserId = userId,
                 OrderDate = DateTime.UtcNow,
-                Total = cart.Items.Sum(i => i.Price * i.StockNumber),
+                Total = cart.Items.Sum(i => i.Price * i.Quantity),
                 Country = Country,
                 City = City,
                 Address = Address,
@@ -62,7 +62,7 @@ namespace Bl.Services
                     Id = Guid.NewGuid(),
                     OrderId = order.Id,
                     ItemId = item.ItemId,
-                    Qty = item.StockNumber,
+                    Qty = item.Quantity,
                     UnitPrice = item.Price,
                     nameAr = item.NameAr,
                     nameEn = item.NameEn,
@@ -74,7 +74,7 @@ namespace Bl.Services
                 var dbItem = _itemRepository.GetById(item.ItemId);
                 if (dbItem != null)
                 {
-                    dbItem.StockNumber -= item.StockNumber;
+                    dbItem.StockNumber -= item.Quantity;
                     _itemRepository.Update(dbItem);
                 }
             }

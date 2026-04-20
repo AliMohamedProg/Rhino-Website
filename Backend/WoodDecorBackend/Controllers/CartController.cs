@@ -60,12 +60,12 @@ namespace Apis.Controllers
         {
 
             
-            if (request.StockNumber <= 0)
+            if (request.Quantity <= 0)
                 return BadRequest(new { message = "Quantity must be greater than zero" });
 
             var userId = _userService.GetLoggedInUser();
 
-            var cart = await _cartService.AddToCart(userId, request.ProductId, request.StockNumber, request.Color);
+            var cart = await _cartService.AddToCart(userId, request.ProductId, request.Quantity, request.Color);
 
             if (cart == null)
                 return NotFound(new { message = "Product not found" });

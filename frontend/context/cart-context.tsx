@@ -66,7 +66,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     try {
       await ApiClient.post("api/Cart/add-to-cart", {
         productId,
-        stockNumber: quantity,
+        quantity: quantity,
         Color: color || "Default"
       })
       console.log(`[CartContext] Successfully added item ${productId}`);
