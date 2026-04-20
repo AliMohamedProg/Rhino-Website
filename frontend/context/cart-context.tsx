@@ -95,7 +95,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const updateQuantity = async (productId: string, quantity: number) => {
     try {
-      await ApiClient.patch(`api/Cart/items/${productId}`, {
+      await ApiClient.post(`api/Cart/items/${productId}`, {
         request: { quantity }
       })
       await refreshCart()
