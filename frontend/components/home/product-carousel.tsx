@@ -64,11 +64,11 @@ function CarouselProductCard({ product }: { product: ApiItem }) {
          method: "POST",
          headers: { "Content-Type": "application/json" },
          credentials: "include",
-         body: JSON.stringify({
-           productId: product.id,
-           quantity,
-           color: selectedColor || "Default"
-         })
+body: JSON.stringify({
+            productId: product.id,
+            quantity: quantity,
+            Color: selectedColor || "Default"
+          })
        })
 
        if (res.ok) {

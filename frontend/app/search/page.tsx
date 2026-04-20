@@ -66,7 +66,7 @@ function SearchProductCard({ product }: { product: SearchItem }) {
         body: JSON.stringify({
           productId: product.id,
           quantity: 1,
-          color: selectedColor || "Default",
+          Color: selectedColor || "Default",
         }),
       })
 
