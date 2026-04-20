@@ -95,7 +95,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const updateQuantity = async (productId: string, quantity: number) => {
     try {
-      await ApiClient.patch(`api/Cart/items/${productId}`, { quantity })
+      await ApiClient.patch(`api/Cart/items/${productId}`, {
+        request: { quantity }
+      })
       await refreshCart()
     } catch (error) {
       console.error("Failed to update cart item:", error)
