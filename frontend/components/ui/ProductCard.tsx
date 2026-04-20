@@ -16,11 +16,25 @@ interface ColorOption {
 }
 
 interface ProductCardProps {
+  product?: {
+    id?: string;
+    nameAr?: string;
+    nameEn?: string;
+    price?: number;
+    discountAmount?: number;
+    stockNumber?: number;
+    colorsEn?: string;
+    colorsAr?: string;
+    mainImage?: string;
+    image?: string;
+    rating?: number;
+    reviewsCount?: number;
+  };
   id?: string;
-  category: string;
-  title: string;
-  description: string;
-  price: string;
+  category?: string;
+  title?: string;
+  description?: string;
+  price?: string;
   originalPrice?: string;
   discountAmount?: number;
   rating?: number;
@@ -36,28 +50,41 @@ interface ProductCardProps {
 }
 
 export function ProductCard({
-  id,
+  product,
+  id: propId,
   category = "PREMIUM FURNITURE",
-  title,
-  description,
-  price,
+  title: propTitle,
+  description: propDescription,
+  price: propPrice,
   originalPrice,
   discountAmount = 0,
-  rating = 4.9,
-  reviewsCount = 124,
-  mainImage,
-  colorsRaw,
+  rating: propRating,
+  reviewsCount: propReviewsCount,
+  mainImage: propMainImage,
+  colorsRaw: propColorsRaw,
   colors: providedColors,
   defaultColor,
-  stockNumber,
+  stockNumber: propStockNumber,
   isWishlisted = false,
   onAddToCart,
   onToggleWishlist,
 }: ProductCardProps) {
-  const isInStock = stockNumber === undefined || stockNumber > 0;
   const router = useRouter();
   const { addItem } = useCart();
   const { language } = useLanguage();
+
+  const id = propId ?? product?.id
+  const title = propTitle ?? (product ? (language === "ar" ? product.nameAr : product.nameEn) ?? "" : "")
+  const description = propDescription ?? title
+  const price = propPrice ?? (product ? `${product.price} EGP` : "")
+  const rating = propRating ?? product?.rating ?? 0
+  const reviewsCount = propReviewsCount ?? product?.reviewsCount ?? 0
+  const mainImage = propMainImage ?? product?.mainImage ?? product?.image
+  const colorsRaw = propColorsRaw ?? (product ? (language === "ar" ? product.colorsAr : product.colorsEn) ?? "" : "")
+  const stockNumber = propStockNumber ?? product?.stockNumber
+  const isInStock = stockNumber === undefined || stockNumber > 0;
+  const discountAmountVal = discountAmount ?? product?.discountAmount ?? 0
+  const hasDiscount = discountAmountVal > 0;
   const parsed = parseColors(colorsRaw);
   const colors = (providedColors && providedColors.length > 0)
     ? providedColors
@@ -71,7 +98,6 @@ export function ProductCard({
   );
   const [isAdding, setIsAdding] = useState(false);
 
-  const hasDiscount = discountAmount > 0;
   const navigateToProduct = () => {
     if (!id) return;
     router.push(`/product/${id}`);
@@ -113,7 +139,7 @@ export function ProductCard({
       <div className="relative bg-gradient-to-br from-[#f9f4ef] via-[#f7ece1] to-[#f1e2d4] rounded-[1.6rem] aspect-[1.2/1] flex items-center justify-center p-4 overflow-hidden border border-white/80">
         {hasDiscount && (
           <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#7B3F32] text-white text-[10px] font-bold tracking-wide z-10">
-            -{discountAmount}%
+            -{discountAmountVal}%
           </span>
         )}
         {/* Wishlist Button */}
@@ -220,14 +246,14 @@ export function ProductCard({
                 ? (() => {
                     // Parse and calculate discounted price from the passed price string
                     const numPrice = parseFloat(price.replace(/[^0-9.]/g, '')) || 0;
-                    const discounted = Math.round(numPrice - (numPrice * discountAmount / 100));
+                    const discounted = Math.round(numPrice - (numPrice * discountAmountVal / 100));
                     return `${discounted.toLocaleString()} EGP`;
                   })()
                 : price}
             </span>
             {hasDiscount && (
               <span className="text-xs text-red-500 font-medium">
-                Save {discountAmount}%
+                Save {discountAmountVal}%
               </span>
             )}
           </div>

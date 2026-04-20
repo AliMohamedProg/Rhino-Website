@@ -10,6 +10,7 @@ import { ApiClient } from "@/app/ApiHelper/ApiClient"
 import { Button } from "@/components/ui/button"
 import { formatPrice } from "@/lib/products"
 import { getImageUrl } from "@/lib/utils"
+import { ProductCard } from "@/components/ui/ProductCard"
 
 type ApiItem = {
   id: string
@@ -24,7 +25,7 @@ type ApiItem = {
   image?: string
 }
 
-function ProductCard({ product }: { product: ApiItem }) {
+function CarouselProductCard({ product }: { product: ApiItem }) {
   const { language, t } = useLanguage()
   const [selectedColor, setSelectedColor] = useState<string>("")
   const [error, setError] = useState<string>("")
@@ -184,6 +185,7 @@ export function ProductCarousel() {
 
   const [products, setProducts] = useState<ApiItem[]>([])
   const [loading, setLoading] = useState(true)
+  const [reviewStats, setReviewStats] = useState<Record<string, { average: number; count: number }>>({})
 
   useEffect(() => {
     const fetchBestDiscounts = async () => {
@@ -228,6 +230,40 @@ export function ProductCarousel() {
 
     fetchBestDiscounts()
   }, [])
+
+  useEffect(() => {
+    if (products.length === 0) return
+
+    const apiBase = (process.env.NEXT_PUBLIC_API_URL || "https://rhino-web.runasp.net").replace(/\/+$/, "")
+    const productIds = products.map(p => p.id).filter(Boolean)
+
+    const fetchReviewStats = async () => {
+      const entries = await Promise.all(
+        productIds.map(async (productId) => {
+          try {
+            const [avgRes, countRes] = await Promise.all([
+              fetch(`${apiBase}/api/review/get-average-reviews?productId=${productId}`),
+              fetch(`${apiBase}/api/review/get-reviews-count?productId=${productId}`)
+            ])
+            if (!avgRes.ok || !countRes.ok) return [productId, null] as const
+            const average = await avgRes.json()
+            const count = await countRes.json()
+            return [productId, { average: Number(average) || 0, count: Number(count) || 0 }] as const
+          } catch {
+            return [productId, null] as const
+          }
+        })
+      )
+
+      const stats: Record<string, { average: number; count: number }> = {}
+      for (const [id, stat] of entries) {
+        if (stat) stats[id] = stat
+      }
+      setReviewStats(stats)
+    }
+
+    fetchReviewStats()
+  }, [products])
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -274,7 +310,14 @@ export function ProductCarousel() {
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard 
+                key={product.id} 
+                product={{
+                  ...product,
+                  rating: reviewStats[product.id]?.average,
+                  reviewsCount: reviewStats[product.id]?.count
+                }}
+              />
             ))}
           </div>
 
