@@ -23,6 +23,8 @@ type ApiItem = {
   colorsAr?: string
   mainImage?: string
   image?: string
+  rating?: number
+  reviewsCount?: number
 }
 
 function CarouselProductCard({ product }: { product: ApiItem }) {
@@ -242,14 +244,18 @@ export function ProductCarousel() {
         productIds.map(async (productId) => {
           try {
             const [avgRes, countRes] = await Promise.all([
-              fetch(`${apiBase}/api/review/get-average-reviews?productId=${productId}`),
-              fetch(`${apiBase}/api/review/get-reviews-count?productId=${productId}`)
+              fetch(`${apiBase}/api/review/get-average-reviews?productId=${encodeURIComponent(productId)}`),
+              fetch(`${apiBase}/api/review/get-reviews-count?productId=${encodeURIComponent(productId)}`)
             ])
-            if (!avgRes.ok || !countRes.ok) return [productId, null] as const
+            if (!avgRes.ok || !countRes.ok) {
+              console.warn('Failed to fetch reviews for:', productId, avgRes.status, countRes.status)
+              return [productId, null] as const
+            }
             const average = await avgRes.json()
             const count = await countRes.json()
             return [productId, { average: Number(average) || 0, count: Number(count) || 0 }] as const
-          } catch {
+          } catch (err) {
+            console.error('Error fetching reviews for', productId, err)
             return [productId, null] as const
           }
         })
@@ -309,16 +315,20 @@ export function ProductCarousel() {
             className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {products.map((product) => (
-              <ProductCard 
-                key={product.id} 
-                product={{
-                  ...product,
-                  rating: reviewStats[product.id]?.average,
-                  reviewsCount: reviewStats[product.id]?.count
-                }}
-              />
-            ))}
+            {products.map((product) => {
+              const productId = product.id
+              const stats = reviewStats[productId]
+              return (
+                <ProductCard 
+                  key={productId} 
+                  product={{
+                    ...product,
+                    rating: stats?.average ?? 0,
+                    reviewsCount: stats?.count ?? 0
+                  }}
+                />
+              )
+            })}
           </div>
 
           <button
