@@ -142,15 +142,10 @@ export function ProductCard({
             -{discountAmountVal}%
           </span>
         )}
-        {/* Wishlist Button */}
-        <button
-          type="button"
-          aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
-          onClick={handleWishlist}
-          className="absolute top-3 right-3 w-9 h-9 bg-white/95 rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-transform z-10 border border-[#7B3F32]/10"
-        >
-          <HeartIcon className={`w-4 h-4 ${isWishlisted ? "text-[#E53935] fill-[#E53935]" : "text-[#B89A8A]"}`} />
-        </button>
+        {/* Stock Status Badge */}
+        <span className={`absolute top-3 right-3 px-2.5 py-1 rounded-full text-white text-[10px] font-bold tracking-wide z-10 ${isInStock ? "bg-green-500" : "bg-red-500"}`}>
+          {isInStock ? (language === "ar" ? "متوفر" : "In Stock") : (language === "ar" ? "غير متوفر" : "Out of Stock")}
+        </span>
 
         {/* Product Image */}
         <div 
