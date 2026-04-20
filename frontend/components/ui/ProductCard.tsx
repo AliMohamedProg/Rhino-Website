@@ -96,8 +96,8 @@ export function ProductCard({
   const reviewsCountVal = propReviewsCount ?? product?.reviewsCountVal ?? 0
   const mainImage = propMainImage ?? product?.mainImage ?? product?.image
   const colorsRaw = propColorsRaw ?? (product ? (language === "ar" ? product.colorsAr : product.colorsEn) ?? "" : "")
-  const stockNumber = propStockNumber ?? product?.stockNumber
-  const isInStock = stockNumber === undefined || stockNumber > 0;
+  const quantity = propStockNumber ?? product?.stockNumber
+  const isInStock = quantity === undefined || quantity > 0;
   const discountAmountVal = discountAmount ?? product?.discountAmount ?? 0
   const hasDiscount = discountAmountVal > 0;
   const parsed = parseColors(colorsRaw);

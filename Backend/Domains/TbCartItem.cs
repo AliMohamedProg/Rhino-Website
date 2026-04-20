@@ -12,7 +12,7 @@ public class TbCartItem : BaseTable
 
     public Guid ItemId { get; set; }
 
-    public int StockNumber { get; set; }
+    public int Quantity { get; set; }
     [Column(TypeName = "decimal(18,2)")]
     public decimal Total { get; set; }
     public string NameAr { get; set; }
