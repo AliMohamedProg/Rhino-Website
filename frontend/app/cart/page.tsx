@@ -77,7 +77,7 @@ export default function CartPage() {
   }, [])
 
   const updateQuantity = async (productId: string, quantity: number) => {
-    if (quantity < 1) return removeItem(productId)
+    if (!Number.isFinite(quantity) || quantity < 1) return removeItem(productId)
     try {
       await ApiClient.patch(`api/Cart/items/${productId}`, { Quantity: quantity })
       fetchCart()
