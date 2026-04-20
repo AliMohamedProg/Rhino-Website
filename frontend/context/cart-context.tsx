@@ -64,7 +64,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const addItem = async (productId: string, quantity: number, color?: string) => {
     console.log(`[CartContext] Adding item: ${productId}, qty: ${quantity}, color: ${color}`);
     try {
-      await ApiClient.post("api/Cart/add-to-cart", { productId, stockNumber: quantity, color: color || "Default" })
+      await ApiClient.post("api/Cart/add-to-cart", {
+        request: {
+          productId,
+          quantity,
+          color: color || "Default"
+        }
+      })
       console.log(`[CartContext] Successfully added item ${productId}`);
       await refreshCart()
     } catch (error: any) {
