@@ -8,11 +8,23 @@ import { HeartIcon, StarIcon, ShoppingCartIcon } from "@/components/layout/Lucid
 import { getImageUrl, parseColors } from "@/lib/utils";
 import { useCart } from "@/context/cart-context";
 import { useLanguage } from "@/context/language-context";
+import { Stars } from "lucide-react";
+import { useEffect } from "react";
 
 interface ColorOption {
   name: string;
   hex: string;
   image: string;
+}
+
+
+type Review = {
+  id: string
+  title: string
+  date: string
+  rating: number
+  text: string
+  userName: string
 }
 
 interface ProductCardProps {
@@ -72,13 +84,15 @@ export function ProductCard({
   const router = useRouter();
   const { addItem } = useCart();
   const { language } = useLanguage();
-
+  const [reviews, setReviews] = useState<Review[]>([])
+  const [currentReviewIndex, setCurrentReviewIndex] = useState(0)
+  const [averageRating, setAverageRating] = useState(0)
+  const [reviewsCount, setReviewsCount] = useState(0)
   const id = propId ?? product?.id
   const title = propTitle ?? (product ? (language === "ar" ? product.nameAr : product.nameEn) ?? "" : "")
   const description = propDescription ?? title
   const price = propPrice ?? (product ? `${product.price} EGP` : "")
   const rating = propRating ?? product?.rating ?? 0
-  const reviewsCount = propReviewsCount ?? product?.reviewsCount ?? 0
   const mainImage = propMainImage ?? product?.mainImage ?? product?.image
   const colorsRaw = propColorsRaw ?? (product ? (language === "ar" ? product.colorsAr : product.colorsEn) ?? "" : "")
   const stockNumber = propStockNumber ?? product?.stockNumber
@@ -88,10 +102,10 @@ export function ProductCard({
   const parsed = parseColors(colorsRaw);
   const colors = (providedColors && providedColors.length > 0)
     ? providedColors
-    : (parsed.length > 0 
-        ? parsed.map(p => ({ ...p, image: mainImage || "/placeholder.svg" }))
-        : [{ name: "Default", hex: "#5A5D63", image: mainImage || "/placeholder.svg" }]
-      );
+    : (parsed.length > 0
+      ? parsed.map(p => ({ ...p, image: mainImage || "/placeholder.svg" }))
+      : [{ name: "Default", hex: "#5A5D63", image: mainImage || "/placeholder.svg" }]
+    );
 
   const [selectedColor, setSelectedColor] = useState(
     colors.find((c) => c.name === defaultColor) || colors[0]
@@ -131,6 +145,58 @@ export function ProductCard({
     }
   };
 
+  // Fetch reviews
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const apiBase = (process.env.NEXT_PUBLIC_API_URL || "https://rhino-web.runasp.net").replace(/\/+$/, "")
+
+        const [reviewsRes, avgRes, countRes] = await Promise.all([
+          fetch(`${apiBase}/api/review/get-reviews?productId=${id}`),
+          fetch(`${apiBase}/api/review/get-average-reviews?productId=${id}`),
+          fetch(`${apiBase}/api/review/get-reviews-count?productId=${id}`)
+        ])
+
+        if (reviewsRes.ok) {
+          const data = await reviewsRes.json()
+          const emailToName = (email?: string) => {
+            if (!email || typeof email !== "string") return null
+            const at = email.indexOf("@")
+            const raw = (at >= 0 ? email.slice(0, at) : email).trim()
+            return raw.length ? raw : null
+          }
+
+          const normalizedReviews = (Array.isArray(data) ? data : []).map((r: any) => ({
+            id: (r.id ?? r.Id ?? Date.now().toString()).toString(),
+            title: r.title || (language === "ar" ? "تقييم" : "Review"),
+            date: (r.createdDate ?? r.CreatedDate)
+              ? String(r.createdDate ?? r.CreatedDate).split("T")[0]
+              : new Date().toISOString().split("T")[0],
+            rating: Number(r.rating ?? r.Rating ?? 0),
+            text: String(r.review ?? r.Review ?? "").trim(),
+            userName:
+              emailToName(r.userName ?? r.UserName ?? r.userEmail ?? r.UserEmail) ||
+              (language === "ar" ? "مستخدم" : "User"),
+          }))
+          setReviews(normalizedReviews)
+        }
+
+        if (avgRes.ok) {
+          const avg = await avgRes.json()
+          setAverageRating(Number(avg) || 0)
+        }
+
+        if (countRes.ok) {
+          const count = await countRes.json()
+          setReviewsCount(Number(count) || 0)
+        }
+      } catch (err) {
+        console.error("Failed to fetch reviews:", err)
+      }
+    }
+    if (id) fetchReviews()
+  }, [id, language])
+
   return (
     <div className="relative w-full bg-white rounded-[2rem] p-5 md:p-6 flex flex-col gap-5 border border-[#7B3F32]/10 transition-all duration-500 hover:shadow-[0_24px_60px_rgba(123,63,50,0.18)] hover:-translate-y-1.5 group h-full overflow-hidden">
       <div className="pointer-events-none absolute -top-16 -right-10 h-32 w-32 rounded-full bg-[#7B3F32]/10 blur-2xl" />
@@ -148,7 +214,7 @@ export function ProductCard({
         </span>
 
         {/* Product Image */}
-        <div 
+        <div
           className="relative w-full h-full flex items-center justify-center transition-transform duration-700 group-hover:scale-110 cursor-pointer"
           onClick={navigateToProduct}
         >
@@ -169,16 +235,19 @@ export function ProductCard({
           <span className="text-[10px] font-bold tracking-[0.15em] text-[#8f7c71] uppercase">
             {category}
           </span>
-          <div className="flex items-center gap-1.5 rounded-full bg-[#f7efe7] px-2.5 py-1 border border-[#7B3F32]/10">
-            <StarIcon className="w-3.5 h-3.5 text-[#FBC02D] fill-[#FBC02D]" />
-            <span className="text-[11px] font-bold text-[#3D2B1F]">
-              {reviewsCount > 0 ? `${rating.toFixed(1)} (${reviewsCount})` : (language === "ar" ? "لا توجد تقييمات" : "No reviews")}
-            </span>
-          </div>
+          {/* Rating */}
+          {reviewsCount > 0 && (
+            <div className="flex items-center gap-2 mb-4">
+              <Stars value={averageRating} />
+              <span className="text-sm font-medium text-[#6f6157]">
+                {averageRating.toFixed(1)} ({reviewsCount} {language === "ar" ? "تقييم" : "reviews"})
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Title */}
-        <h3 
+        <h3
           className="text-2xl font-bold text-[#2f2219] leading-tight font-sans cursor-pointer hover:text-mahogany transition-colors"
           onClick={navigateToProduct}
         >
@@ -206,8 +275,8 @@ export function ProductCard({
               >
                 <div
                   className={`w-9 h-9 rounded-full transition-all duration-300 flex items-center justify-center border border-black/5 ${selectedColor.name === color.name
-                      ? "ring-2 ring-[#2f2219] ring-offset-2"
-                      : "hover:scale-105"
+                    ? "ring-2 ring-[#2f2219] ring-offset-2"
+                    : "hover:scale-105"
                     }`}
                   style={{ backgroundColor: color.hex }}
                 />
@@ -237,13 +306,13 @@ export function ProductCard({
               </span>
             )}
             <span className={`text-3xl font-bold ${hasDiscount ? "text-red-600" : "text-[#2f2219]"}`}>
-              {hasDiscount 
+              {hasDiscount
                 ? (() => {
-                    // Parse and calculate discounted price from the passed price string
-                    const numPrice = parseFloat(price.replace(/[^0-9.]/g, '')) || 0;
-                    const discounted = Math.round(numPrice - (numPrice * discountAmountVal / 100));
-                    return `${discounted.toLocaleString()} EGP`;
-                  })()
+                  // Parse and calculate discounted price from the passed price string
+                  const numPrice = parseFloat(price.replace(/[^0-9.]/g, '')) || 0;
+                  const discounted = Math.round(numPrice - (numPrice * discountAmountVal / 100));
+                  return `${discounted.toLocaleString()} EGP`;
+                })()
                 : price}
             </span>
             {hasDiscount && (
