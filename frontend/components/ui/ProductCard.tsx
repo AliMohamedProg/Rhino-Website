@@ -4,12 +4,11 @@ import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { HeartIcon, StarIcon, ShoppingCartIcon } from "@/components/layout/LucideIcons";
+import { HeartIcon, StarIcon, ShoppingCartIcon, Star } from "@/components/layout/LucideIcons";
 import { getImageUrl, parseColors } from "@/lib/utils";
 import { useCart } from "@/context/cart-context";
-import { useLanguage } from "@/context/language-context";
-import { Stars } from "lucide-react";
 import { useEffect } from "react";
+import { useLanguage } from "@/context/language-context";
 
 interface ColorOption {
   name: string;
@@ -40,7 +39,7 @@ interface ProductCardProps {
     mainImage?: string;
     image?: string;
     rating?: number;
-    reviewsCount?: number;
+    reviewsCountVal?: number;
   };
   id?: string;
   category?: string;
@@ -50,7 +49,7 @@ interface ProductCardProps {
   originalPrice?: string;
   discountAmount?: number;
   rating?: number;
-  reviewsCount?: number;
+  reviewsCountVal?: number;
   mainImage?: string;
   colorsRaw?: string;
   colors?: ColorOption[];
@@ -71,7 +70,7 @@ export function ProductCard({
   originalPrice,
   discountAmount = 0,
   rating: propRating,
-  reviewsCount: propReviewsCount,
+  reviewsCountVal: propReviewsCount,
   mainImage: propMainImage,
   colorsRaw: propColorsRaw,
   colors: providedColors,
@@ -86,13 +85,14 @@ export function ProductCard({
   const { language } = useLanguage();
   const [reviews, setReviews] = useState<Review[]>([])
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0)
-  const [averageRating, setAverageRating] = useState(0)
-  const [reviewsCount, setReviewsCount] = useState(0)
+  const [fetchedAverageRating, setFetchedAverageRating] = useState(0)
+  const [fetchedReviewsCount, setFetchedReviewsCount] = useState(0)
   const id = propId ?? product?.id
   const title = propTitle ?? (product ? (language === "ar" ? product.nameAr : product.nameEn) ?? "" : "")
   const description = propDescription ?? title
   const price = propPrice ?? (product ? `${product.price} EGP` : "")
   const rating = propRating ?? product?.rating ?? 0
+  const reviewsCountVal = propReviewsCount ?? product?.reviewsCountVal ?? 0
   const mainImage = propMainImage ?? product?.mainImage ?? product?.image
   const colorsRaw = propColorsRaw ?? (product ? (language === "ar" ? product.colorsAr : product.colorsEn) ?? "" : "")
   const stockNumber = propStockNumber ?? product?.stockNumber
@@ -183,12 +183,12 @@ export function ProductCard({
 
         if (avgRes.ok) {
           const avg = await avgRes.json()
-          setAverageRating(Number(avg) || 0)
+          setFetchedAverageRating(Number(avg) || 0)
         }
 
         if (countRes.ok) {
           const count = await countRes.json()
-          setReviewsCount(Number(count) || 0)
+          setFetchedReviewsCount(Number(count) || 0)
         }
       } catch (err) {
         console.error("Failed to fetch reviews:", err)
@@ -236,11 +236,11 @@ export function ProductCard({
             {category}
           </span>
           {/* Rating */}
-          {reviewsCount > 0 && (
+          {reviewsCountVal > 0 && (
             <div className="flex items-center gap-2 mb-4">
-              <Stars value={averageRating} />
+              <Stars value={fetchedAverageRating} />
               <span className="text-sm font-medium text-[#6f6157]">
-                {averageRating.toFixed(1)} ({reviewsCount} {language === "ar" ? "تقييم" : "reviews"})
+                {fetchedAverageRating.toFixed(1)} ({reviewsCountVal} {language === "ar" ? "تقييم" : "reviews"})
               </span>
             </div>
           )}
