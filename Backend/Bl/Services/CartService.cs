@@ -36,8 +36,8 @@ public class CartService : BaseService<TbCart, CartDto>, ICart
 
         if (existingItem != null)
         {
-            existingItem.Quantity += quantity;
-            existingItem.Total = existingItem.Price * existingItem.Quantity;
+            existingItem.StockNumber += quantity;
+            existingItem.Total = existingItem.Price * existingItem.StockNumber;
             await _cartRepository.UpdateCartItem(existingItem);
         }
         else
@@ -46,7 +46,7 @@ public class CartService : BaseService<TbCart, CartDto>, ICart
             {
                 Id = Guid.NewGuid(),
                 ItemId = productId,
-                Quantity = quantity,
+                StockNumber = quantity,
                 Color = color,
                 Cart = cart, // 🔑 ربط العنصر بالكارت
                 Price = await _cartRepository.GetProductPrice(productId),
@@ -75,7 +75,7 @@ public class CartService : BaseService<TbCart, CartDto>, ICart
             NameAr = item.NameAr,
             Image = item.Image,
             Price = item.Price,
-            Quantity = item.Quantity,
+            StockNumber = item.StockNumber,
             Total = item.Total,
             UserId = item.UserId,
             Color = item.Color
@@ -88,7 +88,7 @@ public class CartService : BaseService<TbCart, CartDto>, ICart
         {
             var existingItem = await _cartRepository.GetCartItem(userId, productId);
             if (existingItem == null) return false;
-            existingItem.Quantity = quantity;
+            existingItem.StockNumber = quantity;
             existingItem.Total = existingItem.Price * quantity;
             await _cartRepository.UpdateCartItem(existingItem);
             return true;
@@ -111,7 +111,7 @@ public class CartService : BaseService<TbCart, CartDto>, ICart
             NameAr = i.Item.NameAr,
             Image = i.Item.MainImage,
             Price = i.Price,
-            Quantity = i.Quantity,
+            StockNumber = i.StockNumber,
             Total = i.Total,
             Color = i.Color
         }).ToList();

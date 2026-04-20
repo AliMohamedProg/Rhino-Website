@@ -97,6 +97,8 @@ export default function ProductDetailsPage() {
 
   const [reviews, setReviews] = useState<Review[]>([])
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0)
+  const [averageRating, setAverageRating] = useState(0)
+  const [reviewsCount, setReviewsCount] = useState(0)
 
   const [showReviewForm, setShowReviewForm] = useState(false)
   const [reviewText, setReviewText] = useState("")
@@ -157,9 +159,16 @@ export default function ProductDetailsPage() {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const res = await fetch(`${(process.env.NEXT_PUBLIC_API_URL || "https://rhino-web.runasp.net").replace(/\/+$/, "")}/api/review/get-reviews?productId=${id}`)
-        if (res.ok) {
-          const data = await res.json()
+        const apiBase = (process.env.NEXT_PUBLIC_API_URL || "https://rhino-web.runasp.net").replace(/\/+$/, "")
+        
+        const [reviewsRes, avgRes, countRes] = await Promise.all([
+          fetch(`${apiBase}/api/review/get-reviews?productId=${id}`),
+          fetch(`${apiBase}/api/review/get-average-reviews?productId=${id}`),
+          fetch(`${apiBase}/api/review/get-reviews-count?productId=${id}`)
+        ])
+        
+        if (reviewsRes.ok) {
+          const data = await reviewsRes.json()
           const emailToName = (email?: string) => {
             if (!email || typeof email !== "string") return null
             const at = email.indexOf("@")
@@ -167,7 +176,6 @@ export default function ProductDetailsPage() {
             return raw.length ? raw : null
           }
 
-          // Backend DTO is `ReviewDto` => { review, rating, userEmail, createdDate, ... }
           const normalizedReviews = (Array.isArray(data) ? data : []).map((r: any) => ({
             id: (r.id ?? r.Id ?? Date.now().toString()).toString(),
             title: r.title || (language === "ar" ? "تقييم" : "Review"),
@@ -181,6 +189,16 @@ export default function ProductDetailsPage() {
               (language === "ar" ? "مستخدم" : "User"),
           }))
           setReviews(normalizedReviews)
+        }
+        
+        if (avgRes.ok) {
+          const avg = await avgRes.json()
+          setAverageRating(Number(avg) || 0)
+        }
+        
+        if (countRes.ok) {
+          const count = await countRes.json()
+          setReviewsCount(Number(count) || 0)
         }
       } catch (err) {
         console.error("Failed to fetch reviews:", err)
@@ -386,9 +404,19 @@ export default function ProductDetailsPage() {
           <div className="flex flex-col justify-between rounded-3xl border border-white/70 bg-white/75 backdrop-blur-xl p-6 md:p-8 shadow-[0_18px_60px_rgba(0,0,0,0.06)]">
             {/* Title */}
             <div>
-              <h1 className="text-3xl md:text-4xl font-extrabold mb-4 text-[#2f2219]">
+              <h1 className="text-3xl md:text-4xl font-extrabold mb-2 text-[#2f2219]">
                 {language === "ar" ? product.nameAr : product.nameEn}
               </h1>
+
+              {/* Rating */}
+              {reviewsCount > 0 && (
+                <div className="flex items-center gap-2 mb-4">
+                  <Stars value={averageRating} />
+                  <span className="text-sm font-medium text-[#6f6157]">
+                    {averageRating.toFixed(1)} ({reviewsCount} {language === "ar" ? "تقييم" : "reviews"})
+                  </span>
+                </div>
+              )}
 
 
 
@@ -575,7 +603,7 @@ export default function ProductDetailsPage() {
                   value="reviews"
                   className="rounded-xl border border-transparent data-[state=active]:border-[#7B3F32]/20 data-[state=active]:bg-[#f7efe7] px-4 py-2"
                 >
-                  {language === "ar" ? "التقييمات" : "Reviews"} ({reviews.length})
+                  {language === "ar" ? "التقييمات" : "Reviews"} ({reviewsCount})
                 </TabsTrigger>
               </TabsList>
 

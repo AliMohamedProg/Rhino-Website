@@ -54,7 +54,7 @@ namespace Bl.Services
             // ── Build request body ─────────────────────────────────────────────
             var requestBody = new
             {
-                amount = amount,          // EGP → Piasters
+                amount = amount * 100,          // EGP → Piasters
                 currency = "EGP",
                 payment_methods = paymentMethods,
                 items = new[]
@@ -62,7 +62,7 @@ namespace Bl.Services
                     new
                     {
                         name     = "Order",
-                        amount   = amount,
+                        amount   = amount * 100,
                         quantity = 1
                     }
                 },

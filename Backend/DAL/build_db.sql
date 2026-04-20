@@ -305,3 +305,12 @@ VALUES (N'20260416154452_createDB', N'10.0.2');
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+EXEC sp_rename N'[TbCartItem].[Quantity]', N'StockNumber', 'COLUMN';
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20260420161258_renameTheQuantityFieldInTbCartItemToStockNumber', N'10.0.2');
+
+COMMIT;
+GO
+

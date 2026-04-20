@@ -130,17 +130,17 @@ export default function CategoryPage() {
       const entries = await Promise.all(
         productIds.map(async (productId) => {
           try {
-            const res = await fetch(`${apiBase}/api/review/get-reviews?productId=${encodeURIComponent(productId)}`)
-            if (!res.ok) return [productId, null] as const
-            const data = await res.json()
-            const ratings = (Array.isArray(data) ? data : [])
-              .map((r: any) => Number(r.rating ?? r.Rating ?? 0))
-              .filter((n: number) => Number.isFinite(n) && n > 0)
-            const count = ratings.length
-            const average = count > 0
-              ? Math.round((ratings.reduce((sum: number, n: number) => sum + n, 0) / count) * 10) / 10
-              : 0
-            return [productId, { average, count }] as const
+            const [avgRes, countRes] = await Promise.all([
+              fetch(`${apiBase}/api/review/get-average-reviews?productId=${encodeURIComponent(productId)}`),
+              fetch(`${apiBase}/api/review/get-reviews-count?productId=${encodeURIComponent(productId)}`)
+            ])
+            
+            if (!avgRes.ok || !countRes.ok) return [productId, null] as const
+            
+            const average = await avgRes.json()
+            const count = await countRes.json()
+            
+            return [productId, { average: Number(average) || 0, count: Number(count) || 0 }] as const
           } catch {
             return [productId, null] as const
           }

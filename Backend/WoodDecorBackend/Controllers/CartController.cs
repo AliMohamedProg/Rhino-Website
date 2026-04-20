@@ -59,12 +59,13 @@ namespace Apis.Controllers
         public async Task<ActionResult<CartDto>> AddCartItem([FromBody] AddCartItemRequest request)
         {
 
-            if (request.Quantity <= 0)
+            
+            if (request.StockNumber <= 0)
                 return BadRequest(new { message = "Quantity must be greater than zero" });
 
             var userId = _userService.GetLoggedInUser();
 
-            var cart = await _cartService.AddToCart(userId, request.ProductId, request.Quantity, request.Color);
+            var cart = await _cartService.AddToCart(userId, request.ProductId, request.StockNumber, request.Color);
 
             if (cart == null)
                 return NotFound(new { message = "Product not found" });

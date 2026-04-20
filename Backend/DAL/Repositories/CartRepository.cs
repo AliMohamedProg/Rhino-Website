@@ -84,7 +84,7 @@ namespace DAL.Repositories
 
             // 5️⃣ تعيين بيانات المنتج في CartItem
             cartItem.Price = product.Price;
-            cartItem.Total = product.Price * cartItem.Quantity;
+            cartItem.Total = product.Price * cartItem.StockNumber;
             cartItem.NameEn = product.NameEn;
             cartItem.NameAr = product.NameAr;
             cartItem.Image = product.MainImage;

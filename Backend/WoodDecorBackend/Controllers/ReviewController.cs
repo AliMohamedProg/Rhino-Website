@@ -56,5 +56,28 @@ namespace Apis.Controllers
 
             return Ok(reviews);
         }
+        [HttpGet("get-average-reviews")]
+        public ActionResult<double> GetAverageReviews([FromQuery] Guid productId)
+        {
+            var reviews = _reviewService
+                .GetAll()
+                .Where(r => r.CurrentState == 1 && r.ProductId == productId)
+                .ToList();
+
+            if (!reviews.Any())
+                return Ok(0);
+
+            var average = reviews.Average(r => r.Rating);
+
+            return Ok(Math.Round(average, 1));
+        }
+        [HttpGet("get-reviews-count")]
+        public ActionResult<int> GetReviewsCount([FromQuery] Guid productId)
+        {
+            var reviewsCount = _reviewService
+                .GetAll().Count(r => r.CurrentState == 1 && r.ProductId == productId);
+
+            return Ok(reviewsCount);
+        }
     }
 }
