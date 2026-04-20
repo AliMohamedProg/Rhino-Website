@@ -167,10 +167,10 @@ function ProductCard({ product }: { product: ApiItem }) {
             size="sm"
             className="w-full"
             onClick={handleAddToCart}
-            disabled={adding}
+            disabled={adding || product.stockNumber === 0}
           >
             <ShoppingCart size={16} className="me-2" />
-            {adding ? (language === "ar" ? "جاري الإضافة..." : "Adding...") : t("products.addToCart")}
+            {adding ? (language === "ar" ? "جاري الإضافة..." : "Adding...") : product.stockNumber > 0 ? t("products.addToCart") : (language === "ar" ? "غير متاح" : "Out of Stock")}
           </Button>
         </div>
       </div>

@@ -159,10 +159,10 @@ function SearchProductCard({ product }: { product: SearchItem }) {
             size="sm"
             className="w-full"
             onClick={handleAddToCart}
-            disabled={adding}
+            disabled={adding || !isInStock}
           >
             <ShoppingCart size={16} className="me-2" />
-            {adding ? (language === "ar" ? "جاري الإضافة..." : "Adding...") : t("products.addToCart")}
+            {adding ? (language === "ar" ? "جاري الإضافة..." : "Adding...") : isInStock ? t("products.addToCart") : (language === "ar" ? "غير متاح" : "Out of Stock")}
           </Button>
         </div>
       </div>

@@ -29,6 +29,7 @@ interface ProductCardProps {
   colorsRaw?: string;
   colors?: ColorOption[];
   defaultColor?: string;
+  stockNumber?: number;
   isWishlisted?: boolean;
   onAddToCart?: (productId: string, selectedColorName: string) => void | Promise<void>;
   onToggleWishlist?: (productId: string) => void | Promise<void>;
@@ -48,10 +49,12 @@ export function ProductCard({
   colorsRaw,
   colors: providedColors,
   defaultColor,
+  stockNumber,
   isWishlisted = false,
   onAddToCart,
   onToggleWishlist,
 }: ProductCardProps) {
+  const isInStock = stockNumber === undefined || stockNumber > 0;
   const router = useRouter();
   const { addItem } = useCart();
   const { language } = useLanguage();
@@ -231,12 +234,12 @@ export function ProductCard({
           <button
             type="button"
             onClick={handleAddToCart}
-            disabled={isAdding}
+            disabled={isAdding || !isInStock}
             className="flex items-center gap-2 bg-gradient-to-r from-[#7B3F32] to-[#9e5948] text-white px-5 py-3.5 rounded-2xl hover:from-[#5f3026] hover:to-[#8e4f3f] transition-all active:scale-95 shadow-[0_10px_22px_rgba(123,63,50,0.38)] disabled:opacity-60 disabled:cursor-not-allowed"
           >
             <ShoppingCartIcon className="w-5 h-5" />
             <span className="text-[12px] font-bold tracking-tight">
-              {isAdding ? "Adding..." : "Add to Cart"}
+              {isAdding ? "Adding..." : isInStock ? "Add to Cart" : "Out of Stock"}
             </span>
           </button>
         </div>

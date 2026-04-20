@@ -68,7 +68,8 @@ namespace Bl.Services
                 },
                 billing_data = new
                 {
-                    email,
+                    phone_number = phone,
+                    email_address=email,
                     first_name   = firstName,
                     last_name    = lastName,
                 },

@@ -397,8 +397,9 @@ export default function CategoryPage() {
                       }
                       rating={reviewStatsByProductId[product.id]?.average ?? product.overallRating ?? 0}
                       reviewsCount={reviewStatsByProductId[product.id]?.count ?? 0}
-                      mainImage={product.mainImage}
+mainImage={product.mainImage}
                       colorsRaw={product.colorsEn}
+                      stockNumber={product.stockNumber}
                       isWishlisted={isInWishlist(product.id)}
                       onAddToCart={async (productId, selectedColorName) => {
                         await addItem(productId, 1, selectedColorName)
