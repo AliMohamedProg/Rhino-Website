@@ -177,7 +177,7 @@ export function ProductCard({
           <div className="flex items-center gap-1.5 rounded-full bg-[#f7efe7] px-2.5 py-1 border border-[#7B3F32]/10">
             <StarIcon className="w-3.5 h-3.5 text-[#FBC02D] fill-[#FBC02D]" />
             <span className="text-[11px] font-bold text-[#3D2B1F]">
-              {rating} ({reviewsCount})
+              {reviewsCount > 0 ? `${rating.toFixed(1)} (${reviewsCount})` : (language === "ar" ? "لا توجد تقييمات" : "No reviews")}
             </span>
           </div>
         </div>
