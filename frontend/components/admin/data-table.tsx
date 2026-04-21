@@ -226,7 +226,7 @@ export function DataTable<T extends { id: string }>({
            <Button
              variant="outline"
              size="sm"
-             className="border-border text-foreground hover:bg-primary/10 hover:text-primary hover:border-primary"
+             className="border-[#7B3F32]/20 text-[#7B3F32] hover:bg-[#7B3F32]/5 hover:border-[#7B3F32]/40 rounded-lg h-9 w-9 p-0 bg-transparent"
              onClick={() => goToPage(1)}
              disabled={currentPage === 1 || totalItems === 0}
              aria-label="First page"
@@ -236,7 +236,7 @@ export function DataTable<T extends { id: string }>({
            <Button
              variant="outline"
              size="sm"
-             className="border-border text-foreground hover:bg-primary/10 hover:text-primary hover:border-primary"
+             className="border-[#7B3F32]/20 text-[#7B3F32] hover:bg-[#7B3F32]/5 hover:border-[#7B3F32]/40 rounded-lg h-9 w-9 p-0 bg-transparent"
              onClick={() => goToPage(currentPage - 1)}
              disabled={currentPage === 1 || totalItems === 0}
              aria-label="Previous page"
@@ -260,10 +260,10 @@ export function DataTable<T extends { id: string }>({
                  variant={currentPage === pageNum ? "default" : "outline"}
                  size="sm"
                  className={cn(
-                   "w-9",
+                   "w-9 h-9 rounded-lg p-0",
                    currentPage === pageNum
-                     ? "bg-primary hover:bg-primary/90 text-primary-foreground"
-                     : "border-border text-foreground hover:bg-primary/10 hover:text-primary hover:border-primary"
+                     ? "bg-gradient-to-r from-[#7B3F32] to-[#9e5948] hover:from-[#5f3026] hover:to-[#8e4f3f] text-white shadow-sm border-0"
+                     : "border-[#7B3F32]/20 text-[#7B3F32] hover:bg-[#7B3F32]/5 hover:border-[#7B3F32]/40 bg-transparent"
                  )}
                 onClick={() => goToPage(pageNum)}
               >
@@ -274,7 +274,7 @@ export function DataTable<T extends { id: string }>({
            <Button
              variant="outline"
              size="sm"
-             className="border-border text-foreground hover:bg-primary/10 hover:text-primary hover:border-primary"
+             className="border-[#7B3F32]/20 text-[#7B3F32] hover:bg-[#7B3F32]/5 hover:border-[#7B3F32]/40 rounded-lg h-9 w-9 p-0 bg-transparent"
              onClick={() => goToPage(currentPage + 1)}
              disabled={currentPage === totalPages || totalItems === 0}
              aria-label="Next page"
@@ -284,7 +284,7 @@ export function DataTable<T extends { id: string }>({
            <Button
              variant="outline"
              size="sm"
-             className="border-border text-foreground hover:bg-primary/10 hover:text-primary hover:border-primary"
+             className="border-[#7B3F32]/20 text-[#7B3F32] hover:bg-[#7B3F32]/5 hover:border-[#7B3F32]/40 rounded-lg h-9 w-9 p-0 bg-transparent"
              onClick={() => goToPage(totalPages)}
              disabled={currentPage === totalPages || totalItems === 0}
              aria-label="Last page"
