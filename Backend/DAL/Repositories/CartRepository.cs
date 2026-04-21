@@ -82,9 +82,16 @@ namespace DAL.Repositories
             if (product == null)
                 throw new KeyNotFoundException($"Product with Id {cartItem.ItemId} not found");
 
+            // Calculate true Sale Price
+            decimal salePrice = product.Price;
+            if (product.OldPrice == null && product.DiscountAmount.GetValueOrDefault() > 0)
+            {
+                salePrice = product.Price - (product.Price * ((decimal)product.DiscountAmount.Value / 100m));
+            }
+
             // 5️⃣ تعيين بيانات المنتج في CartItem
-            cartItem.Price = product.Price;
-            cartItem.Total = product.Price * cartItem.Quantity;
+            cartItem.Price = salePrice;
+            cartItem.Total = salePrice * cartItem.Quantity;
             cartItem.NameEn = product.NameEn;
             cartItem.NameAr = product.NameAr;
             cartItem.Image = product.MainImage;
@@ -142,7 +149,13 @@ namespace DAL.Repositories
             if (product == null)
                 throw new KeyNotFoundException($"Product with Id {productId} not found");
 
-            return product.Price;
+            decimal salePrice = product.Price;
+            if (product.OldPrice == null && product.DiscountAmount.GetValueOrDefault() > 0)
+            {
+                salePrice = product.Price - (product.Price * ((decimal)product.DiscountAmount.Value / 100m));
+            }
+
+            return salePrice;
         }
         public async Task<TbCart> AddCart(TbCart cart)
         {

@@ -121,17 +121,7 @@ export default function UsersPage() {
   }
 
   const getStatusBadge = (status: User["status"]) => {
-    const statusConfig = {
-      active: { variant: "default" as const, label: "Active", className: "bg-emerald-500" },
-      inactive: { variant: "secondary" as const, label: "Inactive", className: "" },
-      blocked: { variant: "destructive" as const, label: "Blocked", className: "" },
-    }
-    const config = statusConfig[status]
-    return (
-      <Badge variant={config.variant} className={config.className}>
-        {config.label}
-      </Badge>
-    )
+    return null;
   }
 
   const formatCurrency = (amount: number) => {
@@ -168,11 +158,6 @@ export default function UsersPage() {
       key: "role",
       header: "Role",
       render: (user: User) => getRoleBadge(user.role),
-    },
-    {
-      key: "status",
-      header: "Status",
-      render: (user: User) => getStatusBadge(user.status),
     },
     {
       key: "totalOrders",

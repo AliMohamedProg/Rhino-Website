@@ -79,13 +79,7 @@ export default function ProductsPage() {
   }
 
   const getStatusBadge = (status: Product["status"]) => {
-    const statusConfig = {
-      active: { label: "Active", className: "bg-emerald-100 text-emerald-700 border-emerald-200" },
-      inactive: { label: "Inactive", className: "bg-slate-100 text-slate-600 border-slate-200" },
-      draft: { label: "Draft", className: "bg-amber-100 text-amber-700 border-amber-200" },
-    }
-    const config = statusConfig[status]
-    return <Badge className={`border ${config.className}`}>{config.label}</Badge>
+    // keeping function just in case it's used elsewhere, though we remove it from table
   }
 
   const formatCurrency = (amount: number) => `${amount.toLocaleString()} EGP`
@@ -124,22 +118,21 @@ export default function ProductsPage() {
         <span className={`font-semibold ${product.stock <= 10 ? "text-red-600" : "text-indigo-600"}`}>{product.stock}</span>
       )
     },
-    { key: "status", header: "Status", render: (product: Product) => getStatusBadge(product.status) },
     {
       key: "actions", header: "Actions", render: (product: Product) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-indigo-50"><MoreHorizontal className="h-4 w-4" /></Button>
+            <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#A6ACA2]/10"><MoreHorizontal className="h-4 w-4" /></Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-white">
-            <DropdownMenuItem asChild className="hover:bg-indigo-50 cursor-pointer">
-              <Link href={`/admin/products/${product.id}`}><Eye className="h-4 w-4 mr-2 text-indigo-600" /><span className="text-indigo-600">View</span></Link>
+          <DropdownMenuContent align="end" className="bg-white rounded-xl shadow-xl shadow-[#7B3F32]/10 border-[#7B3F32]/10">
+            <DropdownMenuItem asChild className="hover:bg-[#f6eee8] cursor-pointer rounded-lg">
+              <Link href={`/admin/products/${product.id}`}><Eye className="h-4 w-4 mr-2 text-[#7B3F32]" /><span className="text-[#3a2c26] font-medium">View</span></Link>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild className="hover:bg-indigo-50 cursor-pointer">
-              <Link href={`/admin/products/${product.id}/edit`}><Pencil className="h-4 w-4 mr-2 text-indigo-600" /><span className="text-indigo-600">Edit</span></Link>
+            <DropdownMenuItem asChild className="hover:bg-[#f6eee8] cursor-pointer rounded-lg mt-1">
+              <Link href={`/admin/products/${product.id}/edit`}><Pencil className="h-4 w-4 mr-2 text-[#7B3F32]" /><span className="text-[#3a2c26] font-medium">Edit</span></Link>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleDelete(product)} className="hover:bg-red-50 cursor-pointer">
-              <Trash2 className="h-4 w-4 mr-2 text-red-600" /><span className="text-red-600">Delete</span>
+            <DropdownMenuItem onClick={() => handleDelete(product)} className="hover:bg-red-50 focus:bg-red-50 cursor-pointer rounded-lg mt-1">
+              <Trash2 className="h-4 w-4 mr-2 text-red-600" /><span className="text-red-600 font-medium">Delete</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -149,35 +142,29 @@ export default function ProductsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">Products</h1>
-          <p className="text-slate-500">Manage {products.length} products</p>
+      <div className="relative overflow-hidden rounded-3xl border border-[#7B3F32]/12 bg-white/80 backdrop-blur-xl p-6 md:p-8 shadow-[0_14px_40px_rgba(0,0,0,0.06)] flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+        <div className="pointer-events-none absolute -top-16 -right-10 h-36 w-36 rounded-full bg-[#7B3F32]/10 blur-2xl z-0" />
+        <div className="pointer-events-none absolute -bottom-14 -left-8 h-32 w-32 rounded-full bg-[#C1AFA0]/30 blur-2xl z-0" />
+        
+        <div className="relative z-10">
+          <p className="text-[11px] tracking-[0.2em] uppercase font-semibold text-[#8b7d73]">Management</p>
+          <h1 className="text-3xl font-bold tracking-tight text-[#2f2219] mt-1">Products</h1>
+          <p className="text-[#7c6f65] mt-1 text-sm font-medium">Manage {products.length} products</p>
         </div>
-        <div className="flex items-center gap-2">
-          {/* <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="border-slate-200 hover:bg-slate-50 hover:border-indigo-300">
-                <Download className="h-4 w-4 mr-2" />Export
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-white">
-              <DropdownMenuItem onClick={() => exportItemsExcel()} className="hover:bg-indigo-50 cursor-pointer">Export to Excel</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => exportItemsPdf()} className="hover:bg-indigo-50 cursor-pointer">Export to PDF</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu> */}
+        
+        <div className="flex items-center gap-3 relative z-10">
           {products.length > 0 && (
-            <Button variant="destructive" onClick={() => setDeleteAllDialogOpen(true)} className="bg-red-600 hover:bg-red-700">
+            <Button variant="destructive" onClick={() => setDeleteAllDialogOpen(true)} className="bg-red-500/10 text-red-600 hover:bg-red-500 hover:text-white rounded-2xl shadow-none font-bold transition-all">
               <Trash2 className="h-4 w-4 mr-2" />Delete All
             </Button>
           )}
-          <Button asChild className="bg-indigo-600 hover:bg-indigo-700">
-            <Link href="/admin/products/new" className="flex items-center gap-2"><Plus className="h-4 w-4" />Add Product</Link>
+          <Button asChild className="bg-gradient-to-r from-[#7B3F32] to-[#9e5948] text-white hover:from-[#5f3026] hover:to-[#8e4f3f] rounded-2xl shadow-[0_10px_20px_rgba(123,63,50,0.22)] font-bold transition-all px-5 py-4 h-11 border-0">
+            <Link href="/admin/products/new" className="flex items-center gap-2"><Plus className="h-4 w-4 shrink-0" />Add Product</Link>
           </Button>
         </div>
       </div>
 
-      <Card className="border-slate-200/60 bg-white/80 backdrop-blur-sm">
+      <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.03)] overflow-hidden">
         <CardContent className="pt-6">
           {loading ? (
             <div className="flex justify-center items-center h-48 text-slate-500 animate-pulse">Loading products...</div>
