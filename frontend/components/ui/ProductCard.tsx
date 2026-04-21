@@ -32,6 +32,8 @@ interface ProductCardProps {
     id?: string;
     nameAr?: string;
     nameEn?: string;
+    oldprice?: number;
+    oldPrice?: number;
     price?: number;
     discountAmount?: number;
     stockNumber?: number;
@@ -98,8 +100,27 @@ export function ProductCard({
   const colorsRaw = propColorsRaw ?? (product ? (language === "ar" ? product.colorsAr : product.colorsEn) ?? "" : "")
   const quantity = propStockNumber ?? product?.stockNumber
   const isInStock = quantity === undefined || quantity > 0;
-  const discountAmountVal = discountAmount ?? product?.discountAmount ?? 0
-  const hasDiscount = discountAmountVal > 0;
+  const discountAmountVal = discountAmount ?? product?.discountAmount ?? 0;
+  const oldPriceNum = product?.oldPrice ?? product?.oldprice ?? 0;
+  const currentPriceNum = product?.price ?? 0;
+  const hasExplicitOldPrice = oldPriceNum > 0 && oldPriceNum > currentPriceNum;
+  const hasDiscount = discountAmountVal > 0 || hasExplicitOldPrice;
+
+  let computedDiscountPercent = 0;
+  let displayMainPrice = price;
+  let displayLineThrough = originalPrice;
+
+  if (hasExplicitOldPrice) {
+    computedDiscountPercent = Math.round(((oldPriceNum - currentPriceNum) / oldPriceNum) * 100);
+    displayMainPrice = `${currentPriceNum.toLocaleString()} EGP`;
+    displayLineThrough = `${oldPriceNum.toLocaleString()} EGP`;
+  } else if (discountAmountVal > 0) {
+    computedDiscountPercent = discountAmountVal;
+    displayLineThrough = displayLineThrough ?? price;
+    const numPrice = parseFloat(price.replace(/[^0-9.]/g, '')) || 0;
+    const discounted = Math.round(numPrice - (numPrice * discountAmountVal / 100));
+    displayMainPrice = `${discounted.toLocaleString()} EGP`;
+  }
   const parsed = parseColors(colorsRaw);
   const colors = (providedColors && providedColors.length > 0)
     ? providedColors
@@ -206,7 +227,7 @@ export function ProductCard({
       <div className="relative bg-gradient-to-br from-[#f9f4ef] via-[#f7ece1] to-[#f1e2d4] rounded-[1.6rem] aspect-[1.2/1] flex items-center justify-center p-4 overflow-hidden border border-white/80">
         {hasDiscount && (
           <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#7B3F32] text-white text-[10px] font-bold tracking-wide z-10">
-            -{discountAmountVal}%
+            -{computedDiscountPercent}%
           </span>
         )}
         {/* Stock Status Badge */}
@@ -296,29 +317,17 @@ export function ProductCard({
         {/* Pricing & Cart */}
         <div className="flex items-end justify-between gap-3 mt-2">
           <div className="flex flex-col">
-            {hasDiscount && originalPrice && (
+            {hasDiscount && displayLineThrough && (
               <span className="text-[13px] text-[#A1A1A1] line-through font-medium">
-                {originalPrice}
-              </span>
-            )}
-            {hasDiscount && !originalPrice && price && (
-              <span className="text-[13px] text-[#A1A1A1] line-through font-medium">
-                {price}
+                {displayLineThrough}
               </span>
             )}
             <span className={`text-3xl font-bold ${hasDiscount ? "text-red-600" : "text-[#2f2219]"}`}>
-              {hasDiscount
-                ? (() => {
-                  // Parse and calculate discounted price from the passed price string
-                  const numPrice = parseFloat(price.replace(/[^0-9.]/g, '')) || 0;
-                  const discounted = Math.round(numPrice - (numPrice * discountAmountVal / 100));
-                  return `${discounted.toLocaleString()} EGP`;
-                })()
-                : price}
+              {displayMainPrice}
             </span>
             {hasDiscount && (
               <span className="text-xs text-red-500 font-medium">
-                Save {discountAmountVal}%
+                Save {computedDiscountPercent}%
               </span>
             )}
           </div>

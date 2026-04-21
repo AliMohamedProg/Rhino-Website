@@ -96,6 +96,17 @@ namespace Apis.Areas.Admin.Controllers
                 {
                     mainImage = itemDto.Images[0].ImageUrl;
                 }
+
+                if (itemDto.DiscountAmount.GetValueOrDefault() > 0)
+                {
+                    itemDto.OldPrice = itemDto.Price;
+                    itemDto.Price = itemDto.Price - (itemDto.Price * ((decimal)itemDto.DiscountAmount.Value / 100m));
+                }
+                else
+                {
+                    itemDto.OldPrice = itemDto.Price;
+                }
+                
                 var item = new ItemDto()
                 {
                     CurrentState = 1,
@@ -108,8 +119,9 @@ namespace Apis.Areas.Admin.Controllers
                     ColorsAr = itemDto.ColorsAr,
                     DiscountAmount = itemDto.DiscountAmount,
                     MainImage = mainImage ?? string.Empty,
-                    //OverallRating = itemDto.OverallRating,
-                    Price = itemDto.Price,
+                    //OverallRating = itemDto.OverallRating
+                    Price = itemDto.Price, 
+                    OldPrice = itemDto.OldPrice,
                     StockNumber = itemDto.StockNumber,
                     CategoryId = itemDto.CategoryId,
                     Images = itemDto.Images ?? new List<ImageDto>(),
@@ -136,6 +148,16 @@ namespace Apis.Areas.Admin.Controllers
                     mainImage = itemDto.Images[0].ImageUrl;
                 }
 
+                if (itemDto.DiscountAmount.GetValueOrDefault() > 0)
+                {
+                    itemDto.OldPrice = itemDto.Price;
+                    itemDto.Price = itemDto.Price - (itemDto.Price * ((decimal)itemDto.DiscountAmount.Value / 100m));
+                }
+                else
+                {
+                    itemDto.OldPrice = itemDto.Price;
+                }
+
                 var item = new ItemDto()
                 {
                     Id = itemDto.Id,
@@ -150,6 +172,7 @@ namespace Apis.Areas.Admin.Controllers
                     MainImage = mainImage ?? string.Empty,
                     //OverallRating = itemDto.OverallRating,
                     Price = itemDto.Price,
+                    OldPrice = itemDto.OldPrice,
                     StockNumber = itemDto.StockNumber,
                     CategoryId = itemDto.CategoryId,
                     Images = itemDto.Images ?? new List<ImageDto>(),

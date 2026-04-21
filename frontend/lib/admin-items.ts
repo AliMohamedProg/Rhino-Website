@@ -12,6 +12,7 @@ export interface AdminItemDto {
   descriptionAr: string
   descriptionEn: string
   price: number
+  oldPrice?: number | null
   discountAmount?: number | null
   categoryId: string
   stockNumber: number
@@ -48,7 +49,13 @@ export const mapAdminItemToProduct = (
   categories?: AdminCategoryDto[]
 ): Product => {
   const discount = item.discountAmount ?? 0
-  const salePrice = discount > 0 ? Math.round(item.price * (1 - discount / 100)) : item.price
+  const hasBackendOldPrice = item.oldPrice != null && item.oldPrice > item.price
+  
+  const salePrice = item.price
+  const originalPriceVal = hasBackendOldPrice 
+    ? item.oldPrice 
+    : (discount > 0 && item.price > 0 ? Math.round(item.price / (1 - discount / 100)) : undefined)
+
   const imageUrls = buildImageList(
     item.mainImage,
     item.images?.map((img) => img.imageUrl) ?? []
@@ -62,7 +69,7 @@ export const mapAdminItemToProduct = (
     descriptionEn: item.descriptionEn ?? "",
     descriptionAr: item.descriptionAr ?? "",
     price: salePrice,
-    originalPrice: discount > 0 ? item.price : undefined,
+    originalPrice: originalPriceVal ?? undefined,
     stock: item.stockNumber ?? 0,
     category: category ? category.nameEn : item.categoryId ?? "",
     categoryId: item.categoryId ?? "",

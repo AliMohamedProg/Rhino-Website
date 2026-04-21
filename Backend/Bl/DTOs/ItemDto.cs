@@ -16,6 +16,7 @@ namespace Bl.DTOs
         public string DescriptionEn { get; set; } = null!;
 
         public decimal Price { get; set; }
+        public decimal? OldPrice { get; set; }
 
         public int? DiscountAmount { get; set; }
 

@@ -15,6 +15,7 @@ public partial class TbItem : BaseTable
 
     public string DescriptionEn { get; set; } = null!;
 
+    public decimal? OldPrice { get; set; }
     public decimal Price { get; set; }
 
 

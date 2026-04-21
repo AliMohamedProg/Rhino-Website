@@ -325,6 +325,9 @@ namespace DAL.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<decimal?>("OldPrice")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int?>("OverallRating")
                         .HasColumnType("int");
 
