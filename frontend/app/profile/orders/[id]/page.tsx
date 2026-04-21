@@ -44,19 +44,19 @@ function statusBadge(status: string, language: string) {
   const normalized = (status || "Pending").toLowerCase()
   switch (normalized) {
     case "pending":
-      return <Badge className="bg-yellow-500 hover:bg-yellow-600 border-none">{language === "ar" ? "قيد الانتظار" : "Pending"}</Badge>
+      return <Badge className="bg-amber-100 text-amber-700 border border-amber-200 hover:bg-amber-200">{language === "ar" ? "قيد الانتظار" : "Pending"}</Badge>
     case "processing":
-      return <Badge className="bg-blue-500 hover:bg-blue-600 border-none">{language === "ar" ? "جاري المعالجة" : "Processing"}</Badge>
+      return <Badge className="bg-blue-100 text-blue-700 border border-blue-200 hover:bg-blue-200">{language === "ar" ? "جاري المعالجة" : "Processing"}</Badge>
     case "shipped":
-      return <Badge className="bg-purple-500 hover:bg-purple-600 border-none">{language === "ar" ? "تم الشحن" : "Shipped"}</Badge>
+      return <Badge className="bg-purple-100 text-purple-700 border border-purple-200 hover:bg-purple-200">{language === "ar" ? "تم الشحن" : "Shipped"}</Badge>
     case "delivered":
-      return <Badge className="bg-green-500 hover:bg-green-600 border-none">{language === "ar" ? "تم التوصيل" : "Delivered"}</Badge>
+      return <Badge className="bg-green-100 text-green-700 border border-green-200 hover:bg-green-200">{language === "ar" ? "تم التوصيل" : "Delivered"}</Badge>
     case "cancelled":
-      return <Badge className="bg-red-500 hover:bg-red-600 border-none">{language === "ar" ? "ملغي" : "Cancelled"}</Badge>
+      return <Badge className="bg-red-100 text-red-700 border border-red-200 hover:bg-red-200">{language === "ar" ? "ملغي" : "Cancelled"}</Badge>
     case "refunded":
-      return <Badge className="bg-slate-500 hover:bg-slate-600 border-none">{language === "ar" ? "مرتجع" : "Refunded"}</Badge>
+      return <Badge className="bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-200">{language === "ar" ? "مرتجع" : "Refunded"}</Badge>
     default:
-      return <Badge variant="outline">{status || "Pending"}</Badge>
+      return <Badge className="bg-amber-100 text-amber-700 border border-amber-200 hover:bg-amber-200">{status || (language === "ar" ? "قيد الانتظار" : "Pending")}</Badge>
   }
 }
 
