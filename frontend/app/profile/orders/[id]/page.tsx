@@ -61,15 +61,15 @@ function statusBadge(status: string, language: string) {
 }
 
 function paymentStatusBadge(status: string, language: string) {
-  const displayStatus = status || "Pending"
-  switch (displayStatus) {
-    case "Paid":
+  const normalized = (status || "Pending").toLowerCase()
+  switch (normalized) {
+    case "paid":
       return <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800">{language === "ar" ? "مدفوع" : "Paid"}</Badge>
-    case "Refunded":
+    case "refunded":
       return <Badge variant="secondary" className="bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-900/30 dark:text-purple-400 dark:border-purple-800">{language === "ar" ? "مرتجع" : "Refunded"}</Badge>
-    case "Failed":
+    case "failed":
       return <Badge variant="secondary" className="bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800">{language === "ar" ? "فشل" : "Failed"}</Badge>
-    case "Pending":
+    case "pending":
     default:
       return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-800">{language === "ar" ? "معلق" : "Pending"}</Badge>
   }
@@ -205,29 +205,55 @@ export default function OrderViewPage() {
     )
   }
 
+  const orderItemsTotal = order.tbOrderItems.reduce((sum, item) => sum + Number(item.unitPrice || 0) * Number(item.qty || 0), 0)
+  const shippingFee = 0
+  const subtotal = orderItemsTotal || order.total
+  const customerName = `${order.firstName || ""} ${order.lastName || ""}`.trim() || (language === "ar" ? "العميل" : "Customer")
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 bg-background">
+      <main className="flex-1 bg-gradient-to-b from-[#f8efe6] via-[#f7efe7] to-[#f5ebe0]">
         <div className="container mx-auto px-4 py-8">
-          <div className="flex items-center justify-between mb-6">
-            <h1 className="text-2xl font-bold text-foreground">{language === "ar" ? "تفاصيل الطلب" : "Order Details"}</h1>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" onClick={() => window.print()}>
-                <Printer className="h-4 w-4 mr-2" />
-                {language === "ar" ? "طباعة" : "Print"}
-              </Button>
-              <Button variant="outline" size="sm" onClick={() => {
-                const invoiceText = `Order Number: ${order.orderNumber}
+          <div className="relative overflow-hidden rounded-3xl border border-white/60 bg-white/80 backdrop-blur-xl p-6 md:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.06)] mb-6">
+            <div className="absolute -top-16 -right-16 h-40 w-40 rounded-full bg-[#7B3F32]/10 blur-2xl" />
+            <div className="absolute -bottom-16 -left-10 h-40 w-40 rounded-full bg-[#C1AFA0]/30 blur-2xl" />
+
+            <div className="relative z-10 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <p className="text-[11px] tracking-[0.2em] font-semibold uppercase text-[#8b7d73]">
+                  {language === "ar" ? "معلومات الطلب" : "Order Information"}
+                </p>
+                <h1 className="text-3xl font-bold text-[#2f2219] mt-1">
+                  {language === "ar" ? "تفاصيل الطلب" : "Order Details"}
+                </h1>
+                <div className="mt-3 flex flex-wrap items-center gap-3">
+                  <span className="inline-flex items-center rounded-full border border-[#7B3F32]/20 bg-[#f8efe6] px-3 py-1 text-xs font-bold tracking-wider text-[#7B3F32]">
+                    #{order.orderNumber}
+                  </span>
+                  {statusBadge(order.status, language)}
+                  {paymentStatusBadge(order.paymentStatus, language)}
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                <Button variant="outline" size="sm" onClick={() => window.print()}>
+                  <Printer className="h-4 w-4 mr-2" />
+                  {language === "ar" ? "طباعة" : "Print"}
+                </Button>
+                <Button variant="outline" size="sm" onClick={() => {
+                  const invoiceText = `Order Number: ${order.orderNumber}
 Date: ${new Date(order.orderDate).toLocaleDateString(language === "ar" ? "ar-EG" : "en-US")}
 Status: ${order.status}
-Customer Name: ${order.firstName} ${order.lastName}
+Customer Name: ${customerName}
 Email: ${order.email}
 Phone: ${order.phoneNumber}
 
 Items:
 ${order.tbOrderItems.map(i => `- ${language === "ar" ? i.nameAr : i.nameEn} (Qty: ${i.qty}) - ${formatPrice(i.unitPrice)} ${t("products.price")}`).join('\n')}
 
+Subtotal: ${formatPrice(subtotal)} ${t("products.price")}
+Shipping: ${formatPrice(shippingFee)} ${t("products.price")}
 Total: ${formatPrice(order.total)} ${t("products.price")}
 
 Shipping Address:
@@ -250,15 +276,17 @@ Payment Method: ${order.paymentStatus}
               <Link href="/profile" className="text-sm text-primary hover:underline ml-2">{language === "ar" ? "الملف الشخصي" : "Profile"}</Link>
             </div>
           </div>
+          </div>
 
           <div className="grid md:grid-cols-3 gap-6">
             <div className="md:col-span-2">
-              <Card className="mb-6">
+              <Card className="mb-6 border-[#7B3F32]/10 bg-white/85">
                 <CardContent className="pt-6">
-                  <div className="flex flex-wrap items-center justify-between gap-4 mb-6 pb-6 border-b">
+                  <div className="flex flex-wrap items-center justify-between gap-4 mb-6 pb-6 border-b border-[#7B3F32]/10">
                     <div>
                       <div className="text-sm text-muted-foreground">{language === "ar" ? "رقم الطلب" : "Order ID"}</div>
                       <div className="font-bold text-lg">{order.orderNumber}</div>
+                      <div className="text-sm text-muted-foreground mt-1">{language === "ar" ? "العميل" : "Customer"}: {customerName}</div>
                     </div>
                     <div className="text-right">
                       <div className="text-sm text-muted-foreground">{language === "ar" ? "التاريخ" : "Date"}</div>
@@ -267,7 +295,6 @@ Payment Method: ${order.paymentStatus}
                         {language === "ar" ? "تاريخ التوصيل المتوقع: " : "Estimated Delivery: "}
                         {order.delivryDate ? new Date(order.delivryDate).toLocaleDateString(language === "ar" ? "ar-EG" : "en-US") : "---"}
                       </div>
-                      <div className="mt-2 text-right">{statusBadge(order.status, language)}</div>
                       {((order.status || "").toLowerCase() === "pending" || (order.status || "").toLowerCase() === "processing") && (
                         <div className="mt-4">
                           <Button
@@ -295,6 +322,7 @@ Payment Method: ${order.paymentStatus}
                           <TableHead>{language === "ar" ? "المنتج" : "Product"}</TableHead>
                           <TableHead className="text-center">{language === "ar" ? "الكمية" : "Qty"}</TableHead>
                           <TableHead className="text-right">{language === "ar" ? "السعر" : "Price"}</TableHead>
+                          <TableHead className="text-right">{language === "ar" ? "الإجمالي" : "Total"}</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -310,6 +338,7 @@ Payment Method: ${order.paymentStatus}
                             </TableCell>
                             <TableCell className="text-center">{it.qty}</TableCell>
                             <TableCell className="text-right">{formatPrice(it.unitPrice)} {t("products.price")}</TableCell>
+                            <TableCell className="text-right font-semibold">{formatPrice(it.unitPrice * it.qty)} {t("products.price")}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
@@ -318,7 +347,7 @@ Payment Method: ${order.paymentStatus}
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="border-[#7B3F32]/10 bg-white/85">
                 <CardContent className="pt-6">
                   <h3 className="text-lg font-semibold text-foreground mb-4">{language === "ar" ? "تفاصيل الشحن" : "Shipping Details"}</h3>
                   <div className="grid sm:grid-cols-2 gap-4">
@@ -329,6 +358,7 @@ Payment Method: ${order.paymentStatus}
                     </div>
                     <div className="space-y-1 sm:text-right">
                       <div className="text-sm text-muted-foreground">{language === "ar" ? "معلومات التواصل" : "Contact Information"}</div>
+                      <div className="font-medium">{customerName}</div>
                       <div className="font-medium">{order.phoneNumber}</div>
                       <div className="text-sm text-muted-foreground">{order.email}</div>
                     </div>
@@ -338,23 +368,25 @@ Payment Method: ${order.paymentStatus}
             </div>
 
             <aside>
-              <Card>
+              <Card className="border-[#7B3F32]/10 bg-white/85">
                 <CardContent className="pt-6">
                   <h3 className="text-lg font-semibold text-foreground mb-4">{language === "ar" ? "ملخص الطلب" : "Order Summary"}</h3>
                   <div className="space-y-3">
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">{language === "ar" ? "المجموع الفرعي" : "Subtotal"}</span>
-                      <span>{formatPrice(order.total)} {t("products.price")}</span>
+                      <span>{formatPrice(subtotal)} {t("products.price")}</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">{language === "ar" ? "الشحن" : "Shipping"}</span>
-                      <span>{formatPrice(0)} {t("products.price")}</span>
+                      <span>{formatPrice(shippingFee)} {t("products.price")}</span>
                     </div>
                     <div className="flex justify-between font-bold text-lg text-foreground border-t pt-3 mt-3">
                       <span>{language === "ar" ? "الإجمالي" : "Total"}</span>
                       <span className="text-primary">{formatPrice(order.total)} {t("products.price")}</span>
                     </div>
                     <div className="mt-4 p-3 bg-muted/50 rounded-lg text-sm flex flex-col items-center gap-2">
+                      <span className="text-muted-foreground">{language === "ar" ? "حالة الطلب" : "Order Status"}</span>
+                      {statusBadge(order.status, language)}
                       <span className="text-muted-foreground">{language === "ar" ? "حالة الدفع" : "Payment Status"}</span>
                       {paymentStatusBadge(order.paymentStatus, language)}
                     </div>
