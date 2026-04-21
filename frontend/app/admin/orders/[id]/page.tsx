@@ -245,7 +245,12 @@ export default function OrderDetailPage() {
     }
 
     const config = statusConfig[value]
-    return <Badge className={cn("border", config.className)}>{config.label}</Badge>
+    return (
+      <Badge className={cn("border inline-flex items-center gap-1.5 font-semibold", config.className)}>
+        <span className="h-1.5 w-1.5 rounded-full bg-current" />
+        {config.label}
+      </Badge>
+    )
   }
 
   const formatCurrency = (amount: number) => `${amount.toLocaleString()} ${t("common.egp")}`

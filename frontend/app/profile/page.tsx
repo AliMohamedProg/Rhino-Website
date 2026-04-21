@@ -24,6 +24,46 @@ interface Order {
   paymentStatus: string
 }
 
+const getStatusMeta = (status: string, language: "ar" | "en") => {
+  const normalized = (status || "pending").toLowerCase()
+
+  if (normalized.includes("deliver")) {
+    return {
+      label: language === "ar" ? "تم التوصيل" : "Delivered",
+      className: "bg-green-100 text-green-700 border border-green-200",
+    }
+  }
+  if (normalized.includes("ship")) {
+    return {
+      label: language === "ar" ? "تم الشحن" : "Shipped",
+      className: "bg-purple-100 text-purple-700 border border-purple-200",
+    }
+  }
+  if (normalized.includes("process")) {
+    return {
+      label: language === "ar" ? "قيد المعالجة" : "Processing",
+      className: "bg-blue-100 text-blue-700 border border-blue-200",
+    }
+  }
+  if (normalized.includes("cancel")) {
+    return {
+      label: language === "ar" ? "ملغي" : "Cancelled",
+      className: "bg-red-100 text-red-700 border border-red-200",
+    }
+  }
+  if (normalized.includes("refund")) {
+    return {
+      label: language === "ar" ? "مرتجع" : "Refunded",
+      className: "bg-slate-100 text-slate-700 border border-slate-200",
+    }
+  }
+
+  return {
+    label: language === "ar" ? "قيد الانتظار" : "Pending",
+    className: "bg-amber-100 text-amber-700 border border-amber-200",
+  }
+}
+
 const menuItems = [
   { key: "profile.orders", icon: Package },
 ]
@@ -192,13 +232,15 @@ export default function ProfilePage() {
                   </div>
                 ) : (
                   <div className="space-y-8">
-                    {orders.map((order) => (
+                    {orders.map((order) => {
+                      const statusMeta = getStatusMeta(order.status, language === "ar" ? "ar" : "en")
+                      return (
                       <div key={order.id} className="group bg-[#FDFDFD] border border-sand/20 rounded-[2rem] p-10 hover:shadow-xl hover:shadow-mahogany/5 transition-all duration-500">
                         <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-10">
                           <div className="flex-1 space-y-4">
                             <div className="flex items-center gap-3">
-                              <span className="text-[10px] font-black tracking-widest text-mahogany uppercase bg-blush px-3 py-1 rounded-full">
-                                {order.status}
+                              <span className={`text-[10px] font-black tracking-widest uppercase px-3 py-1 rounded-full ${statusMeta.className}`}>
+                                {statusMeta.label}
                               </span>
                               <span className="text-taupe opacity-30">|</span>
                               <p className="text-[10px] text-taupe font-bold tracking-widest uppercase opacity-60">
@@ -225,7 +267,7 @@ export default function ProfilePage() {
                               {language === "ar" ? "التفاصيل" : "View Details"}
                             </Link>
 
-                            {(order.status === "Pending" || order.status === "Processing") && (
+                            {(order.status || "").toLowerCase().includes("pending") || (order.status || "").toLowerCase().includes("process") ? (
                               <Button
                                 variant="ghost"
                                 className="flex-1 xl:flex-none h-12 px-8 text-red-500 hover:bg-red-50 text-[9px] font-black tracking-widest uppercase rounded-full"
@@ -233,11 +275,11 @@ export default function ProfilePage() {
                               >
                                 {language === "ar" ? "إلغاء الطلب" : "Cancel order"}
                               </Button>
-                            )}
+                            ) : null}
                           </div>
                         </div>
                       </div>
-                    ))}
+                    )})}
                   </div>
                 )}
               </div>

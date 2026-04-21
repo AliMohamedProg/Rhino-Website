@@ -100,8 +100,13 @@ export default function OrdersPage() {
       cancelled: { label: "Cancelled", className: "bg-red-100 text-red-700 border-red-200" },
       refunded: { label: "Refunded", className: "bg-slate-100 text-slate-600 border-slate-200" },
     }
-    const config = statusConfig[status]
-    return <Badge className={`border ${config.className}`}>{config.label}</Badge>
+    const config = statusConfig[status] || statusConfig.pending
+    return (
+      <Badge className={`border inline-flex items-center gap-1.5 font-semibold ${config.className}`}>
+        <span className="h-1.5 w-1.5 rounded-full bg-current" />
+        {config.label}
+      </Badge>
+    )
   }
 
   const getPaymentStatusBadge = (paymentStatus: string) => {

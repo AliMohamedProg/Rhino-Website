@@ -41,20 +41,22 @@ interface Order {
 }
 
 function statusBadge(status: string, language: string) {
-  const displayStatus = status || "Pending"
-  switch (displayStatus) {
-    case "Pending":
+  const normalized = (status || "Pending").toLowerCase()
+  switch (normalized) {
+    case "pending":
       return <Badge className="bg-yellow-500 hover:bg-yellow-600 border-none">{language === "ar" ? "قيد الانتظار" : "Pending"}</Badge>
-    case "Processing":
+    case "processing":
       return <Badge className="bg-blue-500 hover:bg-blue-600 border-none">{language === "ar" ? "جاري المعالجة" : "Processing"}</Badge>
-    case "Shipped":
+    case "shipped":
       return <Badge className="bg-purple-500 hover:bg-purple-600 border-none">{language === "ar" ? "تم الشحن" : "Shipped"}</Badge>
-    case "Delivered":
+    case "delivered":
       return <Badge className="bg-green-500 hover:bg-green-600 border-none">{language === "ar" ? "تم التوصيل" : "Delivered"}</Badge>
-    case "Cancelled":
+    case "cancelled":
       return <Badge className="bg-red-500 hover:bg-red-600 border-none">{language === "ar" ? "ملغي" : "Cancelled"}</Badge>
+    case "refunded":
+      return <Badge className="bg-slate-500 hover:bg-slate-600 border-none">{language === "ar" ? "مرتجع" : "Refunded"}</Badge>
     default:
-      return <Badge variant="outline">{displayStatus}</Badge>
+      return <Badge variant="outline">{status || "Pending"}</Badge>
   }
 }
 
@@ -266,7 +268,7 @@ Payment Method: ${order.paymentStatus}
                         {order.delivryDate ? new Date(order.delivryDate).toLocaleDateString(language === "ar" ? "ar-EG" : "en-US") : "---"}
                       </div>
                       <div className="mt-2 text-right">{statusBadge(order.status, language)}</div>
-                      {(order.status === "Pending" || order.status === "Processing") && (
+                      {((order.status || "").toLowerCase() === "pending" || (order.status || "").toLowerCase() === "processing") && (
                         <div className="mt-4">
                           <Button
                             variant="outline"
