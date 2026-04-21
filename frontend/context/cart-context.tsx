@@ -34,8 +34,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const refreshCart = async () => {
     try {
-      const cart = await ApiClient.get("api/Cart")
-      if (cart && cart.items) {
+      const cart = await ApiClient.get<any>("api/Cart")
+      if (cart && Array.isArray(cart.items)) {
         const mappedItems: CartItem[] = cart.items.map((item: any) => ({
           id: item.id ?? item.Id ?? "",
           itemId: item.itemId ?? item.ItemId ?? "",

@@ -78,7 +78,7 @@ export default function OrdersPage() {
       try {
         setLoading(true)
         setLoadError(false)
-        const data = await ApiClient.get("api/admin/Orders")
+        const data = await ApiClient.get<any>("api/admin/Orders")
         const list = Array.isArray(data) ? data : Array.isArray(data?.orders) ? data.orders : Array.isArray(data?.data) ? data.data : []
         const mapped = list.map((order: ApiOrder, index: number) => mapApiOrder(order, index))
         if (isMounted) setOrders(mapped)

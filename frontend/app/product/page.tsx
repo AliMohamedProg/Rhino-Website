@@ -115,8 +115,8 @@ export default function CategoryPage() {
         })) as Item[]
         setProducts(normalized)
 
-        const catData = await ApiClient.get("api/category")
-        setCategories(catData)
+        const catData = await ApiClient.get<any[]>("api/category")
+        setCategories((Array.isArray(catData) ? catData : []) as Category[])
       } catch (err) {
         console.error(err)
       } finally {
@@ -396,7 +396,7 @@ const fetchReviewStats = async () => {
                           : undefined
                       }
                       rating={reviewStatsByProductId[product.id]?.average ?? product.overallRating ?? 0}
-                      reviewsCount={reviewStatsByProductId[product.id]?.count ?? 0}
+                      reviewsCountVal={reviewStatsByProductId[product.id]?.count ?? 0}
 mainImage={product.mainImage}
                       colorsRaw={product.colorsEn}
                       stockNumber={product.stockNumber}

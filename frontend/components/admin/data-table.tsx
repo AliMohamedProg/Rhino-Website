@@ -1,7 +1,6 @@
 "use client"
 
-import React from "react"
-import { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import {
@@ -19,7 +18,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react"
+import {
+  Search,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
+} from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface Column<T> {
@@ -53,15 +61,17 @@ export function DataTable<T extends { id: string }>({
   const [sortBy, setSortBy] = useState<string | null>(null)
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc")
 
-  const filteredData = searchKey
-    ? data.filter((item) => {
-        const value = item[searchKey]
-        if (typeof value === "string") {
-          return value.toLowerCase().includes(searchQuery.toLowerCase())
-        }
-        return true
-      })
-    : data
+  const filteredData = useMemo(() => {
+    if (!searchKey) return data
+
+    return data.filter((item) => {
+      const value = item[searchKey]
+      if (typeof value === "string") {
+        return value.toLowerCase().includes(searchQuery.toLowerCase())
+      }
+      return true
+    })
+  }, [data, searchKey, searchQuery])
 
   const getComparableValue = (item: T, key: string): string | number => {
     const value = item[key as keyof T]
@@ -72,16 +82,18 @@ export function DataTable<T extends { id: string }>({
     return String(value).toLowerCase()
   }
 
-  const sortedData = sortBy
-    ? [...filteredData].sort((a, b) => {
-        const aValue = getComparableValue(a, sortBy)
-        const bValue = getComparableValue(b, sortBy)
+  const sortedData = useMemo(() => {
+    if (!sortBy) return filteredData
 
-        if (aValue < bValue) return sortDirection === "asc" ? -1 : 1
-        if (aValue > bValue) return sortDirection === "asc" ? 1 : -1
-        return 0
-      })
-    : filteredData
+    return [...filteredData].sort((a, b) => {
+      const aValue = getComparableValue(a, sortBy)
+      const bValue = getComparableValue(b, sortBy)
+
+      if (aValue < bValue) return sortDirection === "asc" ? -1 : 1
+      if (aValue > bValue) return sortDirection === "asc" ? 1 : -1
+      return 0
+    })
+  }, [filteredData, sortBy, sortDirection])
 
   const totalItems = sortedData.length
   const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage))
@@ -94,9 +106,7 @@ export function DataTable<T extends { id: string }>({
   }
 
   useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(totalPages)
-    }
+    if (currentPage > totalPages) setCurrentPage(totalPages)
   }, [currentPage, totalPages])
 
   const toggleSort = (key: string) => {
@@ -109,29 +119,34 @@ export function DataTable<T extends { id: string }>({
   }
 
   const renderSortIcon = (key: string) => {
-    if (sortBy !== key) return <ArrowUpDown className="h-3.5 w-3.5 text-muted-foreground/70" />
-    return sortDirection === "asc"
-      ? <ArrowUp className="h-3.5 w-3.5 text-primary" />
-      : <ArrowDown className="h-3.5 w-3.5 text-primary" />
+    if (sortBy !== key) return <ArrowUpDown className="h-3.5 w-3.5 text-[#94867a]" />
+    return sortDirection === "asc" ? (
+      <ArrowUp className="h-3.5 w-3.5 text-[#8f3f2a]" />
+    ) : (
+      <ArrowDown className="h-3.5 w-3.5 text-[#8f3f2a]" />
+    )
   }
 
   return (
     <div className="space-y-4" role="region" aria-label="Data table">
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-        <div className="relative flex-1 max-w-sm">
-          <label htmlFor="table-search" className="sr-only">Search</label>
-          <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-slate-400 pointer-events-none" />
-           <Input
-             id="table-search"
-             placeholder={searchPlaceholder || "Search..."}
-             value={searchQuery}
-             onChange={(e) => {
-               setSearchQuery(e.target.value)
-               setCurrentPage(1)
-             }}
-             className="pl-9 bg-white border-[#7B3F32]/15 focus-visible:ring-2 focus-visible:ring-primary rounded-xl"
-           />
+      <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
+        <div className="relative max-w-sm flex-1">
+          <label htmlFor="table-search" className="sr-only">
+            Search
+          </label>
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94867a]" />
+          <Input
+            id="table-search"
+            placeholder={searchPlaceholder || "Search..."}
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value)
+              setCurrentPage(1)
+            }}
+            className="admin-input h-11 border-[#8f3f2a]/20 bg-white pl-9"
+          />
         </div>
+
         <Select
           value={itemsPerPage.toString()}
           onValueChange={(value) => {
@@ -139,36 +154,38 @@ export function DataTable<T extends { id: string }>({
             setCurrentPage(1)
           }}
         >
-          <SelectTrigger className="w-[140px] border-[#7B3F32]/20 bg-white/80 rounded-xl focus:ring-[#7B3F32]/20 shadow-sm" aria-label="Items per page">
+          <SelectTrigger
+            className="admin-input h-11 w-[148px] border-[#8f3f2a]/20 bg-white"
+            aria-label="Items per page"
+          >
             <SelectValue />
           </SelectTrigger>
-          <SelectContent className="rounded-xl border-[#7B3F32]/10 shadow-xl">
-            <SelectItem value="5" className="rounded-lg focus:bg-[#f6eee8] focus:text-[#7B3F32] transition-colors">5 per page</SelectItem>
-            <SelectItem value="10" className="rounded-lg focus:bg-[#f6eee8] focus:text-[#7B3F32] transition-colors">10 per page</SelectItem>
-            <SelectItem value="20" className="rounded-lg focus:bg-[#f6eee8] focus:text-[#7B3F32] transition-colors">20 per page</SelectItem>
-            <SelectItem value="50" className="rounded-lg focus:bg-[#f6eee8] focus:text-[#7B3F32] transition-colors">50 per page</SelectItem>
+          <SelectContent className="rounded-xl border-[#8f3f2a]/15 bg-white shadow-xl">
+            <SelectItem value="5">5 per page</SelectItem>
+            <SelectItem value="10">10 per page</SelectItem>
+            <SelectItem value="20">20 per page</SelectItem>
+            <SelectItem value="50">50 per page</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
-       <div className="rounded-3xl border border-[#7B3F32]/12 overflow-hidden shadow-[0_10px_26px_rgba(0,0,0,0.05)] bg-white/70 backdrop-blur-md">
+      <div className="admin-card overflow-hidden rounded-[1.6rem]">
         <Table role="table">
           <TableHeader>
-           <TableRow className="bg-[#f7efe7] border-[#7B3F32]/10 hover:bg-[#f7efe7]">
-             {columns.map((column, index) => (
-               <TableHead
-                 key={column.key}
-                 className={cn(
-                   "text-left text-xs font-semibold text-[#6f6157] uppercase tracking-wider h-12",
-                   column.className
-                 )}
-                  style={{ width: index === 0 ? 'auto' : undefined }}
+            <TableRow className="border-[#8f3f2a]/10 bg-[#f8f1ec] hover:bg-[#f8f1ec]">
+              {columns.map((column) => (
+                <TableHead
+                  key={column.key}
+                  className={cn(
+                    "h-12 text-left text-[11px] font-semibold uppercase tracking-[0.12em] text-[#7c6f65]",
+                    column.className
+                  )}
                 >
                   {column.sortable !== false ? (
                     <button
                       type="button"
                       onClick={() => toggleSort(column.key)}
-                      className="inline-flex items-center gap-1.5 hover:text-[#3D2B1F] transition-colors"
+                      className="inline-flex items-center gap-1.5 transition-colors hover:text-[#3d2b1f]"
                     >
                       <span>{column.header}</span>
                       {renderSortIcon(column.key)}
@@ -182,30 +199,24 @@ export function DataTable<T extends { id: string }>({
           </TableHeader>
           <TableBody>
             {paginatedData.length === 0 ? (
-             <TableRow>
-               <TableCell colSpan={columns.length} className="h-28 text-center text-[#8c7b6f]">
-                 No data found
-               </TableCell>
-             </TableRow>
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-28 text-center text-[#94867a]">
+                  No data found
+                </TableCell>
+              </TableRow>
             ) : (
               paginatedData.map((item, rowIndex) => (
-                 <TableRow
-                   key={item.id}
-                   className={cn(
-                     "border-[#7B3F32]/10 hover:bg-[#fcf6f1] transition-colors duration-150",
-                     onRowClick && "cursor-pointer",
-                     rowIndex % 2 === 0 ? "bg-white" : "bg-[#fffaf6]"
-                   )}
+                <TableRow
+                  key={item.id}
+                  className={cn(
+                    "border-[#8f3f2a]/10 transition-colors",
+                    rowIndex % 2 === 0 ? "bg-white/95" : "bg-[#fff9f5]",
+                    onRowClick ? "cursor-pointer hover:bg-[#fff3ea]" : "hover:bg-[#fff3ea]"
+                  )}
                   onClick={() => onRowClick?.(item)}
                 >
                   {columns.map((column) => (
-                     <TableCell
-                       key={column.key}
-                       className={cn(
-                         "text-[#3D2B1F] py-4",
-                         column.className
-                       )}
-                    >
+                    <TableCell key={column.key} className={cn("py-4 text-[#3d2b1f]", column.className)}>
                       {column.render
                         ? column.render(item)
                         : (item[column.key as keyof T] as React.ReactNode)}
@@ -218,31 +229,35 @@ export function DataTable<T extends { id: string }>({
         </Table>
       </div>
 
-       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
-         <p className="text-muted-foreground order-2 sm:order-1">
-           Showing <span className="font-medium text-foreground">{totalItems === 0 ? 0 : startIndex + 1}</span> to <span className="font-medium text-foreground">{Math.min(endIndex, totalItems)}</span> of <span className="font-medium text-foreground">{totalItems}</span> entries
-         </p>
-        <div className="flex items-center gap-1 order-1 sm:order-2" role="navigation" aria-label="Pagination">
-           <Button
-             variant="outline"
-             size="sm"
-             className="border-[#7B3F32]/20 text-[#7B3F32] hover:bg-[#7B3F32]/5 hover:border-[#7B3F32]/40 rounded-lg h-9 w-9 p-0 bg-transparent"
-             onClick={() => goToPage(1)}
-             disabled={currentPage === 1 || totalItems === 0}
-             aria-label="First page"
-           >
-             <ChevronsLeft className="h-4 w-4" />
-           </Button>
-           <Button
-             variant="outline"
-             size="sm"
-             className="border-[#7B3F32]/20 text-[#7B3F32] hover:bg-[#7B3F32]/5 hover:border-[#7B3F32]/40 rounded-lg h-9 w-9 p-0 bg-transparent"
-             onClick={() => goToPage(currentPage - 1)}
-             disabled={currentPage === 1 || totalItems === 0}
-             aria-label="Previous page"
-           >
+      <div className="flex flex-col items-center justify-between gap-4 text-sm sm:flex-row">
+        <p className="text-[#7c6f65]">
+          Showing <span className="font-semibold text-[#3d2b1f]">{totalItems === 0 ? 0 : startIndex + 1}</span> to{" "}
+          <span className="font-semibold text-[#3d2b1f]">{Math.min(endIndex, totalItems)}</span> of{" "}
+          <span className="font-semibold text-[#3d2b1f]">{totalItems}</span> entries
+        </p>
+
+        <div className="flex items-center gap-1" role="navigation" aria-label="Pagination">
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-9 w-9 rounded-lg border-[#8f3f2a]/20 p-0 text-[#8f3f2a] hover:bg-[#f8ece6]"
+            onClick={() => goToPage(1)}
+            disabled={currentPage === 1 || totalItems === 0}
+            aria-label="First page"
+          >
+            <ChevronsLeft className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-9 w-9 rounded-lg border-[#8f3f2a]/20 p-0 text-[#8f3f2a] hover:bg-[#f8ece6]"
+            onClick={() => goToPage(currentPage - 1)}
+            disabled={currentPage === 1 || totalItems === 0}
+            aria-label="Previous page"
+          >
             <ChevronLeft className="h-4 w-4" />
           </Button>
+
           {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
             let pageNum: number
             if (totalPages <= 5) {
@@ -254,41 +269,43 @@ export function DataTable<T extends { id: string }>({
             } else {
               pageNum = currentPage - 2 + i
             }
+
             return (
-               <Button
-                 key={pageNum}
-                 variant={currentPage === pageNum ? "default" : "outline"}
-                 size="sm"
-                 className={cn(
-                   "w-9 h-9 rounded-lg p-0",
-                   currentPage === pageNum
-                     ? "bg-gradient-to-r from-[#7B3F32] to-[#9e5948] hover:from-[#5f3026] hover:to-[#8e4f3f] text-white shadow-sm border-0"
-                     : "border-[#7B3F32]/20 text-[#7B3F32] hover:bg-[#7B3F32]/5 hover:border-[#7B3F32]/40 bg-transparent"
-                 )}
+              <Button
+                key={pageNum}
+                variant={currentPage === pageNum ? "default" : "outline"}
+                size="sm"
+                className={cn(
+                  "h-9 w-9 rounded-lg p-0",
+                  currentPage === pageNum
+                    ? "border-0 bg-gradient-to-r from-[#8f3f2a] to-[#c16043] text-white"
+                    : "border-[#8f3f2a]/20 bg-transparent text-[#8f3f2a] hover:bg-[#f8ece6]"
+                )}
                 onClick={() => goToPage(pageNum)}
               >
                 {pageNum}
               </Button>
             )
           })}
-           <Button
-             variant="outline"
-             size="sm"
-             className="border-[#7B3F32]/20 text-[#7B3F32] hover:bg-[#7B3F32]/5 hover:border-[#7B3F32]/40 rounded-lg h-9 w-9 p-0 bg-transparent"
-             onClick={() => goToPage(currentPage + 1)}
-             disabled={currentPage === totalPages || totalItems === 0}
-             aria-label="Next page"
-           >
-             <ChevronRight className="h-4 w-4" />
-           </Button>
-           <Button
-             variant="outline"
-             size="sm"
-             className="border-[#7B3F32]/20 text-[#7B3F32] hover:bg-[#7B3F32]/5 hover:border-[#7B3F32]/40 rounded-lg h-9 w-9 p-0 bg-transparent"
-             onClick={() => goToPage(totalPages)}
-             disabled={currentPage === totalPages || totalItems === 0}
-             aria-label="Last page"
-           >
+
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-9 w-9 rounded-lg border-[#8f3f2a]/20 p-0 text-[#8f3f2a] hover:bg-[#f8ece6]"
+            onClick={() => goToPage(currentPage + 1)}
+            disabled={currentPage === totalPages || totalItems === 0}
+            aria-label="Next page"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-9 w-9 rounded-lg border-[#8f3f2a]/20 p-0 text-[#8f3f2a] hover:bg-[#f8ece6]"
+            onClick={() => goToPage(totalPages)}
+            disabled={currentPage === totalPages || totalItems === 0}
+            aria-label="Last page"
+          >
             <ChevronsRight className="h-4 w-4" />
           </Button>
         </div>

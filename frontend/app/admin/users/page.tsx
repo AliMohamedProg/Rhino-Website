@@ -78,7 +78,7 @@ export default function UsersPage() {
       try {
         setLoading(true)
         setLoadError(false)
-        const data = await ApiClient.get("api/admin/users/get-all")
+        const data = await ApiClient.get<any>("api/admin/users/get-all")
         const list = Array.isArray(data)
           ? data
           : Array.isArray(data?.users)

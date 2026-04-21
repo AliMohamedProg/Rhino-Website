@@ -364,7 +364,7 @@ export default function CategoryPage() {
                           : undefined
                       }
                       rating={reviewStatsByProductId[product.id]?.average ?? product.overallRating ?? 0}
-                      reviewsCount={reviewStatsByProductId[product.id]?.count ?? 0}
+                      reviewsCountVal={reviewStatsByProductId[product.id]?.count ?? 0}
                       mainImage={product.mainImage}
                       colorsRaw={product.colorsEn}
                       stockNumber={product.stockNumber}

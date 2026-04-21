@@ -324,7 +324,7 @@ export function ProductCarousel() {
                   product={{
                     ...product,
                     rating: stats?.average ?? 0,
-                    reviewsCount: stats?.count ?? 0
+                    reviewsCountVal: stats?.count ?? 0
                   }}
                 />
               )

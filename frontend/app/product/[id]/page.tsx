@@ -111,7 +111,7 @@ export default function ProductDetailsPage() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const data = await ApiClient.get(`api/Items/${id}`)
+        const data = await ApiClient.get<any>(`api/Items/${id}`)
         const colorsValue = data.colors ?? data.Colors ?? ""
         const rawImages = data.images ?? data.Images ?? []
         const price = Number(data.price ?? data.Price ?? 0)
@@ -129,12 +129,18 @@ export default function ProductDetailsPage() {
         const images = [mainImage, ...normalizedImages].filter((img) => img && img.length > 0)
         const uniqueImages = Array.from(new Set(images))
 
-        const normalizedProduct = {
+        const normalizedProduct: Product = {
           ...data,
+          id: String(data.id ?? data.Id ?? ""),
+          nameAr: String(data.nameAr ?? data.NameAr ?? ""),
+          nameEn: String(data.nameEn ?? data.NameEn ?? ""),
+          descriptionAr: String(data.descriptionAr ?? data.DescriptionAr ?? ""),
+          descriptionEn: String(data.descriptionEn ?? data.DescriptionEn ?? ""),
           colorsEn: data.colorsEn ?? data.ColorsEn ?? normalizeColorNames(colorsValue).join(","),
           colorsAr: data.colorsAr ?? data.ColorsAr ?? "",
-          colors: colorsValue,
-          material: data.material ?? data.Material ?? "",
+          materialEn: data.materialEn ?? data.MaterialEn ?? data.material ?? data.Material ?? "",
+          materialAr: data.materialAr ?? data.MaterialAr ?? "",
+          overallRating: Number(data.overallRating ?? data.OverallRating ?? 0),
           images: uniqueImages,
           mainImage,
           price: Number.isFinite(price) ? price : 0,

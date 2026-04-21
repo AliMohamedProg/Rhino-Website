@@ -290,7 +290,7 @@ export function Header() {
                 )}
 
                 {/* Profile icon */}
-                <Link href="/profile" className="hover:scale-125 transition-transform duration-300" title={user?.firstName ?? user?.email ?? "Profile"}>
+                <Link href="/profile" className="hover:scale-125 transition-transform duration-300" title={user?.userName ?? user?.email ?? "Profile"}>
                   <UserIcon className="w-5 h-5 stroke-[1.5]" />
                 </Link>
 

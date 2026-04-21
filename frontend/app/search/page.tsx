@@ -183,8 +183,8 @@ export default function SearchPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const data = await ApiClient.get("api/items")
-        setProducts(data)
+        const data = await ApiClient.get<SearchItem[]>("api/items")
+        setProducts(Array.isArray(data) ? data : [])
       } catch (err: any) {
         setError(err.message)
       } finally {

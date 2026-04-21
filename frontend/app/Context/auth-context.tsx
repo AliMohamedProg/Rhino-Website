@@ -28,17 +28,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const fetchUser = async () => {
     try {
       const data = await ApiClient.auth.me()
-      // Map backend response to user object
-      // Handle both PascalCase (Swagger) and camelCase (JS usual) and the previous userId/userName structure
-      const userEmail = data.email || data.Email || data.userName || data.UserName;
-      const isAdminEmail = userEmail === "admin@gmail.com";
+      const userEmail = data.email || ""
+      const isAdminEmail = userEmail === "admin@gmail.com"
+      const normalizedRole = data.role || (isAdminEmail ? "Admin" : "User")
 
       setUser({
-        id: data.id || data.Id || data.userId || data.UserId || "",
-        userName: data.fullName || data.fullNameEn || data.userName || data.UserName || userEmail || "User",
+        id: data.id || "",
+        userName: data.fullName || userEmail || "User",
         email: userEmail || "",
-        role: data.role || data.Role || (isAdminEmail ? "Admin" : "User"),
-        isAdmin: (data.role || data.Role || "").toLowerCase() === "admin" || isAdminEmail
+        role: normalizedRole,
+        isAdmin: normalizedRole.toLowerCase() === "admin" || isAdminEmail
       })
     } catch {
       setUser(null)

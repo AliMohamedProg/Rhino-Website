@@ -42,9 +42,10 @@ export default function ProfilePage() {
   const fetchOrders = async () => {
     try {
       setLoading(true)
-      const data = await ApiClient.get("api/order/my-orders")
-      setOrders(data)
-      setOrderCount(data.length)
+      const data = await ApiClient.get<Order[]>("api/order/my-orders")
+      const list = Array.isArray(data) ? data : []
+      setOrders(list)
+      setOrderCount(list.length)
     } catch (err) {
       console.error("Failed to fetch orders:", err)
     } finally {

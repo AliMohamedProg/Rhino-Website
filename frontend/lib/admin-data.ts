@@ -40,8 +40,8 @@ export async function addSlider(sliderData: {
   imageUrl: string
 }): Promise<Slider | null> {
   try {
-    const result = await ApiClient.post("api/admin/Sliders/add-slider", sliderData)
-    return result
+    const result = await ApiClient.post<Slider>("api/admin/Sliders/add-slider", sliderData)
+    return result as Slider
   } catch (error) {
     console.error("Error adding slider:", error)
     return null
@@ -55,8 +55,8 @@ export async function editSlider(sliderData: {
   imageUrl: string
 }): Promise<Slider | null> {
   try {
-    const result = await ApiClient.post("api/admin/Sliders/edit-slider", sliderData)
-    return result
+    const result = await ApiClient.post<Slider>("api/admin/Sliders/edit-slider", sliderData)
+    return result as Slider
   } catch (error) {
     console.error("Error editing slider:", error)
     return null
@@ -299,5 +299,4 @@ export const mockProducts: Product[] = [
     updatedAt: "2025-01-15",
   },
 ]
-
 

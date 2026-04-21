@@ -260,7 +260,7 @@ export function ProductCard({
           {/* Rating */}
           {reviewsCountVal > 0 && (
             <div className="flex items-center gap-2 mb-4">
-              <Star value={fetchedAverageRating} />
+              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
               <span className="text-sm font-medium text-[#6f6157]">
                 {fetchedAverageRating.toFixed(1)} ({reviewsCountVal} {language === "ar" ? "تقييم" : "reviews"})
               </span>

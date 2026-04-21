@@ -16,10 +16,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
 import type { Product } from "@/lib/admin-data"
 import type { AdminCategoryDto } from "@/lib/admin-items"
-import { ArrowLeft, ArrowRight, Upload, X } from "lucide-react"
+import { ArrowLeft, Upload, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -35,41 +34,43 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     const list = [item?.mainImage ?? "", ...(item?.images ?? [])]
       .map((value) => value?.trim())
       .filter((value) => value && value.length > 0) as string[]
+
     return Array.from(new Set(list))
   }
 
-   const [formData, setFormData] = useState({
-     nameEn: product?.nameEn || "",
-     descriptionEn: product?.descriptionEn || "",
-     price: product?.originalPrice ?? product?.price ?? 0,
-     discountAmount: product?.discountAmount ?? 0,
-     stock: product?.stock || 0,
-     categoryId: product?.categoryId || "",
-     images: buildInitialImages(product),
-     mainImage: product?.mainImage || product?.images?.[0] || "",
-     colorsEn: product?.colorsEn || "",
-     materialEn: product?.materialEn || "",
-   })
+  const [formData, setFormData] = useState({
+    nameEn: product?.nameEn || "",
+    descriptionEn: product?.descriptionEn || "",
+    price: product?.originalPrice ?? product?.price ?? 0,
+    discountAmount: product?.discountAmount ?? 0,
+    stock: product?.stock || 0,
+    categoryId: product?.categoryId || "",
+    images: buildInitialImages(product),
+    mainImage: product?.mainImage || product?.images?.[0] || "",
+    colorsEn: product?.colorsEn || "",
+    materialEn: product?.materialEn || "",
+  })
 
   const [categories, setCategories] = useState<AdminCategoryDto[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
 
-   useEffect(() => {
-     if (!product) return
-     setFormData({
-       nameEn: product.nameEn || "",
-       descriptionEn: product.descriptionEn || "",
-       price: product.originalPrice ?? product.price ?? 0,
-       discountAmount: product.discountAmount ?? 0,
-       stock: product.stock || 0,
-       categoryId: product.categoryId || "",
-       images: buildInitialImages(product),
-       mainImage: product.mainImage || product.images?.[0] || "",
-       colorsEn: product?.colorsEn || "",
-       materialEn: product?.materialEn || "",
-     })
-   }, [product])
+  useEffect(() => {
+    if (!product) return
+
+    setFormData({
+      nameEn: product.nameEn || "",
+      descriptionEn: product.descriptionEn || "",
+      price: product.originalPrice ?? product.price ?? 0,
+      discountAmount: product.discountAmount ?? 0,
+      stock: product.stock || 0,
+      categoryId: product.categoryId || "",
+      images: buildInitialImages(product),
+      mainImage: product.mainImage || product.images?.[0] || "",
+      colorsEn: product.colorsEn || "",
+      materialEn: product.materialEn || "",
+    })
+  }, [product])
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -84,78 +85,11 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     fetchCategories()
   }, [])
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-
-    try {
-      if (!formData.categoryId) {
-        alert("Please select a category")
-        setIsSubmitting(false)
-        return
-      }
-
-      const mainImage = formData.mainImage || formData.images[0] || ""
-      if (!mainImage) {
-        alert("Please upload a main image")
-        setIsSubmitting(false)
-        return
-      }
-
-      const discountAmount = Math.min(
-        100,
-        Math.max(0, Number(formData.discountAmount) || 0)
-      )
-      const currentState =
-        mode === "edit" && product?.status === "inactive" ? 0 : 1
-      const colorsCheckEn = validateColorsInputEn(formData.colorsEn)
-      if (!colorsCheckEn.valid) {
-        alert("Please enter colors in the correct format: color,color,color (no spaces, use letters, numbers, hyphens only)")
-        setIsSubmitting(false)
-        return
-      }
-
-       const materialValEn = (formData.materialEn || "").trim()
-       const payload = {
-         id: product?.id || "00000000-0000-0000-0000-000000000000",
-         nameEn: formData.nameEn,
-         nameAr: "", // Removed from form
-         descriptionEn: formData.descriptionEn,
-         descriptionAr: "", // Removed from form
-         price: formData.price,
-         discountAmount,
-         stockNumber: formData.stock,
-         categoryId: formData.categoryId,
-         colorsEn: colorsCheckEn.normalized,
-         colorsAr: "", // Removed from form
-         materialEn: materialValEn,
-         materialAr: "", // Removed from form
-         mainImage,
-         images: formData.images.map((url) => ({ imageUrl: url })),
-         currentState,
-       }
-
-
-      if (mode === "create") {
-        await ApiClient.post("api/admin/Item/add-item", payload)
-      } else {
-        await ApiClient.post("api/admin/Item/edit-item", payload)
-      }
-
-      router.push("/admin/products")
-    } catch (err) {
-      console.error("Failed to save product:", err)
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
-  const mergeImages = (current: string[], incoming: string[]) => {
-    return Array.from(new Set([...current, ...incoming]))
-  }
+  const mergeImages = (current: string[], incoming: string[]) => Array.from(new Set([...current, ...incoming]))
 
   const handleUploadImages = async (files: FileList | null) => {
     if (!files || files.length === 0) return
+
     setIsUploading(true)
 
     try {
@@ -187,8 +121,8 @@ export function ProductForm({ product, mode }: ProductFormProps) {
   const handleRemoveImage = (imageUrl: string) => {
     setFormData((prev) => {
       const nextImages = prev.images.filter((url) => url !== imageUrl)
-      const nextMainImage =
-        prev.mainImage === imageUrl ? nextImages[0] || "" : prev.mainImage
+      const nextMainImage = prev.mainImage === imageUrl ? nextImages[0] || "" : prev.mainImage
+
       return {
         ...prev,
         images: nextImages,
@@ -208,132 +142,192 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
-  const normalizedDiscount = Math.min(
-    100,
-    Math.max(0, Number(formData.discountAmount) || 0)
-  )
-  const discountedPrice = Math.max(
-    0,
-    Math.round(formData.price * (1 - normalizedDiscount / 100))
-  )
   const validateColorsInputEn = (value: string) => {
     const standardizedStr = value.replace(/،/g, ",")
     const trimmed = standardizedStr.trim()
     if (!trimmed) return { valid: true, normalized: "" }
-    
-    // Remove all spaces first
+
     const noSpaces = trimmed.replace(/\s+/g, "")
     const parts = noSpaces.split(",").map((part) => part.trim()).filter(Boolean)
-    
     if (parts.length === 0) return { valid: true, normalized: "" }
-    
-    // Validate that each part is valid (letters, numbers, hyphens only)
+
     const regex = /^[A-Za-z0-9\-]+$/
-    const allValid = parts.every(part => regex.test(part))
-    
+    const allValid = parts.every((part) => regex.test(part))
     if (!allValid) return { valid: false, normalized: noSpaces }
-    
-    // Return normalized colors without spaces
+
     return { valid: true, normalized: parts.join(",") }
   }
+
+  const normalizedDiscount = Math.min(100, Math.max(0, Number(formData.discountAmount) || 0))
+  const discountedPrice = Math.max(0, Math.round(formData.price * (1 - normalizedDiscount / 100)))
 
   const colorsValidationEn = validateColorsInputEn(formData.colorsEn || "")
   const showColorsErrorEn = formData.colorsEn.trim().length > 0 && !colorsValidationEn.valid
 
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    try {
+      if (!formData.categoryId) {
+        alert("Please select a category")
+        setIsSubmitting(false)
+        return
+      }
+
+      const mainImage = formData.mainImage || formData.images[0] || ""
+      if (!mainImage) {
+        alert("Please upload a main image")
+        setIsSubmitting(false)
+        return
+      }
+
+      const discountAmount = Math.min(100, Math.max(0, Number(formData.discountAmount) || 0))
+      const currentState = mode === "edit" && product?.status === "inactive" ? 0 : 1
+
+      if (!colorsValidationEn.valid) {
+        alert("Please enter colors in this format: color,color,color")
+        setIsSubmitting(false)
+        return
+      }
+
+      const payload = {
+        id: product?.id || "00000000-0000-0000-0000-000000000000",
+        nameEn: formData.nameEn,
+        nameAr: "",
+        descriptionEn: formData.descriptionEn,
+        descriptionAr: "",
+        price: formData.price,
+        discountAmount,
+        stockNumber: formData.stock,
+        categoryId: formData.categoryId,
+        colorsEn: colorsValidationEn.normalized,
+        colorsAr: "",
+        materialEn: (formData.materialEn || "").trim(),
+        materialAr: "",
+        mainImage,
+        images: formData.images.map((url) => ({ imageUrl: url })),
+        currentState,
+      }
+
+      if (mode === "create") {
+        await ApiClient.post("api/admin/Item/add-item", payload)
+      } else {
+        await ApiClient.post("api/admin/Item/edit-item", payload)
+      }
+
+      router.push("/admin/products")
+    } catch (err) {
+      console.error("Failed to save product:", err)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between bg-white/80 backdrop-blur-xl p-6 rounded-3xl border border-[#7B3F32]/10 shadow-sm relative overflow-hidden">
-        <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full bg-[#7B3F32]/5 blur-2xl z-0" />
-        <div className="flex items-center gap-4 relative z-10">
-          <Button variant="ghost" size="icon" asChild className="hover:bg-[#f6eee8] text-[#7B3F32] h-10 w-10 rounded-xl">
-            <Link href="/admin/products">
-              <ArrowLeft className="h-5 w-5" />
-            </Link>
-          </Button>
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-[#2f2219]">
-              {mode === "create" ? "Add Product" : "Edit Product"}
-            </h1>
-            <p className="text-[#7c6f65] font-medium text-sm">
-              {mode === "create"
-                ? "Add a new product to your store"
-                : "Edit product details"}
-            </p>
+      <div className="relative overflow-hidden rounded-3xl border border-[#8f3f2a]/15 bg-white/85 p-6 shadow-[0_14px_40px_rgba(0,0,0,0.05)] backdrop-blur-xl">
+        <div className="pointer-events-none absolute -right-8 -top-12 h-28 w-28 rounded-full bg-[#d66a49]/15 blur-2xl" />
+        <div className="pointer-events-none absolute -bottom-12 -left-8 h-24 w-24 rounded-full bg-[#c7aea2]/26 blur-2xl" />
+
+        <div className="relative z-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-4">
+            <Button variant="ghost" size="icon" asChild className="h-10 w-10 rounded-xl text-[#8f3f2a] hover:bg-[#f7ebe4]">
+              <Link href="/admin/products">
+                <ArrowLeft className="h-5 w-5" />
+              </Link>
+            </Button>
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8b7d73]">Catalog</p>
+              <h1 className="admin-title text-2xl font-bold">
+                {mode === "create" ? "Create Product" : "Edit Product"}
+              </h1>
+              <p className="admin-subtitle mt-1 text-sm">
+                {mode === "create"
+                  ? "Add full product details including images, category and pricing"
+                  : "Update product details, media and inventory settings"}
+              </p>
+            </div>
           </div>
-        </div>
-        <div className="flex items-center gap-3 relative z-10">
-          <Button variant="outline" type="button" asChild className="rounded-xl border-[#7B3F32]/20 hover:bg-[#A6ACA2]/10 text-[#7c6f65] font-semibold h-11 px-5">
-            <Link href="/admin/products">Cancel</Link>
-          </Button>
-          <Button type="submit" disabled={isSubmitting || isUploading} className="bg-gradient-to-r from-[#7B3F32] to-[#9e5948] text-white hover:from-[#5f3026] hover:to-[#8e4f3f] border-0 rounded-xl font-bold shadow-[0_10px_20px_rgba(123,63,50,0.15)] h-11 px-6">
-            {isSubmitting
-              ? "Saving..."
-              : mode === "create"
-                ? "Add Product"
-                : "Save Changes"}
-          </Button>
+
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              type="button"
+              asChild
+              className="h-11 rounded-xl border-[#8f3f2a]/20 text-[#6f6157] hover:bg-[#f7ebe4]"
+            >
+              <Link href="/admin/products">Cancel</Link>
+            </Button>
+            <Button
+              type="submit"
+              disabled={isSubmitting || isUploading}
+              className="h-11 rounded-xl border-0 bg-gradient-to-r from-[#8f3f2a] to-[#c16043] px-6 font-semibold text-white"
+            >
+              {isSubmitting ? "Saving..." : mode === "create" ? "Create Product" : "Save Changes"}
+            </Button>
+          </div>
         </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        {/* Main Content */}
         <div className="space-y-6 lg:col-span-2">
-          {/* Basic Information */}
-          <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
+          <Card className="admin-card border-[#8f3f2a]/15">
             <CardHeader>
-              <CardTitle className="text-[#2f2219]">
-                Basic Information
-              </CardTitle>
-            </CardHeader>>
+              <CardTitle className="admin-title text-xl">Basic Information</CardTitle>
+            </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-3">
-                <Label htmlFor="nameEn" className="text-sm font-semibold text-[#4b3d34]">Product Name</Label>
+              <div className="space-y-2">
+                <Label htmlFor="nameEn" className="text-sm font-semibold text-[#4b3d34]">
+                  Product Name
+                </Label>
                 <Input
                   id="nameEn"
                   value={formData.nameEn}
                   onChange={(e) => handleChange("nameEn", e.target.value)}
                   placeholder="Enter product name"
-                  className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 rounded-xl bg-white/50 h-11"
+                  className="admin-input h-11"
                   required
                 />
               </div>
-              <div className="space-y-3">
-                <Label htmlFor="descriptionEn" className="text-sm font-semibold text-[#4b3d34]">Description</Label>
+
+              <div className="space-y-2">
+                <Label htmlFor="descriptionEn" className="text-sm font-semibold text-[#4b3d34]">
+                  Description
+                </Label>
                 <Textarea
                   id="descriptionEn"
                   value={formData.descriptionEn}
                   onChange={(e) => handleChange("descriptionEn", e.target.value)}
-                  placeholder="Enter product description"
-                  className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 rounded-xl bg-white/50"
+                  placeholder="Write a detailed product description"
+                  className="admin-input min-h-28"
                   rows={4}
                 />
               </div>
             </CardContent>
           </Card>
 
-          {/* Pricing */}
-          <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
+          <Card className="admin-card border-[#8f3f2a]/15">
             <CardHeader>
-              <CardTitle className="text-[#2f2219]">
-                Pricing & Inventory
-              </CardTitle>
-            </CardHeader>>
+              <CardTitle className="admin-title text-xl">Pricing and Inventory</CardTitle>
+            </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid gap-5 sm:grid-cols-3">
-                <div className="space-y-3">
-                  <Label htmlFor="price" className="text-sm font-semibold text-[#4b3d34]">Price (EGP)</Label>
+              <div className="grid gap-4 sm:grid-cols-3">
+                <div className="space-y-2">
+                  <Label htmlFor="price" className="text-sm font-semibold text-[#4b3d34]">
+                    Price (EGP)
+                  </Label>
                   <Input
                     id="price"
                     type="number"
                     value={formData.price}
                     onChange={(e) => handleChange("price", Number(e.target.value))}
                     min={0}
-                    className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 rounded-xl bg-white/50 h-11"
+                    className="admin-input h-11"
                     required
                   />
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-2">
                   <Label htmlFor="discountAmount" className="text-sm font-semibold text-[#4b3d34]">
                     Discount (%)
                   </Label>
@@ -341,53 +335,37 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                     id="discountAmount"
                     type="number"
                     value={formData.discountAmount}
-                    onChange={(e) =>
-                      handleChange(
-                        "discountAmount",
-                        Math.min(100, Math.max(0, Number(e.target.value)))
-                      )
-                    }
+                    onChange={(e) => handleChange("discountAmount", Math.min(100, Math.max(0, Number(e.target.value))))}
                     min={0}
                     max={100}
-                    className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 rounded-xl bg-white/50 h-11"
+                    className="admin-input h-11"
                   />
                 </div>
-                <div className="space-y-3">
-                  <Label htmlFor="stock" className="text-sm font-semibold text-[#4b3d34]">Stock Quantity</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="stock" className="text-sm font-semibold text-[#4b3d34]">
+                    Stock Quantity
+                  </Label>
                   <Input
                     id="stock"
                     type="number"
                     value={formData.stock}
                     onChange={(e) => handleChange("stock", Number(e.target.value))}
                     min={0}
-                    className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 rounded-xl bg-white/50 h-11"
+                    className="admin-input h-11"
                     required
                   />
                 </div>
               </div>
-              <div className="grid gap-5 sm:grid-cols-3">
-                <div className="space-y-3 sm:col-span-1">
-                  <Label htmlFor="priceAfterDiscount" className="text-sm font-semibold text-[#4b3d34]">
-                    Price After Discount
-                  </Label>
-                  <Input
-                    id="priceAfterDiscount"
-                    type="number"
-                    value={discountedPrice}
-                    className="border-[#7B3F32]/20 bg-[#f8f0e7] rounded-xl h-11 font-medium text-[#7B3F32]"
-                    disabled
-                  />
-                </div>
+
+              <div className="rounded-xl border border-[#8f3f2a]/15 bg-[#faf4ef] px-4 py-3 text-sm text-[#6f6157]">
+                Price after discount: <span className="ml-1 font-semibold text-[#8f3f2a]">{discountedPrice.toLocaleString()} EGP</span>
               </div>
             </CardContent>
           </Card>
 
-          {/* Images */}
-          <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
+          <Card className="admin-card border-[#8f3f2a]/15">
             <CardHeader>
-              <CardTitle className="text-[#2f2219]">
-                Product Images
-              </CardTitle>
+              <CardTitle className="admin-title text-xl">Product Images</CardTitle>
             </CardHeader>
             <CardContent>
               <input
@@ -401,22 +379,25 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                   e.target.value = ""
                 }}
               />
+
               <div className="grid gap-4 sm:grid-cols-4">
                 {formData.images.map((image, index) => (
-                  <div key={`${image}-${index}`} className="relative aspect-square rounded-lg overflow-hidden bg-muted">
+                  <div key={`${image}-${index}`} className="relative aspect-square overflow-hidden rounded-xl border border-[#8f3f2a]/10 bg-[#f4ebe4]">
                     <Image src={getImageUrl(image)} alt={`Product ${index + 1}`} fill className="object-cover" />
+
                     {image === formData.mainImage && (
-                      <span className="absolute left-2 top-2 rounded bg-primary px-2 py-0.5 text-xs text-primary-foreground">
+                      <span className="absolute left-2 top-2 rounded-md bg-[#8f3f2a] px-2 py-0.5 text-xs font-medium text-white">
                         Main
                       </span>
                     )}
+
                     <div className="absolute bottom-2 left-2 flex items-center gap-2">
                       {image !== formData.mainImage && (
                         <Button
                           type="button"
                           variant="secondary"
                           size="sm"
-                          className="h-6 px-2 text-xs"
+                          className="h-6 bg-white/90 px-2 text-xs"
                           onClick={() => handleSetMainImage(image)}
                         >
                           Set Main
@@ -434,51 +415,44 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                     </div>
                   </div>
                 ))}
+
                 <label
                   htmlFor="product-images-upload"
-                  className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground/25 flex flex-col items-center justify-center gap-2 hover:border-primary/50 transition-colors cursor-pointer"
+                  className="flex aspect-square cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#8f3f2a]/28 bg-[#fffaf7] transition-colors hover:bg-[#fff2ea]"
                 >
-                  <Upload className="h-8 w-8 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">
-                    {isUploading
-                      ? "Uploading..."
-                      : "Upload Images"}
-                  </span>
+                  <Upload className="h-8 w-8 text-[#8f3f2a]" />
+                  <span className="text-sm font-medium text-[#7c6f65]">{isUploading ? "Uploading..." : "Upload"}</span>
                 </label>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Sidebar */}
         <div className="space-y-6">
-          {/* Organization */}
-          <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
+          <Card className="admin-card border-[#8f3f2a]/15">
             <CardHeader>
-              <CardTitle className="text-[#2f2219]">
-                Organization
-              </CardTitle>
+              <CardTitle className="admin-title text-xl">Organization</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-5">
-              <div className="space-y-3">
-                <Label htmlFor="category" className="text-sm font-semibold text-[#4b3d34]">Category</Label>
-                <Select
-                  value={formData.categoryId}
-                  onValueChange={(value) => handleChange("categoryId", value)}
-                >
-                  <SelectTrigger className="border-[#7B3F32]/20 bg-white/50 rounded-xl focus:ring-[#7B3F32]/20 h-11">
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="category" className="text-sm font-semibold text-[#4b3d34]">
+                  Category
+                </Label>
+                <Select value={formData.categoryId} onValueChange={(value) => handleChange("categoryId", value)}>
+                  <SelectTrigger className="admin-input h-11">
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
-                  <SelectContent className="rounded-xl border-[#7B3F32]/10 shadow-xl">
+                  <SelectContent className="rounded-xl border-[#8f3f2a]/15 bg-white shadow-xl">
                     {categories.map((category) => (
-                      <SelectItem key={category.id} value={category.id} className="rounded-lg focus:bg-[#f6eee8] focus:text-[#7B3F32] transition-colors">
+                      <SelectItem key={category.id} value={category.id}>
                         {category.nameEn}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
-              <div className="space-y-3">
+
+              <div className="space-y-2">
                 <Label htmlFor="colorsEn" className="text-sm font-semibold text-[#4b3d34]">
                   Colors
                 </Label>
@@ -486,22 +460,18 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                   id="colorsEn"
                   value={formData.colorsEn}
                   onChange={(e) => handleChange("colorsEn", e.target.value)}
-                  placeholder="red,blue,green"
+                  placeholder="beige,black,oak"
                   aria-invalid={showColorsErrorEn}
-                  className={cn("border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 rounded-xl bg-white/50 h-11", showColorsErrorEn && "border-red-500 focus:border-red-500 focus:ring-red-500")}
+                  className={cn("admin-input h-11", showColorsErrorEn && "border-red-500")}
                 />
-                {showColorsErrorEn && (
-                  <p className="text-xs text-destructive">
-                    Format: color,color,color (no spaces allowed, use letters, numbers, and hyphens only)
-                  </p>
-                )}
-                {!showColorsErrorEn && (
-                  <p className="text-xs text-muted-foreground">
-                    Separate each color with a comma. No spaces allowed. Example: red,blue,dark-green
-                  </p>
+                {showColorsErrorEn ? (
+                  <p className="text-xs text-red-600">Use only letters, numbers, and hyphens separated by commas.</p>
+                ) : (
+                  <p className="text-xs text-[#8b7d73]">Example: off-white,black,matte-oak</p>
                 )}
               </div>
-              <div className="space-y-3">
+
+              <div className="space-y-2">
                 <Label htmlFor="materialEn" className="text-sm font-semibold text-[#4b3d34]">
                   Material
                 </Label>
@@ -509,16 +479,14 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                   id="materialEn"
                   value={formData.materialEn}
                   onChange={(e) => handleChange("materialEn", e.target.value)}
-                  placeholder="Enter material (e.g. Wood)"
-                  className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 rounded-xl bg-white/50 h-11"
-                 />
-               </div>
-
-              </CardContent>
-            </Card>
+                  placeholder="Wood, Fabric, Metal..."
+                  className="admin-input h-11"
+                />
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </form>
   )
 }
-

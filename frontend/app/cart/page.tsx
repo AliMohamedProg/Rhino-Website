@@ -178,7 +178,7 @@ export default function CartPage() {
                           <button
                             onClick={() => updateQuantity(item.itemId, item.quantity + 1)}
                             className="w-10 h-10 flex items-center justify-center hover:bg-white rounded-full transition-all text-black hover:shadow-sm"
-                            disabled={stockByItemId[item.itemId] && item.quantity >= stockByItemId[item.itemId]}
+                            disabled={(stockByItemId[item.itemId] ?? 0) > 0 && item.quantity >= (stockByItemId[item.itemId] ?? 0)}
                           >
                             <Plus size={14} strokeWidth={3} />
                           </button>
@@ -255,7 +255,6 @@ export default function CartPage() {
     </div>
   )
 }
-
 
 
 

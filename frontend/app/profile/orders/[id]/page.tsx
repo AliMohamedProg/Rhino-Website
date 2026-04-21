@@ -158,21 +158,17 @@ export default function OrderViewPage() {
     if (!order) return;
 
     try {
-      const res = await ApiClient.post(
+      const result = await ApiClient.post<boolean>(
         `api/order/cancel-order/${order.id}`,
         {}
       );
 
-      if (res.ok) {
-        const result = await res.json();
-
-        if (result === true) {
-          setOrder(prev =>
-            prev ? { ...prev, status: "Cancelled" } : prev
-          );
-        } else {
-          alert("Failed to cancel order");
-        }
+      if (result === true) {
+        setOrder(prev =>
+          prev ? { ...prev, status: "Cancelled" } : prev
+        );
+      } else {
+        alert("Failed to cancel order");
       }
     } catch (err) {
       console.error("Cancel failed", err);

@@ -105,12 +105,12 @@ export function NewCollections({ initialProducts }: NewCollectionsProps) {
                                 price={`${formatPrice(product.price)} EGP`}
                                 discountAmount={product.discountAmount || 0}
                                 originalPrice={
-                                    product.discountAmount > 0
-                                        ? `${formatPrice(Math.round(product.price / (1 - product.discountAmount / 100)))} EGP`
+                                    (product.discountAmount ?? 0) > 0
+                                        ? `${formatPrice(Math.round(product.price / (1 - (product.discountAmount ?? 0) / 100)))} EGP`
                                         : undefined
                                 }
-                                rating={reviewStatsByProductId[product.id]?.average ?? product.overallRating ?? 0}
-                                reviewsCount={reviewStatsByProductId[product.id]?.count ?? 0}
+                                rating={reviewStatsByProductId[product.id]?.average ?? (product as any).overallRating ?? 0}
+                                reviewsCountVal={reviewStatsByProductId[product.id]?.count ?? 0}
                                 mainImage={product.mainImage}
                                 colorsRaw={product.colorsEn}
                                 stockNumber={product.stockNumber}
@@ -120,14 +120,14 @@ export function NewCollections({ initialProducts }: NewCollectionsProps) {
                                 }}
                                 onToggleWishlist={(productId) => {
                                     const discountedPrice =
-                                        product.discountAmount > 0
-                                            ? product.price * (1 - product.discountAmount / 100)
+                                        (product.discountAmount ?? 0) > 0
+                                            ? product.price * (1 - (product.discountAmount ?? 0) / 100)
                                             : product.price
                                     toggleItem({
                                         id: productId,
                                         name: { ar: product.nameAr, en: product.nameEn },
                                         price: discountedPrice,
-                                        originalPrice: product.discountAmount > 0 ? product.price : undefined,
+                                        originalPrice: (product.discountAmount ?? 0) > 0 ? product.price : undefined,
                                         image: product.mainImage || "/placeholder.svg",
                                     })
                                 }}

@@ -79,48 +79,48 @@ async function exportToPdf(data: any[], defaultFilename: string, title: string, 
 // ==================== Categories Export ====================
 
 export async function exportCategoriesExcel(options: ExportOptions = {}): Promise<void> {
-  const data = await ApiClient.get("api/admin/Categories");
+  const data = await ApiClient.get<any[]>("api/admin/Categories");
   await exportToExcel(data, `categories_${new Date().toISOString().split("T")[0]}`, options);
 }
 
 export async function exportCategoriesPdf(options: ExportOptions = {}): Promise<void> {
-  const data = await ApiClient.get("api/admin/Categories");
+  const data = await ApiClient.get<any[]>("api/admin/Categories");
   await exportToPdf(data, `categories_${new Date().toISOString().split("T")[0]}`, "Categories Export", options);
 }
 
 // ==================== Items Export ====================
 
 export async function exportItemsExcel(options: ExportOptions = {}): Promise<void> {
-  const data = await ApiClient.get("api/admin/Item");
+  const data = await ApiClient.get<any[]>("api/admin/Item");
   await exportToExcel(data, `items_${new Date().toISOString().split("T")[0]}`, options);
 }
 
 export async function exportItemsPdf(options: ExportOptions = {}): Promise<void> {
-  const data = await ApiClient.get("api/admin/Item");
+  const data = await ApiClient.get<any[]>("api/admin/Item");
   await exportToPdf(data, `items_${new Date().toISOString().split("T")[0]}`, "Items Export", options);
 }
 
 // ==================== Orders Export ====================
 
 export async function exportOrdersExcel(options: ExportOptions = {}): Promise<void> {
-  const data = await ApiClient.get("api/admin/Orders");
+  const data = await ApiClient.get<any[]>("api/admin/Orders");
   await exportToExcel(data, `orders_${new Date().toISOString().split("T")[0]}`, options);
 }
 
 export async function exportOrdersPdf(options: ExportOptions = {}): Promise<void> {
-  const data = await ApiClient.get("api/admin/Orders");
+  const data = await ApiClient.get<any[]>("api/admin/Orders");
   await exportToPdf(data, `orders_${new Date().toISOString().split("T")[0]}`, "Orders Export", options);
 }
 
 // ==================== Users Export ====================
 
 export async function exportUsersExcel(options: ExportOptions = {}): Promise<void> {
-  const data = await ApiClient.get("api/admin/Users");
+  const data = await ApiClient.get<any[]>("api/admin/Users");
   await exportToExcel(data, `users_${new Date().toISOString().split("T")[0]}`, options);
 }
 
 export async function exportUsersPdf(options: ExportOptions = {}): Promise<void> {
-  const data = await ApiClient.get("api/admin/Users");
+  const data = await ApiClient.get<any[]>("api/admin/Users");
   await exportToPdf(data, `users_${new Date().toISOString().split("T")[0]}`, "Users Export", options);
 }
 
