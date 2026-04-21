@@ -65,19 +65,25 @@ export default function ReviewsPage() {
   const renderStars = (rating: number) => (
     <div className="flex gap-0.5">
       {[1, 2, 3, 4, 5].map((star) => (
-        <Star key={star} className={`h-4 w-4 ${star <= rating ? "fill-yellow-400 text-yellow-400" : "text-slate-300"}`} />
+        <Star key={star} className={`h-4 w-4 ${star <= rating ? "fill-yellow-400 text-yellow-400" : "text-[#A6ACA2]/40"}`} />
       ))}
     </div>
   )
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">Reviews</h1>
-        <p className="text-slate-500">Manage and monitor customer reviews</p>
+      <div className="relative overflow-hidden rounded-3xl border border-[#7B3F32]/12 bg-white/80 backdrop-blur-xl p-6 md:p-8 shadow-[0_14px_40px_rgba(0,0,0,0.06)] flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+        <div className="pointer-events-none absolute -top-16 -right-10 h-36 w-36 rounded-full bg-[#7B3F32]/10 blur-2xl z-0" />
+        <div className="pointer-events-none absolute -bottom-14 -left-8 h-32 w-32 rounded-full bg-[#C1AFA0]/30 blur-2xl z-0" />
+        
+        <div className="relative z-10">
+          <p className="text-[11px] tracking-[0.2em] uppercase font-semibold text-[#8b7d73]">Management</p>
+          <h1 className="text-3xl font-bold tracking-tight text-[#2f2219] mt-1">Reviews</h1>
+          <p className="text-[#7c6f65] mt-1 text-sm font-medium">Manage and monitor customer reviews</p>
+        </div>
       </div>
 
-      <Card className="border-slate-200/60 bg-white/80 backdrop-blur-sm">
+      <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.03)] overflow-hidden">
         <CardContent className="p-4">
           <div className="flex flex-col gap-4 sm:flex-row">
             <div className="relative flex-1">
@@ -109,13 +115,13 @@ export default function ReviewsPage() {
       <div className="space-y-4">
         {isLoading ? (
           <div className="flex h-40 items-center justify-center">
-            <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
+            <Loader2 className="h-8 w-8 animate-spin text-[#7B3F32]" />
           </div>
         ) : filteredReviews.length === 0 ? (
           <p className="text-center text-slate-500 py-10">No reviews found</p>
         ) : (
           filteredReviews.map((review) => (
-            <Card key={review.id} className="border-slate-200/60 bg-white/80 backdrop-blur-sm">
+            <Card key={review.id} className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-sm shadow-sm rounded-3xl">
               <CardContent className="p-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                   <div className="flex gap-4">
@@ -136,12 +142,12 @@ export default function ReviewsPage() {
                   </div>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon">
+                      <Button variant="ghost" size="icon" className="hover:bg-[#A6ACA2]/10">
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem className="text-red-600" onClick={() => handleDeleteReview(review.id)}>
+                    <DropdownMenuContent align="end" className="bg-white rounded-xl shadow-xl shadow-[#7B3F32]/10 border-[#7B3F32]/10">
+                      <DropdownMenuItem className="text-red-600 hover:bg-red-50 focus:bg-red-50 rounded-lg cursor-pointer font-medium" onClick={() => handleDeleteReview(review.id)}>
                         <Trash2 className="h-4 w-4 mr-2" />
                         Delete
                       </DropdownMenuItem>

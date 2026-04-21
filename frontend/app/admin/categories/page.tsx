@@ -123,18 +123,18 @@ export default function CategoriesPage() {
     { key: "actions", header: "Actions", render: (category: Category) => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-indigo-50">
+          <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#A6ACA2]/10">
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="bg-white">
-          <DropdownMenuItem onClick={() => { setEditingCategory(category); setDialogOpen(true) }} className="hover:bg-indigo-50 cursor-pointer">
-            <Pencil className="h-4 w-4 mr-2 text-indigo-600" />
-            <span className="text-indigo-600">Edit</span>
+        <DropdownMenuContent align="end" className="bg-white rounded-xl shadow-xl shadow-[#7B3F32]/10 border-[#7B3F32]/10">
+          <DropdownMenuItem onClick={() => { setEditingCategory(category); setDialogOpen(true) }} className="hover:bg-[#f6eee8] cursor-pointer rounded-lg">
+            <Pencil className="h-4 w-4 mr-2 text-[#7B3F32]" />
+            <span className="text-[#3a2c26] font-medium">Edit</span>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleDelete(category)} className="hover:bg-red-50 cursor-pointer">
+          <DropdownMenuItem onClick={() => handleDelete(category)} className="hover:bg-red-50 focus:bg-red-50 cursor-pointer rounded-lg mt-1">
             <Trash2 className="h-4 w-4 mr-2 text-red-600" />
-            <span className="text-red-600">Delete</span>
+            <span className="text-red-600 font-medium">Delete</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -143,38 +143,29 @@ export default function CategoriesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">Categories</h1>
-          <p className="text-slate-500">Manage {categories.length} categories</p>
+      <div className="relative overflow-hidden rounded-3xl border border-[#7B3F32]/12 bg-white/80 backdrop-blur-xl p-6 md:p-8 shadow-[0_14px_40px_rgba(0,0,0,0.06)] flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+        <div className="pointer-events-none absolute -top-16 -right-10 h-36 w-36 rounded-full bg-[#7B3F32]/10 blur-2xl z-0" />
+        <div className="pointer-events-none absolute -bottom-14 -left-8 h-32 w-32 rounded-full bg-[#C1AFA0]/30 blur-2xl z-0" />
+        
+        <div className="relative z-10">
+          <p className="text-[11px] tracking-[0.2em] uppercase font-semibold text-[#8b7d73]">Management</p>
+          <h1 className="text-3xl font-bold tracking-tight text-[#2f2219] mt-1">Categories</h1>
+          <p className="text-[#7c6f65] mt-1 text-sm font-medium">Manage {categories.length} categories</p>
         </div>
-        <div className="flex items-center gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              {/*<Button variant="outline" className="border-slate-200 hover:bg-slate-50 hover:border-indigo-300">*/}
-              {/*  <Download className="h-4 w-4 mr-2" />*/}
-              {/*  Export*/}
-              {/*</Button>*/}
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-white">
-              <DropdownMenuItem onClick={() => exportCategoriesExcel()} className="hover:bg-indigo-50 cursor-pointer">Export to Excel</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => exportCategoriesPdf()} className="hover:bg-indigo-50 cursor-pointer">Export to PDF</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+        
+        <div className="flex items-center gap-3 relative z-10">
           {categories.length > 0 && (
-            <Button variant="destructive" onClick={() => setDeleteAllDialogOpen(true)} className="bg-red-600 hover:bg-red-700">
-              <Trash2 className="h-4 w-4 mr-2" />
-              Delete All
+            <Button variant="destructive" onClick={() => setDeleteAllDialogOpen(true)} className="bg-red-500/10 text-red-600 hover:bg-red-500 hover:text-white rounded-2xl shadow-none font-bold transition-all">
+              <Trash2 className="h-4 w-4 mr-2" />Delete All
             </Button>
           )}
-          <Button onClick={() => { setEditingCategory(null); setDialogOpen(true) }} className="bg-indigo-600 hover:bg-indigo-700">
-            <Plus className="h-4 w-4 mr-2" />
-            Add Category
+          <Button onClick={() => { setEditingCategory(null); setDialogOpen(true) }} className="bg-gradient-to-r from-[#7B3F32] to-[#9e5948] text-white hover:from-[#5f3026] hover:to-[#8e4f3f] rounded-2xl shadow-[0_10px_20px_rgba(123,63,50,0.22)] font-bold transition-all px-5 py-4 h-11 border-0">
+            <Plus className="h-4 w-4 mr-2" />Add Category
           </Button>
         </div>
       </div>
 
-      <Card className="border-slate-200/60 bg-white/80 backdrop-blur-sm">
+      <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.03)] overflow-hidden">
         <CardContent className="pt-6">
           {loading ? (
             <div className="flex justify-center items-center h-48 text-slate-500 animate-pulse">Loading categories...</div>

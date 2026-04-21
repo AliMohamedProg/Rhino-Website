@@ -127,7 +127,7 @@ export default function OrdersPage() {
   const formatCurrency = (amount: number) => `${amount.toLocaleString()} EGP`
 
   const columns = [
-    { key: "orderNumber", header: "Order Number", render: (order: Order) => <Link href={`/admin/orders/${order.id}`} className="font-medium text-indigo-600 hover:text-indigo-700">{order.orderNumber}</Link> },
+    { key: "orderNumber", header: "Order Number", render: (order: Order) => <Link href={`/admin/orders/${order.id}`} className="font-bold text-[#7B3F32] hover:text-[#9e5948] transition-colors">{order.orderNumber}</Link> },
     { key: "customer", header: "Customer", render: (order: Order) => <div><p className="font-medium text-slate-900">{order.customer.name}</p><p className="text-sm text-slate-500">{order.customer.email}</p></div> },
     { key: "items", header: "Items", render: (order: Order) => <span className="text-slate-500">{order.items.length} items</span> },
     { key: "total", header: "Total", render: (order: Order) => <span className="font-semibold text-slate-900">{formatCurrency(order.total)}</span> },
@@ -137,15 +137,15 @@ export default function OrdersPage() {
     {
       key: "actions", header: "Actions", render: (order: Order) => (
         <DropdownMenu>
-          <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-indigo-50"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-white">
-            <DropdownMenuItem asChild className="hover:bg-indigo-50 cursor-pointer"><Link href={`/admin/orders/${order.id}`}><Eye className="h-4 w-4 mr-2 text-indigo-600" /><span className="text-indigo-600">View Details</span></Link></DropdownMenuItem>
+          <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#A6ACA2]/10"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="bg-white rounded-xl shadow-xl shadow-[#7B3F32]/10 border-[#7B3F32]/10">
+            <DropdownMenuItem asChild className="hover:bg-[#f6eee8] cursor-pointer rounded-lg"><Link href={`/admin/orders/${order.id}`}><Eye className="h-4 w-4 mr-2 text-[#7B3F32]" /><span className="text-[#3a2c26] font-medium">View Details</span></Link></DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuLabel className="text-slate-500">Update Status</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => handleStatusChange(order.id, "processing")} className="hover:bg-indigo-50 cursor-pointer">Processing</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleStatusChange(order.id, "shipped")} className="hover:bg-indigo-50 cursor-pointer">Shipped</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleStatusChange(order.id, "delivered")} className="hover:bg-indigo-50 cursor-pointer">Delivered</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleStatusChange(order.id, "cancelled")} className="hover:bg-red-50 cursor-pointer text-red-600">Cancelled</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleStatusChange(order.id, "processing")} className="hover:bg-[#f6eee8] cursor-pointer rounded-lg mt-1 font-medium text-[#3a2c26]">Processing</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleStatusChange(order.id, "shipped")} className="hover:bg-[#f6eee8] cursor-pointer rounded-lg mt-1 font-medium text-[#3a2c26]">Shipped</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleStatusChange(order.id, "delivered")} className="hover:bg-[#f6eee8] cursor-pointer rounded-lg mt-1 font-medium text-[#3a2c26]">Delivered</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleStatusChange(order.id, "cancelled")} className="hover:bg-red-50 cursor-pointer text-red-600 rounded-lg mt-1 font-medium">Cancelled</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       ), className: "w-[70px]"
@@ -156,8 +156,16 @@ export default function OrdersPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div><h1 className="text-2xl font-bold text-slate-900">Orders</h1><p className="text-slate-500">Manage {orders.length} orders</p></div>
+      <div className="relative overflow-hidden rounded-3xl border border-[#7B3F32]/12 bg-white/80 backdrop-blur-xl p-6 md:p-8 shadow-[0_14px_40px_rgba(0,0,0,0.06)] flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+        <div className="pointer-events-none absolute -top-16 -right-10 h-36 w-36 rounded-full bg-[#7B3F32]/10 blur-2xl z-0" />
+        <div className="pointer-events-none absolute -bottom-14 -left-8 h-32 w-32 rounded-full bg-[#C1AFA0]/30 blur-2xl z-0" />
+        
+        <div className="relative z-10">
+          <p className="text-[11px] tracking-[0.2em] uppercase font-semibold text-[#8b7d73]">Management</p>
+          <h1 className="text-3xl font-bold tracking-tight text-[#2f2219] mt-1">Orders</h1>
+          <p className="text-[#7c6f65] mt-1 text-sm font-medium">Manage {orders.length} orders</p>
+        </div>
+      </div>
         {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="border-slate-200 hover:bg-slate-50 hover:border-indigo-300"><Download className="h-4 w-4 mr-2" />Export</Button>
@@ -169,7 +177,7 @@ export default function OrdersPage() {
         </DropdownMenu> */}
       </div>
 
-      <Card className="border-slate-200/60 bg-white/80 backdrop-blur-sm">
+      <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.03)] overflow-hidden">
         <CardContent className="pt-6">
           <div className="flex items-center gap-4 mb-4">
             <div className="flex items-center gap-2"><Filter className="h-4 w-4 text-slate-400" /><span className="text-sm font-medium text-slate-700">Filter:</span></div>

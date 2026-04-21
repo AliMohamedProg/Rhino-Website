@@ -243,29 +243,30 @@ export function ProductForm({ product, mode }: ProductFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" asChild>
+      <div className="flex items-center justify-between bg-white/80 backdrop-blur-xl p-6 rounded-3xl border border-[#7B3F32]/10 shadow-sm relative overflow-hidden">
+        <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full bg-[#7B3F32]/5 blur-2xl z-0" />
+        <div className="flex items-center gap-4 relative z-10">
+          <Button variant="ghost" size="icon" asChild className="hover:bg-[#f6eee8] text-[#7B3F32] h-10 w-10 rounded-xl">
             <Link href="/admin/products">
               <ArrowLeft className="h-5 w-5" />
             </Link>
           </Button>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">
+            <h1 className="text-2xl font-bold tracking-tight text-[#2f2219]">
               {mode === "create" ? "Add Product" : "Edit Product"}
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-[#7c6f65] font-medium text-sm">
               {mode === "create"
                 ? "Add a new product to your store"
                 : "Edit product details"}
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" type="button" asChild>
+        <div className="flex items-center gap-3 relative z-10">
+          <Button variant="outline" type="button" asChild className="rounded-xl border-[#7B3F32]/20 hover:bg-[#A6ACA2]/10 text-[#7c6f65] font-semibold h-11 px-5">
             <Link href="/admin/products">Cancel</Link>
           </Button>
-          <Button type="submit" disabled={isSubmitting || isUploading}>
+          <Button type="submit" disabled={isSubmitting || isUploading} className="bg-gradient-to-r from-[#7B3F32] to-[#9e5948] text-white hover:from-[#5f3026] hover:to-[#8e4f3f] border-0 rounded-xl font-bold shadow-[0_10px_20px_rgba(123,63,50,0.15)] h-11 px-6">
             {isSubmitting
               ? "Saving..."
               : mode === "create"
@@ -279,7 +280,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
         {/* Main Content */}
         <div className="space-y-6 lg:col-span-2">
           {/* Basic Information */}
-          <Card>
+          <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
             <CardHeader>
               <CardTitle>
                 Basic Information
@@ -310,7 +311,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
           </Card>
 
           {/* Pricing */}
-          <Card>
+          <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
             <CardHeader>
               <CardTitle>
                 Pricing & Inventory
@@ -376,7 +377,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
           </Card>
 
           {/* Images */}
-          <Card>
+          <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
             <CardHeader>
               <CardTitle>
                 Product Images
@@ -446,7 +447,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Organization */}
-          <Card>
+          <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
             <CardHeader>
               <CardTitle>
                 Organization

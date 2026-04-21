@@ -108,9 +108,9 @@ export default function UsersPage() {
 
   const getRoleBadge = (role: User["role"]) => {
     const roleConfig = {
-      admin: { variant: "default" as const, label: "Admin", className: "bg-red-500" },
-      manager: { variant: "default" as const, label: "Manager", className: "bg-blue-500" },
-      customer: { variant: "secondary" as const, label: "Customer", className: "" },
+      admin: { variant: "default" as const, label: "Admin", className: "bg-gradient-to-r from-[#7B3F32] to-[#9e5948] hover:from-[#5f3026] hover:to-[#8e4f3f] text-white border-0 font-bold shadow-sm shadow-[#7B3F32]/20" },
+      manager: { variant: "default" as const, label: "Manager", className: "bg-[#C1AFA0] hover:bg-[#a59487] text-[#2f2219] border-0 font-bold shadow-sm" },
+      customer: { variant: "secondary" as const, label: "Customer", className: "bg-[#f6eee8] text-[#7c6f65] border-[#7B3F32]/10 hover:bg-[#efe3d9] font-bold tracking-wide" },
     }
     const config = roleConfig[role]
     return (
@@ -188,30 +188,18 @@ export default function UsersPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">Users</h1>
-          <p className="text-gray-500">Manage {users.length} users</p>
+      <div className="relative overflow-hidden rounded-3xl border border-[#7B3F32]/12 bg-white/80 backdrop-blur-xl p-6 md:p-8 shadow-[0_14px_40px_rgba(0,0,0,0.06)] flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+        <div className="pointer-events-none absolute -top-16 -right-10 h-36 w-36 rounded-full bg-[#7B3F32]/10 blur-2xl z-0" />
+        <div className="pointer-events-none absolute -bottom-14 -left-8 h-32 w-32 rounded-full bg-[#C1AFA0]/30 blur-2xl z-0" />
+        
+        <div className="relative z-10">
+          <p className="text-[11px] tracking-[0.2em] uppercase font-semibold text-[#8b7d73]">Management</p>
+          <h1 className="text-3xl font-bold tracking-tight text-[#2f2219] mt-1">Users</h1>
+          <p className="text-[#7c6f65] mt-1 text-sm font-medium">Manage {users.length} users</p>
         </div>
-        {/* <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              <Download className="h-4 w-4 mr-2" />
-              Export
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => exportUsersExcel()}>
-              Export to Excel
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => exportUsersPdf()}>
-              Export to PDF
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu> */}
       </div>
 
-      <Card>
+      <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.03)] overflow-hidden">
         <CardContent className="pt-6">
           {loading ? (
             <div className="flex justify-center items-center h-48 text-muted-foreground animate-pulse">
