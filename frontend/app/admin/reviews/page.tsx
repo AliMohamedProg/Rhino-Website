@@ -87,25 +87,25 @@ export default function ReviewsPage() {
         <CardContent className="p-4">
           <div className="flex flex-col gap-4 sm:flex-row">
             <div className="relative flex-1">
-              <Search className="absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <Search className="absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8b7d73]" />
               <Input
                 placeholder="Search reviews..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="ps-9 border-slate-200 focus-visible:ring-indigo-500"
+                className="ps-9 border-[#7B3F32]/20 bg-white/50 focus-visible:ring-[#7B3F32]/20 rounded-xl h-11"
               />
             </div>
             <Select value={ratingFilter} onValueChange={setRatingFilter}>
-              <SelectTrigger className="w-full sm:w-[150px] border-slate-200">
+              <SelectTrigger className="w-full sm:w-[150px] border-[#7B3F32]/20 bg-white/50 rounded-xl focus:ring-[#7B3F32]/20 h-11">
                 <SelectValue placeholder="Rating" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Ratings</SelectItem>
-                <SelectItem value="5">5 Stars</SelectItem>
-                <SelectItem value="4">4 Stars</SelectItem>
-                <SelectItem value="3">3 Stars</SelectItem>
-                <SelectItem value="2">2 Stars</SelectItem>
-                <SelectItem value="1">1 Star</SelectItem>
+              <SelectContent className="rounded-xl border-[#7B3F32]/10 shadow-xl">
+                <SelectItem value="all" className="rounded-lg focus:bg-[#f6eee8] focus:text-[#7B3F32]">All Ratings</SelectItem>
+                <SelectItem value="5" className="rounded-lg focus:bg-[#f6eee8] focus:text-[#7B3F32]">5 Stars</SelectItem>
+                <SelectItem value="4" className="rounded-lg focus:bg-[#f6eee8] focus:text-[#7B3F32]">4 Stars</SelectItem>
+                <SelectItem value="3" className="rounded-lg focus:bg-[#f6eee8] focus:text-[#7B3F32]">3 Stars</SelectItem>
+                <SelectItem value="2" className="rounded-lg focus:bg-[#f6eee8] focus:text-[#7B3F32]">2 Stars</SelectItem>
+                <SelectItem value="1" className="rounded-lg focus:bg-[#f6eee8] focus:text-[#7B3F32]">1 Star</SelectItem>
               </SelectContent>
             </Select>
           </div>

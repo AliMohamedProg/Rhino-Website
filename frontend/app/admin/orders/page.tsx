@@ -165,25 +165,26 @@ export default function OrdersPage() {
           <h1 className="text-3xl font-bold tracking-tight text-[#2f2219] mt-1">Orders</h1>
           <p className="text-[#7c6f65] mt-1 text-sm font-medium">Manage {orders.length} orders</p>
         </div>
-      </div>
-        {/* <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="border-slate-200 hover:bg-slate-50 hover:border-indigo-300"><Download className="h-4 w-4 mr-2" />Export</Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-white">
-            <DropdownMenuItem onClick={() => exportOrdersExcel()} className="hover:bg-indigo-50 cursor-pointer">Export to Excel</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => exportOrdersPdf()} className="hover:bg-indigo-50 cursor-pointer">Export to PDF</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu> */}
+        <div className="flex items-center gap-3 relative z-10">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="border-[#7B3F32]/20 hover:bg-[#A6ACA2]/10 text-[#7B3F32] bg-white/50 rounded-xl"><Download className="h-4 w-4 mr-2" />Export</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="bg-white/95 backdrop-blur-xl rounded-xl shadow-xl border-[#7B3F32]/10">
+              <DropdownMenuItem onClick={() => exportOrdersExcel()} className="hover:bg-[#f6eee8] cursor-pointer rounded-lg font-medium text-[#3a2c26]">Export to Excel</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => exportOrdersPdf()} className="hover:bg-[#f6eee8] cursor-pointer rounded-lg font-medium text-[#3a2c26] mt-1">Export to PDF</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
       <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.03)] overflow-hidden">
         <CardContent className="pt-6">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="flex items-center gap-2"><Filter className="h-4 w-4 text-slate-400" /><span className="text-sm font-medium text-slate-700">Filter:</span></div>
+          <div className="flex items-center gap-4 mb-6 bg-white/50 border border-[#7B3F32]/10 p-3 rounded-2xl w-fit backdrop-blur-sm">
+            <div className="flex items-center gap-2"><Filter className="h-4 w-4 text-[#8b7d73]" /><span className="text-sm font-medium text-[#2f2219]">Filter Status:</span></div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[180px] border-slate-200"><SelectValue /></SelectTrigger>
-              <SelectContent>{statusOptions.map((option) => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}</SelectContent>
+              <SelectTrigger className="w-[180px] border-[#7B3F32]/20 bg-white rounded-xl focus:ring-[#7B3F32]/20"><SelectValue /></SelectTrigger>
+              <SelectContent className="rounded-xl border-[#7B3F32]/10 shadow-xl">{statusOptions.map((option) => <SelectItem key={option.value} value={option.value} className="rounded-lg focus:bg-[#f6eee8] focus:text-[#7B3F32]">{option.label}</SelectItem>)}</SelectContent>
             </Select>
           </div>
           {loading ? <div className="flex justify-center items-center h-48 text-slate-500 animate-pulse">Loading orders...</div> : loadError ? <div className="flex justify-center items-center h-48 text-red-500">Failed to load orders.</div> : <DataTable data={filteredOrders} columns={columns} searchPlaceholder="Search orders..." searchKey="orderNumber" />}

@@ -313,7 +313,7 @@ Payment Method: ${order.paymentMethod}
           {/* Order Items */}
            <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
              <CardHeader>
-               <CardTitle>
+               <CardTitle className="text-[#2f2219]">
                  {t("orders.items")} ({order.items.length})
                </CardTitle>
              </CardHeader>
@@ -345,7 +345,7 @@ Payment Method: ${order.paymentMethod}
            {/* Order Summary */}
            <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
              <CardHeader>
-               <CardTitle>
+               <CardTitle className="text-[#2f2219]">
                  {t("checkout.summary")}
                </CardTitle>
              </CardHeader>
@@ -382,31 +382,31 @@ Payment Method: ${order.paymentMethod}
            {/* Update Status */}
            <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
              <CardHeader>
-               <CardTitle>
+               <CardTitle className="text-[#2f2219]">
                  {t("orders.updateStatus")}
                </CardTitle>
              </CardHeader>
             <CardContent>
               <Select value={status} onValueChange={(value) => setStatus(value as Order["status"])}>
-                <SelectTrigger>
+                <SelectTrigger className="border-[#7B3F32]/20 bg-white rounded-xl focus:ring-[#7B3F32]/20 h-11">
                   <SelectValue />
                 </SelectTrigger>
-                 <SelectContent>
+                 <SelectContent className="rounded-xl border-[#7B3F32]/10 shadow-xl">
                    {statusOptions.map((option) => (
-                     <SelectItem key={option.value} value={option.value}>
+                     <SelectItem key={option.value} value={option.value} className="rounded-lg focus:bg-[#f6eee8] focus:text-[#7B3F32] transition-colors">
                        {option.label}
                      </SelectItem>
                    ))}
                  </SelectContent>
               </Select>
-              <Button className="w-full mt-4 bg-gradient-to-r from-[#7B3F32] to-[#9e5948] hover:from-[#5f3026] hover:to-[#8e4f3f] text-white border-0 font-bold rounded-xl shadow-md h-11">{t("common.save")}</Button>
+              <Button className="w-full mt-4 bg-gradient-to-r from-[#7B3F32] to-[#9e5948] hover:from-[#5f3026] hover:to-[#8e4f3f] text-white border-0 font-bold rounded-xl shadow-[0_8px_20px_rgba(123,63,50,0.2)] h-11 transition-all hover:scale-[1.02] active:scale-[0.98]">{t("common.save")}</Button>
             </CardContent>
           </Card>
 
            {/* Customer Info */}
            <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
              <CardHeader>
-               <CardTitle>
+               <CardTitle className="text-[#2f2219]">
                  {t("orders.customer")}
                </CardTitle>
              </CardHeader>
@@ -428,7 +428,7 @@ Payment Method: ${order.paymentMethod}
            {/* Shipping Address */}
            <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
              <CardHeader>
-               <CardTitle>
+               <CardTitle className="text-[#2f2219]">
                  {t("orders.shippingAddress")}
                </CardTitle>
              </CardHeader>
@@ -451,7 +451,7 @@ Payment Method: ${order.paymentMethod}
            {/* Payment Method */}
            <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
              <CardHeader>
-               <CardTitle>
+               <CardTitle className="text-[#2f2219]">
                  {t("orders.paymentMethod")}
                </CardTitle>
              </CardHeader>

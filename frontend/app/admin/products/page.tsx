@@ -175,27 +175,27 @@ export default function ProductsPage() {
       </Card>
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent className="bg-white">
+        <AlertDialogContent className="bg-white/95 backdrop-blur-xl border-[#7B3F32]/10 rounded-3xl shadow-2xl">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-slate-900">Delete Product</AlertDialogTitle>
-            <AlertDialogDescription className="text-slate-500">Are you sure you want to delete "{productToDelete?.nameEn}"? This action cannot be undone.</AlertDialogDescription>
+            <AlertDialogTitle className="text-2xl font-bold tracking-tight text-[#2f2219]">Delete Product</AlertDialogTitle>
+            <AlertDialogDescription className="text-[#8b7d73] mt-2">Are you sure you want to delete <span className="font-semibold text-[#7B3F32]">"{productToDelete?.nameEn}"</span>? This action cannot be undone.</AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="border-slate-200 hover:bg-slate-50">Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete} className="bg-red-600 hover:bg-red-700">Delete</AlertDialogAction>
+          <AlertDialogFooter className="mt-4">
+            <AlertDialogCancel className="border-[#7B3F32]/20 text-[#4b3d34] hover:bg-[#f6eee8] rounded-xl h-11 font-medium">Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-red-500 hover:bg-red-600 text-white rounded-xl h-11 font-bold shadow-sm shadow-red-500/20">Delete</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
       <AlertDialog open={deleteAllDialogOpen} onOpenChange={setDeleteAllDialogOpen}>
-        <AlertDialogContent className="bg-white">
+        <AlertDialogContent className="bg-white/95 backdrop-blur-xl border-[#7B3F32]/10 rounded-3xl shadow-2xl">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-slate-900">Delete All Products</AlertDialogTitle>
-            <AlertDialogDescription className="text-slate-500">Are you sure you want to delete all products? This action cannot be undone.</AlertDialogDescription>
+            <AlertDialogTitle className="text-2xl font-bold tracking-tight text-red-600">Delete All Products</AlertDialogTitle>
+            <AlertDialogDescription className="text-[#8b7d73] mt-2">Are you sure you want to delete all products? This action cannot be undone and will remove all products from the store.</AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="border-slate-200 hover:bg-slate-50">Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDeleteAll} className="bg-red-600 hover:bg-red-700">Delete All</AlertDialogAction>
+          <AlertDialogFooter className="mt-4">
+            <AlertDialogCancel className="border-[#7B3F32]/20 text-[#4b3d34] hover:bg-[#f6eee8] rounded-xl h-11 font-medium">Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDeleteAll} className="bg-red-600 hover:bg-red-700 text-white rounded-xl h-11 font-bold shadow-sm shadow-red-600/30">Delete All</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

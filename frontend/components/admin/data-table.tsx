@@ -139,19 +139,19 @@ export function DataTable<T extends { id: string }>({
             setCurrentPage(1)
           }}
         >
-          <SelectTrigger className="w-[140px] bg-white border-[#7B3F32]/15 focus-visible:ring-2 focus-visible:ring-primary rounded-xl" aria-label="Items per page">
+          <SelectTrigger className="w-[140px] border-[#7B3F32]/20 bg-white/80 rounded-xl focus:ring-[#7B3F32]/20 shadow-sm" aria-label="Items per page">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="5">5 per page</SelectItem>
-            <SelectItem value="10">10 per page</SelectItem>
-            <SelectItem value="20">20 per page</SelectItem>
-            <SelectItem value="50">50 per page</SelectItem>
+          <SelectContent className="rounded-xl border-[#7B3F32]/10 shadow-xl">
+            <SelectItem value="5" className="rounded-lg focus:bg-[#f6eee8] focus:text-[#7B3F32] transition-colors">5 per page</SelectItem>
+            <SelectItem value="10" className="rounded-lg focus:bg-[#f6eee8] focus:text-[#7B3F32] transition-colors">10 per page</SelectItem>
+            <SelectItem value="20" className="rounded-lg focus:bg-[#f6eee8] focus:text-[#7B3F32] transition-colors">20 per page</SelectItem>
+            <SelectItem value="50" className="rounded-lg focus:bg-[#f6eee8] focus:text-[#7B3F32] transition-colors">50 per page</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
-       <div className="rounded-2xl border border-[#7B3F32]/12 overflow-hidden shadow-[0_10px_26px_rgba(0,0,0,0.05)] bg-white">
+       <div className="rounded-3xl border border-[#7B3F32]/12 overflow-hidden shadow-[0_10px_26px_rgba(0,0,0,0.05)] bg-white/70 backdrop-blur-md">
         <Table role="table">
           <TableHeader>
            <TableRow className="bg-[#f7efe7] border-[#7B3F32]/10 hover:bg-[#f7efe7]">

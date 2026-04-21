@@ -282,28 +282,30 @@ export function ProductForm({ product, mode }: ProductFormProps) {
           {/* Basic Information */}
           <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
             <CardHeader>
-              <CardTitle>
+              <CardTitle className="text-[#2f2219]">
                 Basic Information
               </CardTitle>
-            </CardHeader>
+            </CardHeader>>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="nameEn">Product Name</Label>
+              <div className="space-y-3">
+                <Label htmlFor="nameEn" className="text-sm font-semibold text-[#4b3d34]">Product Name</Label>
                 <Input
                   id="nameEn"
                   value={formData.nameEn}
                   onChange={(e) => handleChange("nameEn", e.target.value)}
                   placeholder="Enter product name"
+                  className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 rounded-xl bg-white/50 h-11"
                   required
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="descriptionEn">Description</Label>
+              <div className="space-y-3">
+                <Label htmlFor="descriptionEn" className="text-sm font-semibold text-[#4b3d34]">Description</Label>
                 <Textarea
                   id="descriptionEn"
                   value={formData.descriptionEn}
                   onChange={(e) => handleChange("descriptionEn", e.target.value)}
                   placeholder="Enter product description"
+                  className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 rounded-xl bg-white/50"
                   rows={4}
                 />
               </div>
@@ -313,25 +315,26 @@ export function ProductForm({ product, mode }: ProductFormProps) {
           {/* Pricing */}
           <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
             <CardHeader>
-              <CardTitle>
+              <CardTitle className="text-[#2f2219]">
                 Pricing & Inventory
               </CardTitle>
-            </CardHeader>
+            </CardHeader>>
             <CardContent className="space-y-4">
-              <div className="grid gap-4 sm:grid-cols-3">
-                <div className="space-y-2">
-                  <Label htmlFor="price">Price (EGP)</Label>
+              <div className="grid gap-5 sm:grid-cols-3">
+                <div className="space-y-3">
+                  <Label htmlFor="price" className="text-sm font-semibold text-[#4b3d34]">Price (EGP)</Label>
                   <Input
                     id="price"
                     type="number"
                     value={formData.price}
                     onChange={(e) => handleChange("price", Number(e.target.value))}
                     min={0}
+                    className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 rounded-xl bg-white/50 h-11"
                     required
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="discountAmount">
+                <div className="space-y-3">
+                  <Label htmlFor="discountAmount" className="text-sm font-semibold text-[#4b3d34]">
                     Discount (%)
                   </Label>
                   <Input
@@ -346,29 +349,32 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                     }
                     min={0}
                     max={100}
+                    className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 rounded-xl bg-white/50 h-11"
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="stock">Stock Quantity</Label>
+                <div className="space-y-3">
+                  <Label htmlFor="stock" className="text-sm font-semibold text-[#4b3d34]">Stock Quantity</Label>
                   <Input
                     id="stock"
                     type="number"
                     value={formData.stock}
                     onChange={(e) => handleChange("stock", Number(e.target.value))}
                     min={0}
+                    className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 rounded-xl bg-white/50 h-11"
                     required
                   />
                 </div>
               </div>
-              <div className="grid gap-4 sm:grid-cols-3">
-                <div className="space-y-2 sm:col-span-1">
-                  <Label htmlFor="priceAfterDiscount">
+              <div className="grid gap-5 sm:grid-cols-3">
+                <div className="space-y-3 sm:col-span-1">
+                  <Label htmlFor="priceAfterDiscount" className="text-sm font-semibold text-[#4b3d34]">
                     Price After Discount
                   </Label>
                   <Input
                     id="priceAfterDiscount"
                     type="number"
                     value={discountedPrice}
+                    className="border-[#7B3F32]/20 bg-[#f8f0e7] rounded-xl h-11 font-medium text-[#7B3F32]"
                     disabled
                   />
                 </div>
@@ -379,7 +385,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
           {/* Images */}
           <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
             <CardHeader>
-              <CardTitle>
+              <CardTitle className="text-[#2f2219]">
                 Product Images
               </CardTitle>
             </CardHeader>
@@ -449,31 +455,31 @@ export function ProductForm({ product, mode }: ProductFormProps) {
           {/* Organization */}
           <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
             <CardHeader>
-              <CardTitle>
+              <CardTitle className="text-[#2f2219]">
                 Organization
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="category">Category</Label>
+            <CardContent className="space-y-5">
+              <div className="space-y-3">
+                <Label htmlFor="category" className="text-sm font-semibold text-[#4b3d34]">Category</Label>
                 <Select
                   value={formData.categoryId}
                   onValueChange={(value) => handleChange("categoryId", value)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="border-[#7B3F32]/20 bg-white/50 rounded-xl focus:ring-[#7B3F32]/20 h-11">
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="rounded-xl border-[#7B3F32]/10 shadow-xl">
                     {categories.map((category) => (
-                      <SelectItem key={category.id} value={category.id}>
+                      <SelectItem key={category.id} value={category.id} className="rounded-lg focus:bg-[#f6eee8] focus:text-[#7B3F32] transition-colors">
                         {category.nameEn}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="colorsEn">
+              <div className="space-y-3">
+                <Label htmlFor="colorsEn" className="text-sm font-semibold text-[#4b3d34]">
                   Colors
                 </Label>
                 <Input
@@ -482,6 +488,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                   onChange={(e) => handleChange("colorsEn", e.target.value)}
                   placeholder="red,blue,green"
                   aria-invalid={showColorsErrorEn}
+                  className={cn("border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 rounded-xl bg-white/50 h-11", showColorsErrorEn && "border-red-500 focus:border-red-500 focus:ring-red-500")}
                 />
                 {showColorsErrorEn && (
                   <p className="text-xs text-destructive">
@@ -494,8 +501,8 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                   </p>
                 )}
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="materialEn">
+              <div className="space-y-3">
+                <Label htmlFor="materialEn" className="text-sm font-semibold text-[#4b3d34]">
                   Material
                 </Label>
                 <Input
@@ -503,6 +510,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                   value={formData.materialEn}
                   onChange={(e) => handleChange("materialEn", e.target.value)}
                   placeholder="Enter material (e.g. Wood)"
+                  className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 rounded-xl bg-white/50 h-11"
                  />
                </div>
 

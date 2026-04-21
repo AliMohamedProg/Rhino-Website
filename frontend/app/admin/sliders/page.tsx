@@ -302,36 +302,36 @@ export default function SlidersPage() {
       )}
 
       <Dialog open={addDialogOpen} onOpenChange={setAddDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md bg-white/95 backdrop-blur-xl border-[#7B3F32]/10 rounded-3xl shadow-2xl p-6 md:p-8">
           <DialogHeader>
-            <DialogTitle>Add New Slider</DialogTitle>
-            <DialogDescription>Add a new slider to the homepage</DialogDescription>
+            <DialogTitle className="text-2xl font-bold tracking-tight text-[#2f2219]">Add New Slider</DialogTitle>
+            <DialogDescription className="text-[#8b7d73] mt-1">Add a new slider to the homepage</DialogDescription>
           </DialogHeader>
-           <div className="space-y-4 py-4">
+           <div className="space-y-5 py-4">
              <div className="space-y-2">
-               <Label htmlFor="titleEn">Title</Label>
-               <Input id="titleEn" value={formData.titleEn} onChange={(e) => setFormData({ ...formData, titleEn: e.target.value })} placeholder="Enter title" />
+               <Label htmlFor="titleEn" className="text-sm font-semibold text-[#4b3d34]">Title</Label>
+               <Input id="titleEn" value={formData.titleEn} onChange={(e) => setFormData({ ...formData, titleEn: e.target.value })} placeholder="Enter title" className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 h-12 rounded-xl bg-white/50" />
              </div>
              <div className="space-y-2">
-               <Label>Image</Label>
+               <Label className="text-sm font-semibold text-[#4b3d34]">Image</Label>
               <div className="flex items-center gap-4">
                 <input type="file" accept="image/*" onChange={handleFileChange} ref={fileInputRef} className="hidden" />
-                <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
+                <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()} disabled={uploading} className="border-[#7B3F32]/20 text-[#7B3F32] hover:bg-[#f6eee8] rounded-xl h-11">
                   {uploading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Upload className="h-4 w-4 mr-2" />}
                   Choose Image
                 </Button>
-                {selectedFile && <span className="text-sm text-slate-500">{selectedFile.name}</span>}
+                {selectedFile && <span className="text-sm font-medium text-[#8b7d73]">{selectedFile.name}</span>}
               </div>
               {formData.imageUrl && (
-                <div className="relative mt-2 aspect-video w-full overflow-hidden rounded-md border">
+                <div className="relative mt-4 aspect-video w-full overflow-hidden rounded-2xl border border-[#7B3F32]/10 bg-[#f8f0e7] shadow-sm">
                   <img src={formData.imageUrl} alt="Preview" className="h-full w-full object-cover" />
                 </div>
               )}
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setAddDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleSubmitAdd} disabled={!isFormValid() || uploading} className="bg-gradient-to-r from-[#7B3F32] to-[#9e5948] text-white hover:from-[#5f3026] hover:to-[#8e4f3f] border-0 rounded-xl font-bold shadow-sm">
+          <DialogFooter className="mt-4">
+            <Button variant="outline" onClick={() => setAddDialogOpen(false)} className="border-[#7B3F32]/20 text-[#4b3d34] hover:bg-[#f6eee8] rounded-xl h-12 font-medium">Cancel</Button>
+            <Button onClick={handleSubmitAdd} disabled={!isFormValid() || uploading} className="bg-gradient-to-r from-[#7B3F32] to-[#9e5948] text-white hover:from-[#5f3026] hover:to-[#8e4f3f] border-0 rounded-xl h-12 font-bold shadow-[0_8px_20px_rgba(123,63,50,0.2)] transition-all hover:scale-[1.02] active:scale-[0.98]">
               {uploading ? "Saving..." : "Add Slider"}
             </Button>
           </DialogFooter>
@@ -339,35 +339,36 @@ export default function SlidersPage() {
       </Dialog>
 
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md bg-white/95 backdrop-blur-xl border-[#7B3F32]/10 rounded-3xl shadow-2xl p-6 md:p-8">
           <DialogHeader>
-            <DialogTitle>Edit Slider</DialogTitle>
-            <DialogDescription>Edit slider details below</DialogDescription>
+            <DialogTitle className="text-2xl font-bold tracking-tight text-[#2f2219]">Edit Slider</DialogTitle>
+            <DialogDescription className="text-[#8b7d73] mt-1">Edit slider details below</DialogDescription>
           </DialogHeader>
-           <div className="space-y-4 py-4">
+           <div className="space-y-5 py-4">
              <div className="space-y-2">
-               <Label htmlFor="editTitleEn">Title</Label>
-               <Input id="editTitleEn" value={formData.titleEn} onChange={(e) => setFormData({ ...formData, titleEn: e.target.value })} placeholder="Enter title" />
+               <Label htmlFor="editTitleEn" className="text-sm font-semibold text-[#4b3d34]">Title</Label>
+               <Input id="editTitleEn" value={formData.titleEn} onChange={(e) => setFormData({ ...formData, titleEn: e.target.value })} placeholder="Enter title" className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 h-12 rounded-xl bg-white/50" />
              </div>
              <div className="space-y-2">
-               <Label>Image</Label>
+               <Label className="text-sm font-semibold text-[#4b3d34]">Image</Label>
               <div className="flex items-center gap-4">
                 <input type="file" accept="image/*" onChange={handleFileChange} ref={fileInputRef} className="hidden" />
-                <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
+                <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()} disabled={uploading} className="border-[#7B3F32]/20 text-[#7B3F32] hover:bg-[#f6eee8] rounded-xl h-11">
                   {uploading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Upload className="h-4 w-4 mr-2" />}
                   Change Image
                 </Button>
+                {selectedFile && <span className="text-sm font-medium text-[#8b7d73]">{selectedFile.name}</span>}
               </div>
               {formData.imageUrl && (
-                <div className="relative mt-2 aspect-video w-full overflow-hidden rounded-md border">
+                <div className="relative mt-4 aspect-video w-full overflow-hidden rounded-2xl border border-[#7B3F32]/10 bg-[#f8f0e7] shadow-sm">
                   <img src={formData.imageUrl} alt="Preview" className="h-full w-full object-cover" />
                 </div>
               )}
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setEditDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleSubmitEdit} disabled={!isFormValid() || uploading} className="bg-gradient-to-r from-[#7B3F32] to-[#9e5948] text-white hover:from-[#5f3026] hover:to-[#8e4f3f] border-0 rounded-xl font-bold shadow-sm">
+          <DialogFooter className="mt-4">
+            <Button variant="outline" onClick={() => setEditDialogOpen(false)} className="border-[#7B3F32]/20 text-[#4b3d34] hover:bg-[#f6eee8] rounded-xl h-12 font-medium">Cancel</Button>
+            <Button onClick={handleSubmitEdit} disabled={!isFormValid() || uploading} className="bg-gradient-to-r from-[#7B3F32] to-[#9e5948] text-white hover:from-[#5f3026] hover:to-[#8e4f3f] border-0 rounded-xl h-12 font-bold shadow-[0_8px_20px_rgba(123,63,50,0.2)] transition-all hover:scale-[1.02] active:scale-[0.98]">
               {uploading ? "Saving..." : "Save Changes"}
             </Button>
           </DialogFooter>
@@ -375,27 +376,27 @@ export default function SlidersPage() {
       </Dialog>
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent>
+        <AlertDialogContent className="bg-white/95 backdrop-blur-xl border-[#7B3F32]/10 rounded-3xl shadow-2xl">
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Slider</AlertDialogTitle>
-            <AlertDialogDescription>Are you sure you want to delete "{sliderToDelete?.titleEn}"? This action cannot be undone.</AlertDialogDescription>
+            <AlertDialogTitle className="text-2xl font-bold tracking-tight text-[#2f2219]">Delete Slider</AlertDialogTitle>
+            <AlertDialogDescription className="text-[#8b7d73] mt-2">Are you sure you want to delete <span className="font-semibold text-[#7B3F32]">"{sliderToDelete?.titleEn}"</span>? This action cannot be undone.</AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete} className="bg-red-600 hover:bg-red-700">Delete</AlertDialogAction>
+          <AlertDialogFooter className="mt-4">
+            <AlertDialogCancel className="border-[#7B3F32]/20 text-[#4b3d34] hover:bg-[#f6eee8] rounded-xl h-11 font-medium">Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-red-500 hover:bg-red-600 text-white rounded-xl h-11 font-bold shadow-sm shadow-red-500/20">Delete</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
       <AlertDialog open={deleteAllDialogOpen} onOpenChange={setDeleteAllDialogOpen}>
-        <AlertDialogContent>
+        <AlertDialogContent className="bg-white/95 backdrop-blur-xl border-[#7B3F32]/10 rounded-3xl shadow-2xl">
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete All Sliders</AlertDialogTitle>
-            <AlertDialogDescription>Are you sure you want to delete all sliders? This action cannot be undone.</AlertDialogDescription>
+            <AlertDialogTitle className="text-2xl font-bold tracking-tight text-red-600">Delete All Sliders</AlertDialogTitle>
+            <AlertDialogDescription className="text-[#8b7d73] mt-2">Are you sure you want to delete all sliders? This action cannot be undone.</AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDeleteAll} className="bg-red-600 hover:bg-red-700">Delete All</AlertDialogAction>
+          <AlertDialogFooter className="mt-4">
+            <AlertDialogCancel className="border-[#7B3F32]/20 text-[#4b3d34] hover:bg-[#f6eee8] rounded-xl h-11 font-medium">Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDeleteAll} className="bg-red-600 hover:bg-red-700 text-white rounded-xl h-11 font-bold shadow-sm shadow-red-600/30">Delete All</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

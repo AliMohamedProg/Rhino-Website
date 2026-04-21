@@ -90,33 +90,35 @@ export default function ProductDetailPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
+      {/* Header */}
       <div
         className={cn(
-          "flex items-center justify-between",
+          "flex items-center justify-between bg-white/80 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-[#7B3F32]/10 shadow-[0_14px_40px_rgba(0,0,0,0.03)] relative overflow-hidden",
           dir === "rtl" && "flex-row-reverse"
         )}
       >
-        <div className={cn("flex items-center gap-4", dir === "rtl" && "flex-row-reverse")}>
-          <Button variant="ghost" size="icon" asChild>
+        <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full bg-[#7B3F32]/5 blur-2xl z-0" />
+        <div className={cn("flex items-center gap-4 relative z-10", dir === "rtl" && "flex-row-reverse")}>
+          <Button variant="ghost" size="icon" asChild className="hover:bg-[#f6eee8] text-[#7B3F32] h-11 w-11 rounded-xl">
             <Link href="/admin/products">
               {dir === "rtl" ? <ArrowRight className="h-5 w-5" /> : <ArrowLeft className="h-5 w-5" />}
             </Link>
           </Button>
           <div className={cn(dir === "rtl" && "text-right")}>
-            <h1 className="text-2xl font-bold tracking-tight">
+            <h1 className="text-3xl font-bold tracking-tight text-[#2f2219]">
               {language === "ar" ? product.nameAr : product.nameEn}
             </h1>
-            <p className="text-muted-foreground">{product.sku}</p>
+            <p className="text-[#8b7d73] font-medium mt-1">{product.sku}</p>
           </div>
         </div>
-        <div className={cn("flex items-center gap-2", dir === "rtl" && "flex-row-reverse")}>
-          <Button variant="outline" asChild>
+        <div className={cn("flex items-center gap-3 relative z-10", dir === "rtl" && "flex-row-reverse")}>
+          <Button variant="outline" asChild className="rounded-xl border-[#7B3F32]/20 hover:bg-[#A6ACA2]/10 text-[#7B3F32] h-11 font-bold shadow-sm">
             <Link href={`/admin/products/${id}/edit`} className={cn("flex items-center gap-2", dir === "rtl" && "flex-row-reverse")}>
               <Pencil className="h-4 w-4" />
               {t("common.edit")}
             </Link>
           </Button>
-          <Button variant="destructive">
+          <Button variant="destructive" className="rounded-xl h-11 font-bold bg-red-500/10 text-red-600 hover:bg-red-500 hover:text-white shadow-none transition-all">
             <Trash2 className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
             {t("products.deleteProduct")}
           </Button>
@@ -127,9 +129,9 @@ export default function ProductDetailPage() {
         {/* Main Content */}
         <div className="space-y-6 lg:col-span-2">
           {/* Images */}
-          <Card>
+          <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
             <CardHeader>
-              <CardTitle className={cn(dir === "rtl" && "text-right")}>
+              <CardTitle className={cn("text-[#2f2219]", dir === "rtl" && "text-right")}>
                 {t("products.images")}
               </CardTitle>
             </CardHeader>
@@ -145,9 +147,9 @@ export default function ProductDetailPage() {
           </Card>
 
           {/* Description */}
-          <Card>
+          <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
             <CardHeader>
-              <CardTitle className={cn(dir === "rtl" && "text-right")}>
+              <CardTitle className={cn("text-[#2f2219]", dir === "rtl" && "text-right")}>
                 {t("products.description")}
               </CardTitle>
             </CardHeader>
@@ -167,9 +169,9 @@ export default function ProductDetailPage() {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Status */}
-          <Card>
+          <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
             <CardHeader>
-              <CardTitle className={cn(dir === "rtl" && "text-right")}>
+              <CardTitle className={cn("text-[#2f2219]", dir === "rtl" && "text-right")}>
                 {t("products.status")}
               </CardTitle>
             </CardHeader>
@@ -194,9 +196,9 @@ export default function ProductDetailPage() {
           </Card>
 
           {/* Pricing */}
-          <Card>
+          <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
             <CardHeader>
-              <CardTitle className={cn(dir === "rtl" && "text-right")}>
+              <CardTitle className={cn("text-[#2f2219]", dir === "rtl" && "text-right")}>
                 {language === "ar" ? "التسعير" : "Pricing"}
               </CardTitle>
             </CardHeader>
@@ -221,9 +223,9 @@ export default function ProductDetailPage() {
           </Card>
 
           {/* Organization */}
-          <Card>
+          <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
             <CardHeader>
-              <CardTitle className={cn(dir === "rtl" && "text-right")}>
+              <CardTitle className={cn("text-[#2f2219]", dir === "rtl" && "text-right")}>
                 {language === "ar" ? "التنظيم" : "Organization"}
               </CardTitle>
             </CardHeader>
