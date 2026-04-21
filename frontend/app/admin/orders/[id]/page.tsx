@@ -246,32 +246,33 @@ export default function OrderDetailPage() {
 
   return (
     <div className="space-y-6">
-       {/* Header */}
-       <div className="flex items-center justify-between">
-         <div className="flex items-center gap-4">
-           <Button variant="ghost" size="icon" asChild>
-             <Link href="/admin/orders">
-               <ArrowLeft className="h-5 w-5" />
-             </Link>
-           </Button>
-           <div>
-             <div className="flex items-center gap-3">
-               <h1 className="text-2xl font-bold tracking-tight">{order.orderNumber}</h1>
-               {getStatusBadge(status)}
-             </div>
-             <p className="text-muted-foreground">
+      {/* Header */}
+      <div className="flex items-center justify-between bg-white/80 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-[#7B3F32]/10 shadow-sm relative overflow-hidden">
+        <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full bg-[#7B3F32]/5 blur-2xl z-0" />
+        <div className="flex items-center gap-4 relative z-10">
+          <Button variant="ghost" size="icon" asChild className="hover:bg-[#f6eee8] text-[#7B3F32] h-10 w-10 rounded-xl">
+            <Link href="/admin/orders">
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+          </Button>
+          <div>
+            <div className="flex items-center gap-3">
+              <h1 className="text-3xl font-bold tracking-tight text-[#2f2219]">{order.orderNumber}</h1>
+              {getStatusBadge(status)}
+            </div>
+            <p className="text-[#7c6f65] font-medium mt-1">
                {new Date(order.createdDate).toLocaleDateString(
                  "en-US",
                  { dateStyle: "full" }
                )}
-             </p>
-           </div>
-         </div>
-         <div className="flex items-center gap-2">
-          <Button variant="outline" size="icon" onClick={() => window.print()}>
-            <Printer className="h-4 w-4" />
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 relative z-10">
+          <Button variant="outline" size="icon" onClick={() => window.print()} className="rounded-xl border-[#7B3F32]/20 hover:bg-[#A6ACA2]/10 text-[#7B3F32] h-11 w-11 shadow-sm">
+            <Printer className="h-5 w-5" />
           </Button>
-          <Button variant="outline" size="icon" onClick={() => {
+          <Button variant="outline" size="icon" className="rounded-xl border-[#7B3F32]/20 hover:bg-[#A6ACA2]/10 text-[#7B3F32] h-11 w-11 shadow-sm" onClick={() => {
             const invoiceText = `Order Number: ${order.orderNumber}
 Date: ${new Date(order.createdDate).toLocaleDateString()}
 Status: ${order.status}
@@ -310,7 +311,7 @@ Payment Method: ${order.paymentMethod}
         {/* Main Content */}
         <div className="space-y-6 lg:col-span-2">
           {/* Order Items */}
-           <Card>
+           <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
              <CardHeader>
                <CardTitle>
                  {t("orders.items")} ({order.items.length})
@@ -342,7 +343,7 @@ Payment Method: ${order.paymentMethod}
            </Card>
 
            {/* Order Summary */}
-           <Card>
+           <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
              <CardHeader>
                <CardTitle>
                  {t("checkout.summary")}
@@ -379,7 +380,7 @@ Payment Method: ${order.paymentMethod}
          {/* Sidebar */}
          <div className="space-y-6">
            {/* Update Status */}
-           <Card>
+           <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
              <CardHeader>
                <CardTitle>
                  {t("orders.updateStatus")}
@@ -398,12 +399,12 @@ Payment Method: ${order.paymentMethod}
                    ))}
                  </SelectContent>
               </Select>
-              <Button className="w-full mt-4">{t("common.save")}</Button>
+              <Button className="w-full mt-4 bg-gradient-to-r from-[#7B3F32] to-[#9e5948] hover:from-[#5f3026] hover:to-[#8e4f3f] text-white border-0 font-bold rounded-xl shadow-md h-11">{t("common.save")}</Button>
             </CardContent>
           </Card>
 
            {/* Customer Info */}
-           <Card>
+           <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
              <CardHeader>
                <CardTitle>
                  {t("orders.customer")}
@@ -425,7 +426,7 @@ Payment Method: ${order.paymentMethod}
           </Card>
 
            {/* Shipping Address */}
-           <Card>
+           <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
              <CardHeader>
                <CardTitle>
                  {t("orders.shippingAddress")}
@@ -448,7 +449,7 @@ Payment Method: ${order.paymentMethod}
            </Card>
 
            {/* Payment Method */}
-           <Card>
+           <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
              <CardHeader>
                <CardTitle>
                  {t("orders.paymentMethod")}
