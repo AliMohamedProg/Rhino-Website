@@ -149,6 +149,7 @@ export default function ReviewsPage() {
 
                 <div className="mt-4 rounded-lg bg-slate-50 p-4">
                   <div className="flex items-center gap-3 mb-2">
+                    <p className="text-sm font-medium text-slate-900">Product Name:</p>
                     <span className="text-sm font-medium text-slate-900">
                       {review.product?.nameEn || review.productNameEn || review.product?.name || review.productName || "Product"}
                     </span>
