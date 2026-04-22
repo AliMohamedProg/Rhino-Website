@@ -29,6 +29,7 @@ type Product = {
   descriptionAr: string
   descriptionEn: string
   price: number
+  oldPrice?: number
   discountAmount: number
   stockNumber: number
   colorsEn: string
@@ -115,6 +116,7 @@ export default function ProductDetailsPage() {
         const colorsValue = data.colors ?? data.Colors ?? ""
         const rawImages = data.images ?? data.Images ?? []
         const price = Number(data.price ?? data.Price ?? 0)
+        const oldPrice = Number(data.oldPrice ?? data.OldPrice ?? 0)
         const discountAmount = Number(data.discountAmount ?? data.DiscountAmount ?? 0)
         const stockNumber = Number(data.stockNumber ?? data.StockNumber ?? 0)
         const normalizedImages = Array.isArray(rawImages)
@@ -144,6 +146,7 @@ export default function ProductDetailsPage() {
           images: uniqueImages,
           mainImage,
           price: Number.isFinite(price) ? price : 0,
+          oldPrice: Number.isFinite(oldPrice) ? oldPrice : 0,
           discountAmount: Number.isFinite(discountAmount) ? discountAmount : 0,
           stockNumber: Number.isFinite(stockNumber) ? stockNumber : 0,
         }
@@ -261,7 +264,8 @@ export default function ProductDetailsPage() {
     )
   }
 
-  const discountedPrice = product.discountAmount > 0 ? product.price * (1 - product.discountAmount / 100) : product.price
+  const originalPrice = product.oldPrice ?? (product.discountAmount > 0 && product.price > 0 ? Math.round(product.price / (1 - product.discountAmount / 100)) : 0)
+  const discountedPrice = product.price
   const colors = buildDisplayColors(product, language === "ar" ? "ar" : "en")
 
   const productImages =
@@ -429,8 +433,8 @@ export default function ProductDetailsPage() {
               {/* Price */}
               <div className="flex items-center gap-4 mb-6">
                 <span className="text-4xl font-bold text-[#7B3F32]">{formatPrice(discountedPrice)} EGP</span>
-                {product.discountAmount > 0 && (
-                  <span className="text-xl line-through text-gray-400">{formatPrice(product.price)} EGP</span>
+                {product.discountAmount > 0 && originalPrice > 0 && (
+                  <span className="text-xl line-through text-gray-400">{formatPrice(originalPrice)} EGP</span>
                 )}
                 {product.discountAmount > 0 && (
                   <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
@@ -565,7 +569,7 @@ export default function ProductDetailsPage() {
                       id: product.id,
                       name: { ar: product.nameAr, en: product.nameEn },
                       price: discountedPrice,
-                      originalPrice: product.price,
+                      originalPrice: originalPrice > 0 ? originalPrice : undefined,
                       image: product.mainImage || "/placeholder.svg",
                     })
                   }

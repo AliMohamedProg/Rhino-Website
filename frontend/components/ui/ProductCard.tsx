@@ -102,8 +102,10 @@ export function ProductCard({
   const quantity = propStockNumber ?? product?.stockNumber
   const isInStock = quantity === undefined || quantity > 0;
   const discountAmountVal = discountAmount ?? product?.discountAmount ?? 0;
-  const originalPriceNum = product?.originalPrice ?? 0;
   const currentPriceNum = product?.price ?? 0;
+  const originalPriceNum = product?.originalPrice 
+    ?? (originalPrice ? parseFloat(originalPrice.replace(/[^0-9.]/g, '')) : 0)
+    ?? 0;
   const hasExplicitOldPrice = originalPriceNum > 0 && originalPriceNum > currentPriceNum;
   const hasDiscount = discountAmountVal > 0 || hasExplicitOldPrice;
 
@@ -116,6 +118,7 @@ export function ProductCard({
     displayMainPrice = `${currentPriceNum.toLocaleString()} EGP`;
     displayLineThrough = `${originalPriceNum.toLocaleString()} EGP`;
   } else if (discountAmountVal > 0) {
+    computedDiscountPercent = discountAmountVal;
     displayLineThrough = displayLineThrough ?? `${currentPriceNum.toLocaleString()} EGP`;
     displayMainPrice = `${currentPriceNum.toLocaleString()} EGP`;
   }
