@@ -21,7 +21,10 @@ interface Item {
   id: string
   nameAr: string
   nameEn: string
+  descriptionAr?: string
+  descriptionEn?: string
   price: number
+  oldPrice?: number
   discountAmount: number
   stockNumber: number
   overallRating: number
@@ -362,8 +365,8 @@ export default function CategoryPage() {
                       price={`${formatPrice(product.price)} EGP`}
                       discountAmount={product.discountAmount || 0}
                       originalPrice={
-                        product.discountAmount > 0
-                          ? `${formatPrice(Math.round(product.price / (1 - product.discountAmount / 100)))} EGP`
+                        (product.oldPrice && product.oldPrice > product.price)
+                          ? `${formatPrice(product.oldPrice)} EGP`
                           : undefined
                       }
                       rating={reviewStatsByProductId[product.id]?.average ?? product.overallRating ?? 0}

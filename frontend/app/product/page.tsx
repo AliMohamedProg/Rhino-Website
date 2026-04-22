@@ -33,7 +33,8 @@ interface Item {
   descriptionAr?: string
   descriptionEn?: string
   price: number
-  discountAmount: number // decimal ex: 0.25
+  oldPrice?: number
+  discountAmount: number
   stockNumber: number
   overallRating: number
   categoryId: string
@@ -99,6 +100,7 @@ export default function CategoryPage() {
           descriptionAr: item.descriptionAr ?? item.DescriptionAr ?? "",
           descriptionEn: item.descriptionEn ?? item.DescriptionEn ?? "",
           price: item.price ?? item.Price ?? 0,
+          oldPrice: item.oldPrice ?? item.OldPrice ?? 0,
           stockNumber: item.stockNumber ?? item.StockNumber ?? 0,
           overallRating: item.overallRating ?? item.OverallRating ?? 0,
           categoryId: item.categoryId ?? item.CategoryId ?? "",
@@ -388,11 +390,11 @@ const fetchReviewStats = async () => {
                           ? product.descriptionAr || product.nameAr
                           : product.descriptionEn || product.nameEn
                       }
-                      price={`${formatPrice(product.price)} EGP`}
+price={`${formatPrice(product.price)} EGP`}
                       discountAmount={product.discountAmount || 0}
                       originalPrice={
-                        product.discountAmount > 0
-                          ? `${formatPrice(Math.round(product.price / (1 - product.discountAmount / 100)))} EGP`
+                        (product.oldPrice && product.oldPrice > product.price)
+                          ? `${formatPrice(product.oldPrice)} EGP`
                           : undefined
                       }
                       rating={reviewStatsByProductId[product.id]?.average ?? product.overallRating ?? 0}
