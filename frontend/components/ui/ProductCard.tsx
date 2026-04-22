@@ -35,6 +35,7 @@ interface ProductCardProps {
     oldprice?: number;
     oldPrice?: number;
     price?: number;
+    originalPrice?: number;
     discountAmount?: number;
     stockNumber?: number;
     colorsEn?: string;
@@ -101,9 +102,9 @@ export function ProductCard({
   const quantity = propStockNumber ?? product?.stockNumber
   const isInStock = quantity === undefined || quantity > 0;
   const discountAmountVal = discountAmount ?? product?.discountAmount ?? 0;
-  const oldPriceNum = product?.oldPrice ?? product?.oldprice ?? 0;
+  const originalPriceNum = product?.originalPrice ?? 0;
   const currentPriceNum = product?.price ?? 0;
-  const hasExplicitOldPrice = oldPriceNum > 0 && oldPriceNum > currentPriceNum;
+  const hasExplicitOldPrice = originalPriceNum > 0 && originalPriceNum > currentPriceNum;
   const hasDiscount = discountAmountVal > 0 || hasExplicitOldPrice;
 
   let computedDiscountPercent = 0;
@@ -111,15 +112,12 @@ export function ProductCard({
   let displayLineThrough = originalPrice;
 
   if (hasExplicitOldPrice) {
-    computedDiscountPercent = Math.round(((oldPriceNum - currentPriceNum) / oldPriceNum) * 100);
+    computedDiscountPercent = Math.round(((originalPriceNum - currentPriceNum) / originalPriceNum) * 100);
     displayMainPrice = `${currentPriceNum.toLocaleString()} EGP`;
-    displayLineThrough = `${oldPriceNum.toLocaleString()} EGP`;
+    displayLineThrough = `${originalPriceNum.toLocaleString()} EGP`;
   } else if (discountAmountVal > 0) {
-    computedDiscountPercent = discountAmountVal;
-    displayLineThrough = displayLineThrough ?? price;
-    const numPrice = parseFloat(price.replace(/[^0-9.]/g, '')) || 0;
-    const discounted = Math.round(numPrice - (numPrice * discountAmountVal / 100));
-    displayMainPrice = `${discounted.toLocaleString()} EGP`;
+    displayLineThrough = displayLineThrough ?? `${currentPriceNum.toLocaleString()} EGP`;
+    displayMainPrice = `${currentPriceNum.toLocaleString()} EGP`;
   }
   const parsed = parseColors(colorsRaw);
   const colors = (providedColors && providedColors.length > 0)
