@@ -103,8 +103,8 @@ export function ProductCard({
   const isInStock = quantity === undefined || quantity > 0;
   const discountAmountVal = discountAmount ?? product?.discountAmount ?? 0;
   const currentPriceNum = product?.price ?? 0;
-  const originalPriceNum = product?.originalPrice 
-    ?? product?.oldPrice 
+  const originalPriceNum = product?.originalPrice
+    ?? product?.oldPrice
     ?? (originalPrice ? parseFloat(originalPrice.replace(/[^0-9.]/g, '')) : 0)
     ?? 0;
   const hasExplicitOldPrice = originalPriceNum > 0 && originalPriceNum > currentPriceNum;
@@ -222,7 +222,7 @@ export function ProductCard({
   }, [id, language])
 
   return (
-    <div className="relative w-full bg-white rounded-[2rem] p-5 md:p-6 flex flex-col gap-5 border border-[#7B3F32]/10 transition-all duration-500 hover:shadow-[0_24px_60px_rgba(123,63,50,0.18)] hover:-translate-y-1.5 group h-full overflow-hidden">
+    <div className="relative w-[800px] bg-white rounded-[2rem] p-5 md:p-6 flex flex-col gap-5 border border-[#7B3F32]/10 transition-all duration-500 hover:shadow-[0_24px_60px_rgba(123,63,50,0.18)] hover:-translate-y-1.5 group h-full overflow-hidden">
       <div className="pointer-events-none absolute -top-16 -right-10 h-32 w-32 rounded-full bg-[#7B3F32]/10 blur-2xl" />
       <div className="pointer-events-none absolute -bottom-12 -left-10 h-28 w-28 rounded-full bg-[#C1AFA0]/35 blur-2xl" />
       {/* Top Section with Image */}

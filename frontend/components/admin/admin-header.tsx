@@ -68,22 +68,8 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
         <div className="flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="relative hover:bg-secondary"
-              >
-                <Bell className="h-5 w-5 text-admin-text-secondary" />
-                <span className="absolute top-1 right-1 h-2.5 w-2.5 bg-red-500 rounded-full border-2 border-white" />
-                <span className="sr-only">Notifications</span>
-              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-80">
-              <DropdownMenuLabel className="flex items-center gap-2">
-                <Bell className="h-4 w-4" />
-                Notifications
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
               <DropdownMenuItem className="flex flex-col items-start gap-1 cursor-pointer">
                 <span className="font-medium">New order received</span>
                 <span className="text-xs text-muted-foreground">Order #1234 - $299.00</span>
@@ -101,7 +87,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-               <Button
+              <Button
                 variant="ghost"
                 className="flex items-center gap-2 px-2 hover:bg-secondary"
               >
@@ -130,7 +116,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                 Settings
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-               <DropdownMenuItem 
+              <DropdownMenuItem
                 className="cursor-pointer text-destructive focus:text-destructive"
                 onClick={logout}
               >
