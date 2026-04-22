@@ -43,11 +43,9 @@ type Product = {
 
 type Review = {
   id: string
-  title: string
   date: string
   rating: number
   text: string
-  userName: string
 }
 
 function normalizeColorNames(value: unknown): string[] {
@@ -186,15 +184,11 @@ export default function ProductDetailsPage() {
 
           const normalizedReviews = (Array.isArray(data) ? data : []).map((r: any) => ({
             id: (r.id ?? r.Id ?? Date.now().toString()).toString(),
-            title: r.title || (language === "ar" ? "تقييم" : "Review"),
             date: (r.createdDate ?? r.CreatedDate)
               ? String(r.createdDate ?? r.CreatedDate).split("T")[0]
               : new Date().toISOString().split("T")[0],
             rating: Number(r.rating ?? r.Rating ?? 0),
             text: String(r.review ?? r.Review ?? "").trim(),
-            userName:
-              emailToName(r.userName ?? r.UserName ?? r.userEmail ?? r.UserEmail) ||
-              (language === "ar" ? "مستخدم" : "User"),
           }))
           setReviews(normalizedReviews)
         }
