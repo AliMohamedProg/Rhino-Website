@@ -169,13 +169,13 @@ export default function ProductDetailsPage() {
     const fetchReviews = async () => {
       try {
         const apiBase = (process.env.NEXT_PUBLIC_API_URL || "https://rhino-web.runasp.net").replace(/\/+$/, "")
-        
+
         const [reviewsRes, avgRes, countRes] = await Promise.all([
           fetch(`${apiBase}/api/review/get-reviews?productId=${id}`),
           fetch(`${apiBase}/api/review/get-average-reviews?productId=${id}`),
           fetch(`${apiBase}/api/review/get-reviews-count?productId=${id}`)
         ])
-        
+
         if (reviewsRes.ok) {
           const data = await reviewsRes.json()
           const emailToName = (email?: string) => {
@@ -199,12 +199,12 @@ export default function ProductDetailsPage() {
           }))
           setReviews(normalizedReviews)
         }
-        
+
         if (avgRes.ok) {
           const avg = await avgRes.json()
           setAverageRating(Number(avg) || 0)
         }
-        
+
         if (countRes.ok) {
           const count = await countRes.json()
           setReviewsCount(Number(count) || 0)
@@ -667,18 +667,6 @@ export default function ProductDetailsPage() {
 
                   {showReviewForm && (
                     <form onSubmit={submitReview} className="border border-[#7B3F32]/10 p-5 rounded-2xl space-y-3 mb-6 bg-white/85 shadow-sm backdrop-blur-sm">
-                      <div>
-                        <label className="block text-sm font-medium mb-1 text-[#4b3d34]">{language === "ar" ? "العنوان" : "Title"}</label>
-                        <input
-                          type="text"
-                          className="w-full border border-[#7B3F32]/15 p-2 rounded-xl bg-white"
-                          placeholder={language === "ar" ? "أدخل عنوان التقييم" : "Enter review title"}
-                          value={reviewTitle}
-                          onChange={e => setReviewTitle(e.target.value)}
-                          required
-                          maxLength={120}
-                        />
-                      </div>
                       <div className="flex items-center gap-2">
                         <span className="text-[#4b3d34]">{language === "ar" ? "التقييم:" : "Rating:"}</span>
                         <div className="flex gap-1">

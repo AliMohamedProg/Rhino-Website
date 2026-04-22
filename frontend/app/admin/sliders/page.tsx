@@ -44,10 +44,10 @@ export default function SlidersPage() {
   const [addDialogOpen, setAddDialogOpen] = useState(false)
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [editingSlider, setEditingSlider] = useState<Slider | null>(null)
-   const [formData, setFormData] = useState({
-     titleEn: "",
-     imageUrl: "",
-   })
+  const [formData, setFormData] = useState({
+    titleEn: "",
+    imageUrl: "",
+  })
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [uploading, setUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -68,21 +68,21 @@ export default function SlidersPage() {
     fetchSliders()
   }, [])
 
-   const handleAdd = () => {
-     setFormData({ titleEn: "", imageUrl: "" })
-     setSelectedFile(null)
-     setAddDialogOpen(true)
-   }
+  const handleAdd = () => {
+    setFormData({ titleEn: "", imageUrl: "" })
+    setSelectedFile(null)
+    setAddDialogOpen(true)
+  }
 
-   const handleEdit = (slider: Slider) => {
-     setEditingSlider(slider)
-     setFormData({
-       titleEn: slider.titleEn,
-       imageUrl: slider.imageUrl,
-     })
-     setSelectedFile(null)
-     setEditDialogOpen(true)
-   }
+  const handleEdit = (slider: Slider) => {
+    setEditingSlider(slider)
+    setFormData({
+      titleEn: slider.titleEn,
+      imageUrl: slider.imageUrl,
+    })
+    setSelectedFile(null)
+    setEditDialogOpen(true)
+  }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -164,11 +164,11 @@ export default function SlidersPage() {
         alert("Image is required")
         return
       }
-       await ApiClient.post("api/admin/Sliders/add-slider", {
-         titleAr: "",
-         titleEn: formData.titleEn,
-         imageUrl,
-       })
+      await ApiClient.post("api/admin/Sliders/add-slider", {
+        titleAr: "",
+        titleEn: formData.titleEn,
+        imageUrl,
+      })
       setAddDialogOpen(false)
       setSelectedFile(null)
       await fetchSliders()
@@ -200,12 +200,12 @@ export default function SlidersPage() {
         alert("Image is required")
         return
       }
-       await ApiClient.post("api/admin/Sliders/edit-slider", {
-         id: editingSlider.id,
-         titleAr: "",
-         titleEn: formData.titleEn,
-         imageUrl,
-       })
+      await ApiClient.post("api/admin/Sliders/edit-slider", {
+        id: editingSlider.id,
+        titleAr: "",
+        titleEn: formData.titleEn,
+        imageUrl,
+      })
       setEditDialogOpen(false)
       setEditingSlider(null)
       setSelectedFile(null)
@@ -217,20 +217,20 @@ export default function SlidersPage() {
     }
   }
 
-   const isFormValid = () => formData.titleEn.trim()
+  const isFormValid = () => formData.titleEn.trim()
 
   return (
     <div className="space-y-6">
       <div className="relative overflow-hidden rounded-3xl border border-[#7B3F32]/12 bg-white/80 backdrop-blur-xl p-6 md:p-8 shadow-[0_14px_40px_rgba(0,0,0,0.06)] flex flex-col sm:flex-row sm:items-center justify-between gap-5">
         <div className="pointer-events-none absolute -top-16 -right-10 h-36 w-36 rounded-full bg-[#7B3F32]/10 blur-2xl z-0" />
         <div className="pointer-events-none absolute -bottom-14 -left-8 h-32 w-32 rounded-full bg-[#C1AFA0]/30 blur-2xl z-0" />
-        
+
         <div className="relative z-10">
           <p className="text-[11px] tracking-[0.2em] uppercase font-semibold text-[#8b7d73]">Management</p>
           <h1 className="text-3xl font-bold tracking-tight text-[#2f2219] mt-1">Sliders</h1>
           <p className="text-[#7c6f65] mt-1 text-sm font-medium">Manage {sliders.length} sliders</p>
         </div>
-        
+
         <div className="flex items-center gap-3 relative z-10">
           {sliders.length > 0 && (
             <Button variant="destructive" onClick={() => setDeleteAllDialogOpen(true)} className="bg-red-500/10 text-red-600 hover:bg-red-500 hover:text-white rounded-2xl shadow-none font-bold transition-all">
@@ -307,13 +307,13 @@ export default function SlidersPage() {
             <DialogTitle className="text-2xl font-bold tracking-tight text-[#2f2219]">Add New Slider</DialogTitle>
             <DialogDescription className="text-[#8b7d73] mt-1">Add a new slider to the homepage</DialogDescription>
           </DialogHeader>
-           <div className="space-y-5 py-4">
-             <div className="space-y-2">
-               <Label htmlFor="titleEn" className="text-sm font-semibold text-[#4b3d34]">Title</Label>
-               <Input id="titleEn" value={formData.titleEn} onChange={(e) => setFormData({ ...formData, titleEn: e.target.value })} placeholder="Enter title" className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 h-12 rounded-xl bg-white/50" />
-             </div>
-             <div className="space-y-2">
-               <Label className="text-sm font-semibold text-[#4b3d34]">Image</Label>
+          <div className="space-y-5 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="titleEn" className="text-sm font-semibold text-[#4b3d34]">Title</Label>
+              <Input id="titleEn" value={formData.titleEn} onChange={(e) => setFormData({ ...formData, titleEn: e.target.value })} placeholder="Enter title" className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 h-12 rounded-xl bg-white/50" />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-sm font-semibold text-[#4b3d34]">Image</Label>
               <div className="flex items-center gap-4">
                 <input type="file" accept="image/*" onChange={handleFileChange} ref={fileInputRef} className="hidden" />
                 <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()} disabled={uploading} className="border-[#7B3F32]/20 text-[#7B3F32] hover:bg-[#f6eee8] rounded-xl h-11">
@@ -344,13 +344,13 @@ export default function SlidersPage() {
             <DialogTitle className="text-2xl font-bold tracking-tight text-[#2f2219]">Edit Slider</DialogTitle>
             <DialogDescription className="text-[#8b7d73] mt-1">Edit slider details below</DialogDescription>
           </DialogHeader>
-           <div className="space-y-5 py-4">
-             <div className="space-y-2">
-               <Label htmlFor="editTitleEn" className="text-sm font-semibold text-[#4b3d34]">Title</Label>
-               <Input id="editTitleEn" value={formData.titleEn} onChange={(e) => setFormData({ ...formData, titleEn: e.target.value })} placeholder="Enter title" className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 h-12 rounded-xl bg-white/50" />
-             </div>
-             <div className="space-y-2">
-               <Label className="text-sm font-semibold text-[#4b3d34]">Image</Label>
+          <div className="space-y-5 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="editTitleEn" className="text-sm font-semibold text-[#4b3d34]">Title</Label>
+              <Input id="editTitleEn" value={formData.titleEn} onChange={(e) => setFormData({ ...formData, titleEn: e.target.value })} placeholder="Enter title" className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 h-12 rounded-xl bg-white/50" />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-sm font-semibold text-[#4b3d34]">Image</Label>
               <div className="flex items-center gap-4">
                 <input type="file" accept="image/*" onChange={handleFileChange} ref={fileInputRef} className="hidden" />
                 <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()} disabled={uploading} className="border-[#7B3F32]/20 text-[#7B3F32] hover:bg-[#f6eee8] rounded-xl h-11">
