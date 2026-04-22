@@ -103,7 +103,6 @@ export default function ProductDetailsPage() {
 
   const [showReviewForm, setShowReviewForm] = useState(false)
   const [reviewText, setReviewText] = useState("")
-  const [reviewTitle, setReviewTitle] = useState("")
   const [reviewRating, setReviewRating] = useState(5)
   const [reviewError, setReviewError] = useState("")
   const [isSubmittingReview, setIsSubmittingReview] = useState(false)
@@ -279,11 +278,11 @@ export default function ProductDetailsPage() {
 
   const submitReview = async (event?: FormEvent<HTMLFormElement>) => {
     event?.preventDefault()
-    const normalizedTitle = reviewTitle.trim()
     const normalizedReviewText = reviewText.trim()
+    const normalizedTitle = language === "ar" ? "تقييم" : "Review"
 
-    if (!normalizedTitle || !normalizedReviewText) {
-      setReviewError(language === "ar" ? "يرجى إدخال العنوان والتعليق." : "Please enter both title and comment.")
+    if (!normalizedReviewText) {
+      setReviewError(language === "ar" ? "يرجى إدخال التعليق." : "Please enter a comment.")
       return
     }
 
@@ -325,7 +324,6 @@ export default function ProductDetailsPage() {
         setReviews([newReview, ...reviews])
         setShowReviewForm(false)
         setReviewText("")
-        setReviewTitle("")
         setReviewRating(5)
         setCurrentReviewIndex(0)
       } else {
