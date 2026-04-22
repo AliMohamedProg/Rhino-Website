@@ -69,20 +69,6 @@ export default function ProductDetailPage() {
     )
   }
 
-  const getStatusBadge = (status: typeof product.status) => {
-    const statusConfig = {
-      active: { variant: "default" as const, labelEn: "Active", labelAr: "نشط", className: "bg-emerald-500" },
-      inactive: { variant: "secondary" as const, labelEn: "Inactive", labelAr: "غير نشط", className: "" },
-      draft: { variant: "outline" as const, labelEn: "Draft", labelAr: "مسودة", className: "" },
-    }
-    const config = statusConfig[status]
-    return (
-      <Badge variant={config.variant} className={config.className}>
-        {language === "ar" ? config.labelAr : config.labelEn}
-      </Badge>
-    )
-  }
-
   const formatCurrency = (amount: number) => {
     return `${amount.toLocaleString()} ${t("common.egp")}`
   }
@@ -158,42 +144,12 @@ export default function ProductDetailPage() {
                 <h4 className="text-sm font-medium text-muted-foreground mb-2">English</h4>
                 <p>{product.descriptionEn}</p>
               </div>
-              <div>
-                <h4 className="text-sm font-medium text-muted-foreground mb-2">العربية</h4>
-                <p dir="rtl">{product.descriptionAr}</p>
-              </div>
             </CardContent>
           </Card>
         </div>
 
         {/* Sidebar */}
         <div className="space-y-6">
-          {/* Status */}
-          <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
-            <CardHeader>
-              <CardTitle className={cn("text-[#2f2219]", dir === "rtl" && "text-right")}>
-                {t("products.status")}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className={cn("flex items-center justify-between", dir === "rtl" && "flex-row-reverse")}>
-                <span className="text-muted-foreground">{t("products.status")}</span>
-                {getStatusBadge(product.status)}
-              </div>
-              <div className={cn("flex items-center justify-between", dir === "rtl" && "flex-row-reverse")}>
-                <span className="text-muted-foreground">{t("products.featured")}</span>
-                <Badge variant={product.featured ? "default" : "secondary"}>
-                  {product.featured ? (language === "ar" ? "نعم" : "Yes") : (language === "ar" ? "لا" : "No")}
-                </Badge>
-              </div>
-              <div className={cn("flex items-center justify-between", dir === "rtl" && "flex-row-reverse")}>
-                <span className="text-muted-foreground">{t("products.onSale")}</span>
-                <Badge variant={product.onSale ? "default" : "secondary"}>
-                  {product.onSale ? (language === "ar" ? "نعم" : "Yes") : (language === "ar" ? "لا" : "No")}
-                </Badge>
-              </div>
-            </CardContent>
-          </Card>
 
           {/* Pricing */}
           <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">

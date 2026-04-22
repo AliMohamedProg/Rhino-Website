@@ -236,12 +236,12 @@ export default function OrderDetailPage() {
 
   const getStatusBadge = (value: Order["status"]) => {
     const statusConfig: Record<Order["status"], { label: string; className: string }> = {
-      pending: { label: "Pending", className: "bg-amber-100 text-amber-700 border-amber-200" },
-      processing: { label: "Processing", className: "bg-cyan-100 text-cyan-700 border-cyan-200" },
-      shipped: { label: "Shipped", className: "bg-indigo-100 text-indigo-700 border-indigo-200" },
-      delivered: { label: "Delivered", className: "bg-emerald-100 text-emerald-700 border-emerald-200" },
-      cancelled: { label: "Cancelled", className: "bg-rose-100 text-rose-700 border-rose-200" },
-      refunded: { label: "Refunded", className: "bg-violet-100 text-violet-700 border-violet-200" },
+      pending: { label: "Pending", className: "bg-yellow-100 text-yellow-800 border-yellow-200" },
+      processing: { label: "Processing", className: "bg-blue-100 text-blue-800 border-blue-200" },
+      shipped: { label: "Shipped", className: "bg-indigo-100 text-indigo-800 border-indigo-200" },
+      delivered: { label: "Delivered", className: "bg-green-100 text-green-800 border-green-200" },
+      cancelled: { label: "Cancelled", className: "bg-red-100 text-red-800 border-red-200" },
+      refunded: { label: "Refunded", className: "bg-purple-100 text-purple-800 border-purple-200" },
     }
 
     const config = statusConfig[value]

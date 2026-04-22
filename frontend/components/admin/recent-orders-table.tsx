@@ -16,12 +16,12 @@ interface RecentOrdersTableProps {
 export function RecentOrdersTable({ orders, className }: RecentOrdersTableProps) {
   const getStatusBadge = (status: Order["status"]) => {
     const statusConfig: Record<string, { className: string; label: string }> = {
-      pending: { className: "bg-amber-100 text-amber-700 border-amber-200", label: "Pending" },
-      processing: { className: "bg-cyan-100 text-cyan-700 border-cyan-200", label: "Processing" },
-      shipped: { className: "bg-indigo-100 text-indigo-700 border-indigo-200", label: "Shipped" },
-      delivered: { className: "bg-emerald-100 text-emerald-700 border-emerald-200", label: "Delivered" },
-      cancelled: { className: "bg-rose-100 text-rose-700 border-rose-200", label: "Cancelled" },
-      refunded: { className: "bg-violet-100 text-violet-700 border-violet-200", label: "Refunded" },
+      pending: { className: "bg-yellow-100 text-yellow-800 border-yellow-200", label: "Pending" },
+      processing: { className: "bg-blue-100 text-blue-800 border-blue-200", label: "Processing" },
+      shipped: { className: "bg-indigo-100 text-indigo-800 border-indigo-200", label: "Shipped" },
+      delivered: { className: "bg-green-100 text-green-800 border-green-200", label: "Delivered" },
+      cancelled: { className: "bg-red-100 text-red-800 border-red-200", label: "Cancelled" },
+      refunded: { className: "bg-purple-100 text-purple-800 border-purple-200", label: "Refunded" },
     }
     const config = statusConfig[status] || statusConfig.pending
     return (
