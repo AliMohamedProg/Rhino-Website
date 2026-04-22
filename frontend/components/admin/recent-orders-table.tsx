@@ -25,8 +25,7 @@ export function RecentOrdersTable({ orders, className }: RecentOrdersTableProps)
     }
     const config = statusConfig[status] || statusConfig.pending
     return (
-      <Badge className={cn("border font-medium text-xs inline-flex items-center gap-1.5", config.className)}>
-        <span className="h-1.5 w-1.5 rounded-full bg-current" />
+      <Badge className={cn("border font-medium text-xs", config.className)}>
         {config.label}
       </Badge>
     )

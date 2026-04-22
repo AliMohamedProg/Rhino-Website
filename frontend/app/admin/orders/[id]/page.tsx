@@ -246,8 +246,7 @@ export default function OrderDetailPage() {
 
     const config = statusConfig[value]
     return (
-      <Badge className={cn("border inline-flex items-center gap-1.5 font-semibold", config.className)}>
-        <span className="h-1.5 w-1.5 rounded-full bg-current" />
+      <Badge className={cn("border font-semibold", config.className)}>
         {config.label}
       </Badge>
     )

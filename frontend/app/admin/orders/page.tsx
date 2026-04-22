@@ -102,8 +102,7 @@ export default function OrdersPage() {
     }
     const config = statusConfig[status] || statusConfig.pending
     return (
-      <Badge className={`border inline-flex items-center gap-1.5 font-semibold ${config.className}`}>
-        <span className="h-1.5 w-1.5 rounded-full bg-current" />
+      <Badge className={cn("border font-semibold", config.className)}>
         {config.label}
       </Badge>
     )
@@ -118,7 +117,7 @@ export default function OrdersPage() {
       Failed: { label: "Failed", className: "bg-red-100 text-red-800 border-red-200" },
     }
     const config = statusConfig[status] || statusConfig["Pending"]
-    return <Badge variant="outline" className={cn("font-medium", config.className)}>{config.label}</Badge>
+    return <Badge className={cn("border font-semibold", config.className)}>{config.label}</Badge>
   }
 
   const handleStatusChange = async (orderId: string, newStatus: Order["status"]) => {

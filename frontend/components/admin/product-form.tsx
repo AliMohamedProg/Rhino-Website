@@ -40,7 +40,9 @@ export function ProductForm({ product, mode }: ProductFormProps) {
 
   const [formData, setFormData] = useState({
     nameEn: product?.nameEn || "",
+    nameAr: product?.nameAr || "",
     descriptionEn: product?.descriptionEn || "",
+    descriptionAr: product?.descriptionAr || "",
     price: product?.originalPrice ?? product?.price ?? 0,
     discountAmount: product?.discountAmount ?? 0,
     stock: product?.stock || 0,
@@ -48,7 +50,9 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     images: buildInitialImages(product),
     mainImage: product?.mainImage || product?.images?.[0] || "",
     colorsEn: product?.colorsEn || "",
+    colorsAr: product?.colorsAr || "",
     materialEn: product?.materialEn || "",
+    materialAr: product?.materialAr || "",
   })
 
   const [categories, setCategories] = useState<AdminCategoryDto[]>([])
@@ -60,7 +64,9 @@ export function ProductForm({ product, mode }: ProductFormProps) {
 
     setFormData({
       nameEn: product.nameEn || "",
+      nameAr: product.nameAr || "",
       descriptionEn: product.descriptionEn || "",
+      descriptionAr: product.descriptionAr || "",
       price: product.originalPrice ?? product.price ?? 0,
       discountAmount: product.discountAmount ?? 0,
       stock: product.stock || 0,
@@ -68,7 +74,9 @@ export function ProductForm({ product, mode }: ProductFormProps) {
       images: buildInitialImages(product),
       mainImage: product.mainImage || product.images?.[0] || "",
       colorsEn: product.colorsEn || "",
+      colorsAr: product.colorsAr || "",
       materialEn: product.materialEn || "",
+      materialAr: product.materialAr || "",
     })
   }, [product])
 
@@ -162,6 +170,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
   const discountedPrice = Math.max(0, Math.round(formData.price * (1 - normalizedDiscount / 100)))
 
   const colorsValidationEn = validateColorsInputEn(formData.colorsEn || "")
+  const colorsValidationAr = formData.colorsAr ? { valid: true, normalized: formData.colorsAr.trim() } : { valid: true, normalized: "" }
   const showColorsErrorEn = formData.colorsEn.trim().length > 0 && !colorsValidationEn.valid
 
   const handleSubmit = async (e: FormEvent) => {
@@ -194,17 +203,17 @@ export function ProductForm({ product, mode }: ProductFormProps) {
       const payload = {
         id: product?.id || "00000000-0000-0000-0000-000000000000",
         nameEn: formData.nameEn,
-        nameAr: "",
+        nameAr: formData.nameAr || "",
         descriptionEn: formData.descriptionEn,
-        descriptionAr: "",
+        descriptionAr: formData.descriptionAr || "",
         price: formData.price,
         discountAmount,
         stockNumber: formData.stock,
         categoryId: formData.categoryId,
         colorsEn: colorsValidationEn.normalized,
-        colorsAr: "",
+        colorsAr: colorsValidationAr.normalized,
         materialEn: (formData.materialEn || "").trim(),
-        materialAr: "",
+        materialAr: (formData.materialAr || "").trim(),
         mainImage,
         images: formData.images.map((url) => ({ imageUrl: url })),
         currentState,
@@ -454,7 +463,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
 
               <div className="space-y-2">
                 <Label htmlFor="colorsEn" className="text-sm font-semibold text-[#4b3d34]">
-                  Colors
+                  Colors (English)
                 </Label>
                 <Input
                   id="colorsEn"
@@ -472,14 +481,40 @@ export function ProductForm({ product, mode }: ProductFormProps) {
               </div>
 
               <div className="space-y-2">
+                <Label htmlFor="colorsAr" className="text-sm font-semibold text-[#4b3d34]">
+                  Colors (Arabic)
+                </Label>
+                <Input
+                  id="colorsAr"
+                  value={formData.colorsAr}
+                  onChange={(e) => handleChange("colorsAr", e.target.value)}
+                  placeholder="بيج,أسود,بلوط"
+                  className="admin-input h-11"
+                />
+              </div>
+
+              <div className="space-y-2">
                 <Label htmlFor="materialEn" className="text-sm font-semibold text-[#4b3d34]">
-                  Material
+                  Material (English)
                 </Label>
                 <Input
                   id="materialEn"
                   value={formData.materialEn}
                   onChange={(e) => handleChange("materialEn", e.target.value)}
                   placeholder="Wood, Fabric, Metal..."
+                  className="admin-input h-11"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="materialAr" className="text-sm font-semibold text-[#4b3d34]">
+                  Material (Arabic)
+                </Label>
+                <Input
+                  id="materialAr"
+                  value={formData.materialAr}
+                  onChange={(e) => handleChange("materialAr", e.target.value)}
+                  placeholder="خشب,قماش,معدن"
                   className="admin-input h-11"
                 />
               </div>
