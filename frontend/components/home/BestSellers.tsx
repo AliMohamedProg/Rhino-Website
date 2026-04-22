@@ -90,7 +90,7 @@ export function BestSellers({ initialBestSellers }: BestSellersProps) {
         </div>
 
         {/* Horizontal scroll on mobile, grid on desktop */}
-        <div className="flex overflow-x-auto pb-8 snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-12 w-full max-w-6xl mx-auto no-scrollbar">
+        <div className="flex overflow-x-auto pb-8 snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 w-full max-w-6xl mx-auto no-scrollbar">
           {(initialBestSellers || []).slice(0, 3).map((product, index) => (
             <div key={index} className="min-w-[85vw] md:min-w-0 snap-center">
               <ProductCard product={product}
