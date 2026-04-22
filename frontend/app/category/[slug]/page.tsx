@@ -46,6 +46,19 @@ interface ReviewStats {
 }
 
 function toSafeNumber(value: unknown): number {
+  if (typeof value === "number") {
+    return Number.isFinite(value) ? value : 0
+  }
+  if (typeof value === "string") {
+    const normalized = value
+      .replace(/[٠-٩]/g, (d) => "0123456789"["٠١٢٣٤٥٦٧٨٩".indexOf(d)] ?? d)
+      .replace(/[٫]/g, ".")
+      .replace(/[٬،]/g, ",")
+    const cleaned = normalized.replace(/,/g, "").replace(/[^\d.-]/g, "")
+    const parsed = Number(cleaned)
+    return Number.isFinite(parsed) ? parsed : 0
+  }
+  if (value == null) return 0
   const num = Number(value)
   return Number.isFinite(num) ? num : 0
 }

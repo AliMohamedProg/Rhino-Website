@@ -101,30 +101,40 @@ export function ProductCard({
   const colorsRaw = propColorsRaw ?? (product ? (language === "ar" ? product.colorsAr : product.colorsEn) ?? "" : "")
   const quantity = propStockNumber ?? product?.stockNumber
   const isInStock = quantity === undefined || quantity > 0;
-  const discountAmountVal = Number(discountAmount ?? product?.discountAmount ?? 0);
+  const parseNumberish = (value: unknown): number => {
+    if (typeof value === "number") return Number.isFinite(value) ? value : 0;
+    if (typeof value === "string") {
+      const normalized = value
+        .replace(/[٠-٩]/g, (d) => "0123456789"["٠١٢٣٤٥٦٧٨٩".indexOf(d)] ?? d)
+        .replace(/[٫]/g, ".")
+        .replace(/[٬،]/g, ",");
+      const cleaned = normalized.replace(/,/g, "").replace(/[^\d.-]/g, "");
+      const parsed = Number(cleaned);
+      return Number.isFinite(parsed) ? parsed : 0;
+    }
+    if (value == null) return 0;
+    const n = Number(value);
+    return Number.isFinite(n) ? n : 0;
+  };
+  const discountAmountVal = parseNumberish(discountAmount ?? product?.discountAmount ?? 0);
   const normalizedDiscount = Number.isFinite(discountAmountVal)
     ? Math.min(99.99, Math.max(0, discountAmountVal))
     : 0;
-  const parseMoneyString = (value?: string) => {
-    if (!value) return 0;
-    const cleaned = value.replace(/[^\d.-]/g, "");
-    const parsed = Number(cleaned);
-    return Number.isFinite(parsed) ? parsed : 0;
-  };
   const currentPriceNum = (() => {
-    const fromProduct = Number(product?.price);
+    const fromProduct = parseNumberish(product?.price);
     if (Number.isFinite(fromProduct) && fromProduct > 0) return fromProduct;
-    return parseMoneyString(price);
+    return parseNumberish(price);
   })();
   const originalPriceNum = (() => {
-    const fromOriginal = Number(product?.originalPrice);
+    const fromOriginal = parseNumberish(product?.originalPrice);
     if (Number.isFinite(fromOriginal) && fromOriginal > 0) return fromOriginal;
-    const fromOld = Number(product?.oldPrice);
+    const fromOld = parseNumberish(product?.oldPrice);
     if (Number.isFinite(fromOld) && fromOld > 0) return fromOld;
-    return parseMoneyString(originalPrice);
+    return parseNumberish(originalPrice);
   })();
-  const hasExplicitOldPrice = originalPriceNum > 0 && originalPriceNum > currentPriceNum;
-  const hasDiscount = normalizedDiscount > 0 || hasExplicitOldPrice;
+  const hasValidCurrentPrice = currentPriceNum > 0;
+  const hasExplicitOldPrice = hasValidCurrentPrice && originalPriceNum > currentPriceNum;
+  const hasDiscount = hasValidCurrentPrice && (normalizedDiscount > 0 || hasExplicitOldPrice);
 
   let computedDiscountPercent = 0;
   let displayMainPrice = price;
