@@ -44,19 +44,19 @@ function statusBadge(status: string, language: string) {
   const normalized = (status || "Pending").toLowerCase()
   switch (normalized) {
     case "pending":
-      return <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">{language === "ar" ? "قيد الانتظار" : "Pending"}</Badge>
+      return <Badge className="bg-yellow-500 text-white border-yellow-600">{language === "ar" ? "قيد الانتظار" : "Pending"}</Badge>
     case "processing":
-      return <Badge className="bg-blue-100 text-blue-800 border-blue-200">{language === "ar" ? "جاري المعالجة" : "Processing"}</Badge>
+      return <Badge className="bg-blue-500 text-white border-blue-600">{language === "ar" ? "جاري المعالجة" : "Processing"}</Badge>
     case "shipped":
-      return <Badge className="bg-indigo-100 text-indigo-800 border-indigo-200">{language === "ar" ? "تم الشحن" : "Shipped"}</Badge>
+      return <Badge className="bg-indigo-500 text-white border-indigo-600">{language === "ar" ? "تم الشحن" : "Shipped"}</Badge>
     case "delivered":
-      return <Badge className="bg-green-100 text-green-800 border-green-200">{language === "ar" ? "تم التوصيل" : "Delivered"}</Badge>
+      return <Badge className="bg-green-500 text-white border-green-600">{language === "ar" ? "تم التوصيل" : "Delivered"}</Badge>
     case "cancelled":
-      return <Badge className="bg-red-100 text-red-800 border-red-200">{language === "ar" ? "ملغي" : "Cancelled"}</Badge>
+      return <Badge className="bg-red-500 text-white border-red-600">{language === "ar" ? "ملغي" : "Cancelled"}</Badge>
     case "refunded":
-      return <Badge className="bg-purple-100 text-purple-800 border-purple-200">{language === "ar" ? "مرتجع" : "Refunded"}</Badge>
+      return <Badge className="bg-purple-500 text-white border-purple-600">{language === "ar" ? "مرتجع" : "Refunded"}</Badge>
     default:
-      return <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">{status || (language === "ar" ? "قيد الانتظار" : "Pending")}</Badge>
+      return <Badge className="bg-yellow-500 text-white border-yellow-600">{status || (language === "ar" ? "قيد الانتظار" : "Pending")}</Badge>
   }
 }
 
@@ -64,14 +64,14 @@ function paymentStatusBadge(status: string, language: string) {
   const normalized = (status || "Pending").toLowerCase()
   switch (normalized) {
     case "paid":
-      return <Badge className="bg-green-100 text-green-800 border-green-200">{language === "ar" ? "مدفوع" : "Paid"}</Badge>
+      return <Badge className="bg-green-500 text-white border-green-600">{language === "ar" ? "مدفوع" : "Paid"}</Badge>
     case "refunded":
-      return <Badge className="bg-purple-100 text-purple-800 border-purple-200">{language === "ar" ? "مرتجع" : "Refunded"}</Badge>
+      return <Badge className="bg-purple-500 text-white border-purple-600">{language === "ar" ? "مرتجع" : "Refunded"}</Badge>
     case "failed":
-      return <Badge className="bg-red-100 text-red-800 border-red-200">{language === "ar" ? "فشل" : "Failed"}</Badge>
+      return <Badge className="bg-red-500 text-white border-red-600">{language === "ar" ? "فشل" : "Failed"}</Badge>
     case "pending":
     default:
-      return <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">{language === "ar" ? "معلق" : "Pending"}</Badge>
+      return <Badge className="bg-yellow-500 text-white border-yellow-600">{language === "ar" ? "معلق" : "Pending"}</Badge>
   }
 }
 

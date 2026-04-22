@@ -93,12 +93,12 @@ export default function OrdersPage() {
 
   const getStatusBadge = (status: Order["status"]) => {
     const statusConfig: Record<string, { label: string; className: string }> = {
-      pending: { label: "Pending", className: "bg-yellow-100 text-yellow-800 border-yellow-200" },
-      processing: { label: "Processing", className: "bg-blue-100 text-blue-800 border-blue-200" },
-      shipped: { label: "Shipped", className: "bg-indigo-100 text-indigo-800 border-indigo-200" },
-      delivered: { label: "Delivered", className: "bg-green-100 text-green-800 border-green-200" },
-      cancelled: { label: "Cancelled", className: "bg-red-100 text-red-800 border-red-200" },
-      refunded: { label: "Refunded", className: "bg-purple-100 text-purple-800 border-purple-200" },
+      pending: { label: "Pending", className: "bg-yellow-500 text-white border-yellow-600" },
+      processing: { label: "Processing", className: "bg-blue-500 text-white border-blue-600" },
+      shipped: { label: "Shipped", className: "bg-indigo-500 text-white border-indigo-600" },
+      delivered: { label: "Delivered", className: "bg-green-500 text-white border-green-600" },
+      cancelled: { label: "Cancelled", className: "bg-red-500 text-white border-red-600" },
+      refunded: { label: "Refunded", className: "bg-purple-500 text-white border-purple-600" },
     }
     const config = statusConfig[status] || statusConfig.pending
     return <Badge className={cn("border font-semibold", config.className)}>{config.label}</Badge>
@@ -107,10 +107,10 @@ export default function OrdersPage() {
   const getPaymentStatusBadge = (paymentStatus: string) => {
     const status = paymentStatus || "Pending"
     const statusConfig: Record<string, { label: string; className: string }> = {
-      Paid: { label: "Paid", className: "bg-green-100 text-green-800 border-green-200" },
-      Pending: { label: "Pending", className: "bg-yellow-100 text-yellow-800 border-yellow-200" },
-      Refunded: { label: "Refunded", className: "bg-purple-100 text-purple-800 border-purple-200" },
-      Failed: { label: "Failed", className: "bg-red-100 text-red-800 border-red-200" },
+      Paid: { label: "Paid", className: "bg-green-500 text-white border-green-600" },
+      Pending: { label: "Pending", className: "bg-yellow-500 text-white border-yellow-600" },
+      Refunded: { label: "Refunded", className: "bg-purple-500 text-white border-purple-600" },
+      Failed: { label: "Failed", className: "bg-red-500 text-white border-red-600" },
     }
     const config = statusConfig[status] || statusConfig["Pending"]
     return <Badge className={cn("border font-semibold", config.className)}>{config.label}</Badge>
