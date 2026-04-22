@@ -45,6 +45,26 @@ interface ReviewStats {
   count: number
 }
 
+function toSafeNumber(value: unknown): number {
+  const num = Number(value)
+  return Number.isFinite(num) ? num : 0
+}
+
+function getOriginalPriceValue(price: number, oldPrice: number, discountAmount: number): number | undefined {
+  if (oldPrice > price) return oldPrice
+  if (discountAmount > 0 && discountAmount < 100 && price > 0) {
+    return Math.round(price / (1 - discountAmount / 100))
+  }
+  return undefined
+}
+
+function getOriginalPriceLabel(price: number, oldPrice: number, discountAmount: number): string | undefined {
+  const originalPriceValue = getOriginalPriceValue(price, oldPrice, discountAmount)
+  return originalPriceValue && originalPriceValue > price
+    ? `${formatPrice(originalPriceValue)} EGP`
+    : undefined
+}
+
 export default function CategoryPage() {
   const params = useParams()
   const categoryId = params.slug as string
@@ -99,12 +119,12 @@ export default function CategoryPage() {
           nameEn: item.nameEn ?? item.NameEn ?? "",
           descriptionAr: item.descriptionAr ?? item.DescriptionAr ?? "",
           descriptionEn: item.descriptionEn ?? item.DescriptionEn ?? "",
-          price: item.price ?? item.Price ?? 0,
-          oldPrice: item.oldPrice ?? item.OldPrice ?? 0,
-          stockNumber: item.stockNumber ?? item.StockNumber ?? 0,
+          price: toSafeNumber(item.price ?? item.Price),
+          oldPrice: toSafeNumber(item.oldPrice ?? item.OldPrice),
+          stockNumber: toSafeNumber(item.stockNumber ?? item.StockNumber),
           categoryId: item.categoryId ?? item.CategoryId ?? "",
-          overallRating: item.overallRating ?? item.OverallRating ?? 0,
-          discountAmount: item.discountAmount ?? item.DiscountAmount ?? 0,
+          overallRating: toSafeNumber(item.overallRating ?? item.OverallRating),
+          discountAmount: toSafeNumber(item.discountAmount ?? item.DiscountAmount),
           mainImage: item.mainImage ?? item.MainImage ?? item.image ?? item.Image ?? "",
           colorsEn: item.colorsEn ?? item.ColorsEn ?? item.colors ?? item.Colors ?? "",
           colorsAr: item.colorsAr ?? item.ColorsAr ?? item.colors ?? item.Colors ?? "",
@@ -364,11 +384,7 @@ export default function CategoryPage() {
                       description={language === "ar" ? product.nameAr : product.nameEn}
                       price={`${formatPrice(product.price)} EGP`}
                       discountAmount={product.discountAmount || 0}
-                      originalPrice={
-                        (product.oldPrice && product.oldPrice > product.price)
-                          ? `${formatPrice(product.oldPrice)} EGP`
-                          : undefined
-                      }
+                      originalPrice={getOriginalPriceLabel(product.price, product.oldPrice ?? 0, product.discountAmount || 0)}
                       rating={reviewStatsByProductId[product.id]?.average ?? product.overallRating ?? 0}
                       reviewsCountVal={reviewStatsByProductId[product.id]?.count ?? 0}
                       mainImage={product.mainImage}
@@ -379,15 +395,12 @@ export default function CategoryPage() {
                         await addItem(productId, 1, selectedColorName)
                       }}
                       onToggleWishlist={(productId) => {
-                        const discountedPrice =
-                          product.discountAmount > 0
-                            ? product.price * (1 - product.discountAmount / 100)
-                            : product.price
+                        const originalPriceValue = getOriginalPriceValue(product.price, product.oldPrice ?? 0, product.discountAmount || 0)
                         toggleItem({
                           id: productId,
                           name: { ar: product.nameAr, en: product.nameEn },
-                          price: discountedPrice,
-                          originalPrice: product.discountAmount > 0 ? product.price : undefined,
+                          price: product.price,
+                          originalPrice: originalPriceValue,
                           image: product.mainImage || "/placeholder.svg",
                         })
                       }}
