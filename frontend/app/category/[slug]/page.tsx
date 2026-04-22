@@ -134,12 +134,12 @@ export default function CategoryPage() {
               fetch(`${apiBase}/api/review/get-average-reviews?productId=${encodeURIComponent(productId)}`),
               fetch(`${apiBase}/api/review/get-reviews-count?productId=${encodeURIComponent(productId)}`)
             ])
-            
+
             if (!avgRes.ok || !countRes.ok) return [productId, null] as const
-            
+
             const average = await avgRes.json()
             const count = await countRes.json()
-            
+
             return [productId, { average: Number(average) || 0, count: Number(count) || 0 }] as const
           } catch {
             return [productId, null] as const
@@ -354,8 +354,8 @@ export default function CategoryPage() {
                       key={product.id}
                       id={product.id}
                       category={(categoryNameById[product.categoryId] || "FURNITURE").toUpperCase()}
-                      title={language === "ar" ? product.nameAr : product.nameEn}
-                      description={language === "ar" ? product.nameAr : product.nameEn}
+                      title={product.nameEn}
+                      description={product.nameEn}
                       price={`${formatPrice(product.price)} EGP`}
                       discountAmount={product.discountAmount || 0}
                       originalPrice={
