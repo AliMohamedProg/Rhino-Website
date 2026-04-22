@@ -24,7 +24,7 @@ export function RecentOrdersTable({ orders, className }: RecentOrdersTableProps)
       refunded: { className: "bg-purple-500 text-white border-2 border-purple-600", label: "Refunded" },
     }
     const config = statusConfig[status] || statusConfig.pending
-    return <Badge className={cn("font-medium text-xs", config.className)}>{config.label}</Badge>
+    return <span className={cn("inline-flex items-center justify-center rounded-xl px-2 py-0.5 text-xs font-medium", config.className)}>{config.label}</span>
   }
 
   const formatCurrency = (amount: number) => `${amount.toLocaleString()} EGP`

@@ -44,19 +44,19 @@ function statusBadge(status: string, language: string) {
   const normalized = (status || "Pending").toLowerCase()
   switch (normalized) {
     case "pending":
-      return <Badge className="bg-yellow-500 text-white border-2 border-yellow-600">{language === "ar" ? "قيد الانتظار" : "Pending"}</Badge>
+      return <span className="inline-flex items-center justify-center rounded-xl px-2.5 py-1 text-xs font-semibold bg-yellow-500 text-white border-2 border-yellow-600">{language === "ar" ? "قيد الانتظار" : "Pending"}</span>
     case "processing":
-      return <Badge className="bg-blue-500 text-white border-2 border-blue-600">{language === "ar" ? "جاري المعالجة" : "Processing"}</Badge>
+      return <span className="inline-flex items-center justify-center rounded-xl px-2.5 py-1 text-xs font-semibold bg-blue-500 text-white border-2 border-blue-600">{language === "ar" ? "جاري المعالجة" : "Processing"}</span>
     case "shipped":
-      return <Badge className="bg-indigo-500 text-white border-2 border-indigo-600">{language === "ar" ? "تم الشحن" : "Shipped"}</Badge>
+      return <span className="inline-flex items-center justify-center rounded-xl px-2.5 py-1 text-xs font-semibold bg-indigo-500 text-white border-2 border-indigo-600">{language === "ar" ? "تم الشحن" : "Shipped"}</span>
     case "delivered":
-      return <Badge className="bg-green-500 text-white border-2 border-green-600">{language === "ar" ? "تم التوصيل" : "Delivered"}</Badge>
+      return <span className="inline-flex items-center justify-center rounded-xl px-2.5 py-1 text-xs font-semibold bg-green-500 text-white border-2 border-green-600">{language === "ar" ? "تم التوصيل" : "Delivered"}</span>
     case "cancelled":
-      return <Badge className="bg-red-500 text-white border-2 border-red-600">{language === "ar" ? "ملغي" : "Cancelled"}</Badge>
+      return <span className="inline-flex items-center justify-center rounded-xl px-2.5 py-1 text-xs font-semibold bg-red-500 text-white border-2 border-red-600">{language === "ar" ? "ملغي" : "Cancelled"}</span>
     case "refunded":
-      return <Badge className="bg-purple-500 text-white border-2 border-purple-600">{language === "ar" ? "مرتجع" : "Refunded"}</Badge>
+      return <span className="inline-flex items-center justify-center rounded-xl px-2.5 py-1 text-xs font-semibold bg-purple-500 text-white border-2 border-purple-600">{language === "ar" ? "مرتجع" : "Refunded"}</span>
     default:
-      return <Badge className="bg-yellow-500 text-white border-2 border-yellow-600">{status || (language === "ar" ? "قيد الانتظار" : "Pending")}</Badge>
+      return <span className="inline-flex items-center justify-center rounded-xl px-2.5 py-1 text-xs font-semibold bg-yellow-500 text-white border-2 border-yellow-600">{status || (language === "ar" ? "قيد الانتظار" : "Pending")}</span>
   }
 }
 
@@ -64,14 +64,14 @@ function paymentStatusBadge(status: string, language: string) {
   const normalized = (status || "Pending").toLowerCase()
   switch (normalized) {
     case "paid":
-      return <Badge className="bg-green-500 text-white border-2 border-green-600">{language === "ar" ? "مدفوع" : "Paid"}</Badge>
+      return <span className="inline-flex items-center justify-center rounded-xl px-2.5 py-1 text-xs font-semibold bg-green-500 text-white border-2 border-green-600">{language === "ar" ? "مدفوع" : "Paid"}</span>
     case "refunded":
-      return <Badge className="bg-purple-500 text-white border-2 border-purple-600">{language === "ar" ? "مرتجع" : "Refunded"}</Badge>
+      return <span className="inline-flex items-center justify-center rounded-xl px-2.5 py-1 text-xs font-semibold bg-purple-500 text-white border-2 border-purple-600">{language === "ar" ? "مرتجع" : "Refunded"}</span>
     case "failed":
-      return <Badge className="bg-red-500 text-white border-2 border-red-600">{language === "ar" ? "فشل" : "Failed"}</Badge>
+      return <span className="inline-flex items-center justify-center rounded-xl px-2.5 py-1 text-xs font-semibold bg-red-500 text-white border-2 border-red-600">{language === "ar" ? "فشل" : "Failed"}</span>
     case "pending":
     default:
-      return <Badge className="bg-yellow-500 text-white border-2 border-yellow-600">{language === "ar" ? "معلق" : "Pending"}</Badge>
+      return <span className="inline-flex items-center justify-center rounded-xl px-2.5 py-1 text-xs font-semibold bg-yellow-500 text-white border-2 border-yellow-600">{language === "ar" ? "معلق" : "Pending"}</span>
   }
 }
 

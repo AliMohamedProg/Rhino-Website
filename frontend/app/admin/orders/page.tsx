@@ -101,7 +101,7 @@ export default function OrdersPage() {
       refunded: { label: "Refunded", className: "bg-purple-500 text-white border-2 border-purple-600" },
     }
     const config = statusConfig[status] || statusConfig.pending
-    return <Badge className={cn("font-semibold", config.className)}>{config.label}</Badge>
+    return <span className={cn("inline-flex items-center justify-center rounded-xl px-2.5 py-1 text-xs font-semibold", config.className)}>{config.label}</span>
   }
 
   const getPaymentStatusBadge = (paymentStatus: string) => {
@@ -113,7 +113,7 @@ export default function OrdersPage() {
       Failed: { label: "Failed", className: "bg-red-500 text-white border-2 border-red-600" },
     }
     const config = statusConfig[status] || statusConfig["Pending"]
-    return <Badge className={cn("font-semibold", config.className)}>{config.label}</Badge>
+    return <span className={cn("inline-flex items-center justify-center rounded-xl px-2.5 py-1 text-xs font-semibold", config.className)}>{config.label}</span>
   }
 
   const handleStatusChange = async (orderId: string, newStatus: Order["status"]) => {
