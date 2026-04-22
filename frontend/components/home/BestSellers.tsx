@@ -78,9 +78,9 @@ export function BestSellers({ initialBestSellers }: BestSellersProps) {
   const [reviewStatsByProductId, setReviewStatsByProductId] = useState<Record<string, ReviewStats>>({})
   return (
     <section className="py-24 px-8 bg-white min-h-screen" id="catalog">
-      <div className="max-w-7xl mx-auto flex flex-col items-center">
+      <div className="max-w-7xl mx-auto flex flex-col">
 
-        <div className="flex flex-col items-center gap-4 mb-20 text-center">
+        <div className="flex flex-col gap-4 mb-20 px-2">
           <span className="text-[10px] tracking-[0.4em] font-bold text-taupe uppercase">
             Customer Favorites
           </span>
