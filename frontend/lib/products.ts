@@ -234,6 +234,7 @@ export interface PublicProduct {
   descriptionAr: string
   descriptionEn: string
   price: number
+  oldPrice?: number
   discountAmount?: number
   mainImage: string
   images: { imageUrl: string }[]
@@ -308,6 +309,7 @@ export async function getPublicProducts(): Promise<PublicProduct[]> {
     descriptionAr: item.descriptionAr ?? item.DescriptionAr ?? "",
     descriptionEn: item.descriptionEn ?? item.DescriptionEn ?? "",
     price: item.price ?? item.Price ?? 0,
+    oldPrice: item.oldPrice ?? item.OldPrice ?? 0,
     discountAmount: item.discountAmount ?? item.DiscountAmount ?? 0,
     mainImage: item.mainImage ?? item.MainImage ?? "",
     images: item.images ?? item.Images ?? [],
@@ -333,6 +335,7 @@ export async function getPublicBestSellers(): Promise<PublicProduct[]> {
     descriptionAr: item.descriptionAr ?? item.DescriptionAr ?? "",
     descriptionEn: item.descriptionEn ?? item.DescriptionEn ?? "",
     price: item.price ?? item.Price ?? 0,
+    oldPrice: item.oldPrice ?? item.OldPrice ?? 0,
     discountAmount: item.discountAmount ?? item.DiscountAmount ?? 0,
     mainImage: item.mainImage ?? item.MainImage ?? "",
     images: item.images ?? item.Images ?? [],

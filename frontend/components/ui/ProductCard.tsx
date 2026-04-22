@@ -104,6 +104,7 @@ export function ProductCard({
   const discountAmountVal = discountAmount ?? product?.discountAmount ?? 0;
   const currentPriceNum = product?.price ?? 0;
   const originalPriceNum = product?.originalPrice 
+    ?? product?.oldPrice 
     ?? (originalPrice ? parseFloat(originalPrice.replace(/[^0-9.]/g, '')) : 0)
     ?? 0;
   const hasExplicitOldPrice = originalPriceNum > 0 && originalPriceNum > currentPriceNum;
