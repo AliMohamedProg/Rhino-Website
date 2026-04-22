@@ -94,7 +94,10 @@ export default function CategoryPage() {
           id: item.id ?? item.Id ?? "",
           nameAr: item.nameAr ?? item.NameAr ?? "",
           nameEn: item.nameEn ?? item.NameEn ?? "",
+          descriptionAr: item.descriptionAr ?? item.DescriptionAr ?? "",
+          descriptionEn: item.descriptionEn ?? item.DescriptionEn ?? "",
           price: item.price ?? item.Price ?? 0,
+          oldPrice: item.oldPrice ?? item.OldPrice ?? 0,
           stockNumber: item.stockNumber ?? item.StockNumber ?? 0,
           categoryId: item.categoryId ?? item.CategoryId ?? "",
           overallRating: item.overallRating ?? item.OverallRating ?? 0,
@@ -354,8 +357,8 @@ export default function CategoryPage() {
                       key={product.id}
                       id={product.id}
                       category={(categoryNameById[product.categoryId] || "FURNITURE").toUpperCase()}
-                      title={product.nameEn}
-                      description={product.nameEn}
+                      title={language === "ar" ? product.nameAr : product.nameEn}
+                      description={language === "ar" ? product.nameAr : product.nameEn}
                       price={`${formatPrice(product.price)} EGP`}
                       discountAmount={product.discountAmount || 0}
                       originalPrice={
