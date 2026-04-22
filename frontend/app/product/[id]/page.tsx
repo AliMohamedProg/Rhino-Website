@@ -275,10 +275,6 @@ export default function ProductDetailsPage() {
     const normalizedReviewText = reviewText.trim()
     const normalizedTitle = language === "ar" ? "تقييم" : "Review"
 
-    if (!normalizedReviewText) {
-      setReviewError(language === "ar" ? "يرجى إدخال التعليق." : "Please enter a comment.")
-      return
-    }
 
     setReviewError("")
     setIsSubmittingReview(true)
@@ -309,12 +305,10 @@ export default function ProductDetailsPage() {
 
         const newReview: Review = {
           id: r?.id || Date.now().toString(),
-          title: normalizedTitle,
           date: new Date().toISOString().split("T")[0],
           rating: reviewRating,
           text: normalizedReviewText,
           userName: language === "ar" ? "أنت" : "You",
-        }
         setReviews([newReview, ...reviews])
         setShowReviewForm(false)
         setReviewText("")
@@ -677,7 +671,6 @@ export default function ProductDetailsPage() {
                           placeholder={language === "ar" ? "اكتب تجربتك مع المنتج" : "Share your experience with this product"}
                           value={reviewText}
                           onChange={e => setReviewText(e.target.value)}
-                          required
                           maxLength={1000}
                         />
                       </div>
