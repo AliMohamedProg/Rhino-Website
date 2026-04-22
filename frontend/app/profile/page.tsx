@@ -30,37 +30,37 @@ const getStatusMeta = (status: string, language: "ar" | "en") => {
   if (normalized.includes("deliver")) {
     return {
       label: language === "ar" ? "تم التوصيل" : "Delivered",
-      className: "bg-green-500 text-white border-green-600",
+      className: "bg-green-500 text-white border-2 border-green-600",
     }
   }
   if (normalized.includes("ship")) {
     return {
       label: language === "ar" ? "تم الشحن" : "Shipped",
-      className: "bg-indigo-500 text-white border-indigo-600",
+      className: "bg-indigo-500 text-white border-2 border-indigo-600",
     }
   }
   if (normalized.includes("process")) {
     return {
       label: language === "ar" ? "قيد المعالجة" : "Processing",
-      className: "bg-blue-500 text-white border-blue-600",
+      className: "bg-blue-500 text-white border-2 border-blue-600",
     }
   }
   if (normalized.includes("cancel")) {
     return {
       label: language === "ar" ? "ملغي" : "Cancelled",
-      className: "bg-red-500 text-white border-red-600",
+      className: "bg-red-500 text-white border-2 border-red-600",
     }
   }
   if (normalized.includes("refund")) {
     return {
       label: language === "ar" ? "مرتجع" : "Refunded",
-      className: "bg-purple-500 text-white border-purple-600",
+      className: "bg-purple-500 text-white border-2 border-purple-600",
     }
   }
 
   return {
     label: language === "ar" ? "قيد الانتظار" : "Pending",
-    className: "bg-yellow-500 text-white border-yellow-600",
+    className: "bg-yellow-500 text-white border-2 border-yellow-600",
   }
 }
 

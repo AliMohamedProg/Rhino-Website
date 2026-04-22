@@ -236,16 +236,16 @@ export default function OrderDetailPage() {
 
   const getStatusBadge = (value: Order["status"]) => {
     const statusConfig: Record<Order["status"], { label: string; className: string }> = {
-      pending: { label: "Pending", className: "bg-yellow-500 text-white border-yellow-600" },
-      processing: { label: "Processing", className: "bg-blue-500 text-white border-blue-600" },
-      shipped: { label: "Shipped", className: "bg-indigo-500 text-white border-indigo-600" },
-      delivered: { label: "Delivered", className: "bg-green-500 text-white border-green-600" },
-      cancelled: { label: "Cancelled", className: "bg-red-500 text-white border-red-600" },
-      refunded: { label: "Refunded", className: "bg-purple-500 text-white border-purple-600" },
+      pending: { label: "Pending", className: "bg-yellow-500 text-white border-2 border-yellow-600" },
+      processing: { label: "Processing", className: "bg-blue-500 text-white border-2 border-blue-600" },
+      shipped: { label: "Shipped", className: "bg-indigo-500 text-white border-2 border-indigo-600" },
+      delivered: { label: "Delivered", className: "bg-green-500 text-white border-2 border-green-600" },
+      cancelled: { label: "Cancelled", className: "bg-red-500 text-white border-2 border-red-600" },
+      refunded: { label: "Refunded", className: "bg-purple-500 text-white border-2 border-purple-600" },
     }
 
     const config = statusConfig[value]
-    return <Badge className={cn("border font-semibold", config.className)}>{config.label}</Badge>
+    return <Badge className={cn("font-semibold", config.className)}>{config.label}</Badge>
   }
 
   const formatCurrency = (amount: number) => `${amount.toLocaleString()} ${t("common.egp")}`

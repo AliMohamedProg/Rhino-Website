@@ -16,15 +16,15 @@ interface RecentOrdersTableProps {
 export function RecentOrdersTable({ orders, className }: RecentOrdersTableProps) {
   const getStatusBadge = (status: Order["status"]) => {
     const statusConfig: Record<string, { className: string; label: string }> = {
-      pending: { className: "bg-yellow-500 text-white border-yellow-600", label: "Pending" },
-      processing: { className: "bg-blue-500 text-white border-blue-600", label: "Processing" },
-      shipped: { className: "bg-indigo-500 text-white border-indigo-600", label: "Shipped" },
-      delivered: { className: "bg-green-500 text-white border-green-600", label: "Delivered" },
-      cancelled: { className: "bg-red-500 text-white border-red-600", label: "Cancelled" },
-      refunded: { className: "bg-purple-500 text-white border-purple-600", label: "Refunded" },
+      pending: { className: "bg-yellow-500 text-white border-2 border-yellow-600", label: "Pending" },
+      processing: { className: "bg-blue-500 text-white border-2 border-blue-600", label: "Processing" },
+      shipped: { className: "bg-indigo-500 text-white border-2 border-indigo-600", label: "Shipped" },
+      delivered: { className: "bg-green-500 text-white border-2 border-green-600", label: "Delivered" },
+      cancelled: { className: "bg-red-500 text-white border-2 border-red-600", label: "Cancelled" },
+      refunded: { className: "bg-purple-500 text-white border-2 border-purple-600", label: "Refunded" },
     }
     const config = statusConfig[status] || statusConfig.pending
-    return <Badge className={cn("border font-medium text-xs", config.className)}>{config.label}</Badge>
+    return <Badge className={cn("font-medium text-xs", config.className)}>{config.label}</Badge>
   }
 
   const formatCurrency = (amount: number) => `${amount.toLocaleString()} EGP`
