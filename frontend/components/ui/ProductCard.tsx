@@ -101,14 +101,30 @@ export function ProductCard({
   const colorsRaw = propColorsRaw ?? (product ? (language === "ar" ? product.colorsAr : product.colorsEn) ?? "" : "")
   const quantity = propStockNumber ?? product?.stockNumber
   const isInStock = quantity === undefined || quantity > 0;
-  const discountAmountVal = discountAmount ?? product?.discountAmount ?? 0;
-  const currentPriceNum = product?.price ?? 0;
-  const originalPriceNum = product?.originalPrice
-    ?? product?.oldPrice
-    ?? (originalPrice ? parseFloat(originalPrice.replace(/[^0-9.]/g, '')) : 0)
-    ?? 0;
+  const discountAmountVal = Number(discountAmount ?? product?.discountAmount ?? 0);
+  const normalizedDiscount = Number.isFinite(discountAmountVal)
+    ? Math.min(99.99, Math.max(0, discountAmountVal))
+    : 0;
+  const parseMoneyString = (value?: string) => {
+    if (!value) return 0;
+    const cleaned = value.replace(/[^\d.-]/g, "");
+    const parsed = Number(cleaned);
+    return Number.isFinite(parsed) ? parsed : 0;
+  };
+  const currentPriceNum = (() => {
+    const fromProduct = Number(product?.price);
+    if (Number.isFinite(fromProduct) && fromProduct > 0) return fromProduct;
+    return parseMoneyString(price);
+  })();
+  const originalPriceNum = (() => {
+    const fromOriginal = Number(product?.originalPrice);
+    if (Number.isFinite(fromOriginal) && fromOriginal > 0) return fromOriginal;
+    const fromOld = Number(product?.oldPrice);
+    if (Number.isFinite(fromOld) && fromOld > 0) return fromOld;
+    return parseMoneyString(originalPrice);
+  })();
   const hasExplicitOldPrice = originalPriceNum > 0 && originalPriceNum > currentPriceNum;
-  const hasDiscount = discountAmountVal > 0 || hasExplicitOldPrice;
+  const hasDiscount = normalizedDiscount > 0 || hasExplicitOldPrice;
 
   let computedDiscountPercent = 0;
   let displayMainPrice = price;
@@ -118,9 +134,9 @@ export function ProductCard({
     computedDiscountPercent = Math.round(((originalPriceNum - currentPriceNum) / originalPriceNum) * 100);
     displayMainPrice = `${currentPriceNum.toLocaleString()} EGP`;
     displayLineThrough = `${originalPriceNum.toLocaleString()} EGP`;
-  } else if (discountAmountVal > 0) {
-    computedDiscountPercent = discountAmountVal;
-    displayLineThrough = displayLineThrough ?? `${currentPriceNum.toLocaleString()} EGP`;
+  } else if (normalizedDiscount > 0 && currentPriceNum > 0) {
+    computedDiscountPercent = Math.round(normalizedDiscount);
+    displayLineThrough = displayLineThrough ?? `${Math.round(currentPriceNum / (1 - normalizedDiscount / 100)).toLocaleString()} EGP`;
     displayMainPrice = `${currentPriceNum.toLocaleString()} EGP`;
   }
   const parsed = parseColors(colorsRaw);
