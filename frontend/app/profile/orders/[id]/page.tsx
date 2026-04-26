@@ -12,7 +12,9 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { formatPrice } from "@/lib/products"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
-import { Printer, Download } from "lucide-react"
+import { Printer, Download, Check, Package, Truck, ClipboardList, CheckCircle2, AlertCircle } from "lucide-react"
+import { cn } from "@/lib/utils"
+
 interface OrderItem {
   itemId: string
   nameEn: string
@@ -73,6 +75,150 @@ function paymentStatusBadge(status: string, language: string) {
     default:
       return <span className="inline-flex items-center justify-center rounded-xl px-2.5 py-1 text-xs font-semibold bg-yellow-500 text-white border-2 border-yellow-600">{language === "ar" ? "معلق" : "Pending"}</span>
   }
+}
+
+function OrderProgress({ status, language }: { status: string; language: string }) {
+  const steps = [
+    { id: "pending", labelEn: "Confirmed", labelAr: "تم التأكيد", icon: ClipboardList },
+    { id: "processing", labelEn: "Processing", labelAr: "جاري التجهيز", icon: Package },
+    { id: "shipped", labelEn: "On the Way", labelAr: "في الطريق", icon: Truck },
+    { id: "delivered", labelEn: "Delivered", labelAr: "تم التوصيل", icon: CheckCircle2 },
+  ]
+
+  const normalized = (status || "Pending").toLowerCase()
+  
+  let currentStep = 0
+  if (normalized === "processing") currentStep = 1
+  if (normalized === "shipped") currentStep = 2
+  if (normalized === "delivered") currentStep = 3
+  
+  const isCancelled = normalized === "cancelled"
+  const isRefunded = normalized === "refunded"
+
+  if (isCancelled || isRefunded) {
+    return (
+      <div className="flex flex-col items-center justify-center py-6">
+        <div className={cn(
+          "h-20 w-20 rounded-3xl flex items-center justify-center mb-4 border-2 shadow-xl transition-all duration-500 hover:scale-105",
+          isCancelled ? "bg-red-50 border-red-200 text-red-600" : "bg-purple-50 border-purple-200 text-purple-600"
+        )}>
+          <AlertCircle className="h-10 w-10" />
+        </div>
+        <h3 className="text-2xl font-bold text-[#2f2219]">
+          {isCancelled 
+            ? (language === "ar" ? "تم إلغاء هذا الطلب" : "Order Cancelled") 
+            : (language === "ar" ? "تم إرجاع هذا الطلب" : "Order Refunded")
+          }
+        </h3>
+        <p className="text-muted-foreground mt-2 text-center max-w-xs mx-auto">
+          {isCancelled 
+            ? (language === "ar" ? "نأسف لإلغاء طلبك. إذا كنت بحاجة إلى مساعدة، يرجى الاتصال بنا." : "We're sorry this order was cancelled. If you need assistance, please contact us.")
+            : (language === "ar" ? "تمت معالجة عملية الاسترداد لهذا الطلب." : "The refund for this order has been processed successfully.")
+          }
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="relative w-full py-2">
+      {/* Mobile view: Vertical */}
+      <div className="flex md:hidden flex-col gap-10">
+        {steps.map((step, index) => {
+          const Icon = step.icon
+          const isCompleted = index < currentStep
+          const isActive = index === currentStep
+          const isLast = index === steps.length - 1
+
+          return (
+            <div key={step.id} className="flex gap-5">
+              <div className="flex flex-col items-center">
+                <div className={cn(
+                  "h-12 w-12 rounded-2xl flex items-center justify-center border-2 z-10 transition-all duration-500",
+                  isCompleted ? "bg-[#7B3F32] border-[#7B3F32] text-white" :
+                  isActive ? "bg-white border-[#7B3F32] text-[#7B3F32] shadow-[0_0_20px_rgba(123,63,50,0.25)] animate-pulse" :
+                  "bg-white border-[#7B3F32]/10 text-slate-300"
+                )}>
+                  {isCompleted ? <Check className="h-6 w-6" /> : <Icon className="h-6 w-6" />}
+                </div>
+                {!isLast && (
+                  <div className={cn(
+                    "w-[2px] h-full mt-2 -mb-2 transition-colors duration-500",
+                    isCompleted ? "bg-[#7B3F32]" : "bg-slate-100"
+                  )} />
+                )}
+              </div>
+              <div className="pt-2">
+                <p className={cn(
+                  "font-bold text-base tracking-tight uppercase",
+                  isActive ? "text-[#7B3F32]" : isCompleted ? "text-[#2f2219]" : "text-slate-400"
+                )}>
+                  {language === "ar" ? step.labelAr : step.labelEn}
+                </p>
+                {isActive && (
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="flex h-2 w-2 rounded-full bg-[#7B3F32] animate-ping"></span>
+                    <p className="text-xs font-semibold text-[#8b7d73]">
+                      {language === "ar" ? "الحالة الحالية" : "Current Status"}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      {/* Desktop view: Horizontal */}
+      <div className="hidden md:block">
+        <div className="relative flex items-center justify-between">
+          {/* Connection Line Background */}
+          <div className="absolute left-[5%] right-[5%] top-1/2 h-[3px] -translate-y-1/2 bg-slate-100/80 rounded-full" />
+          
+          {/* Active Connection Line */}
+          <div 
+            className="absolute left-[5%] top-1/2 h-[3px] -translate-y-1/2 bg-gradient-to-r from-[#7B3F32] via-[#c16043] to-[#7B3F32] bg-[length:200%_auto] animate-gradient-x transition-all duration-1000 ease-in-out rounded-full" 
+            style={{ width: `${Math.max(0, (currentStep / (steps.length - 1)) * 90)}%` }}
+          />
+
+          {steps.map((step, index) => {
+            const Icon = step.icon
+            const isCompleted = index < currentStep
+            const isActive = index === currentStep
+
+            return (
+              <div key={step.id} className="relative z-10 flex flex-col items-center">
+                <div className={cn(
+                  "h-16 w-16 rounded-[22px] flex items-center justify-center border-2 transition-all duration-700",
+                  isCompleted ? "bg-[#7B3F32] border-[#7B3F32] text-white shadow-lg rotate-[360deg]" :
+                  isActive ? "bg-white border-[#7B3F32] text-[#7B3F32] shadow-[0_15px_35px_rgba(123,63,50,0.25)] scale-110" :
+                  "bg-white border-slate-100 text-slate-300"
+                )}>
+                  {isCompleted ? <Check className="h-7 w-7" /> : <Icon className="h-7 w-7" />}
+                </div>
+                
+                <div className="absolute -bottom-12 whitespace-nowrap flex flex-col items-center">
+                  <span className={cn(
+                    "text-[11px] font-black uppercase tracking-[0.2em] transition-colors duration-500",
+                    isActive ? "text-[#7B3F32]" : isCompleted ? "text-[#2f2219]" : "text-slate-400"
+                  )}>
+                    {language === "ar" ? step.labelAr : step.labelEn}
+                  </span>
+                  {isActive && (
+                    <div className="mt-2 flex gap-1">
+                      <div className="h-1.5 w-1.5 rounded-full bg-[#7B3F32] animate-bounce [animation-delay:-0.3s]" />
+                      <div className="h-1.5 w-1.5 rounded-full bg-[#7B3F32] animate-bounce [animation-delay:-0.15s]" />
+                      <div className="h-1.5 w-1.5 rounded-full bg-[#7B3F32] animate-bounce" />
+                    </div>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default function OrderViewPage() {
@@ -274,6 +420,21 @@ Payment Method: ${order.paymentStatus}
               </Button>
               <Button variant="outline" size="sm" onClick={() => router.back()}>{language === "ar" ? "عودة" : "Back"}</Button>
               <Link href="/profile" className="text-sm text-primary hover:underline ml-2">{language === "ar" ? "الملف الشخصي" : "Profile"}</Link>
+            </div>
+          </div>
+
+          {/* Order Tracking Plan */}
+          <div className="relative overflow-hidden rounded-3xl border border-white/60 bg-white/80 backdrop-blur-xl p-8 md:p-14 shadow-[0_20px_60px_rgba(0,0,0,0.06)] mb-6 min-h-[220px] flex items-center justify-center">
+            <div className="absolute top-0 right-0 p-4">
+               <span className="text-[10px] font-bold uppercase tracking-widest text-[#8b7d73]/40">
+                  {language === "ar" ? "تتبع الحالة" : "Live Tracking"}
+               </span>
+            </div>
+            <div className="absolute -top-24 -left-24 h-48 w-48 rounded-full bg-[#7B3F32]/5 blur-3xl" />
+            <div className="absolute -bottom-24 -right-24 h-48 w-48 rounded-full bg-[#C1AFA0]/10 blur-3xl" />
+            
+            <div className="relative z-10 w-full">
+              <OrderProgress status={order.status} language={language} />
             </div>
           </div>
           </div>

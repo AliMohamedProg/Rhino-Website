@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { type Order } from "@/lib/admin-data"
-import { ArrowLeft, Printer, Download, Mail, Phone, MapPin } from "lucide-react"
+import { ArrowLeft, Printer, Download, Mail, Phone, MapPin, Check, Package, Truck, ClipboardList, CheckCircle2, AlertCircle } from "lucide-react"
 
 type ApiOrderItem = {
   itemId?: string
@@ -74,6 +74,88 @@ const normalizeStatus = (status?: string | null): Order["status"] => {
   if (normalized.includes("cancel")) return "cancelled"
   if (normalized.includes("refund")) return "refunded"
   return "pending"
+}
+
+function AdminOrderProgress({ status }: { status: Order["status"] }) {
+  const steps: { id: Order["status"]; label: string; icon: any }[] = [
+    { id: "pending", label: "Confirmed", icon: ClipboardList },
+    { id: "processing", label: "Processing", icon: Package },
+    { id: "shipped", label: "Shipped", icon: Truck },
+    { id: "delivered", label: "Delivered", icon: CheckCircle2 },
+  ]
+
+  const statusOrder: Record<Order["status"], number> = {
+    pending: 0,
+    processing: 1,
+    shipped: 2,
+    delivered: 3,
+    cancelled: -1,
+    refunded: -1
+  }
+
+  const currentStep = statusOrder[status]
+  const isCancelled = status === "cancelled"
+  const isRefunded = status === "refunded"
+
+  if (isCancelled || isRefunded) {
+    return (
+      <div className="flex items-center gap-4 p-4 bg-red-50/50 rounded-2xl border border-red-100 text-red-600">
+        <div className="h-10 w-10 rounded-xl bg-red-100 flex items-center justify-center">
+          <AlertCircle className="h-5 w-5" />
+        </div>
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-widest opacity-70">Order Terminal Status</p>
+          <p className="font-bold text-lg leading-tight uppercase">{status}</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="relative w-full py-4">
+      <div className="flex items-center justify-between px-2">
+        {steps.map((step, index) => {
+          const Icon = step.icon
+          const isCompleted = index < currentStep
+          const isActive = index === currentStep
+          const isLast = index === steps.length - 1
+
+          return (
+            <div key={step.id} className="flex flex-1 items-center last:flex-none">
+              <div className="flex flex-col items-center relative group">
+                <div className={cn(
+                  "h-11 w-11 rounded-xl flex items-center justify-center border-2 transition-all duration-500",
+                  isCompleted ? "bg-[#8f3f2a] border-[#8f3f2a] text-white shadow-md" :
+                  isActive ? "bg-white border-[#8f3f2a] text-[#8f3f2a] shadow-lg scale-110" :
+                  "bg-white border-slate-100 text-slate-300"
+                )}>
+                  {isCompleted ? <Check className="h-5 w-5" /> : <Icon className="h-5 w-5" />}
+                </div>
+                <span className={cn(
+                  "absolute -bottom-6 whitespace-nowrap text-[9px] font-black uppercase tracking-[0.15em] transition-colors duration-300",
+                  isActive ? "text-[#8f3f2a]" : isCompleted ? "text-[#2f2219]" : "text-slate-400"
+                )}>
+                  {step.label}
+                </span>
+                {isActive && (
+                  <div className="absolute -top-1 right-0 flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#8f3f2a] opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#8f3f2a]"></span>
+                  </div>
+                )}
+              </div>
+              {!isLast && (
+                <div className={cn(
+                  "h-[2px] flex-1 mx-3 rounded-full transition-all duration-700",
+                  isCompleted ? "bg-[#8f3f2a]" : "bg-slate-100"
+                )} />
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
 }
 
 const isGuid = (value: string) => /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(value)
@@ -312,6 +394,11 @@ export default function OrderDetailPage() {
               <Download className="h-4 w-4" />
             </Button>
           </div>
+        </div>
+
+        {/* Order Progress Stepper (Admin version) */}
+        <div className="relative mt-8 pt-6 border-t border-[#8f3f2a]/10">
+          <AdminOrderProgress status={order.status} />
         </div>
       </div>
 
