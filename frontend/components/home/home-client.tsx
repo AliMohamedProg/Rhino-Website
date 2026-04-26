@@ -8,6 +8,7 @@ import { DiscoverByStyle } from "@/components/home/DiscoverByStyle"
 import { NewCollections } from "@/components/home/NewCollection"
 import { BestSellers } from "@/components/home/BestSellers"
 import { OurStory } from "@/components/home/OurStory"
+import { ArtOfLiving } from "@/components/home/ArtOfLiving"
 import type { PublicSlider, PublicCategory, PublicProduct } from "@/lib/products"
 
 interface HomeClientProps {
@@ -29,6 +30,7 @@ export function HomeClient({
       <main className="flex-1">
         <Hero initialSliders={initialSliders} />
         <DiscoverByStyle initialCategories={initialCategories} />
+        <ArtOfLiving />
         <NewCollections initialProducts={initialProducts} />
         <BestSellers initialBestSellers={initialBestSellers} />
         <OurStory />
