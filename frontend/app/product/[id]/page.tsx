@@ -46,6 +46,8 @@ type Review = {
   date: string
   rating: number
   text: string
+  userName?: string
+  title?: string
 }
 
 function normalizeColorNames(value: unknown): string[] {
@@ -189,6 +191,8 @@ export default function ProductDetailsPage() {
               : new Date().toISOString().split("T")[0],
             rating: Number(r.rating ?? r.Rating ?? 0),
             text: String(r.review ?? r.Review ?? "").trim(),
+            title: String(r.title ?? r.Title ?? (language === "ar" ? "تقييم" : "Review")),
+            userName: emailToName(r.userEmail ?? r.UserEmail) ?? (language === "ar" ? "مستخدم" : "User"),
           }))
           setReviews(normalizedReviews)
         }
@@ -309,6 +313,8 @@ export default function ProductDetailsPage() {
           rating: reviewRating,
           text: normalizedReviewText,
           userName: language === "ar" ? "أنت" : "You",
+          title: normalizedTitle,
+        }
         setReviews([newReview, ...reviews])
         setShowReviewForm(false)
         setReviewText("")
