@@ -15,14 +15,14 @@ interface GridItemProps {
 
 function GridItem({ title, description, image, href, className, badge, badgeIcon }: GridItemProps) {
   return (
-    <Link 
+    <Link
       href={href}
       className={`group relative overflow-hidden rounded-[2rem] transition-all duration-500 hover:shadow-2xl ${className}`}
     >
       <div className="absolute inset-0">
-        <img 
-          src={image} 
-          alt={title} 
+        <img
+          src={image}
+          alt={title}
           className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-black/5 group-hover:bg-black/10 transition-colors duration-500" />
@@ -62,8 +62,8 @@ export function ArtOfLiving() {
     <section className="py-24 px-6 md:px-12 bg-white">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-16">
-          <h2 className="text-5xl md:text-6xl font-serif text-[#0B2A27] mb-4">
+        <div className="flex flex-col gap-4 mb-20 px-2">
+          <h2 className="text-5xl md:text-7xl font-serif text-mahogany italic">
             The Art of Living
           </h2>
           <p className="text-lg text-gray-500 max-w-xl">
