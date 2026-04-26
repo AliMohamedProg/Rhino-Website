@@ -77,7 +77,7 @@ export function NewCollections({ initialProducts }: NewCollectionsProps) {
     const [selectedCategories, setSelectedCategories] = useState<string[]>([])
     const [reviewStatsByProductId, setReviewStatsByProductId] = useState<Record<string, ReviewStats>>({})
     return (
-        <section className="py-24 px-8 bg-blush min-h-screen">
+        <section className="py-24 px-8 bg-white min-h-screen">
             <div className="max-w-7xl mx-auto flex flex-col">
 
                 <div className="flex flex-col gap-4 mb-20 px-2">
