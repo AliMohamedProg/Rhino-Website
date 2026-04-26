@@ -66,7 +66,7 @@ export function ArtOfLiving() {
           <h2 className="text-5xl md:text-7xl font-serif text-mahogany italic">
             The Art of Living
           </h2>
-          <p className="text-lg text-gray-500 max-w-xl">
+          <p className="text-[10px] tracking-[0.4em] font-bold text-taupe uppercase">
             Curated collections for the modern home, where minimal form meets timeless function.
           </p>
         </div>
