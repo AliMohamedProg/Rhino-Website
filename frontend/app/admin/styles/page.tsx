@@ -35,30 +35,6 @@ import { Label } from "@/components/ui/label"
 import { Plus, MoreHorizontal, Pencil, Trash2, Download } from "lucide-react"
 import { exportCategoriesExcel, exportCategoriesPdf } from "@/app/ApiHelper/ExportApi"
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from \"@/components/ui/select\"
-
-const PREDEFINED_STYLES = [
-  \"Living Room\",
-  \"Bedroom\",
-  \"Dining Room\",
-  \"Office\",
-  \"Outdoor\",
-  \"Modern\",
-  \"Classic\",
-  \"Minimalist\",
-  \"Industrial\",
-  \"Bohemian\",
-  \"Scandinavian\"
-]
-
-import { MOCK_CATEGORIES, type Category as MockCategory } from \"@/lib/mock-admin-data\"
-
 export default function StylesPage() {
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
@@ -67,20 +43,20 @@ export default function StylesPage() {
   const [deleteAllDialogOpen, setDeleteAllDialogOpen] = useState(false)
   const [editingCategory, setEditingCategory] = useState<Category | null>(null)
   const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null)
-  const [formData, setFormData] = useState({ nameEn: \"\", description: \"\", categoryId: \"\" })
-  const [imageUrl, setImageUrl] = useState(\"\")
+  const [formData, setFormData] = useState({ nameEn: "", description: "" })
+  const [imageUrl, setImageUrl] = useState("")
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
-   useEffect(() => {
-     if (editingCategory) {
-       setFormData({ nameEn: editingCategory.nameEn, description: "" })
-       setImageUrl(editingCategory.imageUrl || "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop")
-     } else if (dialogOpen) {
-       setFormData({ nameEn: "", description: "" })
-       setImageUrl("")
-       setSelectedFile(null)
-     }
-   }, [editingCategory, dialogOpen])
+  useEffect(() => {
+    if (editingCategory) {
+      setFormData({ nameEn: editingCategory.nameEn, description: "" })
+      setImageUrl(editingCategory.imageUrl || "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop")
+    } else if (dialogOpen) {
+      setFormData({ nameEn: "", description: "" })
+      setImageUrl("")
+      setSelectedFile(null)
+    }
+  }, [editingCategory, dialogOpen])
 
   const handleSave = async () => {
     try {
@@ -90,11 +66,11 @@ export default function StylesPage() {
         const uploadRes = await ApiClient.upload("api/upload", selectedFile)
         finalImageUrl = uploadRes.url
       }
-       if (editingCategory) {
-         await ApiClient.post("api/admin/Categories/edit-category", { id: editingCategory.id, nameEn: formData.nameEn, nameAr: "", imageUrl: finalImageUrl, currentState: 1 })
-       } else {
-         await ApiClient.post("api/admin/Categories/add-category", { nameEn: formData.nameEn, nameAr: "", imageUrl: finalImageUrl, currentState: 1 })
-       }
+      if (editingCategory) {
+        await ApiClient.post("api/admin/Categories/edit-category", { id: editingCategory.id, nameEn: formData.nameEn, nameAr: "", imageUrl: finalImageUrl, currentState: 1 })
+      } else {
+        await ApiClient.post("api/admin/Categories/add-category", { nameEn: formData.nameEn, nameAr: "", imageUrl: finalImageUrl, currentState: 1 })
+      }
       setDialogOpen(false)
       fetchCategories()
     } catch (err) { console.error("Failed to save category:", err) }
@@ -137,32 +113,36 @@ export default function StylesPage() {
   }
 
   const columns = [
-    { key: "image", header: "Image", render: (category: Category) => (
-      <div className="h-12 w-12 rounded-lg overflow-hidden bg-slate-100 flex items-center justify-center">
-        {category.imageUrl ? <img src={category.imageUrl} alt={category.nameEn} className="h-full w-full object-cover" onError={(e) => {(e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop"}} /> : <span className="text-xs text-slate-400">No Img</span>}
-      </div>
-    )},
+    {
+      key: "image", header: "Image", render: (category: Category) => (
+        <div className="h-12 w-12 rounded-lg overflow-hidden bg-slate-100 flex items-center justify-center">
+          {category.imageUrl ? <img src={category.imageUrl} alt={category.nameEn} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop" }} /> : <span className="text-xs text-slate-400">No Img</span>}
+        </div>
+      )
+    },
     { key: "nameEn", header: "Name (English)", render: (category: Category) => <span className="font-medium text-slate-900">{category.nameEn}</span> },
     { key: "createdDate", header: "Created", render: (category: Category) => <span className="text-slate-500">{new Date(category.createdDate).toLocaleDateString("en-US")}</span> },
-    { key: "actions", header: "Actions", render: (category: Category) => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#A6ACA2]/10">
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="bg-white rounded-xl shadow-xl shadow-[#7B3F32]/10 border-[#7B3F32]/10">
-          <DropdownMenuItem onClick={() => { setEditingCategory(category); setDialogOpen(true) }} className="hover:bg-[#f6eee8] cursor-pointer rounded-lg">
-            <Pencil className="h-4 w-4 mr-2 text-[#7B3F32]" />
-            <span className="text-[#3a2c26] font-medium">Edit</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleDelete(category)} className="hover:bg-red-50 focus:bg-red-50 cursor-pointer rounded-lg mt-1">
-            <Trash2 className="h-4 w-4 mr-2 text-red-600" />
-            <span className="text-red-600 font-medium">Delete</span>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    ), className: "w-[70px]" }
+    {
+      key: "actions", header: "Actions", render: (category: Category) => (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#A6ACA2]/10">
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="bg-white rounded-xl shadow-xl shadow-[#7B3F32]/10 border-[#7B3F32]/10">
+            <DropdownMenuItem onClick={() => { setEditingCategory(category); setDialogOpen(true) }} className="hover:bg-[#f6eee8] cursor-pointer rounded-lg">
+              <Pencil className="h-4 w-4 mr-2 text-[#7B3F32]" />
+              <span className="text-[#3a2c26] font-medium">Edit</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleDelete(category)} className="hover:bg-red-50 focus:bg-red-50 cursor-pointer rounded-lg mt-1">
+              <Trash2 className="h-4 w-4 mr-2 text-red-600" />
+              <span className="text-red-600 font-medium">Delete</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ), className: "w-[70px]"
+    }
   ]
 
   return (
@@ -170,13 +150,13 @@ export default function StylesPage() {
       <div className="relative overflow-hidden rounded-3xl border border-[#7B3F32]/12 bg-white/80 backdrop-blur-xl p-6 md:p-8 shadow-[0_14px_40px_rgba(0,0,0,0.06)] flex flex-col sm:flex-row sm:items-center justify-between gap-5">
         <div className="pointer-events-none absolute -top-16 -right-10 h-36 w-36 rounded-full bg-[#7B3F32]/10 blur-2xl z-0" />
         <div className="pointer-events-none absolute -bottom-14 -left-8 h-32 w-32 rounded-full bg-[#C1AFA0]/30 blur-2xl z-0" />
-        
+
         <div className="relative z-10">
           <p className="text-[11px] tracking-[0.2em] uppercase font-semibold text-[#8b7d73]">Management</p>
           <h1 className="text-3xl font-bold tracking-tight text-[#2f2219] mt-1">Styles</h1>
           <p className="text-[#7c6f65] mt-1 text-sm font-medium">Manage {categories.length} styles</p>
         </div>
-        
+
         <div className="flex items-center gap-3 relative z-10">
           {categories.length > 0 && (
             <Button variant="destructive" onClick={() => setDeleteAllDialogOpen(true)} className="bg-red-500/10 text-red-600 hover:bg-red-500 hover:text-white rounded-2xl shadow-none font-bold transition-all">
@@ -205,36 +185,23 @@ export default function StylesPage() {
             <DialogTitle className="text-2xl font-bold tracking-tight text-[#2f2219]">{editingCategory ? "Edit Style" : "Add Style"}</DialogTitle>
             <DialogDescription className="text-[#8b7d73] mt-1">{editingCategory ? "Edit style details below." : "Add a new style to your store."}</DialogDescription>
           </DialogHeader>
-           <div className="grid gap-5 py-4">
-             <div className="space-y-2">
-               <Label htmlFor="nameEn" className="text-sm font-semibold text-[#4b3d34]">Style Name</Label>
-               <Input id="nameEn" value={formData.nameEn} onChange={(e) => setFormData({ ...formData, nameEn: e.target.value })} className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 h-12 rounded-xl bg-white/50" />
-             </div>
-             <div className="space-y-2">
-               <Label className="text-sm font-semibold text-[#4b3d34]">Style Image</Label>
+          <div className="grid gap-5 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="nameEn" className="text-sm font-semibold text-[#4b3d34]">Style Name</Label>
+              <Input id="nameEn" value={formData.nameEn} onChange={(e) => setFormData({ ...formData, nameEn: e.target.value })} className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 h-12 rounded-xl bg-white/50" />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-sm font-semibold text-[#4b3d34]">Style Image</Label>
               <Input id="image" type="file" accept="image/*" onChange={(e) => { const file = e.target.files?.[0]; if (file) setSelectedFile(file) }} className="border-[#7B3F32]/20 file:bg-[#f6eee8] file:text-[#7B3F32] file:border-0 file:rounded-xl file:px-4 file:font-semibold rounded-xl bg-white/50 cursor-pointer pt-2" />
               {selectedFile ? (
                 <div className="mt-4 h-32 w-full rounded-2xl overflow-hidden border border-[#7B3F32]/10 bg-[#f8f0e7] shadow-sm"><img src={URL.createObjectURL(selectedFile)} alt="Preview" className="h-full w-full object-cover" /></div>
               ) : imageUrl && (
-                <div className="mt-4 h-32 w-full rounded-2xl overflow-hidden border border-[#7B3F32]/10 bg-[#f8f0e7] shadow-sm"><img src={imageUrl} alt="Current" className="h-full w-full object-cover" onError={(e) => {(e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop"}} /></div>
+                <div className="mt-4 h-32 w-full rounded-2xl overflow-hidden border border-[#7B3F32]/10 bg-[#f8f0e7] shadow-sm"><img src={imageUrl} alt="Current" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop" }} /></div>
               )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="imageUrl" className="text-sm font-semibold text-[#4b3d34]">Or Image URL</Label>
               <Input id="imageUrl" placeholder="https://..." value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 h-12 rounded-xl bg-white/50" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="categoryId" className="text-sm font-semibold text-[#4b3d34]">Parent Category</Label>
-              <Select value={formData.categoryId} onValueChange={(value) => setFormData({ ...formData, categoryId: value })}>
-                <SelectTrigger className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 h-12 rounded-xl bg-white/50">
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent className="bg-white rounded-xl shadow-xl">
-                  {MOCK_CATEGORIES.map((cat) => (
-                    <SelectItem key={cat.id} value={cat.id}>{cat.nameEn}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
             </div>
           </div>
           <DialogFooter className="mt-4">
