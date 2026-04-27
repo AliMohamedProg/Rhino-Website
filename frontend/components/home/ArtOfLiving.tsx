@@ -47,7 +47,7 @@ function GridItem({ title, description, image, href, className, badge, badgeIcon
           )}
           <div className="flex items-center gap-2 group/link">
             <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-primary">
-              EXPLORE COLLECTION
+              EXPLORE CATEGORY
             </span>
             <ArrowRightIcon className="w-3 h-3 text-primary transition-transform duration-300 group-hover/link:translate-x-1" />
           </div>
@@ -66,9 +66,7 @@ export function ArtOfLiving() {
           <h2 className="text-5xl md:text-7xl font-serif text-mahogany italic">
             The Art of Living
           </h2>
-          <p className="text-[10px] tracking-[1px] font-bold text-taupe uppercase">
-            Curated collections for the modern home, where minimal form meets timeless function.
-          </p>
+
         </div>
 
         {/* Grid Layout */}

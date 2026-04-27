@@ -94,7 +94,7 @@ export function DiscoverByStyle({ initialCategories = [] }: DiscoverByStyleProps
                 <h3 className="text-3xl font-serif text-mahogany mb-3 italic">{style.nameEn}</h3>
                 <div className="flex items-center gap-3 opacity-100 translate-y-0">
                   <p className="text-[9px] tracking-[0.25em] font-bold text-taupe uppercase">
-                    EXPLORE COLLECTION
+                    EXPLORE STYLE
                   </p>
                   <ArrowRightIcon className="w-3 h-3 text-taupe" />
                 </div>

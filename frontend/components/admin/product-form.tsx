@@ -170,7 +170,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
 
     try {
       if (!formData.categoryId) {
-        alert("Please select a category")
+        alert("Please select a style")
         setIsSubmitting(false)
         return
       }
@@ -244,7 +244,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
               </h1>
               <p className="admin-subtitle mt-1 text-sm">
                 {mode === "create"
-                  ? "Add full product details including images, category and pricing"
+                  ? "Add full product details including images, style and pricing"
                   : "Update product details, media and inventory settings"}
               </p>
             </div>
@@ -436,11 +436,11 @@ export function ProductForm({ product, mode }: ProductFormProps) {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="category" className="text-sm font-semibold text-[#4b3d34]">
-                  Category
+                  Style
                 </Label>
                 <Select value={formData.categoryId} onValueChange={(value) => handleChange("categoryId", value)}>
                   <SelectTrigger className="admin-input h-11">
-                    <SelectValue placeholder="Select category" />
+                    <SelectValue placeholder="Select style" />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl border-[#8f3f2a]/15 bg-white shadow-xl">
                     {categories.map((category) => (

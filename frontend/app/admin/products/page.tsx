@@ -16,6 +16,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -37,6 +44,7 @@ export default function ProductsPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [deleteAllDialogOpen, setDeleteAllDialogOpen] = useState(false)
   const [productToDelete, setProductToDelete] = useState<Product | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState<string>("all")
 
   const fetchProducts = async () => {
     try {
@@ -84,6 +92,11 @@ export default function ProductsPage() {
 
   const formatCurrency = (amount: number) => `${amount.toLocaleString()} EGP`
 
+  const filteredProducts = products.filter((product) => {
+    if (selectedCategory === "all") return true
+    return product.categoryId === selectedCategory
+  })
+
   const columns = [
     {
       key: "product", header: "Product Name", render: (product: Product) => (
@@ -100,7 +113,7 @@ export default function ProductsPage() {
       )
     },
     {
-      key: "category", header: "Category", render: (product: Product) => {
+      key: "category", header: "Style", render: (product: Product) => {
         const category = categories.find((cat) => cat.id === product.categoryId)
         return <span className="text-slate-500">{category?.nameEn || product.category}</span>
       }
@@ -169,7 +182,22 @@ export default function ProductsPage() {
           {loading ? (
             <div className="flex justify-center items-center h-48 text-slate-500 animate-pulse">Loading products...</div>
           ) : (
-            <DataTable data={products} columns={columns} searchPlaceholder="Search products..." searchKey="nameEn" />
+            <div className="space-y-4">
+              <div className="flex items-center gap-3 mb-4">
+                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                  <SelectTrigger className="w-[180px] h-10 border-[#7B3F32]/20 rounded-xl">
+                    <SelectValue placeholder="All Styles" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white rounded-xl shadow-xl">
+                    <SelectItem value="all">All Styles</SelectItem>
+                    {categories.map((cat) => (
+                      <SelectItem key={cat.id} value={cat.id}>{cat.nameEn}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <DataTable data={filteredProducts} columns={columns} searchPlaceholder="Search products..." searchKey="nameEn" />
+            </div>
           )}
         </CardContent>
       </Card>

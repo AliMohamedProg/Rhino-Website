@@ -67,7 +67,7 @@ interface ProductCardProps {
 export function ProductCard({
   product,
   id: propId,
-  category = "PREMIUM FURNITURE",
+  category = "PREMIUM STYLE",
   title: propTitle,
   description: propDescription,
   price: propPrice,

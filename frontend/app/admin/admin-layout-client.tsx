@@ -36,7 +36,7 @@ const navSections = [
     items: [
       { title: "Products", href: "/admin/products", icon: Package },
       { title: "Orders", href: "/admin/orders", icon: ShoppingCart },
-      { title: "Categories", href: "/admin/categories", icon: FolderTree },
+      { title: "Styles", href: "/admin/styles", icon: FolderTree },
       { title: "Sliders", href: "/admin/sliders", icon: ImageIcon },
     ],
   },

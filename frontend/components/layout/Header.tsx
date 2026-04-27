@@ -198,14 +198,14 @@ export function Header() {
                     href={`/category/${category.id}`}
                     className="hover:text-mahogany transition-colors block text-taupe/60 text-[11px] font-bold tracking-[0.2em]"
                   >
-                    {((language === "ar" ? category.nameAr : category.nameEn) || category.nameEn || category.nameAr || "CATEGORY").toUpperCase()}
+                    {((language === "ar" ? category.nameAr : category.nameEn) || category.nameEn || category.nameAr || "STYLE").toUpperCase()}
                   </Link>
                 ))}
 
                 <div className="w-full h-px bg-gray-50 my-1"></div>
 
                 <Link href="/products" className="hover:text-mahogany transition-colors block font-bold text-mahogany text-[11px] tracking-[0.2em]">
-                  ALL COLLECTIONS
+                  ALL STYLES
                 </Link>
 
                 <div className="text-[8px] text-[#D1D1D1] leading-relaxed mt-4 normal-case tracking-normal font-medium max-w-[180px] italic">
@@ -336,7 +336,7 @@ export function Header() {
         <div className="flex flex-col items-center justify-center h-full gap-8 text-sm tracking-[0.3em] font-bold text-mahogany">
           <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-mahogany">HOME</Link>
           <div className="flex flex-col items-center gap-4">
-            <span className="text-mahogany">COLLECTIONS</span>
+            <span className="text-mahogany">STYLE BY</span>
             <div className="flex flex-col items-center gap-2 text-[10px] text-taupe">
               {sortedCategories.map((category) => (
                 <Link

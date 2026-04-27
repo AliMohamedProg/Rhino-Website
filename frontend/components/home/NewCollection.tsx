@@ -27,7 +27,7 @@ import { ChevronUp, ChevronDown, Filter } from "lucide-react"
 import { formatPrice } from "@/lib/products"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
 
-interface NewCollectionsProps {
+interface NewStylesProps {
     initialProducts: PublicProduct[]
 }
 
@@ -58,7 +58,7 @@ interface ReviewStats {
     count: number
 }
 
-export function NewCollections({ initialProducts }: NewCollectionsProps) {
+export function NewStyles({ initialProducts }: NewStylesProps) {
     const { language } = useLanguage()
     const { addItem } = useCart()
     const { toggleItem, isInWishlist } = useWishlist()
@@ -85,7 +85,7 @@ export function NewCollections({ initialProducts }: NewCollectionsProps) {
                         Curated Ranges
                     </span>
                     <h2 className="text-5xl md:text-7xl font-serif text-mahogany italic">
-                        New Collections
+                        New Styles
                     </h2>
                 </div>
 

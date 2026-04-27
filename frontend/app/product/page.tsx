@@ -271,7 +271,7 @@ const fetchReviewStats = async () => {
               {language === "ar" ? "كل المنتجات" : "All Products"}
             </p>
             <h1 className="text-3xl md:text-4xl font-bold text-[#3D2B1F] mt-2">
-              {language === "ar" ? "استكشف التشكيلة الكاملة" : "Explore The Full Collection"}
+              {language === "ar" ? "استكشف التشكيلة الكاملة" : "Explore The Full Styles"}
             </h1>
             <div className="flex flex-wrap items-center gap-3 mt-4">
               <span className="inline-flex items-center rounded-full bg-white/90 px-4 py-1.5 text-sm text-[#7B3F32] border border-[#7B3F32]/15">
@@ -338,7 +338,7 @@ const fetchReviewStats = async () => {
                 {/* Categories */}
                 <Collapsible open={categoryOpen} onOpenChange={setCategoryOpen}>
                   <CollapsibleTrigger className="flex justify-between items-center w-full py-2.5 px-2 rounded-xl hover:bg-[#7B3F32]/5 transition-colors text-[#3D2B1F]">
-                    {language === "ar" ? "التصنيفات" : "Categories"}
+                    {language === "ar" ? "التصنيفات" : "Styles"}
                     {categoryOpen ? <ChevronUp /> : <ChevronDown />}
                   </CollapsibleTrigger>
                   <CollapsibleContent className="space-y-2 py-2">
@@ -416,7 +416,7 @@ const fetchReviewStats = async () => {
                     <ProductCard
                       key={product.id}
                       id={product.id}
-                      category={(categoryNameById[product.categoryId] || "FURNITURE").toUpperCase()}
+                      category={(categoryNameById[product.categoryId] || "STYLE").toUpperCase()}
                       title={language === "ar" ? product.nameAr : product.nameEn}
                       description={
                         language === "ar"

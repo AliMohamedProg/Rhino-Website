@@ -35,7 +35,7 @@ import { Label } from "@/components/ui/label"
 import { Plus, MoreHorizontal, Pencil, Trash2, Download } from "lucide-react"
 import { exportCategoriesExcel, exportCategoriesPdf } from "@/app/ApiHelper/ExportApi"
 
-export default function CategoriesPage() {
+export default function StylesPage() {
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -149,8 +149,8 @@ export default function CategoriesPage() {
         
         <div className="relative z-10">
           <p className="text-[11px] tracking-[0.2em] uppercase font-semibold text-[#8b7d73]">Management</p>
-          <h1 className="text-3xl font-bold tracking-tight text-[#2f2219] mt-1">Categories</h1>
-          <p className="text-[#7c6f65] mt-1 text-sm font-medium">Manage {categories.length} categories</p>
+          <h1 className="text-3xl font-bold tracking-tight text-[#2f2219] mt-1">Styles</h1>
+          <p className="text-[#7c6f65] mt-1 text-sm font-medium">Manage {categories.length} styles</p>
         </div>
         
         <div className="flex items-center gap-3 relative z-10">
@@ -160,7 +160,7 @@ export default function CategoriesPage() {
             </Button>
           )}
           <Button onClick={() => { setEditingCategory(null); setDialogOpen(true) }} className="bg-gradient-to-r from-[#7B3F32] to-[#9e5948] text-white hover:from-[#5f3026] hover:to-[#8e4f3f] rounded-2xl shadow-[0_10px_20px_rgba(123,63,50,0.22)] font-bold transition-all px-5 py-4 h-11 border-0">
-            <Plus className="h-4 w-4 mr-2" />Add Category
+            <Plus className="h-4 w-4 mr-2" />Add Style
           </Button>
         </div>
       </div>
@@ -170,7 +170,7 @@ export default function CategoriesPage() {
           {loading ? (
             <div className="flex justify-center items-center h-48 text-slate-500 animate-pulse">Loading categories...</div>
           ) : (
-            <DataTable data={categories} columns={columns} searchPlaceholder="Search categories..." searchKey="nameEn" />
+            <DataTable data={categories} columns={columns} searchPlaceholder="Search styles..." searchKey="nameEn" />
           )}
         </CardContent>
       </Card>
@@ -178,16 +178,16 @@ export default function CategoriesPage() {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="sm:max-w-[500px] bg-white/95 backdrop-blur-xl border-[#7B3F32]/10 rounded-3xl shadow-2xl p-6 md:p-8">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold tracking-tight text-[#2f2219]">{editingCategory ? "Edit Category" : "Add Category"}</DialogTitle>
-            <DialogDescription className="text-[#8b7d73] mt-1">{editingCategory ? "Edit category details below." : "Add a new category to your store."}</DialogDescription>
+            <DialogTitle className="text-2xl font-bold tracking-tight text-[#2f2219]">{editingCategory ? "Edit Style" : "Add Style"}</DialogTitle>
+            <DialogDescription className="text-[#8b7d73] mt-1">{editingCategory ? "Edit style details below." : "Add a new style to your store."}</DialogDescription>
           </DialogHeader>
            <div className="grid gap-5 py-4">
              <div className="space-y-2">
-               <Label htmlFor="nameEn" className="text-sm font-semibold text-[#4b3d34]">Category Name</Label>
+               <Label htmlFor="nameEn" className="text-sm font-semibold text-[#4b3d34]">Style Name</Label>
                <Input id="nameEn" value={formData.nameEn} onChange={(e) => setFormData({ ...formData, nameEn: e.target.value })} className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 h-12 rounded-xl bg-white/50" />
              </div>
              <div className="space-y-2">
-               <Label className="text-sm font-semibold text-[#4b3d34]">Category Image</Label>
+               <Label className="text-sm font-semibold text-[#4b3d34]">Style Image</Label>
               <Input id="image" type="file" accept="image/*" onChange={(e) => { const file = e.target.files?.[0]; if (file) setSelectedFile(file) }} className="border-[#7B3F32]/20 file:bg-[#f6eee8] file:text-[#7B3F32] file:border-0 file:rounded-xl file:px-4 file:font-semibold rounded-xl bg-white/50 cursor-pointer pt-2" />
               {selectedFile ? (
                 <div className="mt-4 h-32 w-full rounded-2xl overflow-hidden border border-[#7B3F32]/10 bg-[#f8f0e7] shadow-sm"><img src={URL.createObjectURL(selectedFile)} alt="Preview" className="h-full w-full object-cover" /></div>
@@ -202,7 +202,7 @@ export default function CategoriesPage() {
           </div>
           <DialogFooter className="mt-4">
             <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-[#7B3F32]/20 text-[#4b3d34] hover:bg-[#f6eee8] rounded-xl h-12 font-medium">Cancel</Button>
-            <Button onClick={handleSave} disabled={loading} className="bg-gradient-to-r from-[#7B3F32] to-[#9e5948] text-white hover:from-[#5f3026] hover:to-[#8e4f3f] rounded-xl h-12 font-bold shadow-[0_8px_20px_rgba(123,63,50,0.2)] transition-all hover:scale-[1.02] active:scale-[0.98]">{loading ? "Saving..." : "Save Category"}</Button>
+            <Button onClick={handleSave} disabled={loading} className="bg-gradient-to-r from-[#7B3F32] to-[#9e5948] text-white hover:from-[#5f3026] hover:to-[#8e4f3f] rounded-xl h-12 font-bold shadow-[0_8px_20px_rgba(123,63,50,0.2)] transition-all hover:scale-[1.02] active:scale-[0.98]">{loading ? "Saving..." : "Save Style"}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -210,7 +210,7 @@ export default function CategoriesPage() {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent className="bg-white/95 backdrop-blur-xl border-[#7B3F32]/10 rounded-3xl shadow-2xl">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-2xl font-bold tracking-tight text-[#2f2219]">Delete Category</AlertDialogTitle>
+            <AlertDialogTitle className="text-2xl font-bold tracking-tight text-[#2f2219]">Delete Style</AlertDialogTitle>
             <AlertDialogDescription className="text-[#8b7d73] mt-2">Are you sure you want to delete <span className="font-semibold text-[#7B3F32]">"{categoryToDelete?.nameEn}"</span>? This action cannot be undone.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="mt-4">
@@ -223,8 +223,8 @@ export default function CategoriesPage() {
       <AlertDialog open={deleteAllDialogOpen} onOpenChange={setDeleteAllDialogOpen}>
         <AlertDialogContent className="bg-white/95 backdrop-blur-xl border-[#7B3F32]/10 rounded-3xl shadow-2xl">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-2xl font-bold tracking-tight text-red-600">Delete All Categories</AlertDialogTitle>
-            <AlertDialogDescription className="text-[#8b7d73] mt-2">Are you sure you want to delete all categories? This action cannot be undone and will remove all categories from the store.</AlertDialogDescription>
+            <AlertDialogTitle className="text-2xl font-bold tracking-tight text-red-600">Delete All Styles</AlertDialogTitle>
+            <AlertDialogDescription className="text-[#8b7d73] mt-2">Are you sure you want to delete all styles? This action cannot be undone and will remove all styles from the store.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="mt-4">
             <AlertDialogCancel className="border-[#7B3F32]/20 text-[#4b3d34] hover:bg-[#f6eee8] rounded-xl h-11 font-medium">Cancel</AlertDialogCancel>
