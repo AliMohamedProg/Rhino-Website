@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using Apis.Services;
 using AutoMapper;
 using Bl.Contracts;
@@ -181,7 +181,7 @@ using (var scope = app.Services.CreateScope())
     var dbContext = services.GetRequiredService<WoodDecorContext>();
 
     // Apply migrations
-    await dbContext.Database.MigrateAsync();
+    //await dbContext.Database.MigrateAsync();
 
     // Seed data
     await ContextConfig.seedDataAsync(dbContext, userManager, roleManager);

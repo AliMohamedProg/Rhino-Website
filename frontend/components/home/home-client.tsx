@@ -14,6 +14,7 @@ import type { PublicSlider, PublicCategory, PublicProduct } from "@/lib/products
 interface HomeClientProps {
   initialSliders: PublicSlider[]
   initialCategories: PublicCategory[]
+  initialStyles: PublicCategory[]
   initialBestSellers: PublicProduct[]
   initialProducts: PublicProduct[]
 }
@@ -21,6 +22,7 @@ interface HomeClientProps {
 export function HomeClient({
   initialSliders,
   initialCategories,
+  initialStyles,
   initialBestSellers,
   initialProducts
 }: HomeClientProps) {
@@ -29,7 +31,7 @@ export function HomeClient({
       <Header />
       <main className="flex-1">
         <Hero initialSliders={initialSliders} />
-        <DiscoverByStyle initialCategories={initialCategories} />
+        <DiscoverByStyle initialStyles={initialStyles} />
         <ArtOfLiving />
         <NewStyles initialProducts={initialProducts} />
         <BestSellers initialBestSellers={initialBestSellers} />

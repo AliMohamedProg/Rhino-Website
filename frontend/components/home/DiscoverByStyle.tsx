@@ -29,16 +29,16 @@ const FALLBACK_STYLES = [
 ]
 
 interface DiscoverByStyleProps {
-  initialCategories?: PublicCategory[]
+  initialStyles?: PublicCategory[]
 }
 
-export function DiscoverByStyle({ initialCategories = [] }: DiscoverByStyleProps) {
+export function DiscoverByStyle({ initialStyles = [] }: DiscoverByStyleProps) {
   const [styles, setStyles] = useState<PublicCategory[]>(
-    initialCategories.filter((category) => category.nameEn)
+    initialStyles.filter((category) => category.nameEn)
   )
 
   useEffect(() => {
-    if (initialCategories.length > 0) return
+    if (initialStyles.length > 0) return
     let active = true
 
     const loadCategories = async () => {
@@ -55,7 +55,7 @@ export function DiscoverByStyle({ initialCategories = [] }: DiscoverByStyleProps
     return () => {
       active = false
     }
-  }, [initialCategories])
+  }, [initialStyles])
 
   const items = styles.length > 0 ? styles : FALLBACK_STYLES
 

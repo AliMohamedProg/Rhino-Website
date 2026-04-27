@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -44,6 +44,9 @@ namespace Bl.Mapping
             CreateMap<TbRefreshTokens, RefreshTokensDto>().ReverseMap();
             CreateMap<TbCart, CartDto>().ReverseMap();
             CreateMap<TbCartItem, CartItemDto>().ReverseMap();
+            CreateMap<TbStyles, StylesDto>()
+                .ForMember(dest => dest.ProductsCount, opt => opt.MapFrom(src => src.TbItems.Count()))
+                .ReverseMap();
         }
     }
 }

@@ -3,9 +3,10 @@ import { HomeClient } from "@/components/home/home-client"
 
 export default async function HomePage() {
   // Fetch everything on the server for instant rendering
-  const [initialSliders, initialCategories, initialBestSellers, initialProducts] = await Promise.all([
+  const [initialSliders, initialCategories, initialStyles, initialBestSellers, initialProducts] = await Promise.all([
     getPublicSliders(),
     getPublicCategories(),
+    getPublicStyles(),
     getPublicBestSellers(),
     getPublicProducts()
   ])
@@ -14,6 +15,7 @@ export default async function HomePage() {
     <HomeClient 
       initialSliders={initialSliders} 
       initialCategories={initialCategories}
+      initialStyles={initialStyles}
       initialBestSellers={initialBestSellers}
       initialProducts={initialProducts}
     />
