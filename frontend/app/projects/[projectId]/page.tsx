@@ -10,7 +10,7 @@ import { Footer } from "@/components/layout/Footer"
 export default function ProjectDetailsPage() {
   const params = useParams()
   const projectId = params.projectId as string
-  
+
   // Find project in all brands
   const project = BRANDS.flatMap(b => b.projects).find(p => p.id === projectId)
   const brand = BRANDS.find(b => b.projects.some(p => p.id === projectId))
@@ -48,8 +48,8 @@ export default function ProjectDetailsPage() {
           {/* Hero Images Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
             <div className="md:col-span-2 aspect-[4/3] rounded-[2rem] overflow-hidden relative group">
-              <img 
-                src={project.mainImage} 
+              <img
+                src={project.mainImage}
                 alt={project.title}
                 className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                 onError={(e) => {
@@ -63,8 +63,8 @@ export default function ProjectDetailsPage() {
             <div className="flex flex-col gap-6">
               {project.secondaryImages.map((img, idx) => (
                 <div key={idx} className="flex-1 rounded-[2rem] overflow-hidden relative group">
-                  <img 
-                    src={img} 
+                  <img
+                    src={img}
                     alt={`${project.title} detail ${idx + 1}`}
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                     onError={(e) => {
@@ -72,7 +72,7 @@ export default function ProjectDetailsPage() {
                         "https://images.unsplash.com/photo-1513519245088-0e12902e35a6?auto=format&fit=crop&q=80&w=600",
                         "https://images.unsplash.com/photo-1505693413171-293669746a57?auto=format&fit=crop&q=80&w=600"
                       ]
-                      (e.target as HTMLImageElement).src = fallbacks[idx] || fallbacks[0]
+                        (e.target as HTMLImageElement).src = fallbacks[idx] || fallbacks[0]
                     }}
                   />
                 </div>
@@ -110,8 +110,8 @@ export default function ProjectDetailsPage() {
               {project.itemsUsed.map((item) => (
                 <div key={item.id} className="group">
                   <div className="relative aspect-[4/5] bg-white rounded-3xl overflow-hidden mb-4 shadow-sm group-hover:shadow-xl transition-shadow duration-500">
-                    <img 
-                      src={item.image} 
+                    <img
+                      src={item.image}
                       alt={item.name}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       onError={(e) => {
@@ -133,6 +133,6 @@ export default function ProjectDetailsPage() {
         </div>
       </main>
       <Footer />
-    </div>>
+    </div>
   )
 }
