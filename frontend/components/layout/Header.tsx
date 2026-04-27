@@ -177,7 +177,7 @@ export function Header() {
         </div>
 
         {/* Desktop Navigation Links */}
-        <div className="hidden md:flex items-center justify-center gap-10 text-[10px] tracking-[0.25em] font-bold text-taupe flex-1">
+        <div className="hidden md:flex items-center justify-center gap-8 text-[10px] tracking-[0.15em] font-bold text-taupe flex-1">
           <Link href="/" className="hover:text-mahogany transition-all hover:scale-110">
             HOME
           </Link>
