@@ -22,7 +22,7 @@ export default function ProjectDetailsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F5EBE0] pt-32 pb-24 px-6 md:px-12 font-sans">
+    <div className="min-h-screen bg-white pt-32 pb-24 px-6 md:px-12 font-sans">
       <div className="max-w-7xl mx-auto">
         {/* Project Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">

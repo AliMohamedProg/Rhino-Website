@@ -219,7 +219,7 @@ export function Header() {
             CATALOG
           </Link>
           <Link href="/alliances" className="hover:text-mahogany transition-all hover:scale-110">
-            ALLIANCES
+            WE ARE PART OF
           </Link>
           <Link href="/#our-story" className="hover:text-[#3D2B1F] transition-all hover:scale-110">
             OUR STORY

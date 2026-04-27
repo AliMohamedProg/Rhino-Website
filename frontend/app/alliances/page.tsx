@@ -5,7 +5,7 @@ import { BRANDS } from "@/lib/mock-alliances"
 
 export default function AlliancesPage() {
   return (
-    <div className="min-h-screen bg-[#F5EBE0] pt-32 pb-24 px-6 md:px-12 font-sans">
+    <div className="min-h-screen bg-white pt-32 pb-24 px-6 md:px-12 font-sans">
       <div className="max-w-7xl mx-auto text-center">
         {/* Global Alliances Header */}
         <div className="mb-20">

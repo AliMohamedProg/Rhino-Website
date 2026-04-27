@@ -19,11 +19,11 @@ export default function BrandProjectsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F5EBE0] pt-32 pb-24 px-6 md:px-12">
+    <div className="min-h-screen bg-white pt-32 pb-24 px-6 md:px-12">
       <div className="max-w-7xl mx-auto">
         {/* Breadcrumbs */}
         <div className="mb-12 flex items-center gap-2 text-[10px] tracking-widest font-bold text-taupe uppercase">
-          <Link href="/alliances" className="hover:text-mahogany transition-colors">Alliances</Link>
+          <Link href="/alliances" className="hover:text-mahogany transition-colors">WE ARE PART OF</Link>
           <span>/</span>
           <span className="text-mahogany">{brand.name}</span>
         </div>
