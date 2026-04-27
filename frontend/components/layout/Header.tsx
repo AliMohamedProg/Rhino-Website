@@ -185,7 +185,7 @@ export function Header() {
           {/* Dropdown container */}
           <div className="group relative cursor-pointer">
             <div className="flex items-center gap-1.5 text-mahogany transition-all pb-1 hover:scale-110">
-              COLLECTIONS
+              Style By
               <ChevronDownIcon className="w-3 h-3 ml-0.5 transition-transform group-hover:rotate-180 stroke-[3]" />
             </div>
 
