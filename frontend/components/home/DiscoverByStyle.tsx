@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { ArrowRightIcon } from "@/components/layout/LucideIcons"
-import { getPublicStyles, type PublicCategory } from \"@/lib/products\"
+import { getPublicStyles, type PublicCategory } from "@/lib/products"
 
 const FALLBACK_STYLES = [
   {

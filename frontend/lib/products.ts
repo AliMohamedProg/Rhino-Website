@@ -286,27 +286,27 @@ export async function getPublicSliders(): Promise<PublicSlider[]> {
 }
 
 export async function getPublicCategories(): Promise<PublicCategory[]> {
-  const rawData = await fetchFromApi(\"Category\");
+  const rawData = await fetchFromApi("Category");
   if (!Array.isArray(rawData)) return [];
 
   return rawData.map((item: any) => ({
-    id: item.id ?? item.Id ?? \"\",
-    nameAr: item.nameAr ?? item.NameAr ?? \"\",
-    nameEn: item.nameEn ?? item.NameEn ?? \"\",
-    imageUrl: item.imageUrl ?? item.ImageUrl ?? \"\",
+    id: item.id ?? item.Id ?? "",
+    nameAr: item.nameAr ?? item.NameAr ?? "",
+    nameEn: item.nameEn ?? item.NameEn ?? "",
+    imageUrl: item.imageUrl ?? item.ImageUrl ?? "",
     productsCount: item.productsCount ?? item.ProductsCount ?? 0,
   }));
 }
 
 export async function getPublicStyles(): Promise<PublicCategory[]> {
-  const rawData = await fetchFromApi(\"Styles\");
+  const rawData = await fetchFromApi("Styles");
   if (!Array.isArray(rawData)) return [];
 
   return rawData.map((item: any) => ({
-    id: item.id ?? item.Id ?? \"\",
-    nameAr: item.nameAr ?? item.NameAr ?? \"\",
-    nameEn: item.nameEn ?? item.NameEn ?? \"\",
-    imageUrl: item.imageUrl ?? item.ImageUrl ?? \"\",
+    id: item.id ?? item.Id ?? "",
+    nameAr: item.nameAr ?? item.NameAr ?? "",
+    nameEn: item.nameEn ?? item.NameEn ?? "",
+    imageUrl: item.imageUrl ?? item.ImageUrl ?? "",
     productsCount: item.productsCount ?? item.ProductsCount ?? 0,
   }));
 }

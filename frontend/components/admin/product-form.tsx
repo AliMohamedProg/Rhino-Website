@@ -80,13 +80,13 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     const fetchInitialData = async () => {
       try {
         const [stylesData, catsData] = await Promise.all([
-          ApiClient.get(\"api/admin/Styles\"),
-          ApiClient.get(\"api/admin/Categories\")
+          ApiClient.get("api/admin/Styles"),
+          ApiClient.get("api/admin/Categories")
         ])
         setStyles(stylesData as AdminCategoryDto[])
         setCategories(catsData as AdminCategoryDto[])
       } catch (err) {
-        console.error(\"Failed to fetch organizational data:\", err)
+        console.error("Failed to fetch organizational data:", err)
       }
     }
 
