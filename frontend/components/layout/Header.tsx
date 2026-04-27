@@ -302,7 +302,9 @@ export function Header() {
             </div>
           </div>
 
-
+          <Link href="/products" className="hover:text-mahogany transition-colors block font-bold text-mahogany text-[11px] tracking-[0.2em]">
+            ALL PRODUCTS
+          </Link>
           <Link href="/alliances" className="hover:text-mahogany transition-all hover:scale-110">
             WE ARE PART OF
           </Link>
