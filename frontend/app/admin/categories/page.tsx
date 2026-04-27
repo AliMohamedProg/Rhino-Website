@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { ApiClient } from "@/app/ApiHelper/ApiClient"
 import { DataTable } from "@/components/admin/data-table"
 import {
   DropdownMenu,
@@ -40,19 +41,47 @@ export default function CategoriesPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [editingCategory, setEditingCategory] = useState<Category | null>(null)
   const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null)
-  const [formData, setFormData] = useState({ nameEn: "", nameAr: "", imageUrl: "" })
+  const [formData, setFormData] = useState({ nameEn: "" })
+  const [imageUrl, setImageUrl] = useState("")
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
-  const handleSave = () => {
+  useEffect(() => {
     if (editingCategory) {
-      setCategories(categories.map(c => c.id === editingCategory.id ? { ...c, ...formData } : c))
-    } else {
-      const newCat: Category = {
-        id: `cat-${Date.now()}`,
-        ...formData
-      }
-      setCategories([...categories, newCat])
+      setFormData({ nameEn: editingCategory.nameEn })
+      setImageUrl(editingCategory.imageUrl || "")
+    } else if (dialogOpen) {
+      setFormData({ nameEn: "" })
+      setImageUrl("")
+      setSelectedFile(null)
     }
-    setDialogOpen(false)
+  }, [editingCategory, dialogOpen])
+
+  const handleSave = async () => {
+    try {
+      setLoading(true)
+      let finalImageUrl = imageUrl
+
+      if (selectedFile) {
+        const uploadRes = await ApiClient.upload("api/upload", selectedFile)
+        finalImageUrl = uploadRes.url || uploadRes.imageUrl || uploadRes
+      }
+
+      if (editingCategory) {
+        setCategories(categories.map(c => c.id === editingCategory.id ? { ...c, nameEn: formData.nameEn, imageUrl: finalImageUrl } : c))
+      } else {
+        const newCat: Category = {
+          id: `cat-${Date.now()}`,
+          nameEn: formData.nameEn,
+          imageUrl: finalImageUrl
+        }
+        setCategories([...categories, newCat])
+      }
+      setDialogOpen(false)
+    } catch (err) {
+      console.error("Failed to save category:", err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const columns = [
@@ -61,8 +90,7 @@ export default function CategoriesPage() {
         {cat.imageUrl ? <img src={cat.imageUrl} alt={cat.nameEn} className="h-full w-full object-cover" /> : <LayoutGrid className="h-4 w-4 text-slate-300" />}
       </div>
     )},
-    { key: "nameEn", header: "Name (EN)", render: (cat: Category) => <span className="font-medium text-slate-900">{cat.nameEn}</span> },
-    { key: "nameAr", header: "Name (AR)", render: (cat: Category) => <span className="text-slate-500">{cat.nameAr}</span> },
+    { key: "nameEn", header: "Category Name", render: (cat: Category) => <span className="font-bold text-[#3a2c26]">{cat.nameEn}</span> },
     { key: "actions", header: "Actions", render: (cat: Category) => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -71,7 +99,7 @@ export default function CategoriesPage() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="bg-white rounded-xl shadow-xl">
-          <DropdownMenuItem onClick={() => { setEditingCategory(cat); setFormData({ nameEn: cat.nameEn, nameAr: cat.nameAr, imageUrl: cat.imageUrl || "" }); setDialogOpen(true) }} className="hover:bg-[#f6eee8] cursor-pointer">
+          <DropdownMenuItem onClick={() => { setEditingCategory(cat); setFormData({ nameEn: cat.nameEn }); setImageUrl(cat.imageUrl || ""); setDialogOpen(true) }} className="hover:bg-[#f6eee8] cursor-pointer">
             <Pencil className="h-4 w-4 mr-2 text-[#7B3F32]" />
             <span>Edit</span>
           </DropdownMenuItem>
@@ -93,7 +121,7 @@ export default function CategoriesPage() {
           <p className="text-[#7c6f65] mt-1 text-sm font-medium">Manage high-level product categories</p>
         </div>
         
-        <Button onClick={() => { setEditingCategory(null); setFormData({ nameEn: "", nameAr: "", imageUrl: "" }); setDialogOpen(true) }} className="bg-gradient-to-r from-[#7B3F32] to-[#9e5948] text-white hover:from-[#5f3026] hover:to-[#8e4f3f] rounded-2xl shadow-lg font-bold transition-all px-5 border-0">
+        <Button onClick={() => { setEditingCategory(null); setFormData({ nameEn: "" }); setImageUrl(""); setSelectedFile(null); setDialogOpen(true) }} className="bg-gradient-to-r from-[#7B3F32] to-[#9e5948] text-white hover:from-[#5f3026] hover:to-[#8e4f3f] rounded-2xl shadow-lg font-bold transition-all px-5 border-0">
           <Plus className="h-4 w-4 mr-2" />Add Category
         </Button>
       </div>
@@ -112,21 +140,26 @@ export default function CategoriesPage() {
           </DialogHeader>
           <div className="grid gap-5 py-4">
             <div className="space-y-2">
-              <Label htmlFor="nameEn">English Name</Label>
-              <Input id="nameEn" value={formData.nameEn} onChange={(e) => setFormData({ ...formData, nameEn: e.target.value })} className="rounded-xl" />
+              <Label htmlFor="nameEn" className="text-sm font-semibold text-[#4b3d34]">Category Name</Label>
+              <Input id="nameEn" value={formData.nameEn} onChange={(e) => setFormData({ ...formData, nameEn: e.target.value })} className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 h-12 rounded-xl bg-white/50" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="nameAr">Arabic Name</Label>
-              <Input id="nameAr" value={formData.nameAr} onChange={(e) => setFormData({ ...formData, nameAr: e.target.value })} className="rounded-xl" />
+              <Label className="text-sm font-semibold text-[#4b3d34]">Category Image</Label>
+              <Input id="image" type="file" accept="image/*" onChange={(e) => { const file = e.target.files?.[0]; if (file) setSelectedFile(file) }} className="border-[#7B3F32]/20 file:bg-[#f6eee8] file:text-[#7B3F32] file:border-0 file:rounded-xl file:px-4 file:font-semibold rounded-xl bg-white/50 cursor-pointer pt-2" />
+              {selectedFile ? (
+                <div className="mt-4 h-32 w-full rounded-2xl overflow-hidden border border-[#7B3F32]/10 bg-[#f8f0e7] shadow-sm"><img src={URL.createObjectURL(selectedFile)} alt="Preview" className="h-full w-full object-cover" /></div>
+              ) : imageUrl && (
+                <div className="mt-4 h-32 w-full rounded-2xl overflow-hidden border border-[#7B3F32]/10 bg-[#f8f0e7] shadow-sm"><img src={imageUrl} alt="Current" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop" }} /></div>
+              )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="imageUrl">Image URL</Label>
-              <Input id="imageUrl" value={formData.imageUrl} onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} className="rounded-xl" />
+              <Label htmlFor="imageUrl" className="text-sm font-semibold text-[#4b3d34]">Or Image URL</Label>
+              <Input id="imageUrl" placeholder="https://..." value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 h-12 rounded-xl bg-white/50" />
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)} className="rounded-xl">Cancel</Button>
-            <Button onClick={handleSave} className="bg-[#7B3F32] text-white rounded-xl">Save Category</Button>
+          <DialogFooter className="mt-4">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-[#7B3F32]/20 text-[#4b3d34] hover:bg-[#f6eee8] rounded-xl h-12 font-medium">Cancel</Button>
+            <Button onClick={handleSave} disabled={loading} className="bg-gradient-to-r from-[#7B3F32] to-[#9e5948] text-white hover:from-[#5f3026] hover:to-[#8e4f3f] rounded-xl h-12 font-bold shadow-[0_8px_20px_rgba(123,63,50,0.2)] transition-all hover:scale-[1.02] active:scale-[0.98]">{loading ? "Saving..." : "Save Category"}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
