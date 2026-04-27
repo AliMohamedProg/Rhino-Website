@@ -87,6 +87,7 @@ export interface Product {
   stock: number
   category: string
   categoryId: string
+  styleId?: string
   status: "active" | "inactive" | "draft"
   featured: boolean
   onSale: boolean

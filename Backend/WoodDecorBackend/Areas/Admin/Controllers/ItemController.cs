@@ -113,20 +113,20 @@ namespace Apis.Areas.Admin.Controllers
                     Id = Guid.NewGuid(),
                     NameAr = itemDto.NameAr,
                     NameEn = itemDto.NameEn,
-                    DescriptionAr = itemDto.DescriptionAr,
+                    DescriptionAr = itemDto.DescriptionAr ?? string.Empty,
                     DescriptionEn = itemDto.DescriptionEn,
                     ColorsEn = itemDto.ColorsEn,
-                    ColorsAr = itemDto.ColorsAr,
+                    ColorsAr = itemDto.ColorsAr ?? string.Empty,
                     DiscountAmount = itemDto.DiscountAmount,
                     MainImage = mainImage ?? string.Empty,
-                    //OverallRating = itemDto.OverallRating
                     Price = itemDto.Price, 
                     OldPrice = itemDto.OldPrice,
                     StockNumber = itemDto.StockNumber,
                     CategoryId = itemDto.CategoryId,
+                    StyleId = itemDto.StyleId, // Fixed: Missing StyleId
                     Images = itemDto.Images ?? new List<ImageDto>(),
                     MaterialEn = itemDto.MaterialEn,
-                    MaterialAr = itemDto.MaterialAr,
+                    MaterialAr = itemDto.MaterialAr ?? string.Empty,
                 };
                 _itemService.AddItemWithImages(item);
                 return true;
@@ -164,19 +164,19 @@ namespace Apis.Areas.Admin.Controllers
                     CurrentState = itemDto.CurrentState,
                     NameAr = itemDto.NameAr,
                     NameEn = itemDto.NameEn,
-                    DescriptionAr = itemDto.DescriptionAr,
+                    DescriptionAr = itemDto.DescriptionAr ?? string.Empty,
                     DescriptionEn = itemDto.DescriptionEn,
-                    ColorsAr = itemDto.ColorsAr,
+                    ColorsAr = itemDto.ColorsAr ?? string.Empty,
                     ColorsEn = itemDto.ColorsEn,
                     DiscountAmount = itemDto.DiscountAmount,
                     MainImage = mainImage ?? string.Empty,
-                    //OverallRating = itemDto.OverallRating,
                     Price = itemDto.Price,
                     OldPrice = itemDto.OldPrice,
                     StockNumber = itemDto.StockNumber,
                     CategoryId = itemDto.CategoryId,
+                    StyleId = itemDto.StyleId, // Fixed: Missing StyleId
                     Images = itemDto.Images ?? new List<ImageDto>(),
-                    MaterialAr = itemDto.MaterialAr,
+                    MaterialAr = itemDto.MaterialAr ?? string.Empty,
                     MaterialEn = itemDto.MaterialEn,
                 };
 

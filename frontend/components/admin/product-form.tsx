@@ -46,11 +46,11 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     discountAmount: product?.discountAmount ?? 0,
     stock: product?.stock || 0,
     categoryId: product?.categoryId || "",
+    styleId: product?.styleId || "",
     images: buildInitialImages(product),
     mainImage: product?.mainImage || product?.images?.[0] || "",
     colorsEn: product?.colorsEn || "",
     materialEn: product?.materialEn || "",
-    categoryName: "",
     brandId: "",
   })
 
@@ -69,6 +69,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
       discountAmount: product.discountAmount ?? 0,
       stock: product.stock || 0,
       categoryId: product.categoryId || "",
+      styleId: product.styleId || "",
       images: buildInitialImages(product),
       mainImage: product.mainImage || product.images?.[0] || "",
       colorsEn: product.colorsEn || "",
@@ -178,7 +179,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
 
     try {
       if (!formData.categoryId) {
-        alert("Please select a style")
+        alert("Please select a category")
         setIsSubmitting(false)
         return
       }
@@ -209,6 +210,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
         discountAmount,
         stockNumber: formData.stock,
         categoryId: formData.categoryId,
+        styleId: formData.styleId || null,
         colorsEn: colorsValidationEn.normalized,
         colorsAr: "",
         materialEn: (formData.materialEn || "").trim(),
@@ -218,15 +220,23 @@ export function ProductForm({ product, mode }: ProductFormProps) {
         currentState,
       }
 
+      let result
       if (mode === "create") {
-        await ApiClient.post("api/admin/Item/add-item", payload)
+        result = await ApiClient.post("api/admin/Item/add-item", payload)
       } else {
-        await ApiClient.post("api/admin/Item/edit-item", payload)
+        result = await ApiClient.post("api/admin/Item/edit-item", payload)
+      }
+
+      // Backend returns false if the DB save failed (e.g. FK violation)
+      if (result === false) {
+        alert("Failed to save product. Please check that a valid Category is selected.")
+        return
       }
 
       router.push("/admin/products")
     } catch (err) {
       console.error("Failed to save product:", err)
+      alert("Failed to save product. Please try again.")
     } finally {
       setIsSubmitting(false)
     }
@@ -444,16 +454,16 @@ export function ProductForm({ product, mode }: ProductFormProps) {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="category" className="text-sm font-semibold text-[#4b3d34]">
-                  Style
+                  Category
                 </Label>
                 <Select value={formData.categoryId} onValueChange={(value) => handleChange("categoryId", value)}>
                   <SelectTrigger className="admin-input h-11">
-                    <SelectValue placeholder="Select style" />
+                    <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl border-[#8f3f2a]/15 bg-white shadow-xl">
-                    {styles.map((style) => (
-                      <SelectItem key={style.id} value={style.id}>
-                        {style.nameEn}
+                    {categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.nameEn}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -461,17 +471,17 @@ export function ProductForm({ product, mode }: ProductFormProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="category" className="text-sm font-semibold text-[#4b3d34]">
-                  Category
+                <Label htmlFor="style" className="text-sm font-semibold text-[#4b3d34]">
+                  Style
                 </Label>
-                <Select value={formData.categoryName} onValueChange={(value) => handleChange("categoryName", value)}>
+                <Select value={formData.styleId} onValueChange={(value) => handleChange("styleId", value)}>
                   <SelectTrigger className="admin-input h-11">
-                    <SelectValue placeholder="Select category" />
+                    <SelectValue placeholder="Select style" />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl border-[#8f3f2a]/15 bg-white shadow-xl">
-                    {categories.map((category) => (
-                      <SelectItem key={category.id} value={category.nameEn}>
-                        {category.nameEn}
+                    {styles.map((style) => (
+                      <SelectItem key={style.id} value={style.id}>
+                        {style.nameEn}
                       </SelectItem>
                     ))}
                   </SelectContent>

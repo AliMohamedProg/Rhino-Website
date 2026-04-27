@@ -23,11 +23,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy
-            .WithOrigins("https://rhino-web-ffnf.vercel.app") // رابط الNext.js local dev
+        policy.SetIsOriginAllowed(_ => true)
               .AllowAnyHeader()
               .AllowAnyMethod()
-            .AllowCredentials(); // مهم لو بتستخدم cookies
+              .AllowCredentials();
     });
 });
 //********************************************************************
@@ -152,8 +151,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("AllowFrontend");
 app.UseRouting();
+app.UseCors("AllowFrontend");
 app.UseStaticFiles(); // Serve files from wwwroot
 app.UseStaticFiles(new StaticFileOptions
 {

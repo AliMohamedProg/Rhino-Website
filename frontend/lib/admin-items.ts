@@ -15,6 +15,7 @@ export interface AdminItemDto {
   oldPrice?: number | null
   discountAmount?: number | null
   categoryId: string
+  styleId?: string | null
   stockNumber: number
   mainImage?: string | null
   images?: AdminImageDto[]
@@ -77,6 +78,7 @@ export const mapAdminItemToProduct = (
     stock: item.stockNumber ?? 0,
     category: category ? category.nameEn : item.categoryId ?? "",
     categoryId: item.categoryId ?? "",
+    styleId: item.styleId ?? undefined,
     status: item.currentState && item.currentState > 0 ? "active" : "inactive",
     featured: false,
     onSale: discount > 0,
