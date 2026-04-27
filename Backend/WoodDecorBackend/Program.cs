@@ -115,6 +115,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped(typeof(ITableRepository<>), typeof(TableRepository<>));
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<ICategory, CategoryService>();
+builder.Services.AddScoped<IStyles, StylesService>();
 builder.Services.AddScoped<IItem, ItemService>();
 builder.Services.AddScoped<IOrder, OrderService>();
 builder.Services.AddScoped<IOrderItem, OrderItemService>();

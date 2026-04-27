@@ -14,30 +14,30 @@ namespace Apis.Areas.Admin.Controllers
     [Route("api/admin/[controller]")]
     [ApiController]
     [Authorize(Roles = "Admin")]
-    public class CategoriesController : ControllerBase
+    public class StylesController : ControllerBase
     {
-        ICategory _categoryService;
-        public CategoriesController(ICategory categoryService)
+        IStyles _styleService;
+        public StylesController(IStyles styleService)
         {
-            _categoryService = categoryService;
+            _styleService = styleService;
         }
         // GET: api/<ItemsController>
         [HttpGet]
-        public List<CategoryDto> Get()
+        public List<StylesDto> Get()
         {
-            var categories = _categoryService.GetAll();
-            return categories;
+            var styles = _styleService.GetAll();
+            return styles;
         }
 
         [HttpGet("export/excel")]
         public IActionResult ExportCategoriesToExcel()
         {
-            var categories = _categoryService.GetAll();
+            var styles = _styleService.GetAll();
 
             var sb = new StringBuilder();
             sb.AppendLine("Id,NameEn,NameAr,ProductsCount");
 
-            foreach (var cat in categories)
+            foreach (var cat in styles)
             {
                 var row = string.Join(",", new[]
                 {
@@ -50,18 +50,18 @@ namespace Apis.Areas.Admin.Controllers
             }
 
             var bytes = Encoding.UTF8.GetBytes(sb.ToString());
-            return File(bytes, "text/csv", "categories.csv");
+            return File(bytes, "text/csv", "styles.csv");
         }
 
         [HttpGet("export/pdf")]
         public IActionResult ExportCategoriesToPdf()
         {
-            var categories = _categoryService.GetAll();
+            var styles = _styleService.GetAll();
 
             var sb = new StringBuilder();
-            sb.AppendLine("Categories Export");
+            sb.AppendLine("styles Export");
             sb.AppendLine("=================");
-            foreach (var cat in categories)
+            foreach (var cat in styles)
             {
                 sb.AppendLine($"Id: {cat.Id}");
                 sb.AppendLine($"Name (EN): {cat.NameEn}");
@@ -71,7 +71,7 @@ namespace Apis.Areas.Admin.Controllers
             }
 
             var bytes = Encoding.UTF8.GetBytes(sb.ToString());
-            return File(bytes, "application/pdf", "categories.pdf");
+            return File(bytes, "application/pdf", "styles.pdf");
         }
 
         private static string EscapeCsv(string? value)
@@ -82,21 +82,21 @@ namespace Apis.Areas.Admin.Controllers
             return needsQuotes ? $"\"{escaped}\"" : escaped;
         }
 
-        [HttpPost("add-category")]
-        public async Task<bool> Add(CategoryDto categoryDto)
+        [HttpPost("add-style")]
+        public async Task<bool> Add(StylesDto styleDto)
         {
             try
             {
-                var category = new CategoryDto()
+                var style = new StylesDto()
                 {
-                    NameAr = categoryDto.NameAr,
-                    NameEn = categoryDto.NameEn,
-                    ImageUrl = categoryDto.ImageUrl,
+                    NameAr = styleDto.NameAr,
+                    NameEn = styleDto.NameEn,
+                    ImageUrl = styleDto.ImageUrl,
                     CurrentState =1,
                     Id = Guid.NewGuid(),
 
                 };
-                _categoryService.Add(category);
+                _styleService.Add(style);
                 return true;
             }
             catch (Exception ex)
@@ -105,12 +105,12 @@ namespace Apis.Areas.Admin.Controllers
             }
         }
 
-        [HttpPost("edit-category")]
-        public async Task<bool> Edit(CategoryDto categoryDto)
+        [HttpPost("edit-style")]
+        public async Task<bool> Edit(StylesDto styleDto)
         {
             try
             {
-                _categoryService.Update(categoryDto);
+                _styleService.Update(styleDto);
                 return true;
             }
             catch (Exception ex)
@@ -119,16 +119,16 @@ namespace Apis.Areas.Admin.Controllers
             }
         }
 
-        [HttpPost("delete-category/{categoryId}")]
-        public async Task<IActionResult> Delete([FromRoute] Guid categoryId)
+        [HttpPost("delete-style/{styleId}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid styleId)
         {
             try
             {
-                var result = _categoryService.MarkAsDeleted(categoryId, 0); // Soft delete
+                var result = _styleService.MarkAsDeleted(styleId, 0); // Soft delete
                 if (result)
-                    return Ok(new { success = true, message = "Category deleted successfully" });
+                    return Ok(new { success = true, message = "style deleted successfully" });
                 
-                return NotFound(new { success = false, message = "Category not found in database" });
+                return NotFound(new { success = false, message = "style not found in database" });
             }
             catch (Exception ex)
             {
@@ -140,7 +140,7 @@ namespace Apis.Areas.Admin.Controllers
         {
             try
             {
-                var result = _categoryService.DeleteAll();
+                var result = _styleService.DeleteAll();
                 if (result)
                     return Ok(new { success = true, message = "Items deleted successfully" });
 

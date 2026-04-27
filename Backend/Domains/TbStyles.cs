@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Domains;
 
-public partial class TbCategory : BaseTable
+public partial class TbStyles : BaseTable
 {
 
     public string NameAr { get; set; } = null!;

@@ -20,7 +20,9 @@ public partial class WoodDecorContext : IdentityDbContext<ApplicationUser>
     }
 
     public virtual DbSet<TbCategory> TbCategories { get; set; }
-
+    
+    public virtual DbSet<TbStyles> TbStyles { get; set; }
+    
     public virtual DbSet<TbImage> TbImages { get; set; }
 
     public virtual DbSet<TbItem> TbItems { get; set; }

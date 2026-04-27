@@ -17,7 +17,7 @@ public partial class TbItem : BaseTable
 
     public decimal? OldPrice { get; set; }
     public decimal Price { get; set; }
-
+    public Guid? StyleId { get; set; }
 
 public int? DiscountAmount { get; set; }
 

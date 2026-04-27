@@ -32,11 +32,16 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Plus, MoreHorizontal, Pencil, Trash2, LayoutGrid } from "lucide-react"
-import { MOCK_CATEGORIES, type Category } from "@/lib/mock-admin-data"
+
+interface Category {
+  id: string
+  nameEn: string
+  imageUrl?: string
+}
 
 export default function CategoriesPage() {
-  const [categories, setCategories] = useState<Category[]>(MOCK_CATEGORIES)
-  const [loading, setLoading] = useState(false)
+  const [categories, setCategories] = useState<Category[]>([])
+  const [loading, setLoading] = useState(true)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [editingCategory, setEditingCategory] = useState<Category | null>(null)
@@ -44,6 +49,22 @@ export default function CategoriesPage() {
   const [formData, setFormData] = useState({ nameEn: "" })
   const [imageUrl, setImageUrl] = useState("")
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
+
+  const fetchCategories = async () => {
+    try {
+      setLoading(true)
+      const data = await ApiClient.get("api/admin/Categories")
+      setCategories(Array.isArray(data) ? data : [])
+    } catch (err) {
+      console.error("Failed to fetch categories:", err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchCategories()
+  }, [])
 
   useEffect(() => {
     if (editingCategory) {
@@ -66,19 +87,38 @@ export default function CategoriesPage() {
         finalImageUrl = uploadRes.url || uploadRes.imageUrl || uploadRes
       }
 
-      if (editingCategory) {
-        setCategories(categories.map(c => c.id === editingCategory.id ? { ...c, nameEn: formData.nameEn, imageUrl: finalImageUrl } : c))
-      } else {
-        const newCat: Category = {
-          id: `cat-${Date.now()}`,
-          nameEn: formData.nameEn,
-          imageUrl: finalImageUrl
-        }
-        setCategories([...categories, newCat])
+      const payload = {
+        nameEn: formData.nameEn,
+        nameAr: "",
+        imageUrl: finalImageUrl,
+        currentState: 1
       }
+
+      if (editingCategory) {
+        await ApiClient.post("api/admin/Categories/edit-category", { ...payload, id: editingCategory.id })
+      } else {
+        await ApiClient.post("api/admin/Categories/add-category", payload)
+      }
+      
       setDialogOpen(false)
+      await fetchCategories()
     } catch (err) {
       console.error("Failed to save category:", err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const confirmDelete = async () => {
+    if (!categoryToDelete) return
+    try {
+      setLoading(true)
+      await ApiClient.post(`api/admin/Categories/delete-category/${categoryToDelete.id}`, {})
+      setDeleteDialogOpen(false)
+      setCategoryToDelete(null)
+      await fetchCategories()
+    } catch (err) {
+      console.error("Failed to delete category:", err)
     } finally {
       setLoading(false)
     }
@@ -99,8 +139,8 @@ export default function CategoriesPage() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="bg-white rounded-xl shadow-xl">
-          <DropdownMenuItem onClick={() => { setEditingCategory(cat); setFormData({ nameEn: cat.nameEn }); setImageUrl(cat.imageUrl || ""); setDialogOpen(true) }} className="hover:bg-[#f6eee8] cursor-pointer">
-            <Pencil className="h-4 w-4 mr-2 text-[#7B3F32]" />
+          <DropdownMenuItem onClick={() => { setEditingCategory(cat); setDialogOpen(true) }} className="hover:bg-[#f6eee8] cursor-pointer">
+            <Pencil className="h-4 w-4 mr-2 text-[#7B3F32]\" />
             <span>Edit</span>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => { setCategoryToDelete(cat); setDeleteDialogOpen(true) }} className="hover:bg-red-50 text-red-600 cursor-pointer">
@@ -121,14 +161,18 @@ export default function CategoriesPage() {
           <p className="text-[#7c6f65] mt-1 text-sm font-medium">Manage high-level product categories</p>
         </div>
         
-        <Button onClick={() => { setEditingCategory(null); setFormData({ nameEn: "" }); setImageUrl(""); setSelectedFile(null); setDialogOpen(true) }} className="bg-gradient-to-r from-[#7B3F32] to-[#9e5948] text-white hover:from-[#5f3026] hover:to-[#8e4f3f] rounded-2xl shadow-lg font-bold transition-all px-5 border-0">
+        <Button onClick={() => { setEditingCategory(null); setDialogOpen(true) }} className="bg-gradient-to-r from-[#7B3F32] to-[#9e5948] text-white hover:from-[#5f3026] hover:to-[#8e4f3f] rounded-2xl shadow-lg font-bold transition-all px-5 border-0">
           <Plus className="h-4 w-4 mr-2" />Add Category
         </Button>
       </div>
 
       <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-sm overflow-hidden">
         <CardContent className="pt-6">
-          <DataTable data={categories} columns={columns} searchPlaceholder="Search categories..." searchKey="nameEn" />
+          {loading && categories.length === 0 ? (
+            <div className="flex justify-center items-center h-48 text-slate-500 animate-pulse">Loading categories...</div>
+          ) : (
+            <DataTable data={categories} columns={columns} searchPlaceholder="Search categories..." searchKey="nameEn" />
+          )}
         </CardContent>
       </Card>
 
@@ -165,14 +209,14 @@ export default function CategoriesPage() {
       </Dialog>
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent className="bg-white rounded-3xl">
+        <AlertDialogContent className="bg-white rounded-3xl border-[#7B3F32]/10 shadow-2xl">
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Category</AlertDialogTitle>
-            <AlertDialogDescription>Are you sure? This will remove the category from the list.</AlertDialogDescription>
+            <AlertDialogTitle className="text-2xl font-bold tracking-tight text-[#2f2219]">Delete Category</AlertDialogTitle>
+            <AlertDialogDescription className="text-[#8b7d73]">Are you sure you want to delete <span className="font-semibold text-[#7B3F32]">"{categoryToDelete?.nameEn}"</span>? This action cannot be undone.</AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="rounded-xl">Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={() => { setCategories(categories.filter(c => c.id !== categoryToDelete?.id)); setDeleteDialogOpen(false) }} className="bg-red-600 text-white rounded-xl">Delete</AlertDialogAction>
+          <AlertDialogFooter className="mt-4">
+            <AlertDialogCancel className="border-[#7B3F32]/20 text-[#4b3d34] hover:bg-[#f6eee8] rounded-xl h-11 font-medium">Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-red-500 hover:bg-red-600 text-white rounded-xl h-11 font-bold shadow-sm shadow-red-500/20">Delete</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

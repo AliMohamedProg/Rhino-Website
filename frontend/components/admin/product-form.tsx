@@ -54,6 +54,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     brandId: "",
   })
 
+  const [styles, setStyles] = useState<AdminCategoryDto[]>([])
   const [categories, setCategories] = useState<AdminCategoryDto[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
@@ -76,16 +77,20 @@ export function ProductForm({ product, mode }: ProductFormProps) {
   }, [product])
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchInitialData = async () => {
       try {
-        const data = await ApiClient.get("api/admin/Categories")
-        setCategories(data as AdminCategoryDto[])
+        const [stylesData, catsData] = await Promise.all([
+          ApiClient.get(\"api/admin/Styles\"),
+          ApiClient.get(\"api/admin/Categories\")
+        ])
+        setStyles(stylesData as AdminCategoryDto[])
+        setCategories(catsData as AdminCategoryDto[])
       } catch (err) {
-        console.error("Failed to fetch categories:", err)
+        console.error(\"Failed to fetch organizational data:\", err)
       }
     }
 
-    fetchCategories()
+    fetchInitialData()
   }, [])
 
   const mergeImages = (current: string[], incoming: string[]) => Array.from(new Set([...current, ...incoming]))
@@ -446,9 +451,9 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                     <SelectValue placeholder="Select style" />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl border-[#8f3f2a]/15 bg-white shadow-xl">
-                    {categories.map((category) => (
-                      <SelectItem key={category.id} value={category.id}>
-                        {category.nameEn}
+                    {styles.map((style) => (
+                      <SelectItem key={style.id} value={style.id}>
+                        {style.nameEn}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -464,7 +469,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl border-[#8f3f2a]/15 bg-white shadow-xl">
-                    {MOCK_CATEGORIES.map((category) => (
+                    {categories.map((category) => (
                       <SelectItem key={category.id} value={category.nameEn}>
                         {category.nameEn}
                       </SelectItem>

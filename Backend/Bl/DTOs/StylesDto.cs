@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Bl.DTOs
 {
-    public class CategoryDto : BaseDto
+    public class StylesDto : BaseDto
     {
         public string NameAr { get; set; } = null!;
 

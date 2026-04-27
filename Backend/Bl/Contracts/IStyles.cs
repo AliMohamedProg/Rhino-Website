@@ -9,7 +9,7 @@ using Domains;
 
 namespace BusinessLayer.Contracts
 {
-    public interface ICategory: IBaseService<TbCategory,CategoryDto>
+    public interface IStyles: IBaseService<TbStyles,StylesDto>
     {
         // If I Want To Add A New Methods
     }

@@ -9,27 +9,27 @@ namespace Apis.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class StylesController : ControllerBase
     {
-        ICategory _categoryService;
+        IStyles _stylesService;
         IItem _itemService;
-        public CategoryController(ICategory categoryService , IItem itemService)
+        public StylesController(IStyles stylesService , IItem itemService)
         {
-            _categoryService = categoryService;
+            _stylesService = stylesService;
             _itemService = itemService;
         }
         // GET: api/<CategoryController>
         [HttpGet]
-        public List<CategoryDto> Get()
+        public List<StylesDto> Get()
         {
-            var categories = _categoryService.GetAll();
-            return categories;
+            var styles = _stylesService.GetAll();
+            return styles;
         }
         // GET api/<CategoryController>/5
         [HttpGet("{id}")]
-        public List<ItemDto> GetCategoryItems(Guid id)
+        public List<ItemDto> GetStylesItems(Guid id)
         {
-            var itemsCategory = _itemService.GetAll().Where(a => a.CategoryId == id).ToList();
+            var itemsCategory = _itemService.GetAll().Where(a => a.StyleId == id).ToList();
             return itemsCategory;
         }
     }

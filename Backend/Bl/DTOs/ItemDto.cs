@@ -21,6 +21,7 @@ namespace Bl.DTOs
         public int? DiscountAmount { get; set; }
 
         public Guid CategoryId { get; set; }
+        public Guid? StyleId { get; set; }
 
         public int? OverallRating { get; set; }
 

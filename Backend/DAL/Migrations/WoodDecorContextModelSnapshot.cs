@@ -337,6 +337,12 @@ namespace DAL.Migrations
                     b.Property<int>("StockNumber")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("StyleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("TbStylesId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("UpdatedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -346,6 +352,8 @@ namespace DAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("TbStylesId");
 
                     b.ToTable("TbItems");
                 });
@@ -664,6 +672,47 @@ namespace DAL.Migrations
                     b.ToTable("TbSliders");
                 });
 
+            modelBuilder.Entity("Domains.TbStyles", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CurrentState")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ProductsCount")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TbStyles");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -835,6 +884,10 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_TbItems_TbCategories");
 
+                    b.HasOne("Domains.TbStyles", null)
+                        .WithMany("TbItems")
+                        .HasForeignKey("TbStylesId");
+
                     b.Navigation("Category");
                 });
 
@@ -928,6 +981,11 @@ namespace DAL.Migrations
             modelBuilder.Entity("Domains.TbOrder", b =>
                 {
                     b.Navigation("TbOrderItems");
+                });
+
+            modelBuilder.Entity("Domains.TbStyles", b =>
+                {
+                    b.Navigation("TbItems");
                 });
 #pragma warning restore 612, 618
         }

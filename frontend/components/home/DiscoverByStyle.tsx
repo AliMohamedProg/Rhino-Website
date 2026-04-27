@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { ArrowRightIcon } from "@/components/layout/LucideIcons"
-import { getPublicCategories, type PublicCategory } from "@/lib/products"
+import { getPublicStyles, type PublicCategory } from \"@/lib/products\"
 
 const FALLBACK_STYLES = [
   {
@@ -43,7 +43,7 @@ export function DiscoverByStyle({ initialCategories = [] }: DiscoverByStyleProps
 
     const loadCategories = async () => {
       try {
-        const categories = await getPublicCategories()
+        const categories = await getPublicStyles()
         if (!active) return
         setStyles(categories.filter((category) => category.nameEn))
       } catch (error) {

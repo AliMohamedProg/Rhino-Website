@@ -67,9 +67,9 @@ export default function StylesPage() {
         finalImageUrl = uploadRes.url
       }
       if (editingCategory) {
-        await ApiClient.post("api/admin/Categories/edit-category", { id: editingCategory.id, nameEn: formData.nameEn, nameAr: "", imageUrl: finalImageUrl, currentState: 1 })
+        await ApiClient.post("api/admin/Styles/edit-style", { id: editingCategory.id, nameEn: formData.nameEn, nameAr: "", imageUrl: finalImageUrl, currentState: 1 })
       } else {
-        await ApiClient.post("api/admin/Categories/add-category", { nameEn: formData.nameEn, nameAr: "", imageUrl: finalImageUrl, currentState: 1 })
+        await ApiClient.post("api/admin/Styles/add-style", { nameEn: formData.nameEn, nameAr: "", imageUrl: finalImageUrl, currentState: 1 })
       }
       setDialogOpen(false)
       fetchCategories()
@@ -80,7 +80,7 @@ export default function StylesPage() {
   const fetchCategories = async () => {
     try {
       setLoading(true)
-      const data = await ApiClient.get("api/admin/Categories")
+      const data = await ApiClient.get("api/admin/Styles")
       setCategories(Array.isArray(data) ? data : [])
     } catch (err) { console.error("Failed to fetch categories:", err) }
     finally { setLoading(false) }
@@ -94,7 +94,7 @@ export default function StylesPage() {
     if (!categoryToDelete) return
     try {
       setLoading(true)
-      await ApiClient.post(`api/admin/Categories/delete-category/${categoryToDelete.id}`, {})
+      await ApiClient.post(`api/admin/Styles/delete-style/${categoryToDelete.id}`, {})
       setDeleteDialogOpen(false)
       setCategoryToDelete(null)
       await fetchCategories()
@@ -105,7 +105,7 @@ export default function StylesPage() {
   const confirmDeleteAll = async () => {
     try {
       setLoading(true)
-      await ApiClient.post(`api/admin/Categories/delete-all-categories`, {})
+      await ApiClient.post(`api/admin/Styles/delete-all-categories`, {})
       setDeleteAllDialogOpen(false)
       await fetchCategories()
     } catch (err: any) { console.error("Delete failed", err); alert("Delete failed: " + (err.message || "Unknown error")) }
