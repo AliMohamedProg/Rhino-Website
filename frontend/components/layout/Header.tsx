@@ -218,6 +218,9 @@ export function Header() {
           <Link href="/products" className="hover:text-mahogany transition-all hover:scale-110">
             CATALOG
           </Link>
+          <Link href="/alliances" className="hover:text-mahogany transition-all hover:scale-110">
+            ALLIANCES
+          </Link>
           <Link href="/#our-story" className="hover:text-[#3D2B1F] transition-all hover:scale-110">
             OUR STORY
           </Link>
@@ -347,6 +350,7 @@ export function Header() {
             </div>
           </div>
           <Link href="/products" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-mahogany">CATALOG</Link>
+          <Link href="/alliances" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-mahogany">WE ARE PART OF</Link>
           <Link href="/#our-story" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-mahogany">OUR STORY</Link>
 
           <div className="mt-10 w-40 h-px bg-sand/20"></div>

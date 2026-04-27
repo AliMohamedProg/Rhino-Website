@@ -76,7 +76,6 @@ export function ArtOfLiving() {
           {/* Living Room - Large Item */}
           <GridItem
             title="Living Room"
-            description="Sculptural silhouettes and soft textures for your sanctuary."
             image="/art-living-1.png"
             href="/category/living-room"
             className="md:col-span-2 md:row-span-2"
