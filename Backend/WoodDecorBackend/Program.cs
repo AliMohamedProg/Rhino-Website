@@ -25,8 +25,8 @@ builder.Services.AddCors(options =>
     {
         policy
             .WithOrigins("https://rhino-web-ffnf.vercel.app") // رابط الNext.js local dev
-            .AllowAnyHeader()
-            .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowAnyMethod()
             .AllowCredentials(); // مهم لو بتستخدم cookies
     });
 });

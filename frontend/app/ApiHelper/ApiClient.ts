@@ -94,10 +94,10 @@ export const ApiClient = {
 
   // Auth Endpoints
   auth: {
-    login: (data: LoginDto) => ApiClient.post<any>("api/Auth/Login", data),
-    register: (data: RegisterDto) => ApiClient.post<any>("api/Auth/Register", data),
-    logout: () => ApiClient.post<any>("api/Auth/Logout", {}),
-    me: () => ApiClient.get<UserMeDto>("api/Auth/me"),
+    login: (data: LoginDto) => ApiClient.post<any>("api/auth/login", data),
+    register: (data: RegisterDto) => ApiClient.post<any>("api/auth/register", data),
+    logout: () => ApiClient.post<any>("api/auth/logout", {}),
+    me: () => ApiClient.get<UserMeDto>("api/auth/me"),
   },
 
   // Category Endpoints

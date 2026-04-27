@@ -18,7 +18,13 @@ export function getImageUrl(url: string | undefined | null): string {
 
     const baseUrl = (process.env.NEXT_PUBLIC_API_URL || "https://rhino-web.runasp.net").replace(/\/+$/, "")
     const cleanUrl = url.replace(/\\/g, "/")
-    finalUrl = `${baseUrl}/${cleanUrl.startsWith("/") ? cleanUrl.slice(1) : cleanUrl}`
+    
+    // If it's a raw filename (no slashes), it's in the uploads folder
+    if (!cleanUrl.includes("/")) {
+      finalUrl = `${baseUrl}/uploads/${cleanUrl}`
+    } else {
+      finalUrl = `${baseUrl}/${cleanUrl.startsWith("/") ? cleanUrl.slice(1) : cleanUrl}`
+    }
   }
 
   return finalUrl;
