@@ -26,6 +26,14 @@ interface Category {
   currentState?: number;
 }
 
+interface Style {
+  id: string;
+  nameAr?: string;
+  nameEn?: string;
+  imageUrl?: string;
+  currentState?: number;
+}
+
 interface SearchProduct {
   id: string;
   nameAr: string;
@@ -46,6 +54,7 @@ export function Header() {
   const { user, isAuthenticated, loading } = useAuth();
   const { itemCount } = useCart();
   const [categories, setCategories] = useState<Category[]>([]);
+  const [styles, setStyles] = useState<Style[]>([]);
   const [searchProducts, setSearchProducts] = useState<SearchProduct[]>([]);
 
   const isAdmin =
@@ -106,7 +115,33 @@ export function Header() {
       }
     };
 
+    const fetchStyles = async () => {
+      try {
+        const data = await ApiClient.get<any[]>("api/Styles");
+        if (!Array.isArray(data)) {
+          setStyles([]);
+          return;
+        }
+
+        const normalized = data
+          .map((s) => ({
+            id: s.id ?? s.Id ?? "",
+            nameEn: s.nameEn ?? s.NameEn ?? "",
+            nameAr: s.nameAr ?? s.NameAr ?? "",
+            imageUrl: s.imageUrl ?? s.ImageUrl ?? "",
+            currentState: s.currentState ?? s.CurrentState ?? 1,
+          }))
+          .filter((s) => Boolean(s.id) && s.currentState > 0);
+
+        setStyles(normalized);
+      } catch (error) {
+        console.error("Failed to fetch styles:", error);
+        setStyles([]);
+      }
+    };
+
     fetchCategories();
+    fetchStyles();
   }, []);
 
   useEffect(() => {
@@ -148,6 +183,14 @@ export function Header() {
     [categories]
   );
 
+  const sortedStyles = useMemo(
+    () =>
+      [...styles].sort((a, b) =>
+        (a.nameEn || "").localeCompare(b.nameEn || "", "en", { sensitivity: "base" })
+      ),
+    [styles]
+  );
+
   return (
     <>
       <nav className={`fixed top-0 left-0 w-full z-[100] px-6 md:px-8 py-4 flex items-center justify-between transition-all duration-300 bg-white border-b border-[#7B3F32]/10 ${isScrolled || isMobileMenuOpen ? "shadow-sm" : ""}`}>
@@ -182,30 +225,45 @@ export function Header() {
             HOME
           </Link>
 
-          {/* Dropdown container */}
+          {/* Styles Dropdown */}
           <div className="group relative cursor-pointer">
             <div className="flex items-center gap-1.5 text-mahogany transition-all pb-1 hover:scale-110">
-              Style By
+              STYLES
               <ChevronDownIcon className="w-3 h-3 ml-0.5 transition-transform group-hover:rotate-180 stroke-[3]" />
             </div>
 
-            {/* Dropdown Menu */}
+            {/* Styles Dropdown Menu */}
             <div className="absolute top-full left-1/2 -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 pt-4">
-              <div className="bg-white border border-gray-100 rounded-[2.5rem] p-10 shadow-[0_20px_50px_rgba(0,0,0,0.1)] w-80 flex flex-col gap-5">
-                {sortedCategories.map((category) => (
-                  <Link
-                    key={category.id}
-                    href={`/category/${category.id}`}
-                    className="hover:text-mahogany transition-colors block text-taupe/60 text-[11px] font-bold tracking-[0.2em]"
-                  >
-                    {((language === "ar" ? category.nameAr : category.nameEn) || category.nameEn || category.nameAr || "STYLE").toUpperCase()}
-                  </Link>
-                ))}
+              <div className="bg-white border border-gray-100 rounded-[2.5rem] p-10 shadow-[0_20px_50px_rgba(0,0,0,0.1)] w-80 flex flex-col gap-4">
+                {sortedStyles.length > 0 ? (
+                  sortedStyles.map((style) => (
+                    <Link
+                      key={style.id}
+                      href={`/style/${style.id}`}
+                      className="group/item flex items-center gap-3 hover:text-mahogany transition-all text-taupe/60 text-[11px] font-bold tracking-[0.2em] rounded-xl py-1.5 px-2 hover:bg-[#7B3F32]/5"
+                    >
+                      {style.imageUrl && (
+                        <div className="w-8 h-8 rounded-lg overflow-hidden bg-blush flex-shrink-0 border border-[#7B3F32]/10">
+                          <img
+                            src={style.imageUrl}
+                            alt={style.nameEn || ""}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover/item:scale-110"
+                          />
+                        </div>
+                      )}
+                      <span>
+                        {((language === "ar" ? style.nameAr : style.nameEn) || style.nameEn || style.nameAr || "STYLE").toUpperCase()}
+                      </span>
+                    </Link>
+                  ))
+                ) : (
+                  <span className="text-[10px] text-taupe/40 tracking-widest font-medium italic">Loading styles...</span>
+                )}
 
                 <div className="w-full h-px bg-gray-50 my-1"></div>
 
                 <Link href="/products" className="hover:text-mahogany transition-colors block font-bold text-mahogany text-[11px] tracking-[0.2em]">
-                  ALL STYLES
+                  ALL PRODUCTS
                 </Link>
 
                 <div className="text-[8px] text-[#D1D1D1] leading-relaxed mt-4 normal-case tracking-normal font-medium max-w-[180px] italic">
@@ -215,9 +273,36 @@ export function Header() {
             </div>
           </div>
 
-          <Link href="/products" className="hover:text-mahogany transition-all hover:scale-110">
-            CATALOG
-          </Link>
+          {/* Categories Dropdown */}
+          <div className="group relative cursor-pointer">
+            <div className="flex items-center gap-1.5 hover:text-mahogany transition-all pb-1 hover:scale-110">
+              CATEGORIES
+              <ChevronDownIcon className="w-3 h-3 ml-0.5 transition-transform group-hover:rotate-180 stroke-[3]" />
+            </div>
+
+            {/* Categories Dropdown Menu */}
+            <div className="absolute top-full left-1/2 -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 pt-4">
+              <div className="bg-white border border-gray-100 rounded-[2.5rem] p-10 shadow-[0_20px_50px_rgba(0,0,0,0.1)] w-80 flex flex-col gap-5">
+                {sortedCategories.map((category) => (
+                  <Link
+                    key={category.id}
+                    href={`/category/${category.id}`}
+                    className="hover:text-mahogany transition-colors block text-taupe/60 text-[11px] font-bold tracking-[0.2em]"
+                  >
+                    {((language === "ar" ? category.nameAr : category.nameEn) || category.nameEn || category.nameAr || "CATEGORY").toUpperCase()}
+                  </Link>
+                ))}
+
+                <div className="w-full h-px bg-gray-50 my-1"></div>
+
+                <Link href="/products" className="hover:text-mahogany transition-colors block font-bold text-mahogany text-[11px] tracking-[0.2em]">
+                  ALL CATEGORIES
+                </Link>
+              </div>
+            </div>
+          </div>
+
+
           <Link href="/alliances" className="hover:text-mahogany transition-all hover:scale-110">
             WE ARE PART OF
           </Link>
@@ -335,8 +420,26 @@ export function Header() {
         }`}>
         <div className="flex flex-col items-center justify-center h-full gap-8 text-sm tracking-[0.3em] font-bold text-mahogany">
           <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-mahogany">HOME</Link>
+
+          {/* Mobile Styles */}
           <div className="flex flex-col items-center gap-4">
-            <span className="text-mahogany">STYLE BY</span>
+            <span className="text-mahogany">STYLES</span>
+            <div className="flex flex-col items-center gap-2 text-[10px] text-taupe">
+              {sortedStyles.map((style) => (
+                <Link
+                  key={style.id}
+                  href={`/style/${style.id}`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {((language === "ar" ? style.nameAr : style.nameEn) || style.nameEn || style.nameAr || "Style").toUpperCase()}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Mobile Categories */}
+          <div className="flex flex-col items-center gap-4">
+            <span className="text-mahogany">CATEGORIES</span>
             <div className="flex flex-col items-center gap-2 text-[10px] text-taupe">
               {sortedCategories.map((category) => (
                 <Link

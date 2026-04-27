@@ -38,9 +38,16 @@ interface Item {
   stockNumber: number
   overallRating: number
   categoryId: string
+  styleId?: string
   colorsEn?: string
   colorsAr?: string
   mainImage?: string
+}
+
+interface StyleInfo {
+  id: string
+  nameAr: string
+  nameEn: string
 }
 
 interface Category {
@@ -119,6 +126,9 @@ export default function CategoryPage() {
   const [priceOpen, setPriceOpen] = useState(true)
   const [categoryOpen, setCategoryOpen] = useState(true)
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  const [styles, setStyles] = useState<StyleInfo[]>([])
+  const [selectedStyles, setSelectedStyles] = useState<string[]>([])
+  const [styleOpen, setStyleOpen] = useState(true)
   const [reviewStatsByProductId, setReviewStatsByProductId] = useState<Record<string, ReviewStats>>({})
 
   useEffect(() => {
@@ -137,6 +147,7 @@ export default function CategoryPage() {
           stockNumber: toSafeNumber(item.stockNumber ?? item.StockNumber),
           overallRating: toSafeNumber(item.overallRating ?? item.OverallRating),
           categoryId: item.categoryId ?? item.CategoryId ?? "",
+          styleId: item.styleId ?? item.StyleId ?? "",
           discountAmount: toSafeNumber(item.discountAmount ?? item.DiscountAmount),
           mainImage: item.mainImage ?? item.MainImage ?? item.image ?? item.Image ?? "",
           colorsEn:
@@ -150,8 +161,18 @@ export default function CategoryPage() {
         })) as Item[]
         setProducts(normalized)
 
-        const catData = await ApiClient.get<any[]>("api/category")
+        const [catData, stylesData] = await Promise.all([
+          ApiClient.get<any[]>("api/category"),
+          ApiClient.get<any[]>("api/Styles"),
+        ])
         setCategories((Array.isArray(catData) ? catData : []) as Category[])
+        setStyles(
+          (Array.isArray(stylesData) ? stylesData : []).map((s: any) => ({
+            id: s.id ?? s.Id ?? "",
+            nameAr: s.nameAr ?? s.NameAr ?? "",
+            nameEn: s.nameEn ?? s.NameEn ?? "",
+          })).filter((s: StyleInfo) => Boolean(s.id))
+        )
       } catch (err) {
         console.error(err)
       } finally {
@@ -232,6 +253,11 @@ const fetchReviewStats = async () => {
         selectedCategories.includes(p.categoryId)
       )
 
+    if (selectedStyles.length)
+      result = result.filter(p =>
+        p.styleId ? selectedStyles.includes(p.styleId) : false
+      )
+
     switch (sortBy) {
       case "price-low":
         result.sort((a, b) => a.price - b.price)
@@ -249,12 +275,13 @@ const fetchReviewStats = async () => {
     }
 
     return result
-  }, [products, hideOutOfStock, priceRange, selectedCategories, sortBy, reviewStatsByProductId])
+  }, [products, hideOutOfStock, priceRange, selectedCategories, selectedStyles, sortBy, reviewStatsByProductId])
 
   const resetFilters = () => {
     setHideOutOfStock(false)
     setPriceRange([0, 500000])
     setSelectedCategories([])
+    setSelectedStyles([])
     setSortBy("featured")
   }
 
@@ -359,6 +386,33 @@ const fetchReviewStats = async () => {
                     ))}
                   </CollapsibleContent>
                 </Collapsible>
+
+                {/* Styles */}
+                {styles.length > 0 && (
+                  <Collapsible open={styleOpen} onOpenChange={setStyleOpen}>
+                    <CollapsibleTrigger className="flex justify-between items-center w-full py-2.5 px-2 rounded-xl hover:bg-[#7B3F32]/5 transition-colors text-[#3D2B1F]">
+                      {language === "ar" ? "الأساليب" : "Styles"}
+                      {styleOpen ? <ChevronUp /> : <ChevronDown />}
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="space-y-2 py-2">
+                      {styles.map(style => (
+                        <label key={style.id} className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-[#7B3F32]/5 transition-colors text-sm text-[#5A4A40]">
+                          <Checkbox
+                            checked={selectedStyles.includes(style.id)}
+                            onCheckedChange={() =>
+                              setSelectedStyles(prev =>
+                                prev.includes(style.id)
+                                  ? prev.filter(s => s !== style.id)
+                                  : [...prev, style.id]
+                              )
+                            }
+                          />
+                          {language === "ar" ? style.nameAr : style.nameEn}
+                        </label>
+                      ))}
+                    </CollapsibleContent>
+                  </Collapsible>
+                )}
 
                 <Button onClick={resetFilters} variant="outline" className="w-full mt-5 rounded-xl border-[#7B3F32]/20 hover:bg-[#7B3F32] hover:text-white transition-colors">
                   {language === "ar" ? "إعادة تعيين" : "Reset"}

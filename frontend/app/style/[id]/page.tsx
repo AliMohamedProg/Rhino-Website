@@ -12,7 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Slider } from "@/components/ui/slider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { ChevronUp, ChevronDown, Filter } from "lucide-react"
+import { ChevronUp, ChevronDown, Filter, Sparkles } from "lucide-react"
 import { formatPrice } from "@/lib/products"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
 import { ProductCard } from "@/components/ui/ProductCard"
@@ -35,16 +35,17 @@ interface Item {
   mainImage?: string
 }
 
-interface StyleInfo {
+interface Category {
   id: string
   nameAr: string
   nameEn: string
 }
 
-interface Category {
+interface StyleInfo {
   id: string
   nameAr: string
   nameEn: string
+  imageUrl?: string
 }
 
 interface ReviewStats {
@@ -85,9 +86,9 @@ function getOriginalPriceLabel(price: number, oldPrice: number, discountAmount: 
     : undefined
 }
 
-export default function CategoryPage() {
+export default function StylePage() {
   const params = useParams()
-  const categoryId = params.slug as string
+  const styleId = params.id as string
 
   const { language } = useLanguage()
   const { addItem } = useCart()
@@ -95,6 +96,8 @@ export default function CategoryPage() {
 
   const [products, setProducts] = useState<Item[]>([])
   const [categories, setCategories] = useState<Category[]>([])
+  const [styleInfo, setStyleInfo] = useState<StyleInfo | null>(null)
+  const [allStyles, setAllStyles] = useState<StyleInfo[]>([])
   const [loading, setLoading] = useState(true)
   const [hideOutOfStock, setHideOutOfStock] = useState(false)
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500000])
@@ -103,9 +106,6 @@ export default function CategoryPage() {
   const [priceOpen, setPriceOpen] = useState(true)
   const [categoryOpen, setCategoryOpen] = useState(true)
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-  const [styles, setStyles] = useState<StyleInfo[]>([])
-  const [selectedStyles, setSelectedStyles] = useState<string[]>([])
-  const [styleOpen, setStyleOpen] = useState(true)
   const [reviewStatsByProductId, setReviewStatsByProductId] = useState<Record<string, ReviewStats>>({})
 
   useEffect(() => {
@@ -118,6 +118,7 @@ export default function CategoryPage() {
           ApiClient.get<any[]>("api/Styles"),
         ])
 
+        // Normalize categories
         const normalizedCategories = (Array.isArray(categoriesData) ? categoriesData : [])
           .map((cat) => ({
             id: cat.id ?? cat.Id ?? "",
@@ -128,22 +129,26 @@ export default function CategoryPage() {
 
         setCategories(normalizedCategories)
 
+        // Normalize styles and find current style
         const normalizedStyles = (Array.isArray(stylesData) ? stylesData : [])
           .map((s) => ({
             id: s.id ?? s.Id ?? "",
             nameAr: s.nameAr ?? s.NameAr ?? "",
             nameEn: s.nameEn ?? s.NameEn ?? "",
+            imageUrl: s.imageUrl ?? s.ImageUrl ?? "",
           }))
           .filter((s) => Boolean(s.id))
-        setStyles(normalizedStyles)
 
-        const matchedCategory = normalizedCategories.find(
-          (cat) =>
-            cat.id === categoryId ||
-            cat.nameEn?.toLowerCase() === categoryId.toLowerCase()
+        setAllStyles(normalizedStyles)
+
+        const matchedStyle = normalizedStyles.find(
+          (s) => s.id === styleId || s.nameEn?.toLowerCase() === styleId.toLowerCase()
         )
-        const targetCategoryId = matchedCategory?.id ?? categoryId
+        setStyleInfo(matchedStyle || null)
 
+        const targetStyleId = matchedStyle?.id ?? styleId
+
+        // Normalize items and filter by style
         const normalized = (Array.isArray(itemsData) ? itemsData : []).map((item) => ({
           ...item,
           id: item.id ?? item.Id ?? "",
@@ -162,9 +167,10 @@ export default function CategoryPage() {
           colorsEn: item.colorsEn ?? item.ColorsEn ?? item.colors ?? item.Colors ?? "",
           colorsAr: item.colorsAr ?? item.ColorsAr ?? item.colors ?? item.Colors ?? "",
         })) as Item[]
-        const activeCatId = matchedCategory?.id ?? categoryId
-        setProducts(normalized)
-        setSelectedCategories([activeCatId])
+
+        // Filter products by styleId
+        const styleProducts = normalized.filter((p) => p.styleId === targetStyleId)
+        setProducts(styleProducts)
 
       } catch (err) {
         console.error(err)
@@ -173,7 +179,7 @@ export default function CategoryPage() {
       }
     }
     fetchData()
-  }, [categoryId])
+  }, [styleId])
 
   useEffect(() => {
     if (products.length === 0) {
@@ -230,11 +236,6 @@ export default function CategoryPage() {
     if (selectedCategories.length)
       result = result.filter(p => selectedCategories.includes(p.categoryId))
 
-    if (selectedStyles.length)
-      result = result.filter(p =>
-        p.styleId ? selectedStyles.includes(p.styleId) : false
-      )
-
     switch (sortBy) {
       case "price-low": result.sort((a, b) => a.price - b.price); break
       case "price-high": result.sort((a, b) => b.price - a.price); break
@@ -248,7 +249,7 @@ export default function CategoryPage() {
     }
 
     return result
-  }, [products, hideOutOfStock, priceRange, selectedCategories, selectedStyles, sortBy, reviewStatsByProductId])
+  }, [products, hideOutOfStock, priceRange, selectedCategories, sortBy, reviewStatsByProductId])
 
   const categoryNameById = useMemo(
     () =>
@@ -259,17 +260,23 @@ export default function CategoryPage() {
     [categories, language]
   )
 
-  const activeCategoryName =
-    categoryNameById[categoryId] ||
-    (language === "ar" ? "التصنيف" : "Category")
+  const styleName =
+    (language === "ar" ? styleInfo?.nameAr : styleInfo?.nameEn) ||
+    styleInfo?.nameEn ||
+    (language === "ar" ? "الأسلوب" : "Style")
 
   const resetFilters = () => {
     setHideOutOfStock(false)
     setPriceRange([0, 500000])
-    setSelectedCategories([categoryId])
-    setSelectedStyles([])
+    setSelectedCategories([])
     setSortBy("featured")
   }
+
+  // Get unique category IDs present in the style-filtered products
+  const availableCategories = useMemo(() => {
+    const catIds = new Set(products.map((p) => p.categoryId).filter(Boolean))
+    return categories.filter((cat) => catIds.has(cat.id))
+  }, [products, categories])
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -277,21 +284,72 @@ export default function CategoryPage() {
 
       <main className="flex-1 bg-gradient-to-b from-[#f8efe6] via-[#f7efe7] to-[#f5ebe0] pt-24 md:pt-28">
         <div className="container mx-auto px-4 py-8 min-h-screen">
-          <div className="relative overflow-hidden rounded-3xl border border-white/60 bg-white/70 backdrop-blur-xl p-6 md:p-8 shadow-[0_20px_60px_rgba(123,63,50,0.08)] mb-6">
-            <div className="absolute -top-16 -right-16 h-40 w-40 rounded-full bg-[#7B3F32]/10 blur-2xl" />
-            <div className="absolute -bottom-16 -left-10 h-40 w-40 rounded-full bg-[#C1AFA0]/30 blur-2xl" />
-            <p className="text-[11px] tracking-[0.25em] text-[#7B3F32]/70 font-semibold uppercase">
-              {language === "ar" ? "تسوق حسب التصنيف" : "Shop By Category"}
-            </p>
-            <h1 className="text-3xl md:text-4xl font-bold text-[#3D2B1F] mt-2">{activeCategoryName}</h1>
-            <div className="flex flex-wrap items-center gap-3 mt-4">
-              <span className="inline-flex items-center rounded-full bg-white/90 px-4 py-1.5 text-sm text-[#7B3F32] border border-[#7B3F32]/15">
-                {filteredProducts.length} {language === "ar" ? "منتج" : "products"}
-              </span>
-              {hideOutOfStock && (
-                <span className="inline-flex items-center rounded-full bg-[#7B3F32] text-white px-4 py-1.5 text-sm">
-                  {language === "ar" ? "المتاح فقط" : "In stock only"}
+
+          {/* Style Hero Banner */}
+          <div className="relative overflow-hidden rounded-3xl border border-white/60 bg-white/70 backdrop-blur-xl shadow-[0_20px_60px_rgba(123,63,50,0.08)] mb-6">
+            {/* Background Style Image */}
+            {styleInfo?.imageUrl && (
+              <div className="absolute inset-0 z-0">
+                <img
+                  src={styleInfo.imageUrl}
+                  alt={styleName}
+                  className="w-full h-full object-cover opacity-15"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/70 to-transparent" />
+              </div>
+            )}
+
+            <div className="relative z-10 p-6 md:p-8">
+              <div className="absolute -top-16 -right-16 h-40 w-40 rounded-full bg-[#7B3F32]/10 blur-2xl" />
+              <div className="absolute -bottom-16 -left-10 h-40 w-40 rounded-full bg-[#C1AFA0]/30 blur-2xl" />
+
+              <div className="flex items-center gap-2 mb-1">
+                <Sparkles size={14} className="text-[#7B3F32]/70" />
+                <p className="text-[11px] tracking-[0.25em] text-[#7B3F32]/70 font-semibold uppercase">
+                  {language === "ar" ? "تسوق حسب الأسلوب" : "Shop By Style"}
+                </p>
+              </div>
+
+              <h1 className="text-3xl md:text-4xl font-bold text-[#3D2B1F] mt-2 capitalize">
+                {styleName}
+              </h1>
+
+              <div className="flex flex-wrap items-center gap-3 mt-4">
+                <span className="inline-flex items-center rounded-full bg-white/90 px-4 py-1.5 text-sm text-[#7B3F32] border border-[#7B3F32]/15">
+                  {filteredProducts.length} {language === "ar" ? "منتج" : "products"}
                 </span>
+                {hideOutOfStock && (
+                  <span className="inline-flex items-center rounded-full bg-[#7B3F32] text-white px-4 py-1.5 text-sm">
+                    {language === "ar" ? "المتاح فقط" : "In stock only"}
+                  </span>
+                )}
+              </div>
+
+              {/* Other styles quick links */}
+              {allStyles.length > 1 && (
+                <div className="flex flex-wrap items-center gap-2 mt-5 pt-4 border-t border-[#7B3F32]/10">
+                  <span className="text-[10px] text-[#7B3F32]/50 uppercase tracking-[0.2em] font-bold mr-2">
+                    {language === "ar" ? "أساليب أخرى:" : "Other Styles:"}
+                  </span>
+                  {allStyles
+                    .filter((s) => s.id !== styleId)
+                    .map((s) => (
+                      <a
+                        key={s.id}
+                        href={`/style/${s.id}`}
+                        className="inline-flex items-center gap-2 rounded-full bg-white/80 border border-[#7B3F32]/10 px-3 py-1.5 text-[10px] font-bold tracking-[0.15em] text-[#7B3F32]/60 uppercase hover:bg-[#7B3F32] hover:text-white hover:border-[#7B3F32] transition-all duration-300 hover:scale-105"
+                      >
+                        {s.imageUrl && (
+                          <img
+                            src={s.imageUrl}
+                            alt={s.nameEn || ""}
+                            className="w-4 h-4 rounded-full object-cover"
+                          />
+                        )}
+                        {((language === "ar" ? s.nameAr : s.nameEn) || s.nameEn || "Style")}
+                      </a>
+                    ))}
+                </div>
               )}
             </div>
           </div>
@@ -337,54 +395,29 @@ export default function CategoryPage() {
                   </CollapsibleContent>
                 </Collapsible>
 
-                {/* Categories */}
-                <Collapsible open={categoryOpen} onOpenChange={setCategoryOpen}>
-                  <CollapsibleTrigger className="flex justify-between items-center w-full py-2.5 px-2 rounded-xl hover:bg-[#7B3F32]/5 transition-colors text-[#3D2B1F]">
-                    {language === "ar" ? "التصنيفات" : "Categories"} {categoryOpen ? <ChevronUp /> : <ChevronDown />}
-                  </CollapsibleTrigger>
-                  <CollapsibleContent className="space-y-2 py-2">
-                    {categories.map((cat) => (
-                      <label key={cat.id} className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-[#7B3F32]/5 transition-colors text-sm text-[#5A4A40]">
-                        <Checkbox
-                          checked={selectedCategories.includes(cat.id)}
-                          onCheckedChange={() =>
-                            setSelectedCategories((prev) =>
-                              prev.includes(cat.id) ? prev.filter((c) => c !== cat.id) : [...prev, cat.id]
-                            )
-                          }
-                        />
-                        {language === "ar" ? cat.nameAr : cat.nameEn}
-                      </label>
-                    ))}
-                  </CollapsibleContent>
-                </Collapsible>
-
-                {/* Styles */}
-                {styles.length > 0 && (
-                  <Collapsible open={styleOpen} onOpenChange={setStyleOpen}>
+                {/* Categories (within style) */}
+                {availableCategories.length > 0 && (
+                  <Collapsible open={categoryOpen} onOpenChange={setCategoryOpen}>
                     <CollapsibleTrigger className="flex justify-between items-center w-full py-2.5 px-2 rounded-xl hover:bg-[#7B3F32]/5 transition-colors text-[#3D2B1F]">
-                      {language === "ar" ? "الأساليب" : "Styles"} {styleOpen ? <ChevronUp /> : <ChevronDown />}
+                      {language === "ar" ? "التصنيفات" : "Categories"} {categoryOpen ? <ChevronUp /> : <ChevronDown />}
                     </CollapsibleTrigger>
                     <CollapsibleContent className="space-y-2 py-2">
-                      {styles.map(style => (
-                        <label key={style.id} className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-[#7B3F32]/5 transition-colors text-sm text-[#5A4A40]">
+                      {availableCategories.map((cat) => (
+                        <label key={cat.id} className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-[#7B3F32]/5 transition-colors text-sm text-[#5A4A40]">
                           <Checkbox
-                            checked={selectedStyles.includes(style.id)}
+                            checked={selectedCategories.includes(cat.id)}
                             onCheckedChange={() =>
-                              setSelectedStyles(prev =>
-                                prev.includes(style.id)
-                                  ? prev.filter(s => s !== style.id)
-                                  : [...prev, style.id]
+                              setSelectedCategories((prev) =>
+                                prev.includes(cat.id) ? prev.filter((c) => c !== cat.id) : [...prev, cat.id]
                               )
                             }
                           />
-                          {language === "ar" ? style.nameAr : style.nameEn}
+                          {language === "ar" ? cat.nameAr : cat.nameEn}
                         </label>
                       ))}
                     </CollapsibleContent>
                   </Collapsible>
                 )}
-
 
                 <Button onClick={resetFilters} variant="outline" className="w-full mt-5 rounded-xl border-[#7B3F32]/20 hover:bg-[#7B3F32] hover:text-white transition-colors">
                   {language === "ar" ? "إعادة تعيين" : "Reset"}
@@ -426,15 +459,21 @@ export default function CategoryPage() {
                 </div>
               ) : filteredProducts.length === 0 ? (
                 <div className="rounded-3xl border border-white/60 bg-white/75 backdrop-blur-sm p-10 text-center shadow-[0_10px_40px_rgba(0,0,0,0.06)]">
+                  <Sparkles size={48} className="text-[#7B3F32]/20 mx-auto mb-4" />
                   <h3 className="text-2xl font-bold text-[#3D2B1F] mb-2">{language === "ar" ? "لا توجد منتجات" : "No products found"}</h3>
                   <p className="text-[#7B3F32]/75 mb-6">
                     {language === "ar"
-                      ? "جرّب تغيير الفلاتر للعثور على نتائج."
-                      : "Try adjusting your filters to find matching products."}
+                      ? "لا توجد منتجات بهذا الأسلوب حالياً. جرّب تغيير الفلاتر أو تصفح أساليب أخرى."
+                      : "No products match this style yet. Try adjusting your filters or explore other styles."}
                   </p>
-                  <Button onClick={resetFilters} className="rounded-xl bg-[#7B3F32] hover:bg-[#5e3127] text-white">
-                    {language === "ar" ? "إعادة تعيين الفلاتر" : "Reset Filters"}
-                  </Button>
+                  <div className="flex gap-3 justify-center">
+                    <Button onClick={resetFilters} variant="outline" className="rounded-xl border-[#7B3F32]/20 hover:bg-[#7B3F32] hover:text-white">
+                      {language === "ar" ? "إعادة تعيين الفلاتر" : "Reset Filters"}
+                    </Button>
+                    <Button asChild className="rounded-xl bg-[#7B3F32] hover:bg-[#5e3127] text-white">
+                      <a href="/products">{language === "ar" ? "كل المنتجات" : "All Products"}</a>
+                    </Button>
+                  </div>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
