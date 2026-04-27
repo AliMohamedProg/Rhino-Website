@@ -21,6 +21,7 @@ import type { AdminCategoryDto } from "@/lib/admin-items"
 import { ArrowLeft, Upload, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { MOCK_CATEGORIES, MOCK_BRANDS } from "@/lib/mock-admin-data"
 
 interface ProductFormProps {
   product?: Product
@@ -49,6 +50,8 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     mainImage: product?.mainImage || product?.images?.[0] || "",
     colorsEn: product?.colorsEn || "",
     materialEn: product?.materialEn || "",
+    categoryName: "",
+    brandId: "",
   })
 
   const [categories, setCategories] = useState<AdminCategoryDto[]>([])
@@ -446,6 +449,42 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                     {categories.map((category) => (
                       <SelectItem key={category.id} value={category.id}>
                         {category.nameEn}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="category" className="text-sm font-semibold text-[#4b3d34]">
+                  Category
+                </Label>
+                <Select value={formData.categoryName} onValueChange={(value) => handleChange("categoryName", value)}>
+                  <SelectTrigger className="admin-input h-11">
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl border-[#8f3f2a]/15 bg-white shadow-xl">
+                    {MOCK_CATEGORIES.map((category) => (
+                      <SelectItem key={category.id} value={category.nameEn}>
+                        {category.nameEn}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="brand" className="text-sm font-semibold text-[#4b3d34]">
+                  Brand
+                </Label>
+                <Select value={formData.brandId} onValueChange={(value) => handleChange("brandId", value)}>
+                  <SelectTrigger className="admin-input h-11">
+                    <SelectValue placeholder="Select brand" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl border-[#8f3f2a]/15 bg-white shadow-xl">
+                    {MOCK_BRANDS.map((brand) => (
+                      <SelectItem key={brand.id} value={brand.id}>
+                        {brand.name}
                       </SelectItem>
                     ))}
                   </SelectContent>

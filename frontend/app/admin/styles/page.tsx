@@ -35,6 +35,30 @@ import { Label } from "@/components/ui/label"
 import { Plus, MoreHorizontal, Pencil, Trash2, Download } from "lucide-react"
 import { exportCategoriesExcel, exportCategoriesPdf } from "@/app/ApiHelper/ExportApi"
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from \"@/components/ui/select\"
+
+const PREDEFINED_STYLES = [
+  \"Living Room\",
+  \"Bedroom\",
+  \"Dining Room\",
+  \"Office\",
+  \"Outdoor\",
+  \"Modern\",
+  \"Classic\",
+  \"Minimalist\",
+  \"Industrial\",
+  \"Bohemian\",
+  \"Scandinavian\"
+]
+
+import { MOCK_CATEGORIES, type Category as MockCategory } from \"@/lib/mock-admin-data\"
+
 export default function StylesPage() {
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
@@ -43,8 +67,8 @@ export default function StylesPage() {
   const [deleteAllDialogOpen, setDeleteAllDialogOpen] = useState(false)
   const [editingCategory, setEditingCategory] = useState<Category | null>(null)
   const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null)
-   const [formData, setFormData] = useState({ nameEn: "", description: "" })
-  const [imageUrl, setImageUrl] = useState("")
+  const [formData, setFormData] = useState({ nameEn: \"\", description: \"\", categoryId: \"\" })
+  const [imageUrl, setImageUrl] = useState(\"\")
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
    useEffect(() => {
@@ -198,6 +222,19 @@ export default function StylesPage() {
             <div className="space-y-2">
               <Label htmlFor="imageUrl" className="text-sm font-semibold text-[#4b3d34]">Or Image URL</Label>
               <Input id="imageUrl" placeholder="https://..." value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 h-12 rounded-xl bg-white/50" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="categoryId" className="text-sm font-semibold text-[#4b3d34]">Parent Category</Label>
+              <Select value={formData.categoryId} onValueChange={(value) => setFormData({ ...formData, categoryId: value })}>
+                <SelectTrigger className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 h-12 rounded-xl bg-white/50">
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent className="bg-white rounded-xl shadow-xl">
+                  {MOCK_CATEGORIES.map((cat) => (
+                    <SelectItem key={cat.id} value={cat.id}>{cat.nameEn}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
           <DialogFooter className="mt-4">

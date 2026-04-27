@@ -23,6 +23,8 @@ import {
   Search,
   LogOut,
   ChevronRight,
+  LayoutGrid,
+  Building2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -37,6 +39,7 @@ const navSections = [
       { title: "Products", href: "/admin/products", icon: Package },
       { title: "Orders", href: "/admin/orders", icon: ShoppingCart },
       { title: "Styles", href: "/admin/styles", icon: FolderTree },
+      { title: "Categories", href: "/admin/categories", icon: LayoutGrid },
       { title: "Sliders", href: "/admin/sliders", icon: ImageIcon },
     ],
   },
@@ -45,6 +48,7 @@ const navSections = [
     items: [
       { title: "Users", href: "/admin/users", icon: Users },
       { title: "Reviews", href: "/admin/reviews", icon: Star },
+      { title: "Alliances", href: "/admin/alliances", icon: Building2 },
     ],
   },
   {
