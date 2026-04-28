@@ -14,6 +14,8 @@ export interface AdminItemDto {
   price: number
   oldPrice?: number | null
   discountAmount?: number | null
+  dimensions?: string | null
+  sku?: string | null
   categoryId: string
   styleId?: string | null
   stockNumber: number
@@ -79,6 +81,7 @@ export const mapAdminItemToProduct = (
     category: category ? category.nameEn : item.categoryId ?? "",
     categoryId: item.categoryId ?? "",
     styleId: item.styleId ?? undefined,
+    dimensions: item.dimensions ?? "",
     status: item.currentState && item.currentState > 0 ? "active" : "inactive",
     featured: false,
     onSale: discount > 0,
@@ -87,7 +90,7 @@ export const mapAdminItemToProduct = (
     colorsAr: item.colorsAr ?? "",
     materialEn: item.materialEn ?? item.material ?? "",
     materialAr: item.materialAr ?? "",
-    sku: "",
+    sku: item.sku ?? "",
     createdDate: item.createdDate ?? new Date().toISOString(),
     updatedAt: item.createdDate ?? new Date().toISOString(),
     mainImage: item.mainImage ?? imageUrls[0] ?? "",

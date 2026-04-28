@@ -190,6 +190,12 @@ export default function ProductDetailPage() {
                 <span className="text-muted-foreground">{t("products.category")}</span>
                 <span>{product.category}</span>
               </div>
+              {product.dimensions && product.dimensions.trim().length > 0 && (
+                <div className={cn("flex items-center justify-between", dir === "rtl" && "flex-row-reverse")}>
+                  <span className="text-muted-foreground">{language === "ar" ? "الأبعاد" : "Dimensions"}</span>
+                  <span>{product.dimensions}</span>
+                </div>
+              )}
               {product.colorsEn && product.colorsEn.trim().length > 0 && (
                 <div className="space-y-2">
                   <span className="text-muted-foreground">

@@ -40,6 +40,7 @@ interface SearchProduct {
   nameEn: string;
   descriptionAr?: string;
   descriptionEn?: string;
+  sku?: string;
   price: number;
   mainImage?: string;
 }
@@ -75,7 +76,7 @@ export function Header() {
     if (!q) return [];
     return searchProducts
       .filter((p) =>
-        [p.nameEn, p.nameAr, p.descriptionEn, p.descriptionAr]
+        [p.nameEn, p.nameAr, p.descriptionEn, p.descriptionAr, p.sku]
           .filter(Boolean)
           .some((value) => String(value).toLowerCase().includes(q))
       )
@@ -160,6 +161,7 @@ export function Header() {
             nameAr: item.nameAr ?? item.NameAr ?? "",
             descriptionEn: item.descriptionEn ?? item.DescriptionEn ?? "",
             descriptionAr: item.descriptionAr ?? item.DescriptionAr ?? "",
+            sku: item.sku ?? item.SKU ?? "",
             price: Number(item.price ?? item.Price ?? 0),
             mainImage: item.mainImage ?? item.MainImage ?? item.image ?? item.Image ?? "",
           }))

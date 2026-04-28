@@ -88,6 +88,7 @@ export interface Product {
   category: string
   categoryId: string
   styleId?: string
+  dimensions?: string
   status: "active" | "inactive" | "draft"
   featured: boolean
   onSale: boolean
@@ -300,4 +301,3 @@ export const mockProducts: Product[] = [
     updatedAt: "2025-01-15",
   },
 ]
-

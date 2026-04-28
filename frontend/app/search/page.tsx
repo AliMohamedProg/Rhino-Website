@@ -20,6 +20,7 @@ type SearchItem = {
   nameEn: string
   descriptionAr?: string
   descriptionEn?: string
+  sku?: string
   price: number
   discountAmount: number
   stockNumber: number
@@ -203,9 +204,11 @@ export default function SearchPage() {
     const searchLower = query.toLowerCase()
     const name = language === "ar" ? product.nameAr : product.nameEn
     const description = language === "ar" ? product.descriptionAr : product.descriptionEn
+    const sku = product.sku ?? ""
     return (
       (name && name.toLowerCase().includes(searchLower)) ||
-      (description && description.toLowerCase().includes(searchLower))
+      (description && description.toLowerCase().includes(searchLower)) ||
+      sku.toLowerCase().includes(searchLower)
     )
   })
 

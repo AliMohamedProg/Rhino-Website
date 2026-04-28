@@ -21,7 +21,7 @@ import type { AdminCategoryDto } from "@/lib/admin-items"
 import { ArrowLeft, Upload, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { MOCK_CATEGORIES, MOCK_BRANDS } from "@/lib/mock-admin-data"
+import { MOCK_BRANDS } from "@/lib/mock-admin-data"
 
 interface ProductFormProps {
   product?: Product
@@ -45,6 +45,8 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     price: product?.originalPrice ?? product?.price ?? 0,
     discountAmount: product?.discountAmount ?? 0,
     stock: product?.stock || 0,
+    sku: product?.sku || "",
+    dimensions: product?.dimensions || "",
     categoryId: product?.categoryId || "",
     styleId: product?.styleId || "",
     images: buildInitialImages(product),
@@ -68,12 +70,15 @@ export function ProductForm({ product, mode }: ProductFormProps) {
       price: product.originalPrice ?? product.price ?? 0,
       discountAmount: product.discountAmount ?? 0,
       stock: product.stock || 0,
+      sku: product.sku || "",
+      dimensions: product.dimensions || "",
       categoryId: product.categoryId || "",
       styleId: product.styleId || "",
       images: buildInitialImages(product),
       mainImage: product.mainImage || product.images?.[0] || "",
       colorsEn: product.colorsEn || "",
       materialEn: product.materialEn || "",
+      brandId: "",
     })
   }, [product])
 
@@ -209,6 +214,8 @@ export function ProductForm({ product, mode }: ProductFormProps) {
         price: formData.price,
         discountAmount,
         stockNumber: formData.stock,
+        sku: formData.sku.trim(),
+        dimensions: formData.dimensions.trim(),
         categoryId: formData.categoryId,
         styleId: formData.styleId || null,
         colorsEn: colorsValidationEn.normalized,
@@ -371,6 +378,33 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                     min={0}
                     className="admin-input h-11"
                     required
+                  />
+                </div>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="sku" className="text-sm font-semibold text-[#4b3d34]">
+                    SKU
+                  </Label>
+                  <Input
+                    id="sku"
+                    value={formData.sku}
+                    onChange={(e) => handleChange("sku", e.target.value)}
+                    placeholder="SOF-001"
+                    className="admin-input h-11"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="dimensions" className="text-sm font-semibold text-[#4b3d34]">
+                    Dimensions
+                  </Label>
+                  <Input
+                    id="dimensions"
+                    value={formData.dimensions}
+                    onChange={(e) => handleChange("dimensions", e.target.value)}
+                    placeholder="220x95x80 cm"
+                    className="admin-input h-11"
                   />
                 </div>
               </div>
