@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import Link from "next/link"
 import { ArrowRightIcon, LeafIcon } from "lucide-react"
 import { getPublicCategories, type PublicCategory } from "@/lib/products"
@@ -61,6 +60,7 @@ function GridItem({ title, description, image, href, className, badge, badgeIcon
 
 export function ArtOfLiving() {
   const [categories, setCategories] = useState<PublicCategory[]>([])
+
 
   useEffect(() => {
     const fetchCats = async () => {
