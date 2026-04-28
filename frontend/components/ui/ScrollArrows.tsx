@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect, useCallback, type RefObject } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import { useLanguage } from "@/context/language-context"
 
 interface ScrollArrowsProps {
   scrollRef: RefObject<HTMLDivElement | null>
@@ -22,15 +23,26 @@ export function ScrollArrows({
 }: ScrollArrowsProps) {
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(false)
+  const { dir } = useLanguage()
 
   /* ── visibility check ─────────────────────────────── */
   const check = useCallback(() => {
     const el = scrollRef.current
     if (!el) return
     const { scrollLeft, scrollWidth, clientWidth } = el
-    setCanScrollLeft(scrollLeft > 2)
-    setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 2)
-  }, [scrollRef])
+    
+    if (dir === "rtl") {
+      // In RTL, scrollLeft is 0 at the rightmost and decreases as you scroll left
+      const absoluteScrollLeft = Math.abs(scrollLeft)
+      // canScrollRight means we can scroll towards the "right" direction of the container (which is the beginning in RTL)
+      setCanScrollRight(absoluteScrollLeft > 2)
+      // canScrollLeft means we can scroll towards the "left" direction of the container (which is the end in RTL)
+      setCanScrollLeft(absoluteScrollLeft + clientWidth < scrollWidth - 2)
+    } else {
+      setCanScrollLeft(scrollLeft > 2)
+      setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 2)
+    }
+  }, [scrollRef, dir])
 
   useEffect(() => {
     const el = scrollRef.current
@@ -50,8 +62,14 @@ export function ScrollArrows({
 
   /* ── scroll handler ───────────────────────────────── */
   const scroll = (direction: "left" | "right") => {
-    scrollRef.current?.scrollBy({
-      left: direction === "left" ? -scrollAmount : scrollAmount,
+    if (!scrollRef.current) return
+    
+    const multiplier = direction === "left" ? -1 : 1
+    // In RTL, to scroll "left", we actually need to increase the absolute scrollLeft
+    const finalAmount = dir === "rtl" ? -multiplier * scrollAmount : multiplier * scrollAmount
+
+    scrollRef.current.scrollBy({
+      left: finalAmount,
       behavior: "smooth",
     })
   }
@@ -75,19 +93,21 @@ export function ScrollArrows({
       {/* Left arrow */}
       <button
         aria-label="Scroll left"
+        type="button"
         onClick={() => scroll("left")}
         className={`${btnBase} left-2 md:-left-5 pointer-events-auto ${canScrollLeft ? visible : hidden}`}
       >
-        <ChevronLeft className="w-5 h-5" strokeWidth={2.2} />
+        {dir === "rtl" ? <ChevronRight className="w-5 h-5" strokeWidth={2.2} /> : <ChevronLeft className="w-5 h-5" strokeWidth={2.2} />}
       </button>
 
       {/* Right arrow */}
       <button
         aria-label="Scroll right"
+        type="button"
         onClick={() => scroll("right")}
         className={`${btnBase} right-2 md:-right-5 pointer-events-auto ${canScrollRight ? visible : hidden}`}
       >
-        <ChevronRight className="w-5 h-5" strokeWidth={2.2} />
+        {dir === "rtl" ? <ChevronLeft className="w-5 h-5" strokeWidth={2.2} /> : <ChevronRight className="w-5 h-5" strokeWidth={2.2} />}
       </button>
     </div>
   )
