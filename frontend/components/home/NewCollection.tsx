@@ -38,9 +38,9 @@ export function NewCollection({ initialProducts }: NewCollectionProps) {
 
                 <div className="relative max-w-7xl mx-auto w-full px-4 md:px-8 overflow-hidden">
                     <ScrollArrows scrollRef={scrollRef} scrollAmount={350} />
-                    <div ref={scrollRef} className="flex overflow-x-scroll pb-8 snap-x snap-mandatory w-full gap-8 no-scrollbar">
-                        {(initialProducts || []).slice(0, 8).map((product, index) => (
-                            <div key={index} className="min-w-[85vw] md:min-w-[380px] max-w-[360px] snap-center">
+                     <div ref={scrollRef} className="flex overflow-x-hidden pb-8 snap-x snap-mandatory w-full gap-4 md:gap-8 no-scrollbar">
+                         {(initialProducts || []).slice(0, 8).map((product, index) => (
+                             <div key={index} className="flex-shrink-0 w-[48%] md:w-[380px] snap-center">
                                 <ProductCard
                                     product={product}
                                     key={product.id}

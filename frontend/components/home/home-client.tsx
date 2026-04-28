@@ -5,7 +5,7 @@ import { Header } from "@/components/layout/Header"
 import { Footer } from "@/components/layout/Footer"
 import { Hero } from "@/components/home/Hero"
 import { DiscoverByStyle } from "@/components/home/DiscoverByStyle"
-import { NewStyles } from "@/components/home/NewCollection"
+import { NewCollection } from "@/components/home/NewCollection"
 import { BestSellers } from "@/components/home/BestSellers"
 import { OurStory } from "@/components/home/OurStory"
 import { ArtOfLiving } from "@/components/home/ArtOfLiving"
@@ -33,7 +33,7 @@ export function HomeClient({
         <Hero initialSliders={initialSliders} />
         <DiscoverByStyle initialStyles={initialStyles} />
         <ArtOfLiving />
-        <NewStyles initialProducts={initialProducts} />
+        <NewCollection initialProducts={initialProducts} />
         <BestSellers initialBestSellers={initialBestSellers} />
         <OurStory />
       </main>

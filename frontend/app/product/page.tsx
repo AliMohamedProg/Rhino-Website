@@ -193,7 +193,7 @@ export default function CategoryPage() {
     const apiBase = (process.env.NEXT_PUBLIC_API_URL || "https://rhino-web.runasp.net").replace(/\/+$/, "")
     const productIds = Array.from(new Set(products.map((p) => p.id).filter(Boolean)))
 
-const fetchReviewStats = async () => {
+    const fetchReviewStats = async () => {
       const entries = await Promise.all(
         productIds.map(async (productId) => {
           try {
@@ -201,12 +201,12 @@ const fetchReviewStats = async () => {
               fetch(`${apiBase}/api/review/get-average-reviews?productId=${encodeURIComponent(productId)}`),
               fetch(`${apiBase}/api/review/get-reviews-count?productId=${encodeURIComponent(productId)}`)
             ])
-            
+
             if (!avgRes.ok || !countRes.ok) return [productId, null] as const
-            
+
             const average = await avgRes.json()
             const count = await countRes.json()
-            
+
             return [productId, { average: Number(average) || 0, count: Number(count) || 0 }] as const
           } catch {
             return [productId, null] as const
@@ -465,7 +465,7 @@ const fetchReviewStats = async () => {
                   </Button>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {filteredProducts.map((product) => (
                     <ProductCard
                       key={product.id}
