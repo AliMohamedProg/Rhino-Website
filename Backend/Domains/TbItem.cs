@@ -18,7 +18,8 @@ public partial class TbItem : BaseTable
     public decimal? OldPrice { get; set; }
     public decimal Price { get; set; }
     public Guid? StyleId { get; set; }
-
+    public string Dimensions { get; set; }
+    public string SKU { get; set; }
 public int? DiscountAmount { get; set; }
 
     public Guid CategoryId { get; set; }

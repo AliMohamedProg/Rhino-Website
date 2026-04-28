@@ -34,14 +34,15 @@ namespace Apis.Areas.Admin.Controllers
             var items = _itemService.GetAllItemsWithImages();
 
             var sb = new StringBuilder();
-            sb.AppendLine("Id,NameEn,NameAr,Price,DiscountAmount,StockNumber,CategoryId");
+            sb.AppendLine("Id,SKU,Dimensions,NameEn,Price,DiscountAmount,StockNumber,CategoryId");
 
             foreach (var item in items)
             {
                 var row = string.Join(",", new[]
                 {
                     item.Id.ToString(),
-                    EscapeCsv(item.NameEn),
+                    EscapeCsv(item.SKU),
+                    EscapeCsv(item.Dimensions),
                     EscapeCsv(item.NameAr),
                     item.Price.ToString("0.##"),
                     item.DiscountAmount?.ToString() ?? string.Empty,
@@ -125,6 +126,8 @@ namespace Apis.Areas.Admin.Controllers
                     CategoryId = itemDto.CategoryId,
                     StyleId = itemDto.StyleId, // Fixed: Missing StyleId
                     Images = itemDto.Images ?? new List<ImageDto>(),
+                    Dimensions =  itemDto.Dimensions ?? string.Empty,
+                    SKU =  itemDto.SKU,
                     MaterialEn = itemDto.MaterialEn,
                     MaterialAr = itemDto.MaterialAr ?? string.Empty,
                 };
@@ -176,6 +179,8 @@ namespace Apis.Areas.Admin.Controllers
                     CategoryId = itemDto.CategoryId,
                     StyleId = itemDto.StyleId, // Fixed: Missing StyleId
                     Images = itemDto.Images ?? new List<ImageDto>(),
+                    Dimensions =  itemDto.Dimensions ?? string.Empty,
+                    SKU =  itemDto.SKU,
                     MaterialAr = itemDto.MaterialAr ?? string.Empty,
                     MaterialEn = itemDto.MaterialEn,
                 };

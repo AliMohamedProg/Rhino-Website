@@ -2,7 +2,7 @@
 
 import { ProductCard } from "@/components/ui/ProductCard";
 import { type PublicProduct } from "@/lib/products";
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useRef } from "react"
 import { Header } from "@/components/layout/Header"
 import { Footer } from "@/components/layout/Footer"
 import { useLanguage } from "@/context/language-context"
@@ -26,6 +26,7 @@ import {
 import { ChevronUp, ChevronDown, Filter } from "lucide-react"
 import { formatPrice } from "@/lib/products"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
+import { ScrollArrows } from "@/components/ui/ScrollArrows"
 
 interface BestSellersProps {
   initialBestSellers: PublicProduct[]
@@ -76,6 +77,7 @@ export function BestSellers({ initialBestSellers }: BestSellersProps) {
   const [categoryOpen, setCategoryOpen] = useState(true)
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [reviewStatsByProductId, setReviewStatsByProductId] = useState<Record<string, ReviewStats>>({})
+  const scrollRef = useRef<HTMLDivElement>(null)
   return (
     <section className="py-24 px-8 bg-white min-h-screen" id="catalog">
       <div className="max-w-7xl mx-auto flex flex-col">
@@ -90,7 +92,9 @@ export function BestSellers({ initialBestSellers }: BestSellersProps) {
         </div>
 
         {/* Horizontal scroll on mobile, grid on desktop */}
-        <div className="flex overflow-x-auto pb-8 snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 w-full no-scrollbar">
+        <div className="relative">
+        <ScrollArrows scrollRef={scrollRef} />
+        <div ref={scrollRef} className="flex overflow-x-auto pb-8 snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 w-full no-scrollbar">
           {(initialBestSellers || []).slice(0, 3).map((product, index) => (
             <div key={index} className="min-w-[85vw] md:min-w-0 snap-center">
               <ProductCard product={product}
@@ -134,6 +138,7 @@ export function BestSellers({ initialBestSellers }: BestSellersProps) {
               />
             </div>
           ))}
+        </div>
         </div>
       </div>
     </section>

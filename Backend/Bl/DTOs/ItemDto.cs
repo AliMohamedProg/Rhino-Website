@@ -19,7 +19,8 @@ namespace Bl.DTOs
         public decimal? OldPrice { get; set; }
 
         public int? DiscountAmount { get; set; }
-
+        public string Dimensions { get; set; }
+        public string SKU { get; set; }
         public Guid CategoryId { get; set; }
         public Guid? StyleId { get; set; }
 

@@ -1,9 +1,10 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import Link from "next/link"
 import { ArrowRightIcon } from "@/components/layout/LucideIcons"
 import { getPublicStyles, type PublicCategory } from "@/lib/products"
+import { ScrollArrows } from "@/components/ui/ScrollArrows"
 
 const FALLBACK_STYLES = [
   {
@@ -36,6 +37,7 @@ export function DiscoverByStyle({ initialStyles = [] }: DiscoverByStyleProps) {
   const [styles, setStyles] = useState<PublicCategory[]>(
     initialStyles.filter((category) => category.nameEn)
   )
+  const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (initialStyles.length > 0) return
@@ -70,7 +72,9 @@ export function DiscoverByStyle({ initialStyles = [] }: DiscoverByStyleProps) {
           </h2>
         </div>
 
-        <div className="flex overflow-x-auto pb-12 snap-x snap-mandatory w-full no-scrollbar gap-8 px-4 md:px-20">
+        <div className="relative">
+        <ScrollArrows scrollRef={scrollRef} scrollAmount={360} />
+        <div ref={scrollRef} className="flex overflow-x-auto pb-12 snap-x snap-mandatory w-full no-scrollbar gap-8 px-4 md:px-20">
           {items.map((style) => (
             <Link
               key={style.id}
@@ -101,6 +105,7 @@ export function DiscoverByStyle({ initialStyles = [] }: DiscoverByStyleProps) {
               </div>
             </Link>
           ))}
+        </div>
         </div>
       </div>
     </section>
