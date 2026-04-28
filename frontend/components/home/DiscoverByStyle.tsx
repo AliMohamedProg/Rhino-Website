@@ -74,7 +74,7 @@ export function DiscoverByStyle({ initialStyles = [] }: DiscoverByStyleProps) {
 
         <div className="relative max-w-7xl mx-auto w-full px-4 md:px-8">
           <ScrollArrows scrollRef={scrollRef} scrollAmount={300} />
-          <div ref={scrollRef} className="flex overflow-x-auto pb-12 snap-x snap-mandatory w-fit min-w-full gap-8 no-scrollbar">
+           <div ref={scrollRef} className="flex overflow-x-hidden pb-12 snap-x snap-mandatory w-fit min-w-full gap-8 no-scrollbar">
             {items.map((style) => (
             <Link
               key={style.id}
