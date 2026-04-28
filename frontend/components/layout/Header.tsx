@@ -11,7 +11,10 @@ import {
   ChevronDownIcon,
   MenuIcon,
   XIcon,
+  MonitorIcon,
+  SmartphoneIcon,
 } from "@/components/layout/LucideIcons";
+import { useDesktopViewToggle } from "@/hooks/use-desktop-view-toggle";
 import { useAuth } from "@/app/Context/auth-context";
 import { useCart } from "@/context/cart-context";
 import { useLanguage } from "@/context/language-context";
@@ -54,6 +57,7 @@ export function Header() {
   const { language } = useLanguage();
   const { user, isAuthenticated, loading } = useAuth();
   const { itemCount } = useCart();
+  const { isDesktopView, toggleDesktopView } = useDesktopViewToggle();
   const [categories, setCategories] = useState<Category[]>([]);
   const [styles, setStyles] = useState<Style[]>([]);
   const [searchProducts, setSearchProducts] = useState<SearchProduct[]>([]);
@@ -550,6 +554,26 @@ export function Header() {
               )}
             </div>
           )}
+
+          {/* Desktop View Toggle for Mobile */}
+          <div className="mt-8">
+            <button
+              onClick={toggleDesktopView}
+              className={`flex items-center gap-2 px-6 py-3 rounded-full text-[10px] font-black tracking-[0.15em] uppercase transition-all border ${isDesktopView ? "bg-mahogany text-white border-mahogany" : "border-mahogany text-mahogany hover:bg-mahogany hover:text-white"}`}
+            >
+              {isDesktopView ? (
+                <>
+                  <SmartphoneIcon className="w-4 h-4" />
+                  MOBILE VIEW
+                </>
+              ) : (
+                <>
+                  <MonitorIcon className="w-4 h-4" />
+                  DESKTOP VIEW
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </>

@@ -12,7 +12,8 @@ export const metadata: Metadata = {
   description: "Shop furniture and home décor online. Transform your living space with quality products.",
   icons: {
     icon: "/images/logo-websait.png",
-  }
+  },
+  viewport: "width=device-width, initial-scale=1",
 }
 
 export default function RootLayout({
