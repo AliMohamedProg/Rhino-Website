@@ -93,10 +93,10 @@ export function NewStyles({ initialProducts }: NewStylesProps) {
 
                 {/* Horizontal scroll on mobile, grid on desktop */}
                 <div className="relative">
-                <ScrollArrows scrollRef={scrollRef} scrollAmount={300} />
-                <div ref={scrollRef} className="flex overflow-x-auto pb-8 snap-x snap-mandatory w-fit min-w-full gap-6 md:gap-8 px-4">
+                <ScrollArrows scrollRef={scrollRef} scrollAmount={350} />
+                <div ref={scrollRef} className="flex overflow-x-auto pb-8 snap-x snap-mandatory w-fit min-w-full gap-8 px-4">
                     {(initialProducts || []).slice(0, 8).map((product, index) => (
-                        <div key={index} className="min-w-[85vw] md:min-w-[280px] max-w-[300px] snap-center">
+                        <div key={index} className="min-w-[85vw] md:min-w-[320px] max-w-[360px] snap-center">
                             <ProductCard product={product}
                                 key={product.id}
                                 id={product.id}

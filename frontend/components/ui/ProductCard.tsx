@@ -142,12 +142,12 @@ export function ProductCard({
 
   if (hasExplicitOldPrice) {
     computedDiscountPercent = Math.round(((originalPriceNum - currentPriceNum) / originalPriceNum) * 100);
-    displayMainPrice = `${currentPriceNum.toLocaleString()} EGP`;
-    displayLineThrough = `${originalPriceNum.toLocaleString()} EGP`;
+    displayMainPrice = `${formatPrice(currentPriceNum)} EGP`;
+    displayLineThrough = `${formatPrice(originalPriceNum)} EGP`;
   } else if (normalizedDiscount > 0 && currentPriceNum > 0) {
     computedDiscountPercent = Math.round(normalizedDiscount);
-    displayLineThrough = displayLineThrough ?? `${Math.round(currentPriceNum / (1 - normalizedDiscount / 100)).toLocaleString()} EGP`;
-    displayMainPrice = `${currentPriceNum.toLocaleString()} EGP`;
+    displayLineThrough = displayLineThrough ?? `${formatPrice(Math.round(currentPriceNum / (1 - normalizedDiscount / 100)))} EGP`;
+    displayMainPrice = `${formatPrice(currentPriceNum)} EGP`;
   }
   const parsed = parseColors(colorsRaw);
   const colors = (providedColors && providedColors.length > 0)

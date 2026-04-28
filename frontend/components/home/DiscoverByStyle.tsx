@@ -73,13 +73,13 @@ export function DiscoverByStyle({ initialStyles = [] }: DiscoverByStyleProps) {
         </div>
 
         <div className="relative">
-        <ScrollArrows scrollRef={scrollRef} scrollAmount={280} />
-        <div ref={scrollRef} className="flex overflow-x-auto pb-12 snap-x snap-mandatory w-fit min-w-full gap-6 px-4 md:px-20">
+        <ScrollArrows scrollRef={scrollRef} scrollAmount={300} />
+        <div ref={scrollRef} className="flex overflow-x-auto pb-12 snap-x snap-mandatory w-fit min-w-full gap-8 px-4 md:px-20">
           {items.map((style) => (
             <Link
               key={style.id}
               href={styles.length > 0 ? `/category/${encodeURIComponent(style.id)}` : "/product"}
-              className="group relative flex-shrink-0 w-[80vw] md:w-[260px] aspect-[3/5] rounded-[3rem] overflow-hidden cursor-pointer snap-center shadow-lg transition-all duration-500 hover:shadow-2xl"
+              className="group relative flex-shrink-0 w-[80vw] md:w-[300px] aspect-[3/5] rounded-[3rem] overflow-hidden cursor-pointer snap-center shadow-lg transition-all duration-500 hover:shadow-2xl"
             >
               {/* Image */}
               <div className="absolute inset-0 bg-[#F5F5F5]">
