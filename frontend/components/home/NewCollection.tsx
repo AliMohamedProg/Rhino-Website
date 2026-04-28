@@ -92,53 +92,53 @@ export function NewStyles({ initialProducts }: NewStylesProps) {
                 </div>
 
                 {/* Horizontal scroll on mobile, grid on desktop */}
-                <div className="relative max-w-7xl mx-auto w-full px-4 md:px-8">
-                <ScrollArrows scrollRef={scrollRef} scrollAmount={350} />
-                <div ref={scrollRef} className="flex overflow-x-hidden pb-8 snap-x snap-mandatory w-fit min-w-full gap-8 no-scrollbar">
-                    {(initialProducts || []).slice(0, 8).map((product, index) => (
-                        <div key={index} className="min-w-[85vw] md:min-w-[320px] max-w-[360px] snap-center">
-                            <ProductCard product={product}
-                                key={product.id}
-                                id={product.id}
-                                title={language === "ar" ? product.nameAr : product.nameEn}
-                                description={
-                                    language === "ar"
-                                        ? product.descriptionAr || product.nameAr
-                                        : product.descriptionEn || product.nameEn
-                                }
-                                price={`${formatPrice(product.price)} EGP`}
-                                discountAmount={product.discountAmount || 0}
-                                originalPrice={
-                                    (product.discountAmount ?? 0) > 0
-                                        ? `${formatPrice(Math.round(product.price / (1 - (product.discountAmount ?? 0) / 100)))} EGP`
-                                        : undefined
-                                }
-                                rating={reviewStatsByProductId[product.id]?.average ?? (product as any).overallRating ?? 0}
-                                reviewsCountVal={reviewStatsByProductId[product.id]?.count ?? 0}
-                                mainImage={product.mainImage}
-                                colorsRaw={product.colorsEn}
-                                stockNumber={product.stockNumber}
-                                isWishlisted={isInWishlist(product.id)}
-                                onAddToCart={async (productId, selectedColorName) => {
-                                    await addItem(productId, 1, selectedColorName)
-                                }}
-                                onToggleWishlist={(productId) => {
-                                    const discountedPrice =
+                <div className="relative max-w-7xl mx-auto w-full px-4 md:px-8 overflow-hidden">
+                    <ScrollArrows scrollRef={scrollRef} scrollAmount={350} />
+                    <div ref={scrollRef} className="flex overflow-x-scroll pb-8 snap-x snap-mandatory w-full gap-8 no-scrollbar">
+                        {(initialProducts || []).slice(0, 8).map((product, index) => (
+                            <div key={index} className="min-w-[85vw] md:min-w-[320px] max-w-[360px] snap-center">
+                                <ProductCard product={product}
+                                    key={product.id}
+                                    id={product.id}
+                                    title={language === "ar" ? product.nameAr : product.nameEn}
+                                    description={
+                                        language === "ar"
+                                            ? product.descriptionAr || product.nameAr
+                                            : product.descriptionEn || product.nameEn
+                                    }
+                                    price={`${formatPrice(product.price)} EGP`}
+                                    discountAmount={product.discountAmount || 0}
+                                    originalPrice={
                                         (product.discountAmount ?? 0) > 0
-                                            ? product.price * (1 - (product.discountAmount ?? 0) / 100)
-                                            : product.price
-                                    toggleItem({
-                                        id: productId,
-                                        name: { ar: product.nameAr, en: product.nameEn },
-                                        price: discountedPrice,
-                                        originalPrice: (product.discountAmount ?? 0) > 0 ? product.price : undefined,
-                                        image: product.mainImage || "/placeholder.svg",
-                                    })
-                                }}
-                            />
-                        </div>
-                    ))}
-                </div>
+                                            ? `${formatPrice(Math.round(product.price / (1 - (product.discountAmount ?? 0) / 100)))} EGP`
+                                            : undefined
+                                    }
+                                    rating={reviewStatsByProductId[product.id]?.average ?? (product as any).overallRating ?? 0}
+                                    reviewsCountVal={reviewStatsByProductId[product.id]?.count ?? 0}
+                                    mainImage={product.mainImage}
+                                    colorsRaw={product.colorsEn}
+                                    stockNumber={product.stockNumber}
+                                    isWishlisted={isInWishlist(product.id)}
+                                    onAddToCart={async (productId, selectedColorName) => {
+                                        await addItem(productId, 1, selectedColorName)
+                                    }}
+                                    onToggleWishlist={(productId) => {
+                                        const discountedPrice =
+                                            (product.discountAmount ?? 0) > 0
+                                                ? product.price * (1 - (product.discountAmount ?? 0) / 100)
+                                                : product.price
+                                        toggleItem({
+                                            id: productId,
+                                            name: { ar: product.nameAr, en: product.nameEn },
+                                            price: discountedPrice,
+                                            originalPrice: (product.discountAmount ?? 0) > 0 ? product.price : undefined,
+                                            image: product.mainImage || "/placeholder.svg",
+                                        })
+                                    }}
+                                />
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>
