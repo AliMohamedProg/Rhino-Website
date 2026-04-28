@@ -94,7 +94,7 @@ export function BestSellers({ initialBestSellers }: BestSellersProps) {
         {/* Horizontal scroll on mobile, grid on desktop */}
         <div className="relative">
         <ScrollArrows scrollRef={scrollRef} scrollAmount={300} />
-        <div ref={scrollRef} className="flex overflow-x-auto pb-8 snap-x snap-mandatory w-full no-scrollbar gap-6 md:gap-8 px-4">
+        <div ref={scrollRef} className="flex overflow-x-auto pb-8 snap-x snap-mandatory w-fit min-w-full gap-6 md:gap-8 px-4">
           {(initialBestSellers || []).slice(0, 8).map((product, index) => (
             <div key={index} className="min-w-[85vw] md:min-w-[280px] max-w-[300px] snap-center">
               <ProductCard product={product}
