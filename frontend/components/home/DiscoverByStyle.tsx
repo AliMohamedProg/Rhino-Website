@@ -74,38 +74,38 @@ export function DiscoverByStyle({ initialStyles = [] }: DiscoverByStyleProps) {
 
         <div className="relative max-w-7xl mx-auto w-full px-4 md:px-8">
           <ScrollArrows scrollRef={scrollRef} scrollAmount={300} />
-           <div ref={scrollRef} className="flex overflow-x-hidden pb-12 snap-x snap-mandatory w-fit min-w-full gap-8 no-scrollbar">
+          <div ref={scrollRef} className="flex overflow-x-scroll pb-12 snap-x snap-mandatory w-full gap-8 no-scrollbar">
             {items.map((style) => (
-            <Link
-              key={style.id}
-              href={styles.length > 0 ? `/category/${encodeURIComponent(style.id)}` : "/product"}
-              className="group relative flex-shrink-0 w-[80vw] md:w-[300px] aspect-[3/5] rounded-[3rem] overflow-hidden cursor-pointer snap-center shadow-lg transition-all duration-500 hover:shadow-2xl"
-            >
-              {/* Image */}
-              <div className="absolute inset-0 bg-[#F5F5F5]">
-                <img
-                  src={style.imageUrl || "/placeholder.jpg"}
-                  alt={style.nameEn}
-                  className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                />
-              </div>
-
-              {/* Overlay Gradient - Fixed (Always Visible) */}
-              <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-100" />
-
-              {/* Text Content - Fixed (Always Visible) */}
-              <div className="absolute bottom-0 left-0 w-full p-10 flex flex-col items-center">
-                <h3 className="text-3xl font-serif text-mahogany mb-3 italic">{style.nameEn}</h3>
-                <div className="flex items-center gap-3 opacity-100 translate-y-0">
-                  <p className="text-[9px] tracking-[0.25em] font-bold text-taupe uppercase">
-                    EXPLORE STYLE
-                  </p>
-                  <ArrowRightIcon className="w-3 h-3 text-taupe" />
+              <Link
+                key={style.id}
+                href={styles.length > 0 ? `/category/${encodeURIComponent(style.id)}` : "/product"}
+                className="group relative flex-shrink-0 w-[80vw] md:w-[300px] aspect-[3/5] rounded-[3rem] overflow-hidden cursor-pointer snap-center shadow-lg transition-all duration-500 hover:shadow-2xl"
+              >
+                {/* Image */}
+                <div className="absolute inset-0 bg-[#F5F5F5]">
+                  <img
+                    src={style.imageUrl || "/placeholder.jpg"}
+                    alt={style.nameEn}
+                    className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                  />
                 </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+
+                {/* Overlay Gradient - Fixed (Always Visible) */}
+                <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-100" />
+
+                {/* Text Content - Fixed (Always Visible) */}
+                <div className="absolute bottom-0 left-0 w-full p-10 flex flex-col items-center">
+                  <h3 className="text-3xl font-serif text-mahogany mb-3 italic">{style.nameEn}</h3>
+                  <div className="flex items-center gap-3 opacity-100 translate-y-0">
+                    <p className="text-[9px] tracking-[0.25em] font-bold text-taupe uppercase">
+                      EXPLORE STYLE
+                    </p>
+                    <ArrowRightIcon className="w-3 h-3 text-taupe" />
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </section>
