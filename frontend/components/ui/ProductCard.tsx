@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { HeartIcon, StarIcon, ShoppingCartIcon } from "@/components/layout/LucideIcons";
 import { Star } from "lucide-react";
-import { getImageUrl, parseColors } from "@/lib/utils";
+import { getImageUrl, parseColors } from "@/lib/utils"
+import { formatPrice } from "@/lib/products";
 import { useCart } from "@/context/cart-context";
 import { useEffect } from "react";
 import { useLanguage } from "@/context/language-context";
