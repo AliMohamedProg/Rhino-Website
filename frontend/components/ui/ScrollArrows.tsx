@@ -1,6 +1,7 @@
 "use client"
 
-import { useRef, useState, useEffect, useCallback, type RefObject } from "react"
+import { useRef, useState, useEffect, useCallback } from "react"
+import type { RefObject } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { useLanguage } from "@/context/language-context"
 

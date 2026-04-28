@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { ArrowRightIcon, LeafIcon } from "lucide-react"
 import { getPublicCategories, type PublicCategory } from "@/lib/products"
+import { useState, useEffect } from "react"
 
 interface GridItemProps {
   title: string
