@@ -177,30 +177,17 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      {/* <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.03)] overflow-hidden">
+      <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.03)] overflow-hidden">
         <CardContent className="pt-6">
           {loading ? (
             <div className="flex justify-center items-center h-48 text-slate-500 animate-pulse">Loading products...</div>
           ) : (
             <div className="space-y-4">
-              <div className="flex items-center gap-3 mb-4">
-                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                  <SelectTrigger className="w-[180px] h-10 border-[#7B3F32]/20 rounded-xl">
-                    <SelectValue placeholder="All Styles" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white rounded-xl shadow-xl">
-                    <SelectItem value="all">All Styles</SelectItem>
-                    {categories.map((cat) => (
-                      <SelectItem key={cat.id} value={cat.id}>{cat.nameEn}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
               <DataTable data={filteredProducts} columns={columns} searchPlaceholder="Search products..." searchKey="nameEn" />
             </div>
           )}
         </CardContent>
-      </Card> */}
+      </Card>
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent className="bg-white/95 backdrop-blur-xl border-[#7B3F32]/10 rounded-3xl shadow-2xl">
