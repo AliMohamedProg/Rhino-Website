@@ -204,7 +204,7 @@ export function formatPrice(price: number | string): string {
     price = price.replace(/[^\d.-]/g, '')
   }
   const n = typeof price === 'string' ? parseFloat(price) : price
-  return Math.round(n || 0).toLocaleString("en-US")
+  return Math.round(n || 0).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })
 }
 
 // Public Slider API
