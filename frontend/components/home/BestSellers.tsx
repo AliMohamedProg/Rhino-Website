@@ -96,7 +96,7 @@ export function BestSellers({ initialBestSellers }: BestSellersProps) {
           <ScrollArrows scrollRef={scrollRef} scrollAmount={350} />
           <div ref={scrollRef} className="flex overflow-x-scroll pb-8 snap-x snap-mandatory w-full gap-8 no-scrollbar">
             {(initialBestSellers || []).slice(0, 8).map((product, index) => (
-              <div key={index} className="min-w-[85vw] md:min-w-[381px] max-w-[360px] snap-center">
+              <div key={index} className="min-w-[85vw] md:min-w-[382px] max-w-[360px] snap-center">
                 <ProductCard product={product}
                   key={product.id}
                   id={product.id}
