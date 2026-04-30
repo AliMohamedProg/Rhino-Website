@@ -22,45 +22,67 @@ namespace Bl.Services
             _imageRepository = imageRepository;
         }
 
-        public List<ItemDto> GetAllItemsWithImages()
+        public List<ItemDto> GetAllItemsWithImagesAndFabrics()
         {
             var items = repository.GetList<TbItem>(
                 filter: a => a.CurrentState > 0,
-                includers: a => a.TbImages
+                selector: null,
+                orderBy: null,
+                isDescending: false,
+                a => a.TbImages,
+                a => a.TbFabrics
+                
             ).GetAwaiter().GetResult();
             return Mapper.Map<List<TbItem>, List<ItemDto>>(items);
         }
 
-        public ItemDto? GetItemWithImages(Guid id)
+        public ItemDto? GetItemWithImagesAndFabrics(Guid id)
         {
             var items = repository.GetList<TbItem>(
-                filter: a => a.Id == id && a.CurrentState > 0,
-                includers: a => a.TbImages
+                filter: a => a.CurrentState > 0,
+                selector: null,
+                orderBy: null,
+                isDescending: false,
+                a => a.TbImages,
+                a => a.TbFabrics
             ).GetAwaiter().GetResult();
 
             var item = items.FirstOrDefault();
             return item == null ? null : Mapper.Map<TbItem, ItemDto>(item);
         }
 
-        public bool AddItemWithImages(ItemDto itemDto)
+        public bool AddItemWithImagesAndFabrics(ItemDto itemDto)
         {
-            var tbItem = Mapper.Map<ItemDto, TbItem>(itemDto);
-            tbItem.CreatedBy = userService.GetLoggedInUser();
-            tbItem.CreatedDate = DateTime.Now;
-            tbItem.CurrentState = 1;
+            
+                var tbItem = Mapper.Map<ItemDto, TbItem>(itemDto);
+                tbItem.CreatedBy = userService.GetLoggedInUser();
+                tbItem.CreatedDate = DateTime.Now;
+                tbItem.CurrentState = 1;
 
-            foreach (var img in tbItem.TbImages)
-            {
-                img.Id = Guid.NewGuid();
-                img.CreatedBy = userService.GetLoggedInUser();
-                img.CreatedDate = DateTime.Now;
-                img.CurrentState = 1;
-            }
+                var createdBy = userService.GetLoggedInUser();
+                var now = DateTime.Now;
 
-            return repository.Add(tbItem);
+                foreach (var img in tbItem.TbImages)
+                {
+                    img.Id = Guid.NewGuid();
+                    img.CreatedBy = createdBy;
+                    img.CreatedDate = now;
+                    img.CurrentState = 1;
+                }
+
+                foreach (var fabric in tbItem.TbFabrics)
+                {
+                    fabric.Id = Guid.NewGuid();
+                    fabric.CreatedBy = createdBy;
+                    fabric.CreatedDate = now;
+                    fabric.CurrentState = 1;
+                }
+
+                return repository.Add(tbItem);
+            
         }
 
-        public bool UpdateItemWithImages(ItemDto itemDto)
+        public bool UpdateItemWithImagesAndFabrics(ItemDto itemDto)
         {
             if (itemDto.Images == null)
             {

@@ -24,7 +24,7 @@ public partial class WoodDecorContext : IdentityDbContext<ApplicationUser>
     public virtual DbSet<TbStyles> TbStyles { get; set; }
     
     public virtual DbSet<TbImage> TbImages { get; set; }
-
+   public virtual DbSet<TbFabrics> TbFabrics { get; set; }
     public virtual DbSet<TbItem> TbItems { get; set; }
 
     public virtual DbSet<TbOrder> TbOrders { get; set; }
@@ -46,7 +46,7 @@ public partial class WoodDecorContext : IdentityDbContext<ApplicationUser>
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.UseSqlServer(
-                "Server=localhost;Database=RhinoDB;User Id=sa;Password=SQLPassword1;TrustServerCertificate=True");
+                "Server=db48236.public.databaseasp.net; Database=db48236; User Id=db48236; Password=Pt7+8!fC%H6j; Encrypt=False; MultipleActiveResultSets=True;");
         }
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)

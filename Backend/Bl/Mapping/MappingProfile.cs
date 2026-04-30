@@ -18,6 +18,8 @@ namespace Bl.Mapping
                opt => opt.MapFrom(src => src.TbItems.Count()))
 
                 .ReverseMap();
+                
+                CreateMap<TbFabrics,FabricsDto>().ReverseMap();
             CreateMap<TbImage, ImageDto>().ReverseMap();
             CreateMap<TbItem, ItemDto>()
                 .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.TbImages))

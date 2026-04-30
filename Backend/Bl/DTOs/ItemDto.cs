@@ -34,6 +34,7 @@ namespace Bl.DTOs
         public string? MaterialAr { get; set; }
 
         public List<ImageDto> Images { get; set; } = new List<ImageDto>();
+        public List<FabricsDto> Fabrics { get; set; } = new List<FabricsDto>();
 
     }
 }

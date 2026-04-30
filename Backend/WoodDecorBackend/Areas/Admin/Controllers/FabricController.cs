@@ -1,112 +1,81 @@
+using Bl.Contracts;
 using Bl.DTOs;
 using BusinessLayer.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using System.Text;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Apis.Areas.Admin.Controllers
+namespace Apis.Controllers
 {
     [Route("api/admin/[controller]")]
-    [ApiController]
     [Authorize(Roles = "Admin")]
-    public class OrdersController : ControllerBase
+    [ApiController]
+    public class FabricController : ControllerBase
     {
-        IOrder _orderService;
-        public OrdersController(IOrder orderService)
+        private readonly IFabrics _fabricsService;
+
+        public FabricController(IFabrics fabricsService)
         {
-            _orderService = orderService;
+            _fabricsService = fabricsService;
         }
 
-        // GET: api/<OrdersController>
+        // GET: api/Slider
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public ActionResult<IEnumerable<FabricsDto>> Get()
         {
-            // هنا يمكنك استدعاء خدمة لجلب كل الطلبات
-            var orders = await _orderService.GetAllOrders();
-            return Ok(orders);
-        }
-
-        [HttpGet("export/excel")]
-        public async Task<IActionResult> ExportOrdersToExcel()
-        {
-            var orders = await _orderService.GetAllOrders();
-
-            var sb = new StringBuilder();
-            sb.AppendLine("Id,OrderNumber,OrderDate,FirstName,LastName,Email,PhoneNumber,Total,Status,PaymentStatus");
-
-            foreach (var o in orders)
+            try
             {
-                var row = string.Join(",", new[]
+                var fabrics = _fabricsService.GetAll();
+                if (fabrics == null)
                 {
-                    o.Id.ToString(),
-                    EscapeCsv(o.OrderNumber),
-                    o.OrderDate.ToString("yyyy-MM-dd HH:mm:ss"),
-                    EscapeCsv(o.FirstName),
-                    EscapeCsv(o.LastName),
-                    EscapeCsv(o.Email),
-                    EscapeCsv(o.PhoneNumber),
-                    o.Total.ToString("0.##"),
-                    EscapeCsv(o.Status),
-                    EscapeCsv(o.PaymentStatus)
-                });
-                sb.AppendLine(row);
+                    return Ok(new List<FabricsDto>());
+                }
+                return Ok(fabrics);
             }
-
-            var bytes = Encoding.UTF8.GetBytes(sb.ToString());
-            return File(bytes, "text/csv", "orders.csv");
-        }
-
-        [HttpGet("export/pdf")]
-        public async Task<IActionResult> ExportOrdersToPdf()
-        {
-            var orders = await _orderService.GetAllOrders();
-
-            var sb = new StringBuilder();
-            sb.AppendLine("Orders Export");
-            sb.AppendLine("=============");
-            foreach (var o in orders)
+            catch (Exception ex)
             {
-                sb.AppendLine($"Id: {o.Id}");
-                sb.AppendLine($"Order Number: {o.OrderNumber}");
-                sb.AppendLine($"Date: {o.OrderDate:yyyy-MM-dd HH:mm}");
-                sb.AppendLine($"Customer: {o.FirstName} {o.LastName}");
-                sb.AppendLine($"Email: {o.Email}");
-                sb.AppendLine($"Phone: {o.PhoneNumber}");
-                sb.AppendLine($"Total: {o.Total:0.##}");
-                sb.AppendLine($"Status: {o.Status}");
-                sb.AppendLine($"Payment: {o.PaymentStatus}");
-                sb.AppendLine(new string('-', 40));
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-
-            var bytes = Encoding.UTF8.GetBytes(sb.ToString());
-            return File(bytes, "application/pdf", "orders.pdf");
         }
-
-        private static string EscapeCsv(string? value)
+        
+        [HttpPost("add-fabric")]
+        public async Task<bool> Add(FabricsDto categoryDto)
         {
-            if (string.IsNullOrEmpty(value)) return string.Empty;
-            var needsQuotes = value.Contains(',') || value.Contains('"') || value.Contains('\n');
-            var escaped = value.Replace("\"", "\"\"");
-            return needsQuotes ? $"\"{escaped}\"" : escaped;
+        
+            try
+            {
+                var category = new FabricsDto()
+                {
+                    Name = categoryDto.Name,
+                    ImageUrl = categoryDto.ImageUrl,
+                    CurrentState =1,
+                    Id = Guid.NewGuid(),
+
+                };
+                _fabricsService.Add(category);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
-
-        [HttpPost("edit-status")]
-        public async Task<IActionResult> EditStatus(Guid id, [FromBody] string status)
+        
+        [HttpPost("edite-fabric")]
+        public async Task<bool> edit(FabricsDto categoryDto)
         {
-            await _orderService.UpdateOrderStatus(id, status);
-
-            return Ok();
-        }
-
-        [HttpGet("details/{id}")]
-        public async Task<IActionResult> OrderDetails(Guid id)
-        {
-            var order = await _orderService.GetOrderById(id);
-
-            return Ok(order);
+        
+            try
+            {
+                _fabricsService.Update(categoryDto);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
+
 }

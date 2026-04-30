@@ -1,6 +1,12 @@
-namespace Bl.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using Bl.DTOs;
+using Domains;
 
-public interface IFabrics
+namespace Bl.Contracts
 {
-    
+    public interface IFabrics : IBaseService<TbFabrics , FabricsDto>
+    {
+    }
 }

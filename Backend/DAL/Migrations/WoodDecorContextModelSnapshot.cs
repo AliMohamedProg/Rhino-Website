@@ -233,6 +233,45 @@ namespace DAL.Migrations
                     b.ToTable("TbCategories");
                 });
 
+            modelBuilder.Entity("Domains.TbFabrics", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CurrentState")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("TbFabrics");
+                });
+
             modelBuilder.Entity("Domains.TbImage", b =>
                 {
                     b.Property<Guid>("Id")
@@ -306,6 +345,9 @@ namespace DAL.Migrations
 
                     b.Property<int?>("DiscountAmount")
                         .HasColumnType("int");
+
+                    b.Property<Guid?>("FabricId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("MainImage")
                         .IsRequired()
@@ -873,6 +915,17 @@ namespace DAL.Migrations
                     b.Navigation("Item");
                 });
 
+            modelBuilder.Entity("Domains.TbFabrics", b =>
+                {
+                    b.HasOne("Domains.TbItem", "Product")
+                        .WithMany("TbFabrics")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Domains.TbImage", b =>
                 {
                     b.HasOne("Domains.TbItem", "Product")
@@ -981,6 +1034,8 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Domains.TbItem", b =>
                 {
+                    b.Navigation("TbFabrics");
+
                     b.Navigation("TbImages");
 
                     b.Navigation("TbOrderItems");

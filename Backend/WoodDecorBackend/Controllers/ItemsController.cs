@@ -28,7 +28,7 @@ namespace Apis.Controllers
         [HttpGet("{id}")]
         public ActionResult<ItemDto> GetItemDetails(Guid id)
         {
-            var item = _itemService.GetItemWithImages(id);
+            var item = _itemService.GetItemWithImagesAndFabrics(id);
             if (item == null)
             {
                 return NotFound();

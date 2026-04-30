@@ -11,9 +11,9 @@ namespace BusinessLayer.Contracts
 {
     public interface IItem: IBaseService<TbItem,ItemDto>
     {
-        bool AddItemWithImages(ItemDto itemDto);
-        bool UpdateItemWithImages(ItemDto itemDto);
-        List<ItemDto> GetAllItemsWithImages();
-        ItemDto? GetItemWithImages(Guid id);
+        bool AddItemWithImagesAndFabrics(ItemDto itemDto);
+        bool UpdateItemWithImagesAndFabrics(ItemDto itemDto);
+        List<ItemDto> GetAllItemsWithImagesAndFabrics();
+        ItemDto? GetItemWithImagesAndFabrics(Guid id);
     }
 }

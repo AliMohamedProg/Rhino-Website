@@ -1,0 +1,201 @@
+@import "tailwindcss";
+
+:root {
+  --background: #F5EBE0;
+  --foreground: #7B3F32;
+  --card: #ffffff;
+  --card-foreground: #7B3F32;
+  --popover: #ffffff;
+  --popover-foreground: #7B3F32;
+  --primary: #7B3F32;
+  --primary-foreground: #F5EBE0;
+  --secondary: #DDCFBC;
+  --secondary-foreground: #7B3F32;
+  --muted: #C1AFA0;
+  --muted-foreground: #7B3F32;
+  --accent: #7B3F32;
+  --accent-foreground: #F5EBE0;
+  --destructive: #ef4444;
+  --destructive-foreground: #f8fafc;
+  --border: #DDCFBC;
+  --input: #DDCFBC;
+  --ring: #7B3F32;
+  --radius: 0.5rem;
+}
+
+:root[data-theme="admin"] {
+  --admin-sidebar: #0f172a;
+  --admin-sidebar-foreground: #e2e8f0;
+  --admin-sidebar-active: #6366f1;
+  --admin-sidebar-active-foreground: #ffffff;
+  --admin-sidebar-border: #1e293b;
+  --admin-sidebar-hover: #1e293b;
+  --admin-header-bg: #ffffff;
+  --admin-header-border: #e2e8f0;
+  --admin-content-bg: #f1f5f9;
+  --admin-card-bg: #ffffff;
+  --admin-card-border: #e2e8f0;
+  --admin-primary: #6366f1;
+  --admin-primary-hover: #4f46e5;
+  --admin-success: #10b981;
+  --admin-warning: #f59e0b;
+  --admin-danger: #ef4444;
+  --admin-text-primary: #1e293b;
+  --admin-text-secondary: #64748b;
+  --admin-text-muted: #94a3b8;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-mahogany: #7B3F32;
+  --color-taupe: #C1AFA0;
+  --color-sand: #DDCFBC;
+  --color-blush: #F5EBE0;
+
+  --font-sans: var(--font-raleway);
+  --font-serif: var(--font-playfair);
+
+  --color-admin-sidebar: var(--admin-sidebar);
+  --color-admin-sidebar-foreground: var(--admin-sidebar-foreground);
+  --color-admin-sidebar-active: var(--admin-sidebar-active);
+  --color-admin-sidebar-active-foreground: var(--admin-sidebar-active-foreground);
+  --color-admin-sidebar-border: var(--admin-sidebar-border);
+  --color-admin-sidebar-hover: var(--admin-sidebar-hover);
+  --color-admin-header-bg: var(--admin-header-bg);
+  --color-admin-header-border: var(--admin-header-border);
+  --color-admin-content-bg: var(--admin-content-bg);
+  --color-admin-card-bg: var(--admin-card-bg);
+  --color-admin-card-border: var(--admin-card-border);
+  --color-admin-primary: var(--admin-primary);
+  --color-admin-primary-hover: var(--admin-primary-hover);
+  --color-admin-success: var(--admin-success);
+  --color-admin-warning: var(--admin-warning);
+  --color-admin-danger: var(--admin-danger);
+  --color-admin-text-primary: var(--admin-text-primary);
+  --color-admin-text-secondary: var(--admin-text-secondary);
+  --color-admin-text-muted: var(--admin-text-muted);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-raleway), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-playfair), serif;
+}
+
+@utility no-scrollbar {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+[data-theme="admin"] {
+  --background: var(--admin-content-bg);
+  --foreground: var(--admin-text-primary);
+  --card: var(--admin-card-bg);
+  --card-foreground: var(--admin-text-primary);
+  --popover: var(--admin-card-bg);
+  --popover-foreground: var(--admin-text-primary);
+  --primary: var(--admin-primary);
+  --primary-foreground: #ffffff;
+  --secondary: #e2e8f0;
+  --secondary-foreground: var(--admin-text-primary);
+  --muted: #f1f5f9;
+  --muted-foreground: var(--admin-text-secondary);
+  --accent: var(--admin-primary);
+  --accent-foreground: #ffffff;
+  --destructive: var(--admin-danger);
+  --destructive-foreground: #ffffff;
+  --border: var(--admin-card-border);
+  --input: var(--admin-card-border);
+  --ring: var(--admin-primary);
+  --radius: 0.5rem;
+  
+  --sidebar: #ffffff;
+  --sidebar-foreground: #475569;
+  --sidebar-primary: var(--admin-sidebar-active);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-hover: #f1f5f9;
+  --sidebar-border: #e2e8f0;
+}
+
+.admin-focus-ring:focus-visible {
+  outline: 2px solid var(--admin-primary);
+  outline-offset: 2px;
+}
+
+[data-theme="admin"] .sidebar-nav-item:focus-visible {
+  outline: 2px solid var(--admin-sidebar-active);
+  outline-offset: -2px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.admin-animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.admin-animate-slide-in {
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+[data-theme="admin"] .admin-card {
+  border: 1px solid color-mix(in oklab, #8f3f2a 14%, transparent);
+  background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.78));
+  backdrop-filter: blur(14px);
+  border-radius: 1.6rem;
+  box-shadow: 0 16px 44px rgba(31, 24, 20, 0.06);
+}
+
+[data-theme="admin"] .admin-pill {
+  border: 1px solid color-mix(in oklab, #8f3f2a 20%, transparent);
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 0.85rem;
+}
+
+[data-theme="admin"] .admin-input {
+  border-color: color-mix(in oklab, #8f3f2a 28%, white);
+  background: rgba(255, 255, 255, 0.86);
+  border-radius: 0.8rem;
+}
+
+[data-theme="admin"] .admin-input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(143, 63, 42, 0.16);
+  border-color: rgba(143, 63, 42, 0.7);
+}
+
+[data-theme="admin"] .admin-title {
+  color: #2f2219;
+  letter-spacing: -0.02em;
+}
+
+[data-theme="admin"] .admin-subtitle {
+  color: #7c6f65;
+}

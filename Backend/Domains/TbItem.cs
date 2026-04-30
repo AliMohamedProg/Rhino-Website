@@ -8,7 +8,7 @@ public partial class TbItem : BaseTable
 
     public string MainImage { get; set; } = null!;
     public string NameAr { get; set; } = null!;
-
+    public Guid? FabricId { get; set; }
     public string NameEn { get; set; } = null!;
 
     public string DescriptionAr { get; set; } = null!;
@@ -20,7 +20,7 @@ public partial class TbItem : BaseTable
     public Guid? StyleId { get; set; }
     public string Dimensions { get; set; }
     public string SKU { get; set; }
-public int? DiscountAmount { get; set; }
+    public int? DiscountAmount { get; set; }
 
     public Guid CategoryId { get; set; }
 
@@ -36,6 +36,7 @@ public int? DiscountAmount { get; set; }
     public virtual TbCategory Category { get; set; } = null!;
 
     public virtual ICollection<TbImage> TbImages { get; set; } = new List<TbImage>();
+    public virtual ICollection<TbFabrics> TbFabrics { get; set; } = new List<TbFabrics>();
 
     public virtual ICollection<TbOrderItem> TbOrderItems { get; set; } = new List<TbOrderItem>();
 }

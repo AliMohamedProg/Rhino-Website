@@ -121,6 +121,7 @@ builder.Services.AddScoped<IOrderItem, OrderItemService>();
 builder.Services.AddScoped<IReview, ReviewService>();
 builder.Services.AddScoped<ISetting, SettingService>();
 builder.Services.AddScoped<ISlider, SliderService>();
+builder.Services.AddScoped<IFabrics, FabricsService>();
 builder.Services.AddScoped<IImage, ImageService>();
 builder.Services.AddScoped<ICart, CartService>();
 builder.Services.AddScoped<IUserService, UserService>();

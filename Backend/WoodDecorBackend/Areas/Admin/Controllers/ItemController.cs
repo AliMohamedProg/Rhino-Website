@@ -24,14 +24,14 @@ namespace Apis.Areas.Admin.Controllers
         [HttpGet]
         public List<ItemDto> Get()
         {
-            var items = _itemService.GetAllItemsWithImages();
+            var items = _itemService.GetAllItemsWithImagesAndFabrics();
             return items;
         }
 
         [HttpGet("export/excel")]
         public IActionResult ExportItemsToExcel()
         {
-            var items = _itemService.GetAllItemsWithImages();
+            var items = _itemService.GetAllItemsWithImagesAndFabrics();
 
             var sb = new StringBuilder();
             sb.AppendLine("Id,SKU,Dimensions,NameEn,Price,DiscountAmount,StockNumber,CategoryId");
@@ -59,7 +59,7 @@ namespace Apis.Areas.Admin.Controllers
         [HttpGet("export/pdf")]
         public IActionResult ExportItemsToPdf()
         {
-            var items = _itemService.GetAllItemsWithImages();
+            var items = _itemService.GetAllItemsWithImagesAndFabrics();
 
             var sb = new StringBuilder();
             sb.AppendLine("Products Export");
@@ -126,12 +126,13 @@ namespace Apis.Areas.Admin.Controllers
                     CategoryId = itemDto.CategoryId,
                     StyleId = itemDto.StyleId, // Fixed: Missing StyleId
                     Images = itemDto.Images ?? new List<ImageDto>(),
+                    Fabrics =  itemDto.Fabrics,
                     Dimensions =  itemDto.Dimensions ?? string.Empty,
                     SKU =  itemDto.SKU,
                     MaterialEn = itemDto.MaterialEn,
                     MaterialAr = itemDto.MaterialAr ?? string.Empty,
                 };
-                _itemService.AddItemWithImages(item);
+                _itemService.AddItemWithImagesAndFabrics(item);
                 return true;
             }
             catch (Exception ex)
@@ -179,13 +180,14 @@ namespace Apis.Areas.Admin.Controllers
                     CategoryId = itemDto.CategoryId,
                     StyleId = itemDto.StyleId, // Fixed: Missing StyleId
                     Images = itemDto.Images ?? new List<ImageDto>(),
+                    Fabrics = itemDto.Fabrics,
                     Dimensions =  itemDto.Dimensions ?? string.Empty,
                     SKU =  itemDto.SKU,
                     MaterialAr = itemDto.MaterialAr ?? string.Empty,
                     MaterialEn = itemDto.MaterialEn,
                 };
 
-                _itemService.UpdateItemWithImages(item);
+                _itemService.UpdateItemWithImagesAndFabrics(item);
                 return true;
             }
             catch (Exception ex)
