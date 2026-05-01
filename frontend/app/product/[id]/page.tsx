@@ -22,6 +22,12 @@ import { Header } from "@/components/layout/Header"
 import { Footer } from "@/components/layout/Footer"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
 
+type Fabric = {
+  id: string
+  name: string
+  imageUrl: string
+}
+
 type Product = {
   id: string
   sku: string
@@ -41,6 +47,7 @@ type Product = {
   overallRating: number
   images?: string[]
   mainImage?: string
+  fabrics?: Fabric[]
 }
 
 type Review = {
@@ -94,6 +101,7 @@ export default function ProductDetailsPage() {
   const [loading, setLoading] = useState(true)
   const [quantity, setQuantity] = useState(1)
   const [selectedColor, setSelectedColor] = useState<string>("")
+  const [selectedFabric, setSelectedFabric] = useState<string>("")
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
   const [isZoomed, setIsZoomed] = useState(false)
   const [showCopied, setShowCopied] = useState(false)
@@ -116,6 +124,7 @@ export default function ProductDetailsPage() {
         const data = await ApiClient.get<any>(`api/Items/${id}`)
         const colorsValue = data.colors ?? data.Colors ?? ""
         const rawImages = data.images ?? data.Images ?? []
+        const rawFabrics = data.fabrics ?? data.Fabrics ?? []
         const price = Number(data.price ?? data.Price ?? 0)
         const oldPrice = Number(data.oldPrice ?? data.OldPrice ?? 0)
         const discountAmount = Number(data.discountAmount ?? data.DiscountAmount ?? 0)
@@ -128,6 +137,15 @@ export default function ProductDetailsPage() {
             })
             .filter((img: string) => img.length > 0)
           : []
+
+        const normalizedFabrics = Array.isArray(rawFabrics)
+          ? rawFabrics.map((f: any) => ({
+            id: String(f.id ?? f.Id ?? ""),
+            name: String(f.name ?? f.Name ?? ""),
+            imageUrl: String(f.imageUrl ?? f.ImageUrl ?? ""),
+          }))
+          : []
+
         const mainImage = data.mainImage ?? data.MainImage ?? ""
         const images = [mainImage, ...normalizedImages].filter((img) => img && img.length > 0)
         const uniqueImages = Array.from(new Set(images))
@@ -150,11 +168,15 @@ export default function ProductDetailsPage() {
           oldPrice: Number.isFinite(oldPrice) ? oldPrice : 0,
           discountAmount: Number.isFinite(discountAmount) ? discountAmount : 0,
           stockNumber: Number.isFinite(stockNumber) ? stockNumber : 0,
+          fabrics: normalizedFabrics,
         }
 
         setProduct(normalizedProduct)
         const defaultColors = buildDisplayColors(normalizedProduct, language === "ar" ? "ar" : "en")
         setSelectedColor(defaultColors[0]?.name || "")
+        if (normalizedFabrics.length > 0) {
+          setSelectedFabric(normalizedFabrics[0].name)
+        }
       } catch (err) {
         console.error(err)
       } finally {
@@ -486,6 +508,51 @@ export default function ProductDetailsPage() {
                 </div>
               )}
 
+              {/* Fabrics */}
+              {product.fabrics && product.fabrics.length > 0 && (
+                <div className="mb-6">
+                  <span className="text-[#6f6157] block mb-3 font-semibold uppercase tracking-wider text-xs">
+                    {language === "ar" ? "اختر القماش" : "Select Fabric"}
+                  </span>
+                  <div className="flex flex-wrap gap-4">
+                    {product.fabrics.map((fabric) => (
+                      <button
+                        key={fabric.id}
+                        onClick={() => setSelectedFabric(fabric.name)}
+                        className="group flex flex-col items-center gap-2"
+                      >
+                        <div
+                          className={cn(
+                            "relative w-12 h-12 rounded-lg border-2 transition-all duration-300 overflow-hidden",
+                            selectedFabric === fabric.name
+                              ? "border-primary ring-2 ring-primary/20 scale-110 shadow-lg"
+                              : "border-[#7B3F32]/15 hover:border-[#7B3F32]/35 shadow-sm"
+                          )}
+                        >
+                          <Image
+                            src={getImageUrl(fabric.imageUrl)}
+                            alt={fabric.name}
+                            fill
+                            className="object-cover"
+                          />
+                          {selectedFabric === fabric.name && (
+                            <div className="absolute inset-0 bg-primary/10 flex items-center justify-center">
+                              <div className="w-2 h-2 rounded-full bg-primary" />
+                            </div>
+                          )}
+                        </div>
+                        <span className={cn(
+                          "text-[10px] font-bold tracking-wide transition-colors uppercase",
+                          selectedFabric === fabric.name ? "text-primary" : "text-[#8c7b6f]"
+                        )}>
+                          {fabric.name}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Material */}
               {product.materialEn && product.materialEn.trim().length > 0 && (
                 <div className="mb-6">
@@ -539,8 +606,8 @@ export default function ProductDetailsPage() {
                       return;
                     }
                     try {
-                      await addItem(product.id, quantity, selectedColor || "Default")
-                      window.location.href = "/cart"
+                      await addItem(product.id, quantity, selectedColor || "Default", selectedFabric || "Default")
+                      // window.location.href = "/cart"
                     } catch (error) {
                       console.error("Failed to add to cart:", error)
                     }
@@ -551,8 +618,9 @@ export default function ProductDetailsPage() {
                   <ShoppingCart size={22} />
                   {(colors.length > 0 && !selectedColor)
                     ? "Select Color"
-                    : t("products.addToCart")}
-                </Button>
+                    : (product.fabrics && product.fabrics.length > 0 && !selectedFabric)
+                      ? "Select Fabric"
+                      : t("products.addToCart")}                </Button>
 
 
                 <Button

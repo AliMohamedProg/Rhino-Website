@@ -208,7 +208,7 @@ export function formatPrice(price: number | string): string {
 }
 
 // Public Slider API
-const API_BASE_URL = ((process.env.NEXT_PUBLIC_API_URL || "http://localhost:7282").replace(/\/+$/, "")) + "/api"
+const API_BASE_URL = ((process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")) + "/api"
 
 export interface PublicSlider {
   id: string
@@ -253,9 +253,9 @@ async function fetchFromApi(endpoint: string) {
     const url = `${API_BASE_URL}/${endpoint}`;
     const isServer = typeof window === "undefined";
 
-    // if (isServer && url.includes("localhost")) {
-    //   process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-    // }
+    if (isServer && url.includes("localhost")) {
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    }
 
     const response = await fetch(url, { cache: "no-store" });
 

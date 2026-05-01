@@ -4,11 +4,9 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
-import { useAdminLanguage } from "@/context/admin-language-context"
 import { cn } from "@/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import {
   Select,
   SelectContent,
@@ -194,7 +192,7 @@ const mapApiOrder = (apiOrder: ApiOrder): Order => {
 
     return {
       productId: item.itemId || item.ItemId || item.productId || item.ProductId || `item-${index}`,
-      productName: nameAr || nameEn || fallbackName || "Item",
+      productName: nameEn || nameAr || fallbackName || "Item",
       quantity: Number.isFinite(quantity) ? quantity : 0,
       price: Number.isFinite(price) ? price : 0,
     }
@@ -238,7 +236,6 @@ const mapApiOrder = (apiOrder: ApiOrder): Order => {
 export default function OrderDetailPage() {
   const params = useParams()
   const id = params.id as string
-  const { t } = useAdminLanguage()
 
   const [order, setOrder] = useState<Order | null>(null)
   const [status, setStatus] = useState<Order["status"]>("pending")
@@ -298,7 +295,7 @@ export default function OrderDetailPage() {
   }
 
   if (loading) {
-    return <div className="py-12 text-center text-[#7c6f65]">{t("common.loading")}</div>
+    return <div className="py-12 text-center text-[#7c6f65]">Loading...</div>
   }
 
   if (loadError) {
@@ -330,7 +327,7 @@ export default function OrderDetailPage() {
     return <span className={cn("inline-flex items-center justify-center rounded-xl px-2.5 py-1 text-xs font-semibold", config.className)}>{config.label}</span>
   }
 
-  const formatCurrency = (amount: number) => `${amount.toLocaleString()} ${t("common.egp")}`
+  const formatCurrency = (amount: number) => `${amount.toLocaleString()} EGP`
 
   const statusOptions = [
     { value: "pending", label: "Pending" },
@@ -406,14 +403,14 @@ export default function OrderDetailPage() {
         <div className="space-y-6 lg:col-span-2">
           <Card className="admin-card border-[#8f3f2a]/12">
             <CardHeader>
-              <CardTitle className="text-[#2f2219]">{t("orders.items")} ({order.items.length})</CardTitle>
+              <CardTitle className="text-[#2f2219]">Items ({order.items.length})</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {order.items.map((item, index) => (
                 <div key={index} className={cn("flex items-center justify-between py-3", index < order.items.length - 1 && "border-b border-[#8f3f2a]/10")}>
                   <div>
                     <p className="font-medium text-[#2f2219]">{item.productName}</p>
-                    <p className="text-sm text-[#7c6f65]">{t("cart.quantity")}: {item.quantity} x {formatCurrency(item.price)}</p>
+                    <p className="text-sm text-[#7c6f65]">Quantity: {item.quantity} x {formatCurrency(item.price)}</p>
                   </div>
                   <span className="font-semibold text-[#2f2219]">{formatCurrency(item.quantity * item.price)}</span>
                 </div>
@@ -423,30 +420,30 @@ export default function OrderDetailPage() {
 
           <Card className="admin-card border-[#8f3f2a]/12">
             <CardHeader>
-              <CardTitle className="text-[#2f2219]">{t("checkout.summary")}</CardTitle>
+              <CardTitle className="text-[#2f2219]">Summary</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-[#7c6f65]">{t("orders.subtotal")}</span>
+                <span className="text-[#7c6f65]">Subtotal</span>
                 <span>{formatCurrency(order.subtotal)}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-[#7c6f65]">{t("orders.shipping")}</span>
+                <span className="text-[#7c6f65]">Shipping</span>
                 <span>{order.shipping === 0 ? "Free" : formatCurrency(order.shipping)}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-[#7c6f65]">{t("orders.tax")}</span>
+                <span className="text-[#7c6f65]">Tax</span>
                 <span>{formatCurrency(order.tax)}</span>
               </div>
               {order.discount > 0 && (
                 <div className="flex items-center justify-between text-emerald-600">
-                  <span>{t("orders.discount")}</span>
+                  <span>Discount</span>
                   <span>-{formatCurrency(order.discount)}</span>
                 </div>
               )}
               <Separator />
               <div className="flex items-center justify-between text-lg font-semibold">
-                <span>{t("orders.total")}</span>
+                <span>Total</span>
                 <span>{formatCurrency(order.total)}</span>
               </div>
             </CardContent>
@@ -456,7 +453,7 @@ export default function OrderDetailPage() {
         <div className="space-y-6">
           <Card className="admin-card border-[#8f3f2a]/12">
             <CardHeader>
-              <CardTitle className="text-[#2f2219]">{t("orders.updateStatus")}</CardTitle>
+              <CardTitle className="text-[#2f2219]">Update Status</CardTitle>
             </CardHeader>
             <CardContent>
               <Select value={status} onValueChange={(value) => setStatus(value as Order["status"])}>
@@ -476,14 +473,14 @@ export default function OrderDetailPage() {
                 onClick={handleSaveStatus}
                 disabled={savingStatus || !isGuid(order.id)}
               >
-                {savingStatus ? "Saving..." : t("common.save")}
+                {savingStatus ? "Saving..." : "Save"}
               </Button>
             </CardContent>
           </Card>
 
           <Card className="admin-card border-[#8f3f2a]/12">
             <CardHeader>
-              <CardTitle className="text-[#2f2219]">{t("orders.customer")}</CardTitle>
+              <CardTitle className="text-[#2f2219]">Customer</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="font-medium text-[#2f2219]">{order.customer.name}</p>
@@ -500,7 +497,7 @@ export default function OrderDetailPage() {
 
           <Card className="admin-card border-[#8f3f2a]/12">
             <CardHeader>
-              <CardTitle className="text-[#2f2219]">{t("orders.shippingAddress")}</CardTitle>
+              <CardTitle className="text-[#2f2219]">Shipping Address</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex gap-2 text-[#7c6f65]">
@@ -516,7 +513,7 @@ export default function OrderDetailPage() {
 
           <Card className="admin-card border-[#8f3f2a]/12">
             <CardHeader>
-              <CardTitle className="text-[#2f2219]">{t("orders.paymentMethod")}</CardTitle>
+              <CardTitle className="text-[#2f2219]">Payment Method</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-[#7c6f65]">{order.paymentMethod || "N/A"}</p>

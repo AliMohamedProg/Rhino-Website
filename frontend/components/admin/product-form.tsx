@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select"
 import type { Product } from "@/lib/admin-data"
 import type { AdminCategoryDto } from "@/lib/admin-items"
-import { ArrowLeft, Upload, X } from "lucide-react"
+import { ArrowLeft, Upload, X, Plus } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { MOCK_BRANDS } from "@/lib/mock-admin-data"
@@ -28,8 +28,23 @@ interface ProductFormProps {
   mode: "create" | "edit"
 }
 
+interface FabricItem {
+  name: string
+  imageUrl: string
+  file?: File
+}
+
 export function ProductForm({ product, mode }: ProductFormProps) {
   const router = useRouter()
+
+  const buildInitialFabrics = (item?: Product): FabricItem[] => (
+    Array.isArray(item?.fabrics)
+      ? item!.fabrics.map((fabric) => ({
+          name: fabric.name || "",
+          imageUrl: fabric.imageUrl || "",
+        }))
+      : []
+  )
 
   const buildInitialImages = (item?: Product) => {
     const list = [item?.mainImage ?? "", ...(item?.images ?? [])]
@@ -54,12 +69,14 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     colorsEn: product?.colorsEn || "",
     materialEn: product?.materialEn || "",
     brandId: "",
+    fabrics: buildInitialFabrics(product),
   })
 
   const [styles, setStyles] = useState<AdminCategoryDto[]>([])
   const [categories, setCategories] = useState<AdminCategoryDto[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
+  const [isUploadingFabric, setIsUploadingFabric] = useState(false)
 
   useEffect(() => {
     if (!product) return
@@ -79,6 +96,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
       colorsEn: product.colorsEn || "",
       materialEn: product.materialEn || "",
       brandId: "",
+      fabrics: buildInitialFabrics(product),
     })
   }, [product])
 
@@ -152,6 +170,43 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     }))
   }
 
+  const handleAddFabric = () => {
+    setFormData((prev) => ({
+      ...prev,
+      fabrics: [...prev.fabrics, { name: "", imageUrl: "" }],
+    }))
+  }
+
+  const handleRemoveFabric = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      fabrics: prev.fabrics.filter((_, i) => i !== index),
+    }))
+  }
+
+  const handleFabricChange = (index: number, field: keyof FabricItem, value: string) => {
+    setFormData((prev) => {
+      const nextFabrics = [...prev.fabrics]
+      nextFabrics[index] = { ...nextFabrics[index], [field]: value }
+      return { ...prev, fabrics: nextFabrics }
+    })
+  }
+
+  const handleFabricImageUpload = async (index: number, file: File) => {
+    setIsUploadingFabric(true)
+    try {
+      const uploadRes = await ApiClient.upload("api/Upload", file)
+      const url = uploadRes?.url || uploadRes?.imageUrl || uploadRes
+      if (url) {
+        handleFabricChange(index, "imageUrl", url)
+      }
+    } catch (err) {
+      console.error("Failed to upload fabric image:", err)
+    } finally {
+      setIsUploadingFabric(false)
+    }
+  }
+
   const handleChange = (field: string, value: string | number | string[] | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
@@ -198,6 +253,17 @@ export function ProductForm({ product, mode }: ProductFormProps) {
 
       const discountAmount = Math.min(100, Math.max(0, Number(formData.discountAmount) || 0))
       const currentState = mode === "edit" && product?.status === "inactive" ? 0 : 1
+      const productId = product?.id || "00000000-0000-0000-0000-000000000000"
+      const fabrics = formData.fabrics
+        .map((fabric) => ({
+          name: (fabric.name || "").trim(),
+          imageUrl: (fabric.imageUrl || "").trim(),
+        }))
+        .filter((fabric) => fabric.name.length > 0 && fabric.imageUrl.length > 0)
+        .map((fabric) => ({
+          ...fabric,
+          productId,
+        }))
 
       if (!colorsValidationEn.valid) {
         alert("Please enter colors in this format: color,color,color")
@@ -206,7 +272,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
       }
 
       const payload = {
-        id: product?.id || "00000000-0000-0000-0000-000000000000",
+        id: productId,
         nameEn: formData.nameEn,
         nameAr: "",
         descriptionEn: formData.descriptionEn,
@@ -224,10 +290,11 @@ export function ProductForm({ product, mode }: ProductFormProps) {
         materialAr: "",
         mainImage,
         images: formData.images.map((url) => ({ imageUrl: url })),
+        fabrics,
         currentState,
       }
 
-      let result
+      let result: any
       if (mode === "create") {
         result = await ApiClient.post("api/admin/Item/add-item", payload)
       } else {
@@ -239,6 +306,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
         alert("Failed to save product. Please check that a valid Category is selected.")
         return
       }
+
 
       router.push("/admin/products")
     } catch (err) {
@@ -476,6 +544,80 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                   <span className="text-sm font-medium text-[#7c6f65]">{isUploading ? "Uploading..." : "Upload"}</span>
                 </label>
               </div>
+            </CardContent>
+          </Card>
+
+          <Card className="admin-card border-[#8f3f2a]/15">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0">
+              <CardTitle className="admin-title text-xl">Product Fabrics</CardTitle>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleAddFabric}
+                className="h-8 rounded-lg border-[#8f3f2a]/20 text-[#8f3f2a] hover:bg-[#f7ebe4]"
+              >
+                <Plus className="mr-1 h-4 w-4" /> Add Fabric
+              </Button>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {formData.fabrics.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-8 text-center">
+                  <p className="text-sm text-[#8b7d73]">No fabrics added yet.</p>
+                </div>
+              ) : (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {formData.fabrics.map((fabric, index) => (
+                    <div key={index} className="relative rounded-xl border border-[#8f3f2a]/10 bg-[#faf4ef] p-4">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleRemoveFabric(index)}
+                        className="absolute right-2 top-2 h-7 w-7 text-[#8b7d73] hover:text-red-600"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                      <div className="space-y-3">
+                        <div className="space-y-1">
+                          <Label className="text-xs font-semibold text-[#4b3d34]">Fabric Name</Label>
+                          <Input
+                            value={fabric.name}
+                            onChange={(e) => handleFabricChange(index, "name", e.target.value)}
+                            placeholder="e.g. Velvet, Cotton"
+                            className="admin-input h-9 text-sm"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <Label className="text-xs font-semibold text-[#4b3d34]">Fabric Image</Label>
+                          <div className="flex items-center gap-3">
+                            <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg border border-[#8f3f2a]/10 bg-white">
+                              {fabric.imageUrl ? (
+                                <Image src={getImageUrl(fabric.imageUrl)} alt="Fabric" fill className="object-cover" />
+                              ) : (
+                                <div className="flex h-full w-full items-center justify-center bg-[#f4ebe4]">
+                                  <Upload className="h-4 w-4 text-[#8f3f2a]/40" />
+                                </div>
+                              )}
+                            </div>
+                            <div className="flex-1">
+                              <Input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0]
+                                  if (file) handleFabricImageUpload(index, file)
+                                }}
+                                className="h-9 cursor-pointer text-xs file:mr-2 file:cursor-pointer file:border-0 file:bg-[#8f3f2a] file:px-2 file:py-1 file:text-xs file:font-semibold file:text-white"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>

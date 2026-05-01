@@ -1,11 +1,65 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import Link from "next/link"
-import { BRANDS } from "@/lib/mock-alliances"
+import { ApiClient } from "@/app/ApiHelper/ApiClient"
 import { Header } from "@/components/layout/Header"
 import { Footer } from "@/components/layout/Footer"
 
+type Alliance = {
+  id: string
+  name: string
+  imageUrl?: string
+  projectCount: number
+}
+
+const normalizeImageUrl = (value: unknown) => {
+  const normalized = String(value ?? "").trim()
+  return normalized && normalized.toLowerCase() !== "string" ? normalized : ""
+}
+
 export default function AlliancesPage() {
+  const [alliances, setAlliances] = useState<Alliance[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchAlliances = async () => {
+      try {
+        setLoading(true)
+        const [alliancesData, projectsData] = await Promise.all([
+          ApiClient.get<any[]>("api/Alliances"),
+          ApiClient.get<any[]>("api/Project"),
+        ])
+
+        const projectCounts = new Map<string, number>()
+        if (Array.isArray(projectsData)) {
+          for (const project of projectsData) {
+            const allianceId = String(project.allianceId ?? project.AllianceId ?? "").trim()
+            if (!allianceId) continue
+            projectCounts.set(allianceId, (projectCounts.get(allianceId) ?? 0) + 1)
+          }
+        }
+
+        const normalized = Array.isArray(alliancesData)
+          ? alliancesData.map((item) => ({
+              id: String(item.id ?? item.Id ?? ""),
+              name: String(item.name ?? item.Name ?? ""),
+              imageUrl: normalizeImageUrl(item.imageUrl ?? item.ImageUrl),
+              projectCount: projectCounts.get(String(item.id ?? item.Id ?? "").trim()) ?? 0,
+            }))
+          : []
+        setAlliances(normalized.filter((item) => item.id && item.name))
+      } catch (err) {
+        console.error("Failed to fetch alliances:", err)
+        setAlliances([])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchAlliances()
+  }, [])
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Header />
@@ -29,26 +83,42 @@ export default function AlliancesPage() {
 
           {/* Brands Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-y-20 gap-x-12">
-            {BRANDS.map((brand) => (
-              <Link 
-                key={brand.id} 
-                href={`/alliances/${brand.id}`}
-                className="group flex flex-col items-center gap-8 transition-transform hover:scale-105"
-              >
-                {/* Brand Logo Text Placeholder/Style */}
-                <div className="h-16 flex items-center justify-center">
-                  <span className="text-2xl md:text-3xl font-serif text-mahogany/40 group-hover:text-mahogany transition-colors tracking-tighter">
-                    {brand.logoText}
-                  </span>
-                </div>
-                
-                <div className="text-center">
-                  <span className="text-[10px] tracking-[0.2em] font-bold text-mahogany uppercase group-hover:tracking-[0.3em] transition-all">
-                    {brand.name}
-                  </span>
-                </div>
-              </Link>
-            ))}
+            {loading ? (
+              <div className="col-span-full text-center text-sm text-mahogany/60">Loading alliances...</div>
+            ) : alliances.length > 0 ? (
+              alliances.map((alliance) => (
+                <Link
+                  key={alliance.id}
+                  href={`/alliances/${alliance.id}`}
+                  className="group flex flex-col items-center gap-8 transition-transform hover:scale-105"
+                >
+                  <div className="h-16 flex items-center justify-center">
+                    {alliance.imageUrl ? (
+                      <img
+                        src={alliance.imageUrl}
+                        alt={alliance.name}
+                        className="h-16 w-auto max-w-[160px] object-contain opacity-70 transition-opacity group-hover:opacity-100"
+                      />
+                    ) : (
+                      <span className="text-2xl md:text-3xl font-serif text-mahogany/40 group-hover:text-mahogany transition-colors tracking-tighter">
+                        {alliance.name}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="text-center">
+                    <span className="text-[10px] tracking-[0.2em] font-bold text-mahogany uppercase group-hover:tracking-[0.3em] transition-all">
+                      {alliance.name}
+                    </span>
+                    <p className="mt-2 text-[10px] text-mahogany/60 uppercase tracking-[0.15em]">
+                      {alliance.projectCount} {alliance.projectCount === 1 ? "Project" : "Projects"}
+                    </p>
+                  </div>
+                </Link>
+              ))
+            ) : (
+              <div className="col-span-full text-center text-sm text-mahogany/60">No alliances available.</div>
+            )}
           </div>
         </div>
       </main>

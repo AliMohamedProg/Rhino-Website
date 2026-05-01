@@ -5,10 +5,11 @@ import {
   ProductDto,
   OrderDto,
   SliderDto,
-  UserMeDto
+  UserMeDto,
+  FabricDto
 } from "./types";
 
-const BASE_URL = (process.env.NEXT_PUBLIC_API_URL || "https://rhino-web.runasp.net").replace(/\/+$/, "");
+const BASE_URL = (process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "");
 
 function buildUrl(path: string) {
   const cleanPath = path.replace(/^\/+/, "");
@@ -134,6 +135,11 @@ export const ApiClient = {
     create: (data: SliderDto) => ApiClient.post<SliderDto>("api/Slider", data),
     update: (id: string, data: SliderDto) => ApiClient.put<SliderDto>(`api/Slider/${id}`, data),
     delete: (id: string) => ApiClient.delete<any>(`api/Slider/${id}`),
+  },
+
+  // Fabric Endpoints
+  fabric: {
+    addFabric: (data: FabricDto) => ApiClient.post<FabricDto>("api/admin/fabric/add-fabric", data),
   },
 
   upload: async (urlOrFile: string | File, maybeFile?: File) => {

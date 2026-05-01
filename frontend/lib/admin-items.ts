@@ -5,6 +5,13 @@ export interface AdminImageDto {
   productId?: string
 }
 
+export interface AdminFabricDto {
+  id?: string
+  name?: string
+  imageUrl?: string
+  productId?: string
+}
+
 export interface AdminItemDto {
   id: string
   nameAr: string
@@ -30,6 +37,7 @@ export interface AdminItemDto {
   materialAr?: string | null
   createdDate?: string | null
   isSeller?: boolean
+  fabrics?: AdminFabricDto[] | null
 }
 
 export interface AdminCategoryDto {
@@ -96,5 +104,13 @@ export const mapAdminItemToProduct = (
     mainImage: item.mainImage ?? imageUrls[0] ?? "",
     discountAmount: discount,
     isSeller: item.isSeller ?? false,
+    fabrics: Array.isArray(item.fabrics)
+      ? item.fabrics.map((fabric) => ({
+          id: fabric.id ?? "",
+          name: fabric.name ?? "",
+          imageUrl: fabric.imageUrl ?? "",
+          productId: fabric.productId,
+        }))
+      : [],
   }
 }

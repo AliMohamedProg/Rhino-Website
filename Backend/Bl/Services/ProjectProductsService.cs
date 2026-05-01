@@ -11,9 +11,9 @@ using Domains;
 
 namespace Bl.Services
 {
-    public class ProjectsService : BaseService<TbProjects, ProjectsDto>, IProjects
+    public class ProjectProductsService : BaseService<TbProjectProducts, ProjectProductsDto>, IProjectProducts
     {
-        public ProjectsService(ITableRepository<TbProjects> _repository, IMapper _Mapper, IUserService userService)
+        public ProjectProductsService(ITableRepository<TbProjectProducts> _repository, IMapper _Mapper, IUserService userService)
             : base(_repository, _Mapper, userService)
         {
         }

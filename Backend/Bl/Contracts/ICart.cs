@@ -9,7 +9,7 @@ namespace Bl.Contracts
     public interface ICart : IBaseService<TbCart, CartDto>
     {
         Task<CartDto> GetActiveCart(Guid userId);
-        Task<bool> AddToCart(Guid userId, Guid productId, int quantity, string color);
+        Task<bool> AddToCart(Guid userId, Guid productId, int quantity, string color, string fabric);
         Task<CartItemDto?> GetCartItem(Guid userId, Guid productId);
         Task<bool> UpdateCartItem(Guid userId, Guid productId, int quantity);
         Task<bool> DeleteCart(Guid userId);

@@ -23,7 +23,7 @@ namespace Apis.Controllers
         // GET: api/Slider
         [HttpGet]
         public ActionResult<IEnumerable<AlliancesDto>> Get()
-        {
+        {   
             try
             {
                 var alliances = _alliancesService.GetAll();
@@ -79,7 +79,7 @@ namespace Apis.Controllers
         {
             try
             {
-                _alliancesService.Delete(id);
+                _alliancesService.MarkAsDeleted(id);
                 return true;
             }
             catch (Exception ex)

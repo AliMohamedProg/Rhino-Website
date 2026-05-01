@@ -16,7 +16,7 @@ export interface CartItem {
 
 interface CartContextType {
   items: CartItem[]
-  addItem: (productId: string, quantity: number, color?: string) => Promise<void>
+  addItem: (productId: string, quantity: number, color?: string, fabrics?: string) => Promise<void>
   removeItem: (productId: string) => Promise<void>
   updateQuantity: (productId: string, quantity: number) => Promise<void>
   clearCart: () => void
@@ -61,14 +61,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
     refreshCart()
   }, [])
 
-  const addItem = async (productId: string, quantity: number, color?: string) => {
-    console.log(`[CartContext] Adding item: ${productId}, qty: ${quantity}, color: ${color}`);
+  const addItem = async (productId: string, quantity: number, color?: string, fabric?: string) => {
+    console.log(`[CartContext] Adding item: ${productId}, qty: ${quantity}, color: ${color}, fabrics: ${fabric}`);
     try {
-      await ApiClient.post("api/Cart/add-to-cart", {
+      const payload: Record<string, string | number> = {
         productId,
         quantity: quantity,
         Color: color || "Default"
-      })
+      }
+
+      if (fabric) {
+        payload.Fabric = fabric
+      }
+
+      await ApiClient.post("api/Cart/add-to-cart", payload)
       console.log(`[CartContext] Successfully added item ${productId}`);
       await refreshCart()
     } catch (error: any) {

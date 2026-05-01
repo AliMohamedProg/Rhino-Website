@@ -98,6 +98,40 @@ namespace DAL.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Domains.TbAlliances", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CurrentState")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TbAlliances");
+                });
+
             modelBuilder.Entity("Domains.TbCart", b =>
                 {
                     b.Property<Guid>("Id")
@@ -137,7 +171,6 @@ namespace DAL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Color")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("CreatedBy")
@@ -148,6 +181,9 @@ namespace DAL.Migrations
 
                     b.Property<int>("CurrentState")
                         .HasColumnType("int");
+
+                    b.Property<string>("Fabric")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Image")
                         .IsRequired()
@@ -552,6 +588,118 @@ namespace DAL.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("TbOrderItems");
+                });
+
+            modelBuilder.Entity("Domains.TbProjectImages", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CurrentState")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("TbProjectImages");
+                });
+
+            modelBuilder.Entity("Domains.TbProjectProducts", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CurrentState")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("TbProjectProducts");
+                });
+
+            modelBuilder.Entity("Domains.TbProjects", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AllianceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CurrentState")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MainImage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AllianceId");
+
+                    b.ToTable("TbProjects");
                 });
 
             modelBuilder.Entity("Domains.TbRefreshTokens", b =>
@@ -971,6 +1119,47 @@ namespace DAL.Migrations
                     b.Navigation("Order");
                 });
 
+            modelBuilder.Entity("Domains.TbProjectImages", b =>
+                {
+                    b.HasOne("Domains.TbProjects", "Project")
+                        .WithMany("Images")
+                        .HasForeignKey("ProjectId")
+                        .IsRequired()
+                        .HasConstraintName("FK_TbProjectImages_TbProjects");
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("Domains.TbProjectProducts", b =>
+                {
+                    b.HasOne("Domains.TbItem", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .IsRequired()
+                        .HasConstraintName("FK_TbProjectProducts_TbItems");
+
+                    b.HasOne("Domains.TbProjects", "Project")
+                        .WithMany("TbProjectProducts")
+                        .HasForeignKey("ProjectId")
+                        .IsRequired()
+                        .HasConstraintName("FK_TbProjectProducts_TbProjects");
+
+                    b.Navigation("Item");
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("Domains.TbProjects", b =>
+                {
+                    b.HasOne("Domains.TbAlliances", "Alliance")
+                        .WithMany("Projects")
+                        .HasForeignKey("AllianceId")
+                        .IsRequired()
+                        .HasConstraintName("FK_TbProjects_TbBrands");
+
+                    b.Navigation("Alliance");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -1022,6 +1211,11 @@ namespace DAL.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domains.TbAlliances", b =>
+                {
+                    b.Navigation("Projects");
+                });
+
             modelBuilder.Entity("Domains.TbCart", b =>
                 {
                     b.Navigation("Items");
@@ -1044,6 +1238,13 @@ namespace DAL.Migrations
             modelBuilder.Entity("Domains.TbOrder", b =>
                 {
                     b.Navigation("TbOrderItems");
+                });
+
+            modelBuilder.Entity("Domains.TbProjects", b =>
+                {
+                    b.Navigation("Images");
+
+                    b.Navigation("TbProjectProducts");
                 });
 
             modelBuilder.Entity("Domains.TbStyles", b =>

@@ -65,7 +65,7 @@ namespace Apis.Controllers
 
             var userId = _userService.GetLoggedInUser();
 
-            var cart = await _cartService.AddToCart(userId, request.ProductId, request.Quantity, request.Color);
+            var cart = await _cartService.AddToCart(userId, request.ProductId, request.Quantity, request.Color,request.Fabric);
 
             if (cart == null)
                 return NotFound(new { message = "Product not found" });

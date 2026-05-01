@@ -6,7 +6,7 @@ using Domains;
 
 namespace Bl.Contracts
 {
-    public interface IProjects : IBaseService<TbProjects, ProjectsDto>
+    public interface IProjectImages : IBaseService<TbProjectImages, ProjectImagesDto>
     {
     }
 }

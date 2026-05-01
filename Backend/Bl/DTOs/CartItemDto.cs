@@ -15,6 +15,8 @@ namespace Bl.DTOs
         public decimal Total { get; set; }
         public Guid UserId { get; set; }
         public string Color { get; set; }
+        public string Fabric { get; set; }
+
 
     }
 }

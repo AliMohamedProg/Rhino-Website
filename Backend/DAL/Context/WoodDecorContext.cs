@@ -25,7 +25,11 @@ public partial class WoodDecorContext : IdentityDbContext<ApplicationUser>
     
     public virtual DbSet<TbImage> TbImages { get; set; }
    public virtual DbSet<TbFabrics> TbFabrics { get; set; }
+   public virtual DbSet<TbAlliances> TbAlliances { get; set; }
     public virtual DbSet<TbItem> TbItems { get; set; }
+    public virtual DbSet<TbProjects> TbProjects { get; set; }
+    public virtual DbSet<TbProjectImages> TbProjectImages { get; set; }
+    public virtual DbSet<TbProjectProducts> TbProjectProducts { get; set; }
 
     public virtual DbSet<TbOrder> TbOrders { get; set; }
 
@@ -46,7 +50,7 @@ public partial class WoodDecorContext : IdentityDbContext<ApplicationUser>
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.UseSqlServer(
-                "Server=db48236.public.databaseasp.net; Database=db48236; User Id=db48236; Password=Pt7+8!fC%H6j; Encrypt=False; MultipleActiveResultSets=True;");
+                "Server=db48236.public.databaseasp.net;User Id=db48236; Password=Pt7+8!fC%H6j; Encrypt=False; MultipleActiveResultSets=True;");
         }
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -57,6 +61,47 @@ public partial class WoodDecorContext : IdentityDbContext<ApplicationUser>
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.NameAr).HasMaxLength(50);
             entity.Property(e => e.NameEn).HasMaxLength(50);
+        });
+        
+
+        modelBuilder.Entity<TbProjects>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Name).HasMaxLength(100);
+
+            entity.HasOne(p => p.Alliance)
+                .WithMany(b => b.Projects)
+                .HasForeignKey(p => p.AllianceId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_TbProjects_TbBrands");
+        });
+
+        modelBuilder.Entity<TbProjectImages>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedNever();
+
+            entity.HasOne(i => i.Project)
+                .WithMany(p => p.Images)
+                .HasForeignKey(i => i.ProjectId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_TbProjectImages_TbProjects");
+        });
+
+        modelBuilder.Entity<TbProjectProducts>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedNever();
+
+            entity.HasOne(pp => pp.Project)
+                .WithMany(p => p.TbProjectProducts)
+                .HasForeignKey(pp => pp.ProjectId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_TbProjectProducts_TbProjects");
+
+            entity.HasOne(pp => pp.Item)
+                .WithMany()
+                .HasForeignKey(pp => pp.ItemId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_TbProjectProducts_TbItems");
         });
 
         modelBuilder.Entity<TbImage>(entity =>

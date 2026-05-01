@@ -34,6 +34,7 @@ export interface ProductDto {
   rating?: number;
   reviewsCount?: number;
   specifications?: SpecificationDto[] | null;
+  fabrics?: FabricDto[] | null;
 }
 
 export interface SpecificationDto {
@@ -75,4 +76,13 @@ export interface UserMeDto {
   fullName: string;
   email: string;
   role: string;
+}
+
+export interface FabricDto {
+  id?: string;
+  currentState?: number;
+  createdDate?: string;
+  name?: string | null;
+  imageUrl?: string | null;
+  productId?: string;
 }

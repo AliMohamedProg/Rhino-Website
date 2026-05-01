@@ -8,7 +8,6 @@ import { useAdminLanguage } from "@/context/admin-language-context"
 import { cn } from "@/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import type { Product } from "@/lib/admin-data"
 import { ApiClient } from "@/app/ApiHelper/ApiClient"
 import { mapAdminItemToProduct, type AdminCategoryDto, type AdminItemDto } from "@/lib/admin-items"
@@ -17,7 +16,7 @@ import { ArrowLeft, ArrowRight, Pencil, Trash2 } from "lucide-react"
 export default function ProductDetailPage() {
   const params = useParams()
   const id = params.id as string
-  const { t, language, dir } = useAdminLanguage()
+  const { dir } = useAdminLanguage()
 
   const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
@@ -53,7 +52,7 @@ export default function ProductDetailPage() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-muted-foreground animate-pulse">
-        {t("common.loading")}
+        Loading...
       </div>
     )
   }
@@ -61,16 +60,16 @@ export default function ProductDetailPage() {
   if (!product) {
     return (
       <div className="flex flex-col items-center justify-center py-12">
-        <h2 className="text-xl font-semibold">{language === "ar" ? "المنتج غير موجود" : "Product not found"}</h2>
+        <h2 className="text-xl font-semibold">Product not found</h2>
         <Button asChild className="mt-4">
-          <Link href="/admin/products">{t("common.back")}</Link>
+          <Link href="/admin/products">Back</Link>
         </Button>
       </div>
     )
   }
 
   const formatCurrency = (amount: number) => {
-    return `${amount.toLocaleString()} ${t("common.egp")}`
+    return `${amount.toLocaleString()} EGP`
   }
 
   return (
@@ -92,7 +91,7 @@ export default function ProductDetailPage() {
           </Button>
           <div className={cn(dir === "rtl" && "text-right")}>
             <h1 className="text-3xl font-bold tracking-tight text-[#2f2219]">
-              {language === "ar" ? product.nameAr : product.nameEn}
+              {product.nameEn}
             </h1>
             <p className="text-[#8b7d73] font-medium mt-1">{product.sku}</p>
           </div>
@@ -101,12 +100,12 @@ export default function ProductDetailPage() {
           <Button variant="outline" asChild className="rounded-xl border-[#7B3F32]/20 hover:bg-[#A6ACA2]/10 text-[#7B3F32] h-11 font-bold shadow-sm">
             <Link href={`/admin/products/${id}/edit`} className={cn("flex items-center gap-2", dir === "rtl" && "flex-row-reverse")}>
               <Pencil className="h-4 w-4" />
-              {t("common.edit")}
+              Edit
             </Link>
           </Button>
           <Button variant="destructive" className="rounded-xl h-11 font-bold bg-red-500/10 text-red-600 hover:bg-red-500 hover:text-white shadow-none transition-all">
             <Trash2 className={cn("h-4 w-4", dir === "rtl" ? "ml-2" : "mr-2")} />
-            {t("products.deleteProduct")}
+            Delete Product
           </Button>
         </div>
       </div>
@@ -118,7 +117,7 @@ export default function ProductDetailPage() {
           <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
             <CardHeader>
               <CardTitle className={cn("text-[#2f2219]", dir === "rtl" && "text-right")}>
-                {t("products.images")}
+                Images
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -136,7 +135,7 @@ export default function ProductDetailPage() {
           <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
             <CardHeader>
               <CardTitle className={cn("text-[#2f2219]", dir === "rtl" && "text-right")}>
-                {t("products.description")}
+                Description
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -155,22 +154,22 @@ export default function ProductDetailPage() {
           <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
             <CardHeader>
               <CardTitle className={cn("text-[#2f2219]", dir === "rtl" && "text-right")}>
-                {language === "ar" ? "التسعير" : "Pricing"}
+                Pricing
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className={cn("flex items-center justify-between", dir === "rtl" && "flex-row-reverse")}>
-                <span className="text-muted-foreground">{t("products.price")}</span>
+                <span className="text-muted-foreground">Price</span>
                 <span className="font-semibold">{formatCurrency(product.price)}</span>
               </div>
               {product.originalPrice && (
                 <div className={cn("flex items-center justify-between", dir === "rtl" && "flex-row-reverse")}>
-                  <span className="text-muted-foreground">{t("products.originalPrice")}</span>
+                  <span className="text-muted-foreground">Original Price</span>
                   <span className="line-through text-muted-foreground">{formatCurrency(product.originalPrice)}</span>
                 </div>
               )}
               <div className={cn("flex items-center justify-between", dir === "rtl" && "flex-row-reverse")}>
-                <span className="text-muted-foreground">{t("products.stock")}</span>
+                <span className="text-muted-foreground">Stock</span>
                 <span className={cn("font-medium", product.stock <= 10 && "text-destructive")}>
                   {product.stock}
                 </span>
@@ -182,24 +181,24 @@ export default function ProductDetailPage() {
           <Card className="border-[#7B3F32]/10 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-visible">
             <CardHeader>
               <CardTitle className={cn("text-[#2f2219]", dir === "rtl" && "text-right")}>
-                {language === "ar" ? "التنظيم" : "Organization"}
+                Organization
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className={cn("flex items-center justify-between", dir === "rtl" && "flex-row-reverse")}>
-                <span className="text-muted-foreground">{t("products.category")}</span>
+                <span className="text-muted-foreground">Category</span>
                 <span>{product.category}</span>
               </div>
               {product.dimensions && product.dimensions.trim().length > 0 && (
                 <div className={cn("flex items-center justify-between", dir === "rtl" && "flex-row-reverse")}>
-                  <span className="text-muted-foreground">{language === "ar" ? "الأبعاد" : "Dimensions"}</span>
+                  <span className="text-muted-foreground">Dimensions</span>
                   <span>{product.dimensions}</span>
                 </div>
               )}
               {product.colorsEn && product.colorsEn.trim().length > 0 && (
                 <div className="space-y-2">
                   <span className="text-muted-foreground">
-                    {language === "ar" ? "الألوان" : "Colors"}
+                    Colors
                   </span>
                   <div className={cn("flex flex-wrap gap-2", dir === "rtl" && "justify-end")}>
                     {product.colorsEn.split(",").map((color, index) => (
@@ -216,10 +215,10 @@ export default function ProductDetailPage() {
               {product.materialEn && product.materialEn.trim().length > 0 && (
                 <div className="space-y-1">
                   <span className="text-muted-foreground block">
-                    {language === "ar" ? "المادة" : "Material"}
+                    Material
                   </span>
                   <span className={cn("block", dir === "rtl" && "text-right")}>
-                    {language === "ar" ? product.materialAr : product.materialEn}
+                    {product.materialEn}
                   </span>
                 </div>
               )}

@@ -1,5 +1,5 @@
 // API Base URL
-const API_BASE_URL = ((process.env.NEXT_PUBLIC_API_URL || "https://rhino-web.runasp.net").replace(/\/+$/, "")) + "/api/admin"
+const API_BASE_URL = ((process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")) + "/api/admin"
 
 // Slider Interface
 export interface Slider {
@@ -75,6 +75,13 @@ export async function deleteSlider(sliderId: string): Promise<boolean> {
 
 // Mock data for admin panel - will be replaced with API calls later
 
+export interface Fabric {
+  id: string
+  name: string
+  imageUrl: string
+  productId?: string
+}
+
 export interface Product {
   id: string
   nameEn: string
@@ -102,6 +109,7 @@ export interface Product {
   createdDate: string
   updatedAt: string
   isSeller?: boolean
+  fabrics?: Fabric[]
 }
 
 export interface Order {

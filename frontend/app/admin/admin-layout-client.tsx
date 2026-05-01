@@ -25,6 +25,7 @@ import {
   ChevronRight,
   LayoutGrid,
   Building2,
+  Briefcase,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -37,7 +38,6 @@ const navSections = [
     label: "Commerce",
     items: [
       { title: "Products", href: "/admin/products", icon: Package },
-      { title: "fabrics", href: "/admin/fabrics", icon: ImageIcon },
       { title: "Orders", href: "/admin/orders", icon: ShoppingCart },
       { title: "Styles", href: "/admin/styles", icon: FolderTree },
       { title: "Categories", href: "/admin/categories", icon: LayoutGrid },
@@ -50,6 +50,7 @@ const navSections = [
       { title: "Users", href: "/admin/users", icon: Users },
       { title: "Reviews", href: "/admin/reviews", icon: Star },
       { title: "Alliances", href: "/admin/alliances", icon: Building2 },
+      { title: "Projects", href: "/admin/projects", icon: Briefcase },
     ],
   },
   {

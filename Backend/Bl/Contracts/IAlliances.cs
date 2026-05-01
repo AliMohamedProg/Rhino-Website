@@ -6,13 +6,7 @@ using Domains;
 
 namespace Bl.Contracts
 {
-    public interface ICart : IBaseService<TbCart, CartDto>
+    public interface IAlliances : IBaseService<TbAlliances, AlliancesDto>
     {
-        Task<CartDto> GetActiveCart(Guid userId);
-        Task<bool> AddToCart(Guid userId, Guid productId, int quantity, string color, string fabric);
-        Task<CartItemDto?> GetCartItem(Guid userId, Guid productId);
-        Task<bool> UpdateCartItem(Guid userId, Guid productId, int quantity);
-        Task<bool> DeleteCart(Guid userId);
-        Task<bool> DeleteCartItem(Guid userId, Guid itemId);
     }
 }

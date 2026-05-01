@@ -16,15 +16,21 @@ namespace Bl.Mapping
         {
                 CreateMap<TbCategory, CategoryDto>().ForMember(dest => dest.ProductsCount,
                opt => opt.MapFrom(src => src.TbItems.Count()))
-
                 .ReverseMap();
                 
+                CreateMap<TbProjects, ProjectsDto>().ReverseMap();
+                CreateMap<TbProjectImages, ProjectImagesDto>().ReverseMap();
+                CreateMap<TbProjectProducts, ProjectProductsDto>().ReverseMap();
+
+                CreateMap<TbAlliances, AlliancesDto>().ReverseMap();
                 CreateMap<TbFabrics,FabricsDto>().ReverseMap();
             CreateMap<TbImage, ImageDto>().ReverseMap();
             CreateMap<TbItem, ItemDto>()
                 .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.TbImages))
+                .ForMember(dest => dest.Fabrics, opt => opt.MapFrom(src => src.TbFabrics))
                 .ReverseMap()
-                .ForMember(dest => dest.TbImages, opt => opt.MapFrom(src => src.Images));
+                .ForMember(dest => dest.TbImages, opt => opt.MapFrom(src => src.Images))
+                .ForMember(dest => dest.TbFabrics, opt => opt.MapFrom(src => src.Fabrics));
             CreateMap<TbOrder, OrderDto>().ReverseMap();
             CreateMap<TbOrderItem, OrderItemDto>()
                 .ForMember(dest => dest.NameEn, opt => opt.MapFrom(src =>

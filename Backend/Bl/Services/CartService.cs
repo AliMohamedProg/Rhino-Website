@@ -15,7 +15,7 @@ public class CartService : BaseService<TbCart, CartDto>, ICart
         _cartRepository = cartRepository;
     }
 
-    public async Task<bool> AddToCart(Guid userId, Guid productId, int quantity, string color)
+    public async Task<bool> AddToCart(Guid userId, Guid productId, int quantity, string color, string fabric)
     {
         var cart = await _cartRepository.GetActiveCartWithItemsAsync(userId);
 
