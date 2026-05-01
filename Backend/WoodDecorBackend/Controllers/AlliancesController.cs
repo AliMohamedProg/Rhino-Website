@@ -9,27 +9,27 @@ namespace Apis.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FabricsController : ControllerBase
+    public class AlliancesController : ControllerBase
     {
-        private readonly IFabrics _fabricsService;
+        private readonly IAlliances _alliancesService;
 
-        public FabricsController(IFabrics fabricsService)
+        public AlliancesController(IAlliances alliaceService)
         {
-            _fabricsService = fabricsService;
+            _alliancesService = alliaceService;
         }
 
         // GET: api/Slider
         [HttpGet]
-        public ActionResult<IEnumerable<FabricsDto>> Get()
+        public ActionResult<IEnumerable<AlliancesDto>> Get()
         {
             try
             {
-                var fabrics = _fabricsService.GetAll();
-                if (fabrics == null)
+                var alliances = _alliancesService.GetAll();
+                if (alliances == null)
                 {
-                    return Ok(new List<FabricsDto>());
+                    return Ok(new List<AlliancesDto>());
                 }
-                return Ok(fabrics);
+                return Ok(alliances);
             }
             catch (Exception ex)
             {
