@@ -47,9 +47,9 @@ namespace Apis.Controllers
             var item = await _cartService.GetCartItem(userId, productId);
             
             if (item == null)
-               return NotFound();
+                return NotFound();
 
-           return Ok(item);
+            return Ok(item);
         }
 
         // =============================
@@ -73,11 +73,12 @@ namespace Apis.Controllers
             return Ok(cart);
         }
 
+        
         // =============================
         // PATCH: api/cart/items/{productId}
         // =============================
         [HttpPatch("items/{productId:guid}")]
-        public async Task<ActionResult<CartDto>> UpdateCartItem(
+        public async Task<ActionResult<CartDto>> UpdateCartItem( 
             Guid productId,
             [FromBody] UpdateCartItemRequest request)
         {

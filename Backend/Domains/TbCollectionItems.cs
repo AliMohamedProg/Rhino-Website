@@ -1,11 +1,11 @@
 namespace Domains;
 
-public class TbProjectProducts : BaseTable
+public class TbCollectionItems : BaseTable
 {
     public Guid ItemId { get; set; }
-    public Guid ProjectId { get; set; }
+    public Guid CollectionId { get; set; }
 
     // Nav properties
-    public TbProjects Project { get; set; }
+    public TbCollections Collection { get; set; }
     public TbItem Item { get; set; }
 }

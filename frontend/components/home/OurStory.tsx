@@ -17,21 +17,18 @@ export function OurStory() {
             </div>
 
             <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center text-center">
-                <span className="text-[10px] tracking-[0.5em] font-bold text-white/80 uppercase mb-6">
-                    ESTABLISHED 2024
-                </span>
-                
+
                 <h2 className="text-6xl md:text-8xl font-serif text-white mb-10 italic">
                     Our Story
                 </h2>
 
                 <p className="text-xl md:text-2xl text-white/90 font-medium italic leading-relaxed mb-16 max-w-3xl px-4">
-                    "Founded on the belief that beauty lies in the simplicity of form and luxury. Every piece is built to be a statement of craftsmanship, style, and a timeless piece of art."
+                    "Journey from imagination to reality.” that's how we turn wood into the elite design and unique.
                 </p>
 
-                <button className="bg-white text-mahogany hover:bg-mahogany hover:text-white transition-all duration-500 px-14 py-6 rounded-full text-[10px] font-bold tracking-[0.4em] uppercase shadow-2xl hover:scale-105 active:scale-95">
+                {/* <button className="bg-white text-mahogany hover:bg-mahogany hover:text-white transition-all duration-500 px-14 py-6 rounded-full text-[10px] font-bold tracking-[0.4em] uppercase shadow-2xl hover:scale-105 active:scale-95">
                     Read Our Story
-                </button>
+                </button> */}
             </div>
         </section>
     );

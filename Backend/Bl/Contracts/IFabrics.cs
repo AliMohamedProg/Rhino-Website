@@ -6,7 +6,7 @@ using Domains;
 
 namespace Bl.Contracts
 {
-    public interface IFabrics : IBaseService<TbFabrics , FabricsDto>
+    public interface IFabrics : IBaseService<TbItemFabrics , ItemFabricsDto>
     {
     }
 }

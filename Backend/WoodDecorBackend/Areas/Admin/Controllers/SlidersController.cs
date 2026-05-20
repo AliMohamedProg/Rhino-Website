@@ -34,8 +34,7 @@ namespace Apis.Areas.Admin.Controllers
             {
                 var category = new SliderDto()
                 {
-                    TitleAr = categoryDto.TitleAr,
-                    TitleEn = categoryDto.TitleEn,
+                    Title = categoryDto.Title,
                     ImageUrl = categoryDto.ImageUrl,
                     CurrentState =1,
                     Id = Guid.NewGuid(),

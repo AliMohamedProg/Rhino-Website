@@ -1,19 +1,12 @@
 
 export interface Category {
   id: string
-  nameEn: string
+  name: string
   imageUrl?: string
 }
 
-export const MOCK_CATEGORIES: Category[] = [
-  { id: "cat-1", nameEn: "Living Room", imageUrl: "/art-living-1.png" },
-  { id: "cat-2", nameEn: "Bedroom", imageUrl: "/art-living-3.png" },
-  { id: "cat-3", nameEn: "Dining Room", imageUrl: "/art-living-2.png" },
-  { id: "cat-4", nameEn: "Office", imageUrl: "/art-living-3.png" },
-  { id: "cat-5", nameEn: "Outdoor", imageUrl: "/green-sofa.png" },
-]
 
-export interface Brand {
+export interface Alliance {
   id: string
   name: string
   logo: string
@@ -21,19 +14,3 @@ export interface Brand {
   categories: string[]
 }
 
-export const MOCK_BRANDS: Brand[] = [
-  {
-    id: "brand-1",
-    name: "Rhino Design",
-    logo: "/rhino-logo.png",
-    description: "Premium handcrafted furniture with a focus on sustainable materials and timeless design.",
-    categories: ["Living Room", "Bedroom"]
-  },
-  {
-    id: "brand-2",
-    name: "Lignum",
-    logo: "/lignum-logo.png",
-    description: "Contemporary wooden furniture that blends traditional craftsmanship with modern aesthetics.",
-    categories: ["Dining Room", "Office"]
-  }
-]

@@ -49,7 +49,7 @@ export default function StylesPage() {
 
   useEffect(() => {
     if (editingCategory) {
-      setFormData({ nameEn: editingCategory.nameEn, description: "" })
+      setFormData({ nameEn: editingCategory.name, description: "" })
       setImageUrl(editingCategory.imageUrl || "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop")
     } else if (dialogOpen) {
       setFormData({ nameEn: "", description: "" })
@@ -67,9 +67,9 @@ export default function StylesPage() {
         finalImageUrl = uploadRes.url
       }
       if (editingCategory) {
-        await ApiClient.post("api/admin/Styles/edit-style", { id: editingCategory.id, nameEn: formData.nameEn, nameAr: "", imageUrl: finalImageUrl, currentState: 1 })
+        await ApiClient.post("api/admin/Styles/edit-style", { id: editingCategory.id, name: formData.nameEn, imageUrl: finalImageUrl, currentState: 1 })
       } else {
-        await ApiClient.post("api/admin/Styles/add-style", { nameEn: formData.nameEn, nameAr: "", imageUrl: finalImageUrl, currentState: 1 })
+        await ApiClient.post("api/admin/Styles/add-style", { name: formData.nameEn, imageUrl: finalImageUrl, currentState: 1 })
       }
       setDialogOpen(false)
       fetchCategories()
@@ -116,11 +116,11 @@ export default function StylesPage() {
     {
       key: "image", header: "Image", render: (category: Category) => (
         <div className="h-12 w-12 rounded-lg overflow-hidden bg-slate-100 flex items-center justify-center">
-          {category.imageUrl ? <img src={category.imageUrl} alt={category.nameEn} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop" }} /> : <span className="text-xs text-slate-400">No Img</span>}
+          {category.imageUrl ? <img src={category.imageUrl} alt={category.name} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1538688543635-08193f037613?q=80&w=2670&auto=format&fit=crop" }} /> : <span className="text-xs text-slate-400">No Img</span>}
         </div>
       )
     },
-    { key: "nameEn", header: "Name (English)", render: (category: Category) => <span className="font-medium text-slate-900">{category.nameEn}</span> },
+    { key: "name", header: "Name", render: (category: Category) => <span className="font-medium text-slate-900">{category.name}</span> },
     { key: "createdDate", header: "Created", render: (category: Category) => <span className="text-slate-500">{new Date(category.createdDate).toLocaleDateString("en-US")}</span> },
     {
       key: "actions", header: "Actions", render: (category: Category) => (
@@ -174,7 +174,7 @@ export default function StylesPage() {
           {loading ? (
             <div className="flex justify-center items-center h-48 text-slate-500 animate-pulse">Loading categories...</div>
           ) : (
-            <DataTable data={categories} columns={columns} searchPlaceholder="Search styles..." searchKey="nameEn" />
+            <DataTable data={categories} columns={columns} searchPlaceholder="Search styles..." searchKey="name" />
           )}
         </CardContent>
       </Card>
@@ -215,7 +215,7 @@ export default function StylesPage() {
         <AlertDialogContent className="bg-white/95 backdrop-blur-xl border-[#7B3F32]/10 rounded-3xl shadow-2xl">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-2xl font-bold tracking-tight text-[#2f2219]">Delete Style</AlertDialogTitle>
-            <AlertDialogDescription className="text-[#8b7d73] mt-2">Are you sure you want to delete <span className="font-semibold text-[#7B3F32]">"{categoryToDelete?.nameEn}"</span>? This action cannot be undone.</AlertDialogDescription>
+            <AlertDialogDescription className="text-[#8b7d73] mt-2">Are you sure you want to delete <span className="font-semibold text-[#7B3F32]">"{categoryToDelete?.name}"</span>? This action cannot be undone.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="mt-4">
             <AlertDialogCancel className="border-[#7B3F32]/20 text-[#4b3d34] hover:bg-[#f6eee8] rounded-xl h-11 font-medium">Cancel</AlertDialogCancel>

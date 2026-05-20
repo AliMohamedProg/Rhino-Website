@@ -6,7 +6,10 @@ import {
   OrderDto,
   SliderDto,
   UserMeDto,
-  FabricDto
+  FabricDto,
+  CollectionDto,
+  ChangeDto,
+  TypeDto
 } from "./types";
 
 const BASE_URL = (process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "");
@@ -142,6 +145,26 @@ export const ApiClient = {
     addFabric: (data: FabricDto) => ApiClient.post<FabricDto>("api/admin/fabric/add-fabric", data),
   },
 
+  // Collection Endpoints
+  collection: {
+    getAll: () => ApiClient.get<CollectionDto[]>("api/Collections"),
+    getById: (id: string) => ApiClient.get<CollectionDto>(`api/Collections/collection-details/${id}`),
+    getWithChange: (collectionId: string, changeId: string) => ApiClient.get<CollectionDto>(`api/Collections/get-collection/${collectionId}?changeId=${changeId}`),
+    create: (data: CollectionDto) => ApiClient.post<CollectionDto>("api/admin/Collection/add-collection", data),
+    update: (id: string, data: CollectionDto) => ApiClient.post<CollectionDto>(`api/admin/Collection/edit-collection/${id}`, data),
+    delete: (id: string) => ApiClient.post<any>(`api/admin/Collection/delete-collection/${id}`, {}),
+  },
+
+  changes: {
+    addChange: (collectionId: string, data: ChangeDto) => ApiClient.post<ChangeDto>(`api/admin/Changes/add-change/${collectionId}`, data),
+  },
+
+  types: {
+    getAll: () => ApiClient.get<TypeDto[]>("api/admin/Types"),
+    add: (data: TypeDto) => ApiClient.post<boolean>("api/admin/Types/add-type", data),
+    edit: (data: TypeDto) => ApiClient.post<boolean>("api/admin/Types/edit-type", data),
+  },
+
   upload: async (urlOrFile: string | File, maybeFile?: File) => {
     let url = "api/Upload/image";
     let file: File;
@@ -157,8 +180,6 @@ export const ApiClient = {
     } else {
       file = urlOrFile;
     }
-
-
 
     if (!file) throw new Error("ApiClient.upload: No file provided");
 
@@ -186,5 +207,3 @@ export const ApiClient = {
     return res.json();
   },
 };
-
-

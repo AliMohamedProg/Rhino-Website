@@ -71,8 +71,7 @@ public class CartService : BaseService<TbCart, CartDto>, ICart
         {
             Id = item.Id,
             ItemId = item.ItemId,
-            NameEn = item.NameEn,
-            NameAr = item.NameAr,
+            Name = item.Name,
             Image = item.Image,
             Price = item.Price,
             Quantity = item.Quantity,
@@ -107,8 +106,7 @@ public class CartService : BaseService<TbCart, CartDto>, ICart
         var items = cart.Items.Select(i => new CartItemDto
         {
             ItemId = i.ItemId,
-            NameEn = i.Item.NameEn,
-            NameAr = i.Item.NameAr,
+            Name = i.Item.Name,
             Image = i.Item.MainImage,
             Price = i.Price,
             Quantity = i.Quantity,

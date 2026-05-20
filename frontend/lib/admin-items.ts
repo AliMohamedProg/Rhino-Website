@@ -14,10 +14,8 @@ export interface AdminFabricDto {
 
 export interface AdminItemDto {
   id: string
-  nameAr: string
-  nameEn: string
-  descriptionAr: string
-  descriptionEn: string
+  name: string
+  description: string
   price: number
   oldPrice?: number | null
   discountAmount?: number | null
@@ -30,11 +28,7 @@ export interface AdminItemDto {
   images?: AdminImageDto[]
   currentState?: number
   colors?: string | null
-  colorsEn?: string | null
-  colorsAr?: string | null
   material?: string | null
-  materialEn?: string | null
-  materialAr?: string | null
   createdDate?: string | null
   isSeller?: boolean
   fabrics?: AdminFabricDto[] | null
@@ -42,8 +36,7 @@ export interface AdminItemDto {
 
 export interface AdminCategoryDto {
   id: string
-  nameEn: string
-  nameAr: string
+  name: string
   imageUrl?: string | null
 }
 
@@ -65,10 +58,10 @@ export const mapAdminItemToProduct = (
 ): Product => {
   const discount = item.discountAmount ?? 0
   const hasBackendOldPrice = item.oldPrice != null && item.oldPrice > item.price
-  
+
   const salePrice = item.price
-  const originalPriceVal = hasBackendOldPrice 
-    ? item.oldPrice 
+  const originalPriceVal = hasBackendOldPrice
+    ? item.oldPrice
     : (discount > 0 && item.price > 0 ? Math.round(item.price / (1 - discount / 100)) : undefined)
 
   const imageUrls = buildImageList(
@@ -79,14 +72,12 @@ export const mapAdminItemToProduct = (
 
   return {
     id: item.id,
-    nameEn: item.nameEn ?? "",
-    nameAr: item.nameAr ?? "",
-    descriptionEn: item.descriptionEn ?? "",
-    descriptionAr: item.descriptionAr ?? "",
+    name: item.name ?? "",
+    description: item.description ?? "",
     price: salePrice,
     originalPrice: originalPriceVal ?? undefined,
     stock: item.stockNumber ?? 0,
-    category: category ? category.nameEn : item.categoryId ?? "",
+    category: category ? category.name : item.categoryId ?? "",
     categoryId: item.categoryId ?? "",
     styleId: item.styleId ?? undefined,
     dimensions: item.dimensions ?? "",
@@ -94,10 +85,8 @@ export const mapAdminItemToProduct = (
     featured: false,
     onSale: discount > 0,
     images: imageUrls,
-    colorsEn: item.colorsEn ?? item.colors ?? "",
-    colorsAr: item.colorsAr ?? "",
-    materialEn: item.materialEn ?? item.material ?? "",
-    materialAr: item.materialAr ?? "",
+    colors: item.colors ?? "",
+    material: item.material ?? "",
     sku: item.sku ?? "",
     createdDate: item.createdDate ?? new Date().toISOString(),
     updatedAt: item.createdDate ?? new Date().toISOString(),
@@ -106,11 +95,11 @@ export const mapAdminItemToProduct = (
     isSeller: item.isSeller ?? false,
     fabrics: Array.isArray(item.fabrics)
       ? item.fabrics.map((fabric) => ({
-          id: fabric.id ?? "",
-          name: fabric.name ?? "",
-          imageUrl: fabric.imageUrl ?? "",
-          productId: fabric.productId,
-        }))
+        id: fabric.id ?? "",
+        name: fabric.name ?? "",
+        imageUrl: fabric.imageUrl ?? "",
+        productId: fabric.productId,
+      }))
       : [],
   }
 }

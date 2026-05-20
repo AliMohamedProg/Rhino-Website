@@ -3,7 +3,8 @@ import {
   getPublicCategories, 
   getPublicStyles, 
   getPublicProducts, 
-  getPublicBestSellers 
+  getPublicBestSellers,
+  getPublicCollections 
 } from "@/lib/products"
 import { HomeClient } from "@/components/home/home-client"
 
@@ -12,12 +13,13 @@ export const revalidate = 0
 
 export default async function HomePage() {
   // Fetch everything on the server for instant rendering
-  const [initialSliders, initialCategories, initialStyles, initialBestSellers, initialProducts] = await Promise.all([
+  const [initialSliders, initialCategories, initialStyles, initialBestSellers, initialProducts, initialCollections] = await Promise.all([
     getPublicSliders(),
     getPublicCategories(),
     getPublicStyles(),
     getPublicBestSellers(),
-    getPublicProducts()
+    getPublicProducts(),
+    getPublicCollections()
   ])
 
   return (
@@ -27,6 +29,7 @@ export default async function HomePage() {
       initialStyles={initialStyles}
       initialBestSellers={initialBestSellers}
       initialProducts={initialProducts}
+      initialCollections={initialCollections}
     />
   )
 }

@@ -1,3 +1,4 @@
+using Apis.Models;
 using Bl.Contracts;
 using Bl.DTOs;
 using BusinessLayer.Contracts;
@@ -18,6 +19,7 @@ namespace Apis.Controllers
             _alliancesService = alliaceService;
         }
 
+        // GET: api/Slider
         // GET: api/Slider
         [HttpGet]
         public ActionResult<IEnumerable<AlliancesDto>> Get()

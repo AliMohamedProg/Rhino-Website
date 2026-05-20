@@ -197,7 +197,7 @@ public class ProjectsService : BaseService<TbProjects, ProjectsDto>, IProjects
             orderBy: null,
             isDescending: false,
             i => i.TbImages,
-            i => i.TbFabrics
+            i => i.TbItemFabrics
         ).GetAwaiter().GetResult();
 
         return new ProjectsDto

@@ -92,8 +92,7 @@ namespace DAL.Repositories
             // 5️⃣ تعيين بيانات المنتج في CartItem
             cartItem.Price = salePrice;
             cartItem.Total = salePrice * cartItem.Quantity;
-            cartItem.NameEn = product.NameEn;
-            cartItem.NameAr = product.NameAr;
+            cartItem.Name = product.Name;
             cartItem.Image = product.MainImage;
 
             await _context.TbCartItem.AddAsync(cartItem);

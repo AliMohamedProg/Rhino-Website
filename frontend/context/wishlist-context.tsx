@@ -4,7 +4,7 @@ import { createContext, useContext, useState, useEffect, type ReactNode } from "
 
 export interface WishlistItem {
   id: string
-  name: { en: string; ar: string }
+  name: string
   price: number
   originalPrice?: number
   image: string

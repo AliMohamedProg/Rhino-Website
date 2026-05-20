@@ -25,7 +25,7 @@ namespace Apis.Areas.Admin.Controllers
         public List<ItemDto> Get()
         {
             var items = _itemService.GetAllItemsWithImagesAndFabrics();
-            return items;
+            return items.Result;
         }
 
         [HttpGet("export/excel")]
@@ -36,14 +36,14 @@ namespace Apis.Areas.Admin.Controllers
             var sb = new StringBuilder();
             sb.AppendLine("Id,SKU,Dimensions,NameEn,Price,DiscountAmount,StockNumber,CategoryId");
 
-            foreach (var item in items)
+            foreach (var item in items.Result)
             {
                 var row = string.Join(",", new[]
                 {
                     item.Id.ToString(),
                     EscapeCsv(item.SKU),
                     EscapeCsv(item.Dimensions),
-                    EscapeCsv(item.NameAr),
+                    EscapeCsv(item.Name),
                     item.Price.ToString("0.##"),
                     item.DiscountAmount?.ToString() ?? string.Empty,
                     item.StockNumber.ToString(),
@@ -64,11 +64,10 @@ namespace Apis.Areas.Admin.Controllers
             var sb = new StringBuilder();
             sb.AppendLine("Products Export");
             sb.AppendLine("===============");
-            foreach (var item in items)
+            foreach (var item in items.Result)
             {
                 sb.AppendLine($"Id: {item.Id}");
-                sb.AppendLine($"Name (EN): {item.NameEn}");
-                sb.AppendLine($"Name (AR): {item.NameAr}");
+                sb.AppendLine($"Name (EN): {item.Name}");
                 sb.AppendLine($"Price: {item.Price:0.##}");
                 sb.AppendLine($"Discount: {item.DiscountAmount}");
                 sb.AppendLine($"Stock: {item.StockNumber}");
@@ -112,25 +111,22 @@ namespace Apis.Areas.Admin.Controllers
                 {
                     CurrentState = 1,
                     Id = Guid.NewGuid(),
-                    NameAr = itemDto.NameAr,
-                    NameEn = itemDto.NameEn,
-                    DescriptionAr = itemDto.DescriptionAr ?? string.Empty,
-                    DescriptionEn = itemDto.DescriptionEn,
-                    ColorsEn = itemDto.ColorsEn,
-                    ColorsAr = itemDto.ColorsAr ?? string.Empty,
+                    Name = itemDto.Name,
+                    Description = itemDto.Description,
+                    Colors = itemDto.Colors,
                     DiscountAmount = itemDto.DiscountAmount,
                     MainImage = mainImage ?? string.Empty,
                     Price = itemDto.Price, 
                     OldPrice = itemDto.OldPrice,
                     StockNumber = itemDto.StockNumber,
                     CategoryId = itemDto.CategoryId,
-                    StyleId = itemDto.StyleId, // Fixed: Missing StyleId
+                    StyleId = itemDto.StyleId, 
                     Images = itemDto.Images ?? new List<ImageDto>(),
                     Fabrics =  itemDto.Fabrics,
                     Dimensions =  itemDto.Dimensions ?? string.Empty,
                     SKU =  itemDto.SKU,
-                    MaterialEn = itemDto.MaterialEn,
-                    MaterialAr = itemDto.MaterialAr ?? string.Empty,
+                    Material = itemDto.Material,
+                    TypeId =  itemDto.TypeId,
                 };
                 _itemService.AddItemWithImagesAndFabrics(item);
                 return true;
@@ -141,11 +137,12 @@ namespace Apis.Areas.Admin.Controllers
             }
         }
 
-        [HttpPost("edit-item")]
-        public async Task<bool> Edit(ItemDto itemDto)
+        [HttpPost("edit-item/{itemId}")]
+        public async Task<bool> Edit(Guid itemId)
         {
             try
             {
+                var itemDto = await _itemService.GetItemWithImagesAndFabrics(itemId);
                 var mainImage = itemDto.MainImage;
                 if (string.IsNullOrWhiteSpace(mainImage) && itemDto.Images != null && itemDto.Images.Count > 0)
                 {
@@ -166,12 +163,9 @@ namespace Apis.Areas.Admin.Controllers
                 {
                     Id = itemDto.Id,
                     CurrentState = itemDto.CurrentState,
-                    NameAr = itemDto.NameAr,
-                    NameEn = itemDto.NameEn,
-                    DescriptionAr = itemDto.DescriptionAr ?? string.Empty,
-                    DescriptionEn = itemDto.DescriptionEn,
-                    ColorsAr = itemDto.ColorsAr ?? string.Empty,
-                    ColorsEn = itemDto.ColorsEn,
+                    Name = itemDto.Name,
+                    Description = itemDto.Description,
+                    Colors = itemDto.Colors,
                     DiscountAmount = itemDto.DiscountAmount,
                     MainImage = mainImage ?? string.Empty,
                     Price = itemDto.Price,
@@ -181,10 +175,10 @@ namespace Apis.Areas.Admin.Controllers
                     StyleId = itemDto.StyleId, // Fixed: Missing StyleId
                     Images = itemDto.Images ?? new List<ImageDto>(),
                     Fabrics = itemDto.Fabrics,
-                    Dimensions =  itemDto.Dimensions ?? string.Empty,
+                    Dimensions =  itemDto.Dimensions ,
                     SKU =  itemDto.SKU,
-                    MaterialAr = itemDto.MaterialAr ?? string.Empty,
-                    MaterialEn = itemDto.MaterialEn,
+                    Material = itemDto.Material,
+                    TypeId = itemDto.TypeId,
                 };
 
                 _itemService.UpdateItemWithImagesAndFabrics(item);
@@ -213,7 +207,7 @@ namespace Apis.Areas.Admin.Controllers
             }
         }
         [HttpPost("delete-all-items")]
-        public async Task<IActionResult> Delete()
+        public async Task<IActionResult> DeleteAll()
         {
             try
             {

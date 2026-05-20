@@ -1,7 +1,7 @@
 export interface Product {
   id: string
-  name: { en: string; ar: string }
-  description: { en: string; ar: string }
+  name: string
+  description: string
   price: number
   originalPrice?: number
   discount?: number
@@ -18,14 +18,8 @@ export interface Product {
 export const products: Product[] = [
   {
     id: "1",
-    name: {
-      en: "Modern Bedroom Set with Wardrobe",
-      ar: "طقم غرفة نوم حديثة مع دولاب",
-    },
-    description: {
-      en: "Complete bedroom set including bed, wardrobe, and nightstands. Made from premium quality wood with elegant finish.",
-      ar: "طقم غرفة نوم كامل يشمل السرير والدولاب والكومودينو. مصنوع من خشب عالي الجودة بتشطيب أنيق.",
-    },
+    name: "Modern Bedroom Set with Wardrobe",
+    description: "Complete bedroom set including bed, wardrobe, and nightstands. Made from premium quality wood with elegant finish.",
     price: 18999,
     originalPrice: 24999,
     discount: 24,
@@ -44,14 +38,8 @@ export const products: Product[] = [
   },
   {
     id: "2",
-    name: {
-      en: "Kids Wardrobe with Desk Combo",
-      ar: "دولاب أطفال مع مكتب",
-    },
-    description: {
-      en: "Space-saving kids furniture set with wardrobe and integrated study desk. Perfect for small rooms.",
-      ar: "طقم أثاث أطفال موفر للمساحة مع دولاب ومكتب دراسة مدمج. مثالي للغرف الصغيرة.",
-    },
+    name: "Kids Wardrobe with Desk Combo",
+    description: "Space-saving kids furniture set with wardrobe and integrated study desk. Perfect for small rooms.",
     price: 4535,
     originalPrice: 5999,
     discount: 24,
@@ -70,14 +58,8 @@ export const products: Product[] = [
   },
   {
     id: "3",
-    name: {
-      en: "L-Shaped Corner Sofa Set",
-      ar: "طقم كنب ركنة على شكل L",
-    },
-    description: {
-      en: "Comfortable L-shaped corner sofa with premium fabric upholstery. Perfect for modern living rooms.",
-      ar: "كنبة ركنة مريحة على شكل L مع تنجيد قماش فاخر. مثالية لغرف المعيشة الحديثة.",
-    },
+    name: "L-Shaped Corner Sofa Set",
+    description: "Comfortable L-shaped corner sofa with premium fabric upholstery. Perfect for modern living rooms.",
     price: 27700,
     originalPrice: 35000,
     discount: 21,
@@ -96,14 +78,8 @@ export const products: Product[] = [
   },
   {
     id: "4",
-    name: {
-      en: "Premium Home Office Desk",
-      ar: "مكتب منزلي فاخر",
-    },
-    description: {
-      en: "Ergonomic home office desk with cable management and ample storage space.",
-      ar: "مكتب منزلي مريح مع إدارة الكابلات ومساحة تخزين واسعة.",
-    },
+    name: "Premium Home Office Desk",
+    description: "Ergonomic home office desk with cable management and ample storage space.",
     price: 5388,
     originalPrice: 6999,
     discount: 23,
@@ -122,14 +98,8 @@ export const products: Product[] = [
   },
   {
     id: "5",
-    name: {
-      en: "Elegant Dining Table Set",
-      ar: "طقم سفرة أنيق",
-    },
-    description: {
-      en: "6-seater dining table set with elegant design and durable construction.",
-      ar: "طقم سفرة 6 مقاعد بتصميم أنيق وبناء متين.",
-    },
+    name: "Elegant Dining Table Set",
+    description: "6-seater dining table set with elegant design and durable construction.",
     price: 19999,
     originalPrice: 25999,
     discount: 23,
@@ -152,14 +122,8 @@ export const products: Product[] = [
   },
   {
     id: "6",
-    name: {
-      en: "Outdoor Garden Furniture Set",
-      ar: "طقم أثاث حديقة خارجي",
-    },
-    description: {
-      en: "Weather-resistant outdoor furniture set perfect for patios and gardens.",
-      ar: "طقم أثاث خارجي مقاوم للعوامل الجوية مثالي للفناء والحدائق.",
-    },
+    name: "Outdoor Garden Furniture Set",
+    description: "Weather-resistant outdoor furniture set perfect for patios and gardens.",
     price: 12999,
     originalPrice: 16999,
     discount: 24,
@@ -212,8 +176,7 @@ const API_BASE_URL = ((process.env.NEXT_PUBLIC_API_URL || "https://localhost:728
 
 export interface PublicSlider {
   id: string
-  titleAr: string
-  titleEn: string
+  title: string
   imageUrl: string
   currentState: number
   createdDate: string
@@ -221,18 +184,15 @@ export interface PublicSlider {
 
 export interface PublicCategory {
   id: string
-  nameAr: string
-  nameEn: string
+  name: string
   imageUrl: string
   productsCount: number
 }
 
 export interface PublicProduct {
   id: string
-  nameAr: string
-  nameEn: string
-  descriptionAr: string
-  descriptionEn: string
+  name: string
+  description: string
   price: number
   oldPrice?: number
   discountAmount?: number
@@ -240,10 +200,8 @@ export interface PublicProduct {
   images: { imageUrl: string }[]
   categoryId: string
   stockNumber: number
-  colorsEn?: string
-  colorsAr?: string
-  materialEn?: string
-  materialAr?: string
+  colors?: string
+  material?: string
   currentState: number
   createdDate?: string
 }
@@ -277,8 +235,7 @@ export async function getPublicSliders(): Promise<PublicSlider[]> {
 
   return rawData.map((item: any) => ({
     id: item.id ?? item.Id ?? "",
-    titleAr: item.titleAr ?? item.TitleAr ?? "",
-    titleEn: item.titleEn ?? item.TitleEn ?? "",
+    title: item.title ?? "",
     imageUrl: item.imageUrl ?? item.ImageUrl ?? "",
     currentState: item.currentState ?? item.CurrentState ?? 0,
     createdDate: item.createdDate ?? item.CreatedDate ?? "",
@@ -291,8 +248,7 @@ export async function getPublicCategories(): Promise<PublicCategory[]> {
 
   return rawData.map((item: any) => ({
     id: item.id ?? item.Id ?? "",
-    nameAr: item.nameAr ?? item.NameAr ?? "",
-    nameEn: item.nameEn ?? item.NameEn ?? "",
+    name: item.name ?? "",
     imageUrl: item.imageUrl ?? item.ImageUrl ?? "",
     productsCount: item.productsCount ?? item.ProductsCount ?? 0,
   }));
@@ -304,8 +260,7 @@ export async function getPublicStyles(): Promise<PublicCategory[]> {
 
   return rawData.map((item: any) => ({
     id: item.id ?? item.Id ?? "",
-    nameAr: item.nameAr ?? item.NameAr ?? "",
-    nameEn: item.nameEn ?? item.NameEn ?? "",
+    name: item.name ?? "",
     imageUrl: item.imageUrl ?? item.ImageUrl ?? "",
     productsCount: item.productsCount ?? item.ProductsCount ?? 0,
   }));
@@ -317,10 +272,8 @@ export async function getPublicProducts(): Promise<PublicProduct[]> {
 
   return rawData.map((item: any) => ({
     id: item.id ?? item.Id ?? "",
-    nameAr: item.nameAr ?? item.NameAr ?? "",
-    nameEn: item.nameEn ?? item.NameEn ?? "",
-    descriptionAr: item.descriptionAr ?? item.DescriptionAr ?? "",
-    descriptionEn: item.descriptionEn ?? item.DescriptionEn ?? "",
+    name: item.name ?? "",
+    description: item.description ?? "",
     price: item.price ?? item.Price ?? 0,
     oldPrice: item.oldPrice ?? item.OldPrice ?? 0,
     discountAmount: item.discountAmount ?? item.DiscountAmount ?? 0,
@@ -328,10 +281,8 @@ export async function getPublicProducts(): Promise<PublicProduct[]> {
     images: item.images ?? item.Images ?? [],
     categoryId: item.categoryId ?? item.CategoryId ?? "",
     stockNumber: item.stockNumber ?? item.StockNumber ?? 0,
-    colorsEn: item.colorsEn ?? item.ColorsEn ?? "",
-    colorsAr: item.colorsAr ?? item.ColorsAr ?? "",
-    materialEn: item.materialEn ?? item.MaterialEn ?? "",
-    materialAr: item.materialAr ?? item.MaterialAr ?? "",
+    colors: item.colors ?? "",
+    material: item.material ?? "",
     currentState: item.currentState ?? item.CurrentState ?? 1,
     createdDate: item.createdDate ?? item.CreatedDate ?? "",
   })).filter(p => p.currentState > 0);
@@ -343,10 +294,8 @@ export async function getPublicBestSellers(): Promise<PublicProduct[]> {
 
   return rawData.map((item: any) => ({
     id: item.id ?? item.Id ?? "",
-    nameAr: item.nameAr ?? item.NameAr ?? "",
-    nameEn: item.nameEn ?? item.NameEn ?? "",
-    descriptionAr: item.descriptionAr ?? item.DescriptionAr ?? "",
-    descriptionEn: item.descriptionEn ?? item.DescriptionEn ?? "",
+    name: item.name ?? "",
+    description: item.description ?? "",
     price: item.price ?? item.Price ?? 0,
     oldPrice: item.oldPrice ?? item.OldPrice ?? 0,
     discountAmount: item.discountAmount ?? item.DiscountAmount ?? 0,
@@ -354,12 +303,30 @@ export async function getPublicBestSellers(): Promise<PublicProduct[]> {
     images: item.images ?? item.Images ?? [],
     categoryId: item.categoryId ?? item.CategoryId ?? "",
     stockNumber: item.stockNumber ?? item.StockNumber ?? 0,
-    colorsEn: item.colorsEn ?? item.ColorsEn ?? "",
-    colorsAr: item.colorsAr ?? item.ColorsAr ?? "",
-    materialEn: item.materialEn ?? item.MaterialEn ?? "",
-    materialAr: item.materialAr ?? item.MaterialAr ?? "",
+    colors: item.colors ?? "",
+    material: item.material ?? "",
     currentState: item.currentState ?? item.CurrentState ?? 1,
     createdDate: item.createdDate ?? item.CreatedDate ?? "",
   })).filter(p => p.currentState > 0);
 }
+export async function getPublicCollections(): Promise<PublicProduct[]> {
+  const rawData = await fetchFromApi("Collections");
+  if (!Array.isArray(rawData)) return [];
 
+  return rawData.map((item: any) => ({
+    id: item.id ?? item.Id ?? "",
+    name: item.name ?? "",
+    description: item.description ?? "",
+    price: item.price ?? 0,
+    oldPrice: item.oldPrice ?? 0,
+    discountAmount: item.discountAmount ?? 0,
+    mainImage: item.mainImage ?? "",
+    images: item.collectionImages ?? [],
+    categoryId: item.categoryId ?? "",
+    stockNumber: item.stockNumber ?? 0,
+    colors: item.colors ?? "",
+    material: item.material ?? "",
+    currentState: item.currentState ?? 1,
+    createdDate: item.createdDate ?? "",
+  })).filter(p => p.currentState > 0);
+}

@@ -6,8 +6,7 @@ namespace Bl.DTOs
 {
     public class CategorySalesDto
     {
-        public string NameAr { get; set; }
-        public string NameEn { get; set; }
+        public string Name { get; set; }
         public int TotalSold { get; set; }
     }
 }

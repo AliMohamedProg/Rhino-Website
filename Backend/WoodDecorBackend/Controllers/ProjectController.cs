@@ -2,6 +2,7 @@
     using Bl.DTOs;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Apis.Models;
 
     namespace Apis.Controllers
     {
@@ -19,18 +20,17 @@
             [HttpGet]
             public ActionResult<IEnumerable<ProjectsDto>> Get()
             {
-                try
-                {
-                    var projects = _projectsService.GetAllProjects();
-                    if (projects == null)
-                        return Ok(new List<ProjectsDto>());
-
-                    return Ok(projects);
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, $"Internal server error: {ex.Message}");
-                }
+                    try
+                    {
+                        var projects = _projectsService.GetAllProjects();
+                        if (projects == null)
+                            return Ok(new List<ProjectsDto>());
+                       return Ok(projects);
+                    }
+                    catch (Exception ex)
+                    {
+                        return StatusCode(500, $"Internal server error: {ex.Message}");
+                    }
             }
 
             [HttpGet("{id}")]

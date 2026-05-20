@@ -37,8 +37,7 @@ namespace Apis.Controllers
                 Rating = reviewDto.Rating,
                 UserId = userId,
                 ProductId = reviewDto.ProductId,
-                ProductNameAr = item.NameAr,
-                ProductNameEn = item.NameEn,
+                ProductName = item.Name,
                 UserEmail = user.Result.Email,
                 CurrentState = 1
             };

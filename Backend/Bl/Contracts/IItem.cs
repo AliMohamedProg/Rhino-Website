@@ -13,7 +13,7 @@ namespace BusinessLayer.Contracts
     {
         bool AddItemWithImagesAndFabrics(ItemDto itemDto);
         bool UpdateItemWithImagesAndFabrics(ItemDto itemDto);
-        List<ItemDto> GetAllItemsWithImagesAndFabrics();
-        ItemDto? GetItemWithImagesAndFabrics(Guid id);
+        Task<List<ItemDto>> GetAllItemsWithImagesAndFabrics();
+        Task<ItemDto?> GetItemWithImagesAndFabrics(Guid id);
     }
 }

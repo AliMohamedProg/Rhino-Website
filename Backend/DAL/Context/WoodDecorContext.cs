@@ -8,13 +8,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Context;
 
-public partial class RhinoContext : IdentityDbContext<ApplicationUser>
+public partial class WoodDecorContext : IdentityDbContext<ApplicationUser>
 {
-    public RhinoContext()
+    public WoodDecorContext()
     {
     }
 
-    public RhinoContext(DbContextOptions<RhinoContext> options)
+    public WoodDecorContext(DbContextOptions<WoodDecorContext> options)
         : base(options)
     {
     }
@@ -24,7 +24,13 @@ public partial class RhinoContext : IdentityDbContext<ApplicationUser>
     public virtual DbSet<TbStyles> TbStyles { get; set; }
     
     public virtual DbSet<TbImage> TbImages { get; set; }
-   public virtual DbSet<TbFabrics> TbFabrics { get; set; }
+   public virtual DbSet<TbItemFabrics> TbItemFabrics { get; set; }
+   public virtual DbSet<TbCollectionFabrics> TbCollectionFabrics { get; set; }
+   
+   public virtual DbSet<TbCollections>  TbCollections { get; set; }
+   public virtual DbSet<TbCollectionImages> TbCollectionImages { get; set; }
+   public virtual DbSet<TbChanges> TbChanges { get; set; }
+   public virtual DbSet<TbChangeImages> TbChangeImages { get; set; }
    public virtual DbSet<TbAlliances> TbAlliances { get; set; }
     public virtual DbSet<TbItem> TbItems { get; set; }
     public virtual DbSet<TbProjects> TbProjects { get; set; }
@@ -34,6 +40,8 @@ public partial class RhinoContext : IdentityDbContext<ApplicationUser>
     public virtual DbSet<TbOrder> TbOrders { get; set; }
 
     public virtual DbSet<TbOrderItem> TbOrderItems { get; set; }
+    
+    public virtual DbSet<TbOrderCollection> TbOrderCollection { get; set; }
 
     public virtual DbSet<TbReview> TbReviews { get; set; }
 
@@ -43,15 +51,18 @@ public partial class RhinoContext : IdentityDbContext<ApplicationUser>
     public virtual DbSet<TbRefreshTokens> TbRefreshTokens { get; set; }
     public virtual DbSet<TbCart> TbCart { get; set; }
     public virtual DbSet<TbCartItem> TbCartItem { get; set; }
+    public virtual DbSet<TbCartCollection> TbCartCollection { get; set; }
+    
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-//        if (!optionsBuilder.IsConfigured)
-  //      {
-    //        optionsBuilder.UseSqlServer(
-      //          "Server=db48236.public.databaseasp.net;User Id=db48236; Password=Pt7+8!fC%H6j; Encrypt=False; MultipleActiveResultSets=True;");
-        //}
+        if (!optionsBuilder.IsConfigured)
+        {
+            /*optionsBuilder.UseSqlServer(
+               "Server=db48236.public.databaseasp.net;User Id=db48236; Password=Pt7+8!fC%H6j; Encrypt=False; MultipleActiveResultSets=True;");*/
+            optionsBuilder.UseSqlServer("Server=localhost; Database=RhinoDB; User Id=sa; Password=SQLPassword1;TrustServerCertificate=True;");
+        }
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -59,8 +70,7 @@ public partial class RhinoContext : IdentityDbContext<ApplicationUser>
         modelBuilder.Entity<TbCategory>(entity =>
         {
             entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.NameAr).HasMaxLength(50);
-            entity.Property(e => e.NameEn).HasMaxLength(50);
+            entity.Property(e => e.Name).HasMaxLength(50);
         });
         
 
@@ -73,7 +83,7 @@ public partial class RhinoContext : IdentityDbContext<ApplicationUser>
                 .WithMany(b => b.Projects)
                 .HasForeignKey(p => p.AllianceId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_TbProjects_TbBrands");
+                .HasConstraintName("FK_TbProjects_TbBrands");   
         });
 
         modelBuilder.Entity<TbProjectImages>(entity =>
@@ -113,16 +123,17 @@ public partial class RhinoContext : IdentityDbContext<ApplicationUser>
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_TbImages_TbItems");
         });
+        modelBuilder.Entity<TbChanges>()
+            .HasOne(c => c.TbCollections)
+            .WithMany(c => c.TbChanges)
+            .HasForeignKey(c => c.CollectionId);
 
         modelBuilder.Entity<TbItem>(entity =>
         {
             entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.ColorsEn).HasMaxLength(100);
-            entity.Property(e => e.ColorsAr).HasMaxLength(100);
-            entity.Property(e => e.MaterialEn).HasMaxLength(100);
-            entity.Property(e => e.MaterialAr).HasMaxLength(100);
-            entity.Property(e => e.NameAr).HasMaxLength(50);
-            entity.Property(e => e.NameEn).HasMaxLength(50);
+            entity.Property(e => e.Colors).HasMaxLength(100);
+            entity.Property(e => e.Material).HasMaxLength(100);
+            entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.Price).HasColumnType("decimal(18, 4)");
 
             entity.HasOne(d => d.Category).WithMany(p => p.TbItems)
@@ -176,10 +187,7 @@ public partial class RhinoContext : IdentityDbContext<ApplicationUser>
 
         modelBuilder.Entity<TbSlider>(entity =>
         {
-
-
-            entity.Property(e => e.TitleAr).HasMaxLength(50);
-            entity.Property(e => e.TitleEn).HasMaxLength(50);
+            entity.Property(e => e.Title).HasMaxLength(50);
             entity.Property(e => e.ImageUrl).HasMaxLength(500);
         });
 

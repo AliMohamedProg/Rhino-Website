@@ -102,12 +102,12 @@ export default function ProductsPage() {
       key: "product", header: "Product Name", render: (product: Product) => (
         <div className="flex items-center gap-3">
           <div className="relative h-12 w-12 overflow-hidden rounded-lg bg-slate-100 shrink-0">
-            <Image src={getImageUrl(product.mainImage || product.images[0])} alt={product.nameEn} fill className="object-cover" />
+            <Image src={getImageUrl(product.mainImage || product.images[0])} alt={product.name} fill className="object-cover" />
           </div>
           <div>
-            <p className="font-medium text-slate-900">{product.nameEn}</p>
-            {product.colorsEn && product.colorsEn.trim().length > 0 && <p className="text-sm text-slate-500">Colors: {product.colorsEn}</p>}
-            {product.materialEn && product.materialEn.trim().length > 0 && <p className="text-sm text-slate-500">Material: {product.materialEn}</p>}
+            <p className="font-medium text-slate-900">{product.name}</p>
+            {product.colors && product.colors.trim().length > 0 && <p className="text-sm text-slate-500">Colors: {product.colors}</p>}
+            {product.material && product.material.trim().length > 0 && <p className="text-sm text-slate-500">Material: {product.material}</p>}
           </div>
         </div>
       )
@@ -115,7 +115,7 @@ export default function ProductsPage() {
     {
       key: "category", header: "Style", render: (product: Product) => {
         const category = categories.find((cat) => cat.id === product.categoryId)
-        return <span className="text-slate-500">{category?.nameEn || product.category}</span>
+        return <span className="text-slate-500">{category?.name || product.category}</span>
       }
     },
     {
@@ -183,7 +183,7 @@ export default function ProductsPage() {
             <div className="flex justify-center items-center h-48 text-slate-500 animate-pulse">Loading products...</div>
           ) : (
             <div className="space-y-4">
-              <DataTable data={filteredProducts} columns={columns} searchPlaceholder="Search products..." searchKey="nameEn" />
+              <DataTable data={filteredProducts} columns={columns} searchPlaceholder="Search products..." searchKey="name" />
             </div>
           )}
         </CardContent>
@@ -193,7 +193,7 @@ export default function ProductsPage() {
         <AlertDialogContent className="bg-white/95 backdrop-blur-xl border-[#7B3F32]/10 rounded-3xl shadow-2xl">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-2xl font-bold tracking-tight text-[#2f2219]">Delete Product</AlertDialogTitle>
-            <AlertDialogDescription className="text-[#8b7d73] mt-2">Are you sure you want to delete <span className="font-semibold text-[#7B3F32]">"{productToDelete?.nameEn}"</span>? This action cannot be undone.</AlertDialogDescription>
+            <AlertDialogDescription className="text-[#8b7d73] mt-2">Are you sure you want to delete <span className="font-semibold text-[#7B3F32]">"{productToDelete?.name}"</span>? This action cannot be undone.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="mt-4">
             <AlertDialogCancel className="border-[#7B3F32]/20 text-[#4b3d34] hover:bg-[#f6eee8] rounded-xl h-11 font-medium">Cancel</AlertDialogCancel>

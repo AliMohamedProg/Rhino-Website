@@ -34,7 +34,7 @@ namespace DAL.Repositories
         {
             try
             {
-                return _dbSet.Where(a => a.CurrentState > 0).ToList();
+                return _dbSet.Where(a => a.CurrentState > 0).AsNoTracking().ToList();
             }
             catch (Exception ex)
 
@@ -278,6 +278,29 @@ namespace DAL.Repositories
                 }
                 _context.SaveChanges();
                 return true;
+            }
+            catch (Exception ex)
+            {
+                throw new DataAccessExption(ex, "", _logger);
+            }
+        }
+        public async Task<List<T>> GetListWithNestedIncludes(
+            Expression<Func<T, bool>>? filter = null,
+            params Func<IQueryable<T>, IQueryable<T>>[] includes)
+        {
+            try
+            {
+                IQueryable<T> query = _dbSet.AsQueryable();
+
+                // Apply nested includes
+                foreach (var include in includes)
+                    query = include(query);
+
+                // Apply filter
+                if (filter != null)
+                    query = query.Where(filter);
+
+                return await query.AsNoTracking().ToListAsync();
             }
             catch (Exception ex)
             {

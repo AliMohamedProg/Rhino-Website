@@ -11,11 +11,11 @@ using Domains;
 
 namespace Bl.Services
 {
-    public class StylesService : BaseService<TbStyles, StylesDto>, IStyles
+    public class TypesService : BaseService<TbTypes, TypesDto>, ITypes
     {
-        ITableRepository<TbStyles> repository;
+        ITableRepository<TbTypes> repository;
         IMapper _Mapper;
-        public StylesService(ITableRepository<TbStyles> _repository, IMapper _Mapper, IUserService userService)
+        public TypesService(ITableRepository<TbTypes> _repository, IMapper _Mapper, IUserService userService)
             : base(_repository, _Mapper, userService)
         {
             repository = _repository;
@@ -23,16 +23,16 @@ namespace Bl.Services
         }
 
 
-        public override List<StylesDto> GetAll()
+        public override List<TypesDto> GetAll()
         {
-            var listTask = repository.GetList<TbStyles>(
+            var listTask = repository.GetList<TbTypes>(
                 a => a.CurrentState > 0,
                 selector: null,
                 orderBy: null,
                 isDescending: false
             );
             var list = listTask.GetAwaiter().GetResult();
-            return _Mapper.Map<List<TbStyles>, List<StylesDto>>(list);
+            return _Mapper.Map<List<TbTypes>, List<TypesDto>>(list);
         }
     }
 }

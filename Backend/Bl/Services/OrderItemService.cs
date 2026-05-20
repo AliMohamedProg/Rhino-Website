@@ -13,11 +13,9 @@ namespace Bl.Services
 {
     public class OrderItemService : BaseService<TbOrderItem, OrderItemDto>, IOrderItem
     {
-        ITableRepository<TbOrderItem> tableRepository;
         public OrderItemService(ITableRepository<TbOrderItem> _repository, IMapper _Mapper, IUserService userService)
             : base(_repository, _Mapper, userService)
         {
-            tableRepository = _repository;
         }
 
         //public async Task<OrderItemDto> GetAllUserOrderItem(Guid userId)

@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Text;
+using Bl;
+using Bl.Contracts;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,34 +16,33 @@ namespace Apis.Areas.Admin.Controllers
     [Route("api/admin/[controller]")]
     [ApiController]
     [Authorize(Roles = "Admin")]
-    public class CategoriesController : ControllerBase
+    public class TypesController : ControllerBase
     {
-        ICategory _categoryService;
-        public CategoriesController(ICategory categoryService)
+        ITypes _typesService;
+        public TypesController(ITypes typesService)
         {
-            _categoryService = categoryService;
+            _typesService = typesService;
         }
         // GET: api/<ItemsController>
         [HttpGet]
-        public List<CategoryDto> Get()
+        public List<TypesDto> Get()
         {
-            var categories = _categoryService.GetAll();
+            var categories = _typesService.GetAll();
             return categories;
         }
 
-        [HttpPost("add-category")]
-        public async Task<bool> Add(CategoryDto categoryDto)
+        [HttpPost("add-type")]
+        public async Task<bool> Add(TypesDto categoryDto)
         {
             try
             {
-                var category = new CategoryDto()
+                var category = new TypesDto()
                 {
                     Name = categoryDto.Name,
-                    ImageUrl = categoryDto.ImageUrl,
                     CurrentState =1,
                     Id = Guid.NewGuid(),
                 };
-                _categoryService.Add(category);
+                _typesService.Add(category);
                 return true;
             }
             catch (Exception ex)
@@ -50,12 +51,12 @@ namespace Apis.Areas.Admin.Controllers
             }
         }
 
-        [HttpPost("edit-category")]
-        public async Task<bool> Edit(CategoryDto categoryDto)
+        [HttpPost("edit-type")]
+        public async Task<bool> Edit(TypesDto categoryDto)
         {
             try
             {
-                _categoryService.Update(categoryDto);
+                _typesService.Update(categoryDto);
                 return true;
             }
             catch (Exception ex)
@@ -64,12 +65,12 @@ namespace Apis.Areas.Admin.Controllers
             }
         }
 
-        [HttpPost("delete-category/{categoryId}")]
-        public async Task<IActionResult> Delete([FromRoute] Guid categoryId)
+        [HttpPost("delete-type/{typeId}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid typeId)
         {
             try
             {
-                var result = _categoryService.MarkAsDeleted(categoryId, 0); // Soft delete
+                var result = _typesService .MarkAsDeleted(typeId, 0); // Soft delete
                 if (result)
                     return Ok(new { success = true, message = "Category deleted successfully" });
                 
@@ -80,12 +81,12 @@ namespace Apis.Areas.Admin.Controllers
                 return BadRequest(new { success = false, error = ex.Message });
             }
         }
-        [HttpPost("delete-all-categories")]
+        [HttpPost("delete-all-types")]
         public async Task<IActionResult> Delete()
         {
             try
             {
-                var result = _categoryService.DeleteAll();
+                var result = _typesService.DeleteAll();
                 if (result)
                     return Ok(new { success = true, message = "Items deleted successfully" });
 

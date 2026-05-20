@@ -17,6 +17,7 @@ interface HomeClientProps {
   initialStyles: PublicCategory[]
   initialBestSellers: PublicProduct[]
   initialProducts: PublicProduct[]
+  initialCollections: PublicProduct[]
 }
 
 export function HomeClient({
@@ -24,7 +25,8 @@ export function HomeClient({
   initialCategories,
   initialStyles,
   initialBestSellers,
-  initialProducts
+  initialProducts,
+  initialCollections
 }: HomeClientProps) {
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -33,7 +35,7 @@ export function HomeClient({
         <Hero initialSliders={initialSliders} />
         <DiscoverByStyle initialStyles={initialStyles} />
         <ArtOfLiving />
-        <NewCollection initialProducts={initialProducts} />
+        <NewCollection initialProducts={initialCollections} />
         <BestSellers initialBestSellers={initialBestSellers} />
         <OurStory />
       </main>

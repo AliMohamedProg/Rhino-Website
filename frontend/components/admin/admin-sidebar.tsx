@@ -12,6 +12,9 @@ import {
   BarChart3,
   ImageIcon,
   Star,
+  Layers,
+  Palette,
+  Tag,
 } from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
@@ -24,9 +27,12 @@ interface NavItem {
 const mainNavItems: NavItem[] = [
   { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { title: "Products", href: "/admin/products", icon: Package },
+  { title: "Collections", href: "/admin/collections", icon: Layers },
   { title: "Orders", href: "/admin/orders", icon: ShoppingCart },
   { title: "Users", href: "/admin/users", icon: Users },
   { title: "Categories", href: "/admin/categories", icon: FolderTree },
+  { title: "Styles", href: "/admin/styles", icon: Palette },
+  { title: "Types", href: "/admin/types", icon: Tag },
   { title: "Sliders", href: "/admin/sliders", icon: ImageIcon },
 ]
 

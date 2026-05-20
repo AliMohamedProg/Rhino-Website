@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import { Header } from "@/components/layout/Header"
 import { Footer } from "@/components/layout/Footer"
 import { useLanguage } from "@/context/language-context"
@@ -38,6 +39,7 @@ interface Item {
   stockNumber: number
   overallRating: number
   categoryId: string
+  typeId?: string
   styleId?: string
   colorsEn?: string
   colorsAr?: string
@@ -54,6 +56,11 @@ interface Category {
   id: string
   nameAr: string
   nameEn: string
+}
+
+interface TypeInfo {
+  id: string
+  name?: string
 }
 
 interface ReviewStats {
@@ -109,7 +116,15 @@ function getColorNamesFromApi(item: any, language: "en" | "ar"): string[] {
     .filter(Boolean)
 }
 
-export default function CategoryPage() {
+export default function CategoryPageWrapper() {
+  return (
+    <Suspense fallback={<div>Loading catalog...</div>}>
+      <CategoryPage />
+    </Suspense>
+  )
+}
+
+function CategoryPage() {
   const { language } = useLanguage()
   const { addItem } = useCart()
   const { toggleItem, isInWishlist } = useWishlist()
@@ -129,7 +144,19 @@ export default function CategoryPage() {
   const [styles, setStyles] = useState<StyleInfo[]>([])
   const [selectedStyles, setSelectedStyles] = useState<string[]>([])
   const [styleOpen, setStyleOpen] = useState(true)
+  const [types, setTypes] = useState<TypeInfo[]>([])
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([])
+  const [typeOpen, setTypeOpen] = useState(true)
   const [reviewStatsByProductId, setReviewStatsByProductId] = useState<Record<string, ReviewStats>>({})
+
+  const searchParams = useSearchParams()
+  const initialTypeId = searchParams.get("typeId")
+
+  useEffect(() => {
+    if (initialTypeId) {
+      setSelectedTypes([initialTypeId])
+    }
+  }, [initialTypeId])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -161,9 +188,10 @@ export default function CategoryPage() {
         })) as Item[]
         setProducts(normalized)
 
-        const [catData, stylesData] = await Promise.all([
+        const [catData, stylesData, typesData] = await Promise.all([
           ApiClient.get<any[]>("api/category"),
           ApiClient.get<any[]>("api/Styles"),
+          ApiClient.types.getAll()
         ])
         setCategories((Array.isArray(catData) ? catData : []) as Category[])
         setStyles(
@@ -173,6 +201,7 @@ export default function CategoryPage() {
             nameEn: s.nameEn ?? s.NameEn ?? "",
           })).filter((s: StyleInfo) => Boolean(s.id))
         )
+        setTypes(Array.isArray(typesData) ? typesData : [])
       } catch (err) {
         console.error(err)
       } finally {
@@ -258,6 +287,11 @@ export default function CategoryPage() {
         p.styleId ? selectedStyles.includes(p.styleId) : false
       )
 
+    if (selectedTypes.length)
+      result = result.filter(p =>
+        p.typeId ? selectedTypes.includes(p.typeId) : false
+      )
+
     switch (sortBy) {
       case "price-low":
         result.sort((a, b) => a.price - b.price)
@@ -282,6 +316,7 @@ export default function CategoryPage() {
     setPriceRange([0, 500000])
     setSelectedCategories([])
     setSelectedStyles([])
+    setSelectedTypes([])
     setSortBy("featured")
   }
 
@@ -408,6 +443,33 @@ export default function CategoryPage() {
                             }
                           />
                           {language === "ar" ? style.nameAr : style.nameEn}
+                        </label>
+                      ))}
+                    </CollapsibleContent>
+                  </Collapsible>
+                )}
+
+                {/* Types */}
+                {types.length > 0 && (
+                  <Collapsible open={typeOpen} onOpenChange={setTypeOpen}>
+                    <CollapsibleTrigger className="flex justify-between items-center w-full py-2.5 px-2 rounded-xl hover:bg-[#7B3F32]/5 transition-colors text-[#3D2B1F]">
+                      {language === "ar" ? "الأنواع" : "Furniture Types"}
+                      {typeOpen ? <ChevronUp /> : <ChevronDown />}
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="space-y-2 py-2">
+                      {types.map(t => (
+                        <label key={t.id} className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-[#7B3F32]/5 transition-colors text-sm text-[#5A4A40]">
+                          <Checkbox
+                            checked={selectedTypes.includes(t.id)}
+                            onCheckedChange={() =>
+                              setSelectedTypes(prev =>
+                                prev.includes(t.id)
+                                  ? prev.filter(id => id !== t.id)
+                                  : [...prev, t.id]
+                              )
+                            }
+                          />
+                          {t.name || "Type"}
                         </label>
                       ))}
                     </CollapsibleContent>

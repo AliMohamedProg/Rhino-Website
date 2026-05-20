@@ -6,11 +6,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domains;
 
-public class TbCartItem : BaseTable
+public class TbCartCollection : BaseTable
 {
     public Guid CartId { get; set; }
 
-    public Guid ItemId { get; set; }
+    public Guid CollectionId { get; set; }
 
     public int Quantity { get; set; }
     [Column(TypeName = "decimal(18,2)")]
@@ -25,6 +25,6 @@ public class TbCartItem : BaseTable
     // Navigation
     [ForeignKey(nameof(CartId))]
     public TbCart Cart { get; set; }
-    public TbItem Item { get; set; }
+    public TbCollections Collection { get; set; }
     
 }

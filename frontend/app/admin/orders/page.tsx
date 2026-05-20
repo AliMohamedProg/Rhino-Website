@@ -21,7 +21,7 @@ import { MoreHorizontal, Eye, Download, Filter } from "lucide-react"
 import Link from "next/link"
 import { exportOrdersExcel, exportOrdersPdf } from "@/app/ApiHelper/ExportApi"
 
-type ApiOrderItem = { itemId?: string; productId?: string; nameEn?: string; nameAr?: string; qty?: number; quantity?: number; unitPrice?: number; price?: number }
+type ApiOrderItem = { itemId?: string; productId?: string; name?: string; name?: string; qty?: number; quantity?: number; unitPrice?: number; price?: number }
 type ApiOrder = { id?: string; userId?: string; orderNumber?: string; orderDate?: string; createdDate?: string; delivryDate?: string; address?: string; city?: string; country?: string; email?: string; phoneNumber?: string; firstName?: string; lastName?: string; status?: string; paymentStatus?: string; total?: number; tbOrderItems?: ApiOrderItem[]; paymentMethod?: string; paymentMethodName?: string }
 
 const normalizeStatus = (status?: string | null): Order["status"] => {
@@ -48,7 +48,7 @@ const mapApiOrder = (apiOrder: ApiOrder, index: number): Order => {
   const mappedItems = items.map((item, itemIndex) => {
     const price = Number(item.unitPrice ?? item.price ?? 0)
     const quantity = Number(item.qty ?? item.quantity ?? 0)
-    return { productId: item.itemId || item.productId || `item-${index}-${itemIndex}`, productName: item.nameEn || item.nameAr || "Item", quantity: Number.isFinite(quantity) ? quantity : 0, price: Number.isFinite(price) ? price : 0 }
+    return { productId: item.itemId || item.productId || `item-${index}-${itemIndex}`, productName: item.name || item.name || "Item", quantity: Number.isFinite(quantity) ? quantity : 0, price: Number.isFinite(price) ? price : 0 }
   })
   const subtotal = mappedItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const total = Number(apiOrder.total ?? subtotal)

@@ -45,7 +45,7 @@ export default function SlidersPage() {
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [editingSlider, setEditingSlider] = useState<Slider | null>(null)
   const [formData, setFormData] = useState({
-    titleEn: "",
+    title: "",
     imageUrl: "",
   })
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -69,7 +69,7 @@ export default function SlidersPage() {
   }, [])
 
   const handleAdd = () => {
-    setFormData({ titleEn: "", imageUrl: "" })
+    setFormData({ title: "", imageUrl: "" })
     setSelectedFile(null)
     setAddDialogOpen(true)
   }
@@ -77,7 +77,7 @@ export default function SlidersPage() {
   const handleEdit = (slider: Slider) => {
     setEditingSlider(slider)
     setFormData({
-      titleEn: slider.titleEn,
+      title: slider.title,
       imageUrl: slider.imageUrl,
     })
     setSelectedFile(null)
@@ -165,8 +165,7 @@ export default function SlidersPage() {
         return
       }
       await ApiClient.post("api/admin/Sliders/add-slider", {
-        titleAr: "",
-        titleEn: formData.titleEn,
+        title: formData.title,
         imageUrl,
       })
       setAddDialogOpen(false)
@@ -202,8 +201,7 @@ export default function SlidersPage() {
       }
       await ApiClient.post("api/admin/Sliders/edit-slider", {
         id: editingSlider.id,
-        titleAr: "",
-        titleEn: formData.titleEn,
+        title: formData.title,
         imageUrl,
       })
       setEditDialogOpen(false)
@@ -217,7 +215,7 @@ export default function SlidersPage() {
     }
   }
 
-  const isFormValid = () => formData.titleEn.trim()
+  const isFormValid = () => formData.title.trim()
 
   return (
     <div className="space-y-6">
@@ -262,7 +260,7 @@ export default function SlidersPage() {
             <Card key={slider.id} className="overflow-hidden border-[#7B3F32]/10 bg-white/80 backdrop-blur-sm rounded-3xl shadow-sm">
               <div className="relative aspect-video bg-slate-100">
                 {slider.imageUrl ? (
-                  <Image src={getImageUrl(slider.imageUrl)} alt={slider.titleEn} fill className="object-cover" />
+                  <Image src={getImageUrl(slider.imageUrl)} alt={slider.title} fill className="object-cover" />
                 ) : (
                   <div className="flex items-center justify-center h-full">
                     <ImageIcon className="h-12 w-12 text-slate-300" />
@@ -272,7 +270,7 @@ export default function SlidersPage() {
               <CardContent className="p-4">
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
-                    <h3 className="font-semibold text-slate-900">{slider.titleEn}</h3>
+                    <h3 className="font-semibold text-slate-900">{slider.title}</h3>
                     <p className="text-sm text-slate-500">
                       {slider.createdDate ? new Date(slider.createdDate).toLocaleDateString("en-US") : "-"}
                     </p>
@@ -309,8 +307,8 @@ export default function SlidersPage() {
           </DialogHeader>
           <div className="space-y-5 py-4">
             <div className="space-y-2">
-              <Label htmlFor="titleEn" className="text-sm font-semibold text-[#4b3d34]">Title</Label>
-              <Input id="titleEn" value={formData.titleEn} onChange={(e) => setFormData({ ...formData, titleEn: e.target.value })} placeholder="Enter title" className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 h-12 rounded-xl bg-white/50" />
+              <Label htmlFor="title" className="text-sm font-semibold text-[#4b3d34]">Title</Label>
+              <Input id="title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} placeholder="Enter title" className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 h-12 rounded-xl bg-white/50" />
             </div>
             <div className="space-y-2">
               <Label className="text-sm font-semibold text-[#4b3d34]">Image</Label>
@@ -346,8 +344,8 @@ export default function SlidersPage() {
           </DialogHeader>
           <div className="space-y-5 py-4">
             <div className="space-y-2">
-              <Label htmlFor="editTitleEn" className="text-sm font-semibold text-[#4b3d34]">Title</Label>
-              <Input id="editTitleEn" value={formData.titleEn} onChange={(e) => setFormData({ ...formData, titleEn: e.target.value })} placeholder="Enter title" className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 h-12 rounded-xl bg-white/50" />
+              <Label htmlFor="editTitle" className="text-sm font-semibold text-[#4b3d34]">Title</Label>
+              <Input id="editTitle" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} placeholder="Enter title" className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 h-12 rounded-xl bg-white/50" />
             </div>
             <div className="space-y-2">
               <Label className="text-sm font-semibold text-[#4b3d34]">Image</Label>
@@ -379,7 +377,7 @@ export default function SlidersPage() {
         <AlertDialogContent className="bg-white/95 backdrop-blur-xl border-[#7B3F32]/10 rounded-3xl shadow-2xl">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-2xl font-bold tracking-tight text-[#2f2219]">Delete Slider</AlertDialogTitle>
-            <AlertDialogDescription className="text-[#8b7d73] mt-2">Are you sure you want to delete <span className="font-semibold text-[#7B3F32]">"{sliderToDelete?.titleEn}"</span>? This action cannot be undone.</AlertDialogDescription>
+            <AlertDialogDescription className="text-[#8b7d73] mt-2">Are you sure you want to delete <span className="font-semibold text-[#7B3F32]">"{sliderToDelete?.title}"</span>? This action cannot be undone.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="mt-4">
             <AlertDialogCancel className="border-[#7B3F32]/20 text-[#4b3d34] hover:bg-[#f6eee8] rounded-xl h-11 font-medium">Cancel</AlertDialogCancel>

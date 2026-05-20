@@ -15,8 +15,7 @@ public class TbCartItem : BaseTable
     public int Quantity { get; set; }
     [Column(TypeName = "decimal(18,2)")]
     public decimal Total { get; set; }
-    public string NameAr { get; set; }
-    public string NameEn { get; set; }
+    public string Name { get; set; }
     public string Image { get; set; }
     public string? Color { get; set; }
     public string? Fabric { get; set; }
@@ -26,7 +25,6 @@ public class TbCartItem : BaseTable
     // Navigation
     [ForeignKey(nameof(CartId))]
     public TbCart Cart { get; set; }
-
-    [ForeignKey(nameof(ItemId))]
     public TbItem Item { get; set; }
+    
 }

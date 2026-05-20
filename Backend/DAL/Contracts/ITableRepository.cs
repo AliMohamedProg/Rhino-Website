@@ -27,5 +27,8 @@ namespace DAL.Contracts
         Task<int> CountAsync(Expression<Func<T, bool>>? filter = null);
         Task<List<TResult>> GetList<TResult>(Expression<Func<T, bool>>? filter = null, Expression<Func<T, TResult>>? selector = null, 
         Expression<Func<T, object>>? orderBy = null, bool isDescending = false, params Expression<Func<T, object>>[] includers);
+        Task<List<T>> GetListWithNestedIncludes(
+            Expression<Func<T, bool>>? filter = null,
+            params Func<IQueryable<T>, IQueryable<T>>[] includes);
     }
 }

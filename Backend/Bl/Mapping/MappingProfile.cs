@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessLayer.Services;
@@ -14,47 +13,54 @@ namespace Bl.Mapping
     {
         public MappingProfile()
         {
-                CreateMap<TbCategory, CategoryDto>().ForMember(dest => dest.ProductsCount,
-               opt => opt.MapFrom(src => src.TbItems.Count()))
-                .ReverseMap();
-                
-                CreateMap<TbProjects, ProjectsDto>().ReverseMap();
-                CreateMap<TbProjectImages, ProjectImagesDto>().ReverseMap();
-                CreateMap<TbProjectProducts, ProjectProductsDto>().ReverseMap();
-
-                CreateMap<TbAlliances, AlliancesDto>().ReverseMap();
-                CreateMap<TbFabrics,FabricsDto>().ReverseMap();
+            CreateMap<TbCategory, CategoryDto>().ReverseMap();
+            CreateMap<TbProjects, ProjectsDto>().ReverseMap();
+            CreateMap<TbProjectImages, ProjectImagesDto>().ReverseMap();
+            CreateMap<TbProjectProducts, ProjectProductsDto>().ReverseMap();
+            CreateMap<TbAlliances, AlliancesDto>().ReverseMap();
+            CreateMap<TbItemFabrics,ItemFabricsDto>().ReverseMap();
             CreateMap<TbImage, ImageDto>().ReverseMap();
-            CreateMap<TbItem, ItemDto>()
-                .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.TbImages))
-                .ForMember(dest => dest.Fabrics, opt => opt.MapFrom(src => src.TbFabrics))
-                .ReverseMap()
-                .ForMember(dest => dest.TbImages, opt => opt.MapFrom(src => src.Images))
-                .ForMember(dest => dest.TbFabrics, opt => opt.MapFrom(src => src.Fabrics));
+            CreateMap<TbItem, ItemDto>().ReverseMap();
             CreateMap<TbOrder, OrderDto>().ReverseMap();
-            CreateMap<TbOrderItem, OrderItemDto>()
-                .ForMember(dest => dest.NameEn, opt => opt.MapFrom(src =>
-                    !string.IsNullOrWhiteSpace(src.nameEn)
-                        ? src.nameEn
-                        : (src.Item != null ? src.Item.NameEn : null)))
-                .ForMember(dest => dest.NameAr, opt => opt.MapFrom(src =>
-                    !string.IsNullOrWhiteSpace(src.nameAr)
-                        ? src.nameAr
-                        : (src.Item != null ? src.Item.NameAr : null)))
-                .ForMember(dest => dest.Image, opt => opt.MapFrom(src =>
-                    !string.IsNullOrWhiteSpace(src.Image)
-                        ? src.Image
-                        : (src.Item != null ? src.Item.MainImage : null)))
-                .ReverseMap();
+            CreateMap<TbOrderItem, OrderItemDto>().ReverseMap();
             CreateMap<TbReview, ReviewDto>().ReverseMap();
             CreateMap<TbSetting, SettingDto>().ReverseMap();
             CreateMap<TbSlider, SliderDto>().ReverseMap();
             CreateMap<TbRefreshTokens, RefreshTokensDto>().ReverseMap();
             CreateMap<TbCart, CartDto>().ReverseMap();
             CreateMap<TbCartItem, CartItemDto>().ReverseMap();
-            CreateMap<TbStyles, StylesDto>()
-                .ForMember(dest => dest.ProductsCount, opt => opt.MapFrom(src => src.TbItems.Count()))
+            CreateMap<TbStyles, StylesDto>().ReverseMap();
+            CreateMap<TbCollections, CollectionDto>()
+                .ForMember(dest => dest.Changes, 
+                    opt => opt.MapFrom(src => src.TbChanges))
+                .ForMember(dest => dest.CollectionImages, 
+                    opt => opt.MapFrom(src => src.TbCollectionImages))
+                .ForMember(dest => dest.CollectionFabrics, 
+                    opt => opt.MapFrom(src => src.TbCollectionFabrics))
+                .ForMember(dest => dest.CollectionItems, 
+                    opt => opt.MapFrom(src => src.TbCollectionItems))
+                .ReverseMap()
+                .ForMember(dest => dest.TbChanges, 
+                    opt => opt.MapFrom(src => src.Changes))
+                .ForMember(dest => dest.TbCollectionImages, 
+                    opt => opt.MapFrom(src => src.CollectionImages))
+                .ForMember(dest => dest.TbCollectionFabrics, 
+                    opt => opt.MapFrom(src => src.CollectionFabrics))
+                .ForMember(dest => dest.TbCollectionItems, 
+                    opt => opt.MapFrom(src => src.CollectionItems));
+            CreateMap<TbCollectionFabrics, CollectionFabricsDto>().ReverseMap();
+            CreateMap<TbCollectionImages, CollectionImagesDto>().ReverseMap();
+            CreateMap<TbCollectionItems, CollectionItemsDto>()
+                .ForMember(dest => dest.Item, opt => opt.MapFrom(src => src.Item)) // ✅
                 .ReverseMap();
+            CreateMap<TbChanges, ChangeDto>()
+                .ForMember(dest => dest.ChangeImages, 
+                    opt => opt.MapFrom(src => src.TbChangeImages))
+                .ReverseMap()
+                .ForMember(dest => dest.TbChangeImages, 
+                    opt => opt.MapFrom(src => src.ChangeImages));
+            CreateMap<TbChangeImages, ChangeImagesDto>().ReverseMap();
+            CreateMap<TbTypes, TypesDto>().ReverseMap();
         }
     }
 }

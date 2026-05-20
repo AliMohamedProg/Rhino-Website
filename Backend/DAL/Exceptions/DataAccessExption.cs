@@ -11,8 +11,9 @@ namespace DAL.Exceptions
     public class DataAccessExption : Exception
     {
         public DataAccessExption(Exception ex , string customMessage , ILogger logger)
+            : base(string.IsNullOrWhiteSpace(customMessage) ? ex.Message : customMessage, ex)
         {
-            logger.LogError($"The Exception: {ex.Message} \n Custom Message: {customMessage}");
+            logger.LogError(ex, "Data access exception. Custom Message: {CustomMessage}", customMessage);
         }
     }
 }

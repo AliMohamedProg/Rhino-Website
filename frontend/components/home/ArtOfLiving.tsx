@@ -96,7 +96,7 @@ export function ArtOfLiving() {
             return (
               <GridItem
                 key={cat.id}
-                title={cat.nameEn}
+                title={cat.name}
                 image={cat.imageUrl || "/art-living-1.png"}
                 href={`/category/${cat.id}`}
                 className={className}

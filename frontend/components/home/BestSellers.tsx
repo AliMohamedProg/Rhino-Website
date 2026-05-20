@@ -38,15 +38,15 @@ export function BestSellers({ initialBestSellers }: BestSellersProps) {
 
         <div className="relative max-w-7xl mx-auto w-full px-4 md:px-8 overflow-hidden">
           <ScrollArrows scrollRef={scrollRef} scrollAmount={350} />
-           <div ref={scrollRef} className="flex overflow-x-hidden pb-8 snap-x snap-mandatory w-full gap-4 md:gap-8 no-scrollbar">
-             {(initialBestSellers || []).slice(0, 8).map((product, index) => (
-               <div key={index} className="flex-shrink-0 w-[48%] md:w-[382px] snap-center">
+          <div ref={scrollRef} className="flex overflow-x-hidden pb-8 snap-x snap-mandatory w-full gap-4 md:gap-8 no-scrollbar">
+            {(initialBestSellers || []).slice(0, 8).map((product, index) => (
+              <div key={index} className="flex-shrink-0 w-[48%] md:w-[382px] snap-center">
                 <ProductCard
                   product={product}
                   key={product.id}
                   id={product.id}
-                  title={language === "ar" ? product.nameAr : product.nameEn}
-                  description={language === "ar" ? product.descriptionAr || product.nameAr : product.descriptionEn || product.nameEn}
+                  title={product.name}
+                  description={product.description}
                   price={`${formatPrice(product.price)} EGP`}
                   discountAmount={product.discountAmount || 0}
                   originalPrice={
@@ -57,7 +57,7 @@ export function BestSellers({ initialBestSellers }: BestSellersProps) {
                   rating={reviewStatsByProductId[product.id]?.average ?? (product as any).overallRating ?? 0}
                   reviewsCountVal={reviewStatsByProductId[product.id]?.count ?? 0}
                   mainImage={product.mainImage}
-                  colorsRaw={product.colorsEn}
+                  colorsRaw={product.colors}
                   stockNumber={product.stockNumber}
                   isWishlisted={isInWishlist(product.id)}
                   onAddToCart={async (productId, selectedColorName) => {
@@ -70,7 +70,7 @@ export function BestSellers({ initialBestSellers }: BestSellersProps) {
                         : product.price
                     toggleItem({
                       id: productId,
-                      name: { ar: product.nameAr, en: product.nameEn },
+                      name: product.name,
                       price: discountedPrice,
                       originalPrice: (product.discountAmount ?? 0) > 0 ? product.price : undefined,
                       image: product.mainImage || "/placeholder.svg",

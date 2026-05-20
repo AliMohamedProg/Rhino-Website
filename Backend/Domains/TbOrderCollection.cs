@@ -3,19 +3,19 @@ using System.Collections.Generic;
 
 namespace Domains;
 
-public partial class TbOrderItem : BaseTable
+public partial class TbOrderCollection : BaseTable
 {
 
-    public Guid ItemId { get; set; }
+    public Guid CollectionId { get; set; }
     public string Name { get; set; }
-    public string Image { get; set; }
+    public string MainImage { get; set; }
     public Guid OrderId { get; set; }
 
     public int Qty { get; set; }
 
     public decimal UnitPrice { get; set; }
 
-    public virtual TbItem Item { get; set; } = null!;
+    public virtual TbCollections Collections { get; set; } = null!;
 
     public virtual TbOrder Order { get; set; } = null!;
 }

@@ -21,7 +21,6 @@ import type { AdminCategoryDto } from "@/lib/admin-items"
 import { ArrowLeft, Upload, X, Plus } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { MOCK_BRANDS } from "@/lib/mock-admin-data"
 
 interface ProductFormProps {
   product?: Product
@@ -40,9 +39,9 @@ export function ProductForm({ product, mode }: ProductFormProps) {
   const buildInitialFabrics = (item?: Product): FabricItem[] => (
     Array.isArray(item?.fabrics)
       ? item!.fabrics.map((fabric) => ({
-          name: fabric.name || "",
-          imageUrl: fabric.imageUrl || "",
-        }))
+        name: fabric.name || "",
+        imageUrl: fabric.imageUrl || "",
+      }))
       : []
   )
 
@@ -55,8 +54,8 @@ export function ProductForm({ product, mode }: ProductFormProps) {
   }
 
   const [formData, setFormData] = useState({
-    nameEn: product?.nameEn || "",
-    descriptionEn: product?.descriptionEn || "",
+    name: product?.name || "",
+    description: product?.description || "",
     price: product?.originalPrice ?? product?.price ?? 0,
     discountAmount: product?.discountAmount ?? 0,
     stock: product?.stock || 0,
@@ -64,16 +63,18 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     dimensions: product?.dimensions || "",
     categoryId: product?.categoryId || "",
     styleId: product?.styleId || "",
+    typeId: product?.typeId || "",
     images: buildInitialImages(product),
     mainImage: product?.mainImage || product?.images?.[0] || "",
-    colorsEn: product?.colorsEn || "",
-    materialEn: product?.materialEn || "",
+    colors: product?.colors || "",
+    material: product?.material || "",
     brandId: "",
     fabrics: buildInitialFabrics(product),
   })
 
   const [styles, setStyles] = useState<AdminCategoryDto[]>([])
   const [categories, setCategories] = useState<AdminCategoryDto[]>([])
+  const [types, setTypes] = useState<AdminCategoryDto[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const [isUploadingFabric, setIsUploadingFabric] = useState(false)
@@ -82,8 +83,8 @@ export function ProductForm({ product, mode }: ProductFormProps) {
     if (!product) return
 
     setFormData({
-      nameEn: product.nameEn || "",
-      descriptionEn: product.descriptionEn || "",
+      name: product.name || "",
+      description: product.description || "",
       price: product.originalPrice ?? product.price ?? 0,
       discountAmount: product.discountAmount ?? 0,
       stock: product.stock || 0,
@@ -91,10 +92,11 @@ export function ProductForm({ product, mode }: ProductFormProps) {
       dimensions: product.dimensions || "",
       categoryId: product.categoryId || "",
       styleId: product.styleId || "",
+      typeId: product.typeId || "",
       images: buildInitialImages(product),
       mainImage: product.mainImage || product.images?.[0] || "",
-      colorsEn: product.colorsEn || "",
-      materialEn: product.materialEn || "",
+      colors: product.colors || "",
+      material: product.material || "",
       brandId: "",
       fabrics: buildInitialFabrics(product),
     })
@@ -103,12 +105,14 @@ export function ProductForm({ product, mode }: ProductFormProps) {
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const [stylesData, catsData] = await Promise.all([
+        const [stylesData, catsData, typesData] = await Promise.all([
           ApiClient.get("api/admin/Styles"),
-          ApiClient.get("api/admin/Categories")
+          ApiClient.get("api/admin/Categories"),
+          ApiClient.types.getAll()
         ])
         setStyles(stylesData as AdminCategoryDto[])
         setCategories(catsData as AdminCategoryDto[])
+        setTypes(typesData as AdminCategoryDto[])
       } catch (err) {
         console.error("Failed to fetch organizational data:", err)
       }
@@ -230,8 +234,8 @@ export function ProductForm({ product, mode }: ProductFormProps) {
   const normalizedDiscount = Math.min(100, Math.max(0, Number(formData.discountAmount) || 0))
   const discountedPrice = Math.max(0, Math.round(formData.price * (1 - normalizedDiscount / 100)))
 
-  const colorsValidationEn = validateColorsInputEn(formData.colorsEn || "")
-  const showColorsErrorEn = formData.colorsEn.trim().length > 0 && !colorsValidationEn.valid
+  const colorsValidationEn = validateColorsInputEn(formData.colors || "")
+  const showColorsErrorEn = formData.colors.trim().length > 0 && !colorsValidationEn.valid
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -273,9 +277,9 @@ export function ProductForm({ product, mode }: ProductFormProps) {
 
       const payload = {
         id: productId,
-        nameEn: formData.nameEn,
+        name: formData.name,
         nameAr: "",
-        descriptionEn: formData.descriptionEn,
+        description: formData.description,
         descriptionAr: "",
         price: formData.price,
         discountAmount,
@@ -283,11 +287,10 @@ export function ProductForm({ product, mode }: ProductFormProps) {
         sku: formData.sku.trim(),
         dimensions: formData.dimensions.trim(),
         categoryId: formData.categoryId,
+        typeId: formData.typeId || null,
         styleId: formData.styleId || null,
-        colorsEn: colorsValidationEn.normalized,
-        colorsAr: "",
-        materialEn: (formData.materialEn || "").trim(),
-        materialAr: "",
+        colors: colorsValidationEn.normalized,
+        material: (formData.material || "").trim(),
         mainImage,
         images: formData.images.map((url) => ({ imageUrl: url })),
         fabrics,
@@ -376,7 +379,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                 </Label>
                 <Input
                   id="nameEn"
-                  value={formData.nameEn}
+                  value={formData.name}
                   onChange={(e) => handleChange("nameEn", e.target.value)}
                   placeholder="Enter product name"
                   className="admin-input h-11"
@@ -390,7 +393,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                 </Label>
                 <Textarea
                   id="descriptionEn"
-                  value={formData.descriptionEn}
+                  value={formData.description}
                   onChange={(e) => handleChange("descriptionEn", e.target.value)}
                   placeholder="Write a detailed product description"
                   className="admin-input min-h-28"
@@ -639,7 +642,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                   <SelectContent className="rounded-xl border-[#8f3f2a]/15 bg-white shadow-xl">
                     {categories.map((category) => (
                       <SelectItem key={category.id} value={category.id}>
-                        {category.nameEn}
+                        {category.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -657,7 +660,25 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                   <SelectContent className="rounded-xl border-[#8f3f2a]/15 bg-white shadow-xl">
                     {styles.map((style) => (
                       <SelectItem key={style.id} value={style.id}>
-                        {style.nameEn}
+                        {style.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="type" className="text-sm font-semibold text-[#4b3d34]">
+                  Type
+                </Label>
+                <Select value={formData.typeId} onValueChange={(value) => handleChange("typeId", value)}>
+                  <SelectTrigger className="admin-input h-11">
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl border-[#8f3f2a]/15 bg-white shadow-xl">
+                    {types.map((type) => (
+                      <SelectItem key={type.id} value={type.id}>
+                        {type.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -673,11 +694,6 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                     <SelectValue placeholder="Select brand" />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl border-[#8f3f2a]/15 bg-white shadow-xl">
-                    {MOCK_BRANDS.map((brand) => (
-                      <SelectItem key={brand.id} value={brand.id}>
-                        {brand.name}
-                      </SelectItem>
-                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -688,7 +704,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                 </Label>
                 <Input
                   id="colorsEn"
-                  value={formData.colorsEn}
+                  value={formData.colors}
                   onChange={(e) => handleChange("colorsEn", e.target.value)}
                   placeholder="beige,black,oak"
                   aria-invalid={showColorsErrorEn}
@@ -709,7 +725,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                 </Label>
                 <Input
                   id="materialEn"
-                  value={formData.materialEn}
+                  value={formData.material}
                   onChange={(e) => handleChange("materialEn", e.target.value)}
                   placeholder="Wood, Fabric, Metal..."
                   className="admin-input h-11"

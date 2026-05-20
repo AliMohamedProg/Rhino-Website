@@ -28,9 +28,9 @@ namespace Bl.Services
             _itemRepository = itemRepository;
             _mapper = _Mapper;
         }
-        public async Task<TbOrder> CreateOrder(Guid userId, string Country, string paymentMethodName, string City, string Address, decimal Total, string PhoneNumber, string Email, string FirstName, string LastName, string? transactionId = null)
+        public async Task<TbOrder> CreateOrder(Guid userId , OrderRequest orderRequest)
         {
-            var cart = await _cartRepository.GetActiveCartWithItemsAsync(userId);
+            var cart = await _cartRepository.GetActiveCartWithItemsAsync(orderRequest.UserId);
             if (cart == null || !cart.Items.Any())
                 throw new Exception("Cart is empty!");
             var order = new TbOrder
@@ -39,23 +39,23 @@ namespace Bl.Services
                 UserId = userId,
                 OrderDate = DateTime.UtcNow,
                 Total = cart.Items.Sum(i => i.Price * i.Quantity),
-                Country = Country,
-                City = City,
-                Address = Address,
-                PhoneNumber = PhoneNumber,
-                Email = Email,
-                FirstName = FirstName,
-                LastName = LastName,
+                Country = orderRequest.Country,
+                City = orderRequest.City,
+                Address = orderRequest.Address,
+                PhoneNumber = "+2"+orderRequest.PhoneNumber,
+                Email = orderRequest.Email,
+                FirstName = orderRequest.FirstName,
+                LastName = orderRequest.LastName,
                 Status = "Pending",
-                PaymentStatus = transactionId != null ? "Paid" : "Pending",
-                PaymobTransactionId = transactionId,
+                PaymentStatus = orderRequest.TransactionId != null ? "Paid" : "Pending",
+                PaymobTransactionId = orderRequest.TransactionId,
                 OrderNumber = $"ORD-{DateTime.UtcNow:yyyyMMddHHmmss}-{Guid.NewGuid().ToString().Substring(0, 6).ToUpper()}",
                 CurrentState = 1,
                 DelivryDate = DateTime.Now.AddDays(5),
-                PaymentMethodName = paymentMethodName
+                PaymentMethodName = orderRequest.PaymentMethodName
             };
 
-            foreach (var item in cart.Items)
+          /*  foreach (var item in cart.Items)
             {
                 order.TbOrderItems.Add(new TbOrderItem
                 {
@@ -64,9 +64,8 @@ namespace Bl.Services
                     ItemId = item.ItemId,
                     Qty = item.Quantity,
                     UnitPrice = item.Price,
-                    nameAr = item.NameAr,
-                    nameEn = item.NameEn,
-                    Image = item.Image,
+                    Name = item.Name,
+                    MainImage = item.Image,
                     CurrentState = 1
                 });
 
@@ -77,12 +76,25 @@ namespace Bl.Services
                     dbItem.StockNumber -= item.Quantity;
                     _itemRepository.Update(dbItem);
                 }
-            }
+            }*/
 
+            var itemIds = cart.Items.Select(i => i.ItemId).ToList();
+            var dbItems = await _itemRepository.GetList<TbItem>( 
+                filter: i => itemIds.Contains(i.Id));
+            
+            var dict = dbItems.ToDictionary(i => i.Id);
+            foreach (var item in cart.Items)
+            {
+                if (dict.TryGetValue(item.ItemId, out var dbItem))
+                {
+                    dbItem.StockNumber -= item.Quantity; 
+                    _itemRepository.Update(dbItem);
+                }
+            }
             _tableRepository.Add(order);
 
             // إفراغ الكارت
-            await _cartRepository.DeleteCart(userId);
+            await _cartRepository.DeleteCart(orderRequest.UserId);
 
             return order;
         }

@@ -6,8 +6,6 @@ namespace Domains;
 
 public partial class TbOrder : BaseTable
 {
- 
-
     public Guid UserId { get; set; }
     public DateTime OrderDate { get; set; }
     public DateTime DelivryDate { get; set; }

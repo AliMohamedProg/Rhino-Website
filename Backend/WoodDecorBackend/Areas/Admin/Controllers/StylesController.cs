@@ -42,8 +42,7 @@ namespace Apis.Areas.Admin.Controllers
                 var row = string.Join(",", new[]
                 {
                     cat.Id.ToString(),
-                    EscapeCsv(cat.NameEn),
-                    EscapeCsv(cat.NameAr),
+                    EscapeCsv(cat.Name),
                     cat.ProductsCount.ToString()
                 });
                 sb.AppendLine(row);
@@ -64,8 +63,7 @@ namespace Apis.Areas.Admin.Controllers
             foreach (var cat in styles)
             {
                 sb.AppendLine($"Id: {cat.Id}");
-                sb.AppendLine($"Name (EN): {cat.NameEn}");
-                sb.AppendLine($"Name (AR): {cat.NameAr}");
+                sb.AppendLine($"Name (EN): {cat.Name}");
                 sb.AppendLine($"Products Count: {cat.ProductsCount}");
                 sb.AppendLine(new string('-', 40));
             }
@@ -89,8 +87,7 @@ namespace Apis.Areas.Admin.Controllers
             {
                 var style = new StylesDto()
                 {
-                    NameAr = styleDto.NameAr,
-                    NameEn = styleDto.NameEn,
+                    Name = styleDto.Name,
                     ImageUrl = styleDto.ImageUrl,
                     CurrentState =1,
                     Id = Guid.NewGuid(),

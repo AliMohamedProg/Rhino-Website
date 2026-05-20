@@ -16,40 +16,36 @@ namespace Bl.Services
     public class ItemService : BaseService<TbItem, ItemDto>, IItem
     {
         private readonly ITableRepository<TbImage> _imageRepository;
-        private readonly ITableRepository<TbFabrics> _fabricRepository;
+        private readonly ITableRepository<TbItemFabrics> _fabricRepository;
 
         public ItemService(ITableRepository<TbItem> _repository, IMapper _Mapper, IUserService userService, 
-            ITableRepository<TbImage> imageRepository, ITableRepository<TbFabrics> fabricRepository)
+            ITableRepository<TbImage> imageRepository, ITableRepository<TbItemFabrics> fabricRepository)
             : base(_repository, _Mapper, userService)
         {
             _imageRepository = imageRepository;
             _fabricRepository = fabricRepository;
         }
-
-        public List<ItemDto> GetAllItemsWithImagesAndFabrics()
-        {
-            var items = repository.GetList<TbItem>(
+        public async Task<List<ItemDto>> GetAllItemsWithImagesAndFabrics()
+        { 
+            var items = await repository.GetList<TbItem>( 
                 filter: a => a.CurrentState > 0,
                 selector: null,
                 orderBy: null,
                 isDescending: false,
                 a => a.TbImages,
-                a => a.TbFabrics
-                
-            ).GetAwaiter().GetResult();
+                a => a.TbItemFabrics); 
             return Mapper.Map<List<TbItem>, List<ItemDto>>(items);
         }
 
-        public ItemDto? GetItemWithImagesAndFabrics(Guid id)
+        public async Task<ItemDto?> GetItemWithImagesAndFabrics(Guid id)
         {
-            var items = repository.GetList<TbItem>(
+            var items = await repository.GetList<TbItem>(
                 filter: a => a.Id == id && a.CurrentState > 0,
                 selector: null,
                 orderBy: null,
                 isDescending: false,
                 a => a.TbImages,
-                a => a.TbFabrics
-            ).GetAwaiter().GetResult();
+                a => a.TbItemFabrics);
 
             var item = items.FirstOrDefault();
             return item == null ? null : Mapper.Map<TbItem, ItemDto>(item);
@@ -74,7 +70,7 @@ namespace Bl.Services
                     img.CurrentState = 1;
                 }
 
-                foreach (var fabric in tbItem.TbFabrics)
+                foreach (var fabric in tbItem.TbItemFabrics)
                 {
                     fabric.Id = Guid.NewGuid();
                     fabric.CreatedBy = createdBy;
@@ -94,7 +90,7 @@ namespace Bl.Services
             }
             if (itemDto.Fabrics == null)
             {
-                itemDto.Fabrics = new List<FabricsDto>();
+                itemDto.Fabrics = new List<ItemFabricsDto>();
             }
             if (string.IsNullOrWhiteSpace(itemDto.MainImage) && itemDto.Images.Count > 0)
             {
@@ -129,7 +125,7 @@ namespace Bl.Services
                 _fabricRepository.Delete(oldFabric.Id);
             }
 
-            foreach (var newFabric in tbItem.TbFabrics)
+            foreach (var newFabric in tbItem.TbItemFabrics)
             {
                 newFabric.ProductId = tbItem.Id;
                 newFabric.CreatedBy = userService.GetLoggedInUser();

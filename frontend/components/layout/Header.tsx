@@ -60,6 +60,7 @@ export function Header() {
   const { isDesktopView, toggleDesktopView } = useDesktopViewToggle();
   const [categories, setCategories] = useState<Category[]>([]);
   const [styles, setStyles] = useState<Style[]>([]);
+  const [types, setTypes] = useState<Type[]>([]);
   const [searchProducts, setSearchProducts] = useState<SearchProduct[]>([]);
 
   const isAdmin =
@@ -145,8 +146,19 @@ export function Header() {
       }
     };
 
+    const fetchTypes = async () => {
+      try {
+        const data = await ApiClient.types.getAll();
+        setTypes(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error("Failed to fetch types:", error);
+        setTypes([]);
+      }
+    };
+
     fetchCategories();
     fetchStyles();
+    fetchTypes();
   }, []);
 
   useEffect(() => {
@@ -195,6 +207,14 @@ export function Header() {
         (a.nameEn || "").localeCompare(b.nameEn || "", "en", { sensitivity: "base" })
       ),
     [styles]
+  );
+
+  const sortedTypes = useMemo(
+    () =>
+      [...types].sort((a, b) =>
+        (a.name || "").localeCompare(b.name || "", "en", { sensitivity: "base" })
+      ),
+    [types]
   );
 
   return (
@@ -303,6 +323,35 @@ export function Header() {
 
                 <Link href="/products" className="hover:text-mahogany transition-colors block font-bold text-mahogany text-[11px] tracking-[0.2em]">
                   ALL CATEGORIES
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Types Dropdown */}
+          <div className="group relative cursor-pointer">
+            <div className="flex items-center gap-1.5 hover:text-mahogany transition-all pb-1 hover:scale-110">
+              TYPES
+              <ChevronDownIcon className="w-3 h-3 ml-0.5 transition-transform group-hover:rotate-180 stroke-[3]" />
+            </div>
+
+            {/* Types Dropdown Menu */}
+            <div className="absolute top-full left-1/2 -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 pt-4">
+              <div className="bg-white border border-gray-100 rounded-[2.5rem] p-10 shadow-[0_20px_50px_rgba(0,0,0,0.1)] w-80 flex flex-col gap-5">
+                {sortedTypes.map((type) => (
+                  <Link
+                    key={type.id}
+                    href={`/products?typeId=${type.id}`}
+                    className="hover:text-mahogany transition-colors block text-taupe/60 text-[11px] font-bold tracking-[0.2em]"
+                  >
+                    {(type.name || "TYPE").toUpperCase()}
+                  </Link>
+                ))}
+
+                <div className="w-full h-px bg-gray-50 my-1"></div>
+
+                <Link href="/products" className="hover:text-mahogany transition-colors block font-bold text-mahogany text-[11px] tracking-[0.2em]">
+                  VIEW ALL TYPES
                 </Link>
               </div>
             </div>
@@ -456,6 +505,22 @@ export function Header() {
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {((language === "ar" ? category.nameAr : category.nameEn) || category.nameEn || category.nameAr || "Category").toUpperCase()}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Mobile Types */}
+          <div className="flex flex-col items-center gap-4">
+            <span className="text-mahogany">TYPES</span>
+            <div className="flex flex-col items-center gap-2 text-[10px] text-taupe">
+              {sortedTypes.map((type) => (
+                <Link
+                  key={type.id}
+                  href={`/products?typeId=${type.id}`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {(type.name || "Type").toUpperCase()}
                 </Link>
               ))}
             </div>

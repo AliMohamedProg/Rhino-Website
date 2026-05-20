@@ -4,8 +4,7 @@ const API_BASE_URL = ((process.env.NEXT_PUBLIC_API_URL || "https://localhost:728
 // Slider Interface
 export interface Slider {
   id: string
-  titleAr: string
-  titleEn: string
+  title: string
   imageUrl: string
   currentState: number
   createdDate: string
@@ -22,8 +21,7 @@ export async function getSliders(): Promise<Slider[]> {
     // Normalize property names (handle both camelCase and PascalCase)
     return rawData.map((item: any) => ({
       id: item.id ?? item.Id ?? "",
-      titleAr: item.titleAr ?? item.TitleAr ?? "",
-      titleEn: item.titleEn ?? item.TitleEn ?? "",
+      title: item.title ?? item.Title ?? "",
       imageUrl: item.imageUrl ?? item.ImageUrl ?? "",
       currentState: item.currentState ?? item.CurrentState ?? 0,
       createdDate: item.createdDate ?? item.CreatedDate ?? "",
@@ -35,8 +33,7 @@ export async function getSliders(): Promise<Slider[]> {
 }
 
 export async function addSlider(sliderData: {
-  titleAr: string
-  titleEn: string
+  title: string
   imageUrl: string
 }): Promise<Slider | null> {
   try {
@@ -50,8 +47,7 @@ export async function addSlider(sliderData: {
 
 export async function editSlider(sliderData: {
   id: string
-  titleAr: string
-  titleEn: string
+  title: string
   imageUrl: string
 }): Promise<Slider | null> {
   try {
@@ -84,16 +80,15 @@ export interface Fabric {
 
 export interface Product {
   id: string
-  nameEn: string
-  nameAr: string
-  descriptionEn: string
-  descriptionAr: string
+  name: string
+  description: string
   price: number
   originalPrice?: number
   discountAmount?: number
   stock: number
   category: string
   categoryId: string
+  typeId?: string
   styleId?: string
   dimensions?: string
   status: "active" | "inactive" | "draft"
@@ -101,10 +96,8 @@ export interface Product {
   onSale: boolean
   images: string[]
   mainImage?: string
-  colorsEn?: string
-  colorsAr?: string
-  materialEn?: string
-  materialAr?: string
+  colors?: string
+  material?: string
   sku: string
   createdDate: string
   updatedAt: string
@@ -127,8 +120,6 @@ export interface Order {
     productName: string
     quantity: number
     price: number
-    nameEn?: string
-    nameAr?: string
     image?: string
   }[]
   subtotal: number
@@ -165,11 +156,9 @@ export interface User {
 
 export interface Category {
   id: string
-  nameEn: string
-  nameAr: string
+  name: string
   slug: string
-  descriptionEn?: string
-  descriptionAr?: string
+  description?: string
   parentId?: string
   imageUrl?: string
   productsCount: number
@@ -194,118 +183,4 @@ export interface ChartData {
   value2?: number
 }
 
-// Mock Products
-export const mockProducts: Product[] = [
-  {
-    id: "1",
-    nameEn: "Modern L-Shaped Sofa",
-    nameAr: "كنبة حرف L عصرية",
-    descriptionEn: "Elegant L-shaped sofa with premium fabric upholstery",
-    descriptionAr: "كنبة حرف L أنيقة بتنجيد قماش فاخر",
-    price: 15999,
-    originalPrice: 19999,
-    stock: 25,
-    category: "Living Room",
-    categoryId: "1",
-    status: "active",
-    featured: true,
-    onSale: true,
-    images: ["/l-shaped-sofa-living-room.jpg"],
-    sku: "SOF-001",
-    createdDate: "2025-01-15",
-    updatedAt: "2025-01-28",
-  },
-  {
-    id: "2",
-    nameEn: "King Size Bedroom Set",
-    nameAr: "طقم غرفة نوم كينج",
-    descriptionEn: "Complete bedroom set with bed, wardrobe, and nightstands",
-    descriptionAr: "طقم غرفة نوم كامل يشمل سرير وخزانة وكومودينو",
-    price: 45000,
-    originalPrice: 52000,
-    stock: 12,
-    category: "Bedroom",
-    categoryId: "2",
-    status: "active",
-    featured: true,
-    onSale: true,
-    images: ["/modern-bedroom-furniture-set-front-view.jpg"],
-    sku: "BED-001",
-    createdDate: "2025-01-10",
-    updatedAt: "2025-01-25",
-  },
-  {
-    id: "3",
-    nameEn: "Home Office Desk",
-    nameAr: "مكتب منزلي",
-    descriptionEn: "Spacious home office desk with storage drawers",
-    descriptionAr: "مكتب منزلي واسع مع أدراج للتخزين",
-    price: 4500,
-    stock: 50,
-    category: "Office",
-    categoryId: "3",
-    status: "active",
-    featured: false,
-    onSale: false,
-    images: ["/modern-home-office-desk-wood.jpg"],
-    sku: "DSK-001",
-    createdDate: "2025-01-08",
-    updatedAt: "2025-01-20",
-  },
-  {
-    id: "4",
-    nameEn: "Kids Bedroom Furniture Set",
-    nameAr: "طقم أثاث غرفة أطفال",
-    descriptionEn: "Colorful kids bedroom set with bed and wardrobe",
-    descriptionAr: "طقم غرفة نوم أطفال ملون يشمل سرير وخزانة",
-    price: 18500,
-    originalPrice: 22000,
-    stock: 8,
-    category: "Kids",
-    categoryId: "4",
-    status: "active",
-    featured: true,
-    onSale: true,
-    images: ["/kids-bedroom-furniture.jpg"],
-    sku: "KID-001",
-    createdDate: "2025-01-05",
-    updatedAt: "2025-01-22",
-  },
-  {
-    id: "5",
-    nameEn: "Modern Wardrobe",
-    nameAr: "خزانة ملابس عصرية",
-    descriptionEn: "Large modern wardrobe with sliding doors",
-    descriptionAr: "خزانة ملابس عصرية كبيرة بأبواب منزلقة",
-    price: 12000,
-    stock: 15,
-    category: "Bedroom",
-    categoryId: "2",
-    status: "active",
-    featured: false,
-    onSale: false,
-    images: ["/modern-bedroom-wardrobe.jpg"],
-    sku: "WRD-001",
-    createdDate: "2025-01-03",
-    updatedAt: "2025-01-18",
-  },
-  {
-    id: "6",
-    nameEn: "Corner Sofa Set",
-    nameAr: "طقم كنب زاوية",
-    descriptionEn: "Premium corner sofa with Ottoman",
-    descriptionAr: "طقم كنب زاوية فاخر مع أوتومان",
-    price: 22000,
-    originalPrice: 26000,
-    stock: 5,
-    category: "Living Room",
-    categoryId: "1",
-    status: "active",
-    featured: true,
-    onSale: true,
-    images: ["/l-shaped-corner-sofa-gray-modern.jpg"],
-    sku: "SOF-002",
-    createdDate: "2025-01-01",
-    updatedAt: "2025-01-15",
-  },
-]
+

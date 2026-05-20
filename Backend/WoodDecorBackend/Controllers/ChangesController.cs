@@ -2,6 +2,7 @@ using Bl.Contracts;
 using Bl.DTOs;
 using BusinessLayer.Contracts;
 using Microsoft.AspNetCore.Mvc;
+using Apis.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -9,35 +10,27 @@ namespace Apis.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CollectionsController : ControllerBase
+    public class ChangeController: ControllerBase
     {
-        ICollections _collectionService;
+        //ICollections _collectionService;
         IChanges _changesService;
-        public CollectionsController(ICollections collectionService,  IChanges changesService)
+        public ChangeController(/*ICollections collectionService,*/ IChanges changesService)
         {
-            _collectionService = collectionService;
+            //_collectionService = collectionService;
             _changesService = changesService;
         }
-        // GET: api/<ItemsController>
-        [HttpGet]
-        public List<CollectionDto> Get()
+        [HttpGet("get-changes/{collectionId}")]
+        public ActionResult<List<ChangeDto>> GetCollectionChanges(Guid collectionId)
         {
-            var collections = _collectionService.GetAllCollectionWithImagesAndFabrics();
-            return collections;
+            try
+            {
+                var changes = _changesService.GetAll().Where(c => c.CollectionId == collectionId).ToList();
+                return Ok(changes);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
-        [HttpGet("collection-details/{collectionId}")]
-        public CollectionDto GetDetials(Guid collectionId)
-        {
-            var collection = _collectionService.GetCollectionWithImagesAndFabrics(collectionId);
-            return collection;
-        }
-        
-        [HttpGet("collection-changes/{collectionId}")]
-        public List<ChangeDto> GetCollectionChanges(Guid collectionId)
-        {
-            var changes = _changesService.GetAll().Where(c => c.CollectionId == collectionId).ToList();
-            return changes;
-        }
-
     }
 }

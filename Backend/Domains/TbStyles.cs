@@ -6,9 +6,7 @@ namespace Domains;
 public partial class TbStyles : BaseTable
 {
 
-    public string NameAr { get; set; } = null!;
-
-    public string NameEn { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
     public string ImageUrl { get; set; } = null!;
     public int? ProductsCount { get; set; }

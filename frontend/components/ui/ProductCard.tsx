@@ -60,6 +60,7 @@ interface ProductCardProps {
   colors?: ColorOption[];
   defaultColor?: string;
   stockNumber?: number;
+  href?: string;
   isWishlisted?: boolean;
   onAddToCart?: (productId: string, selectedColorName: string) => void | Promise<void>;
   onToggleWishlist?: (productId: string) => void | Promise<void>;
@@ -81,6 +82,7 @@ export function ProductCard({
   colors: providedColors,
   defaultColor,
   stockNumber: propStockNumber,
+  href,
   isWishlisted = false,
   onAddToCart,
   onToggleWishlist,
@@ -165,7 +167,7 @@ export function ProductCard({
 
   const navigateToProduct = () => {
     if (!id) return;
-    router.push(`/product/${id}`);
+    router.push(href || `/product/${id}`);
   };
 
   const handleWishlist = async () => {
@@ -200,7 +202,7 @@ export function ProductCard({
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const apiBase = (process.env.NEXT_PUBLIC_API_URL || "https://rhino-web.runasp.net").replace(/\/+$/, "")
+        const apiBase = (process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")
 
         const [reviewsRes, avgRes, countRes] = await Promise.all([
           fetch(`${apiBase}/api/review/get-reviews?productId=${id}`),

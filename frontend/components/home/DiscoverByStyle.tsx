@@ -6,28 +6,7 @@ import { ArrowRightIcon } from "@/components/layout/LucideIcons"
 import { getPublicStyles, type PublicCategory } from "@/lib/products"
 import { ScrollArrows } from "@/components/ui/ScrollArrows"
 
-const FALLBACK_STYLES = [
-  {
-    id: "fallback-bedroom",
-    nameEn: "Bedroom",
-    imageUrl: "/Gemini_Generated_Image_o20qsuo20qsuo20q.png",
-  },
-  {
-    id: "fallback-living-room",
-    nameEn: "Living Room",
-    imageUrl: "/hero.png",
-  },
-  {
-    id: "fallback-dining-room",
-    nameEn: "Dining Room",
-    imageUrl: "/green-sofa.png",
-  },
-  {
-    id: "fallback-workshop",
-    nameEn: "Workshop",
-    imageUrl: "/Gemini_Generated_Image_cdx4nlcdx4nlcdx4.png",
-  },
-]
+
 
 interface DiscoverByStyleProps {
   initialStyles?: PublicCategory[]
@@ -35,7 +14,7 @@ interface DiscoverByStyleProps {
 
 export function DiscoverByStyle({ initialStyles = [] }: DiscoverByStyleProps) {
   const [styles, setStyles] = useState<PublicCategory[]>(
-    initialStyles.filter((category) => category.nameEn)
+    initialStyles.filter((category) => category.name)
   )
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -47,7 +26,7 @@ export function DiscoverByStyle({ initialStyles = [] }: DiscoverByStyleProps) {
       try {
         const categories = await getPublicStyles()
         if (!active) return
-        setStyles(categories.filter((category) => category.nameEn))
+        setStyles(categories.filter((category) => category.name))
       } catch (error) {
         console.error("Failed to load discover categories:", error)
       }
@@ -59,7 +38,6 @@ export function DiscoverByStyle({ initialStyles = [] }: DiscoverByStyleProps) {
     }
   }, [initialStyles])
 
-  const items = styles.length > 0 ? styles : FALLBACK_STYLES
 
   return (
     <section className="py-24 px-8 bg-white" id="discover">
@@ -75,7 +53,7 @@ export function DiscoverByStyle({ initialStyles = [] }: DiscoverByStyleProps) {
         <div className="relative max-w-7xl mx-auto w-full px-4 md:px-8">
           <ScrollArrows scrollRef={scrollRef} scrollAmount={300} />
           <div ref={scrollRef} className="flex overflow-x-scroll pb-12 snap-x snap-mandatory w-full gap-8 no-scrollbar">
-            {items.map((style) => (
+            {styles.map((style) => (
               <Link
                 key={style.id}
                 href={styles.length > 0 ? `/category/${encodeURIComponent(style.id)}` : "/product"}
@@ -85,7 +63,7 @@ export function DiscoverByStyle({ initialStyles = [] }: DiscoverByStyleProps) {
                 <div className="absolute inset-0 bg-[#F5F5F5]">
                   <img
                     src={style.imageUrl || "/placeholder.jpg"}
-                    alt={style.nameEn}
+                    alt={style.name}
                     className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
                   />
                 </div>
@@ -95,7 +73,7 @@ export function DiscoverByStyle({ initialStyles = [] }: DiscoverByStyleProps) {
 
                 {/* Text Content - Fixed (Always Visible) */}
                 <div className="absolute bottom-0 left-0 w-full p-10 flex flex-col items-center">
-                  <h3 className="text-3xl font-serif text-mahogany mb-3 italic">{style.nameEn}</h3>
+                  <h3 className="text-3xl font-serif text-mahogany mb-3 italic">{style.name}</h3>
                   <div className="flex items-center gap-3 opacity-100 translate-y-0">
                     <p className="text-[9px] tracking-[0.25em] font-bold text-taupe uppercase">
                       EXPLORE STYLE

@@ -26,6 +26,9 @@ import {
   LayoutGrid,
   Building2,
   Briefcase,
+  Layers,
+  Tag,
+  Palette,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -38,9 +41,11 @@ const navSections = [
     label: "Commerce",
     items: [
       { title: "Products", href: "/admin/products", icon: Package },
+      { title: "Collections", href: "/admin/collections", icon: Layers },
       { title: "Orders", href: "/admin/orders", icon: ShoppingCart },
-      { title: "Styles", href: "/admin/styles", icon: FolderTree },
+      { title: "Styles", href: "/admin/styles", icon: Palette },
       { title: "Categories", href: "/admin/categories", icon: LayoutGrid },
+      { title: "Types", href: "/admin/types", icon: Tag },
       { title: "Sliders", href: "/admin/sliders", icon: ImageIcon },
     ],
   },

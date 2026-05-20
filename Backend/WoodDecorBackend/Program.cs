@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Text;
 using Apis.Services;
 using AutoMapper;
+using Bl;
 using Bl.Contracts;
 using Bl.Mapping;
 using Bl.Services;
@@ -26,7 +28,7 @@ builder.Services.AddCors(options =>
         policy.SetIsOriginAllowed(_ => true)
               .AllowAnyHeader()
               .AllowAnyMethod()
-              .AllowCredentials();
+              .AllowCredentials();  
     });
 });
 //********************************************************************
@@ -125,7 +127,7 @@ builder.Services.AddScoped<IOrderItem, OrderItemService>();
 builder.Services.AddScoped<IReview, ReviewService>();
 builder.Services.AddScoped<ISetting, SettingService>();
 builder.Services.AddScoped<ISlider, SliderService>();
-builder.Services.AddScoped<IFabrics, FabricsService>();
+builder.Services.AddScoped<IFabrics, ItemFabricsService>();
 builder.Services.AddScoped<IImage, ImageService>();
 builder.Services.AddScoped<ICart, CartService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -133,6 +135,11 @@ builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IRefreshTokens, RefreshTokensService>();
 builder.Services.AddSingleton<TokenService>();
 builder.Services.AddHttpClient<IPaymobPayment, PaymobService>();
+builder.Services.AddScoped<ICollections, CollectionsService>();
+builder.Services.AddScoped<ICollectionsFabrics, CollectionsFabricsService>();
+builder.Services.AddScoped<ICollectionsImages, CollectionsImagesService>();
+builder.Services.AddScoped<IChanges, ChangesService>();
+builder.Services.AddScoped<ITypes, TypesService>();
 //**************************************************************************************************************************************
 
 builder.Host.UseSerilog();
@@ -153,6 +160,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
@@ -174,8 +183,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.UseSwagger();
-app.UseSwaggerUI();
+
 
 using (var scope = app.Services.CreateScope())
 {
@@ -185,7 +193,7 @@ using (var scope = app.Services.CreateScope())
     var dbContext = services.GetRequiredService<WoodDecorContext>();
 
     // Apply migrations
-    //await dbContext.Database.MigrateAsync();
+    await dbContext.Database.MigrateAsync();
 
     // Seed data
     await ContextConfig.seedDataAsync(dbContext, userManager, roleManager);

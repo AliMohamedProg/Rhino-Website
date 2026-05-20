@@ -1,4 +1,4 @@
-using Bl.DTOs;
+using Bl.Contracts;
 using Bl.DTOs;
 using BusinessLayer.Contracts;
 using Microsoft.AspNetCore.Mvc;
@@ -9,39 +9,41 @@ namespace Apis.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ItemsController : ControllerBase
+    public class CollectionsController : ControllerBase
     {
-        IItem _itemService;
-        public ItemsController(IItem itemService)
+        ICollections _collectionService;
+        IChanges _changesService;
+        public CollectionsController(ICollections collectionService,  IChanges changesService)
         {
-            _itemService = itemService;
+            _collectionService = collectionService;
+            _changesService = changesService;
         }
         // GET: api/<ItemsController>
         [HttpGet]
-        public List<ItemDto> Get()
+        public async Task<List<CollectionDto>> Get()
         {
-            var items = _itemService.GetAll();
-            return items;
+            var collections = await _collectionService.GetAllCollectionsWithImagesAndFabrics();
+            return collections;
+        }
+        [HttpGet("collection-details/{collectionId}")]
+        public async Task<CollectionDto> GetDetials(Guid collectionId)
+        {
+            var collection = await _collectionService.GetCollectionWithImagesAndFabrics(collectionId);
+            return collection;
+        }
+        
+        [HttpGet("collection-changes/{collectionId}")]
+        public List<ChangeDto> GetCollectionChanges(Guid collectionId)
+        {
+            var changes = _changesService.GetAll().Where(c => c.CollectionId == collectionId).ToList();
+            return changes;
         }
 
-        // GET api/<ItemsController>/5
-        [HttpGet("{id}")]
-        public ActionResult<ItemDto> GetItemDetails(Guid id)
+        [HttpGet("get-collection/{collectionId}")]
+        public CollectionDto GetCollectionWithChanges(Guid collectionId ,[FromQuery] Guid changeId)
         {
-            var item = _itemService.GetItemWithImagesAndFabrics(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-            return item;
+            var collections = _changesService.GetCollectionWithChange(collectionId, changeId);
+            return collections;
         }
-        // GET: api/<ItemsController>/GetTheBestItemsDiscounts
-        [HttpGet("best-discounts")]
-        public List<ItemDto> GetTheBestItemsDiscounts()
-        {
-            var items = _itemService.GetAll().Where(a => a.DiscountAmount > 1 && a.DiscountAmount < 100).ToList();
-            return items;
-        }
-
     }
 }

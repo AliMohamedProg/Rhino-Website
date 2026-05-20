@@ -26,9 +26,9 @@ namespace Apis.Controllers
 
         // GET api/<ItemsController>/5
         [HttpGet("{id}")]
-        public ActionResult<ItemDto> GetItemDetails(Guid id)
+        public async Task<ActionResult<ItemDto>> GetItemDetails(Guid id)
         {
-            var item = _itemService.GetItemWithImagesAndFabrics(id);
+            var item = await _itemService.GetItemWithImagesAndFabrics(id);
             if (item == null)
             {
                 return NotFound();

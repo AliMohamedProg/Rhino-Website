@@ -91,7 +91,7 @@ export default function ProductDetailPage() {
           </Button>
           <div className={cn(dir === "rtl" && "text-right")}>
             <h1 className="text-3xl font-bold tracking-tight text-[#2f2219]">
-              {product.nameEn}
+              {product.name}
             </h1>
             <p className="text-[#8b7d73] font-medium mt-1">{product.sku}</p>
           </div>
@@ -141,7 +141,7 @@ export default function ProductDetailPage() {
             <CardContent className="space-y-4">
               <div>
                 <h4 className="text-sm font-medium text-muted-foreground mb-2">English</h4>
-                <p>{product.descriptionEn}</p>
+                <p>{product.description}</p>
               </div>
             </CardContent>
           </Card>
@@ -195,13 +195,13 @@ export default function ProductDetailPage() {
                   <span>{product.dimensions}</span>
                 </div>
               )}
-              {product.colorsEn && product.colorsEn.trim().length > 0 && (
+              {product.colors && product.colors.trim().length > 0 && (
                 <div className="space-y-2">
                   <span className="text-muted-foreground">
                     Colors
                   </span>
                   <div className={cn("flex flex-wrap gap-2", dir === "rtl" && "justify-end")}>
-                    {product.colorsEn.split(",").map((color, index) => (
+                    {product.colors.split(",").map((color, index) => (
                       <span
                         key={`${color}-${index}`}
                         className="rounded-full border px-3 py-1 text-xs text-muted-foreground"
@@ -212,13 +212,13 @@ export default function ProductDetailPage() {
                   </div>
                 </div>
               )}
-              {product.materialEn && product.materialEn.trim().length > 0 && (
+              {product.material && product.material.trim().length > 0 && (
                 <div className="space-y-1">
                   <span className="text-muted-foreground block">
                     Material
                   </span>
                   <span className={cn("block", dir === "rtl" && "text-right")}>
-                    {product.materialEn}
+                    {product.material}
                   </span>
                 </div>
               )}

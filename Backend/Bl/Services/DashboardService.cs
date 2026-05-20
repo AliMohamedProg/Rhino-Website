@@ -83,13 +83,11 @@ namespace Bl.Services
                     .Where(x => x.Item != null && x.Item.Category != null)
                     .GroupBy(oi => new
                     {
-                        oi.Item.Category.NameAr,
-                        oi.Item.Category.NameEn
+                        oi.Item.Category.Name
                     })
                     .Select(g => new CategorySalesDto
                     {
-                        NameAr = g.Key.NameAr,
-                        NameEn = g.Key.NameEn,
+                        Name = g.Key.Name,
                         TotalSold = g.Sum(x => x.Qty)
                     })
                     .OrderByDescending(x => x.TotalSold)
@@ -113,15 +111,13 @@ namespace Bl.Services
                     .Where(x => x.Item != null)
                     .GroupBy(oi => new
                     {
-                        oi.Item.NameAr,
-                        oi.Item.NameEn,
+                        oi.Item.Name,
                         oi.Item.Price,
                         oi.Item.StockNumber
                     })
                     .Select(g => new TopProductDto
                     {
-                        NameAr = g.Key.NameAr,
-                        NameEn = g.Key.NameEn,
+                        Name = g.Key.Name,
                         Price = g.Key.Price,
                         Stock = g.Key.StockNumber,
                         TotalSold = g.Sum(x => x.Qty)
