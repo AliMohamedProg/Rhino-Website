@@ -8,13 +8,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Context;
 
-public partial class WoodDecorContext : IdentityDbContext<ApplicationUser>
+public partial class RhinoContext : IdentityDbContext<ApplicationUser>
 {
-    public WoodDecorContext()
+    public RhinoContext()
     {
     }
 
-    public WoodDecorContext(DbContextOptions<WoodDecorContext> options)
+    public RhinoContext(DbContextOptions<RhinoContext> options)
         : base(options)
     {
     }
@@ -47,11 +47,11 @@ public partial class WoodDecorContext : IdentityDbContext<ApplicationUser>
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseSqlServer(
-                "Server=db48236.public.databaseasp.net;User Id=db48236; Password=Pt7+8!fC%H6j; Encrypt=False; MultipleActiveResultSets=True;");
-        }
+//        if (!optionsBuilder.IsConfigured)
+  //      {
+    //        optionsBuilder.UseSqlServer(
+      //          "Server=db48236.public.databaseasp.net;User Id=db48236; Password=Pt7+8!fC%H6j; Encrypt=False; MultipleActiveResultSets=True;");
+        //}
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
