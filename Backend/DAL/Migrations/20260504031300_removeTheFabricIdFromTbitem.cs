@@ -11,9 +11,9 @@ namespace DAL.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "FabricId",
-                table: "TbItems");
+       //     migrationBuilder.DropColumn(
+         //       name: "FabricId",
+           //     table: "TbItems");
         }
 
         /// <inheritdoc />

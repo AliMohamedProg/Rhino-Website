@@ -11,8 +11,8 @@ namespace DAL.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "TbFabrics");
+          /*  migrationBuilder.DropTable(
+                name: "TbFabrics");*/
 
             migrationBuilder.RenameColumn(
                 name: "Image",
