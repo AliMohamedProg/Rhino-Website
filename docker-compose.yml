@@ -78,7 +78,7 @@ services:
       while true; do
         sleep 86400;
         echo 'Making backup...';
-        /opt/mssql-tools18/bin/sqlcmd -S sqlserver -U sa -P 'WoodDecor@12345' -No
+        /opt/mssql-tools18/bin/sqlcmd -S sqlserver -U sa -P 'rhino@12345' -No
         -Q \"BACKUP DATABASE [RhinoDB] TO DISK='/backups/backup_\$$(date +%Y%m%d_%H%M).bak' WITH COMPRESSION\";
         echo 'Backup done!';
       done"
