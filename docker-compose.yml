@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+
+  # ==========================================
+  # SQL Server - الداتا بيز
+  # ==========================================
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      SA_PASSWORD: "WoodDecor@12345"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1434:1433"
+    volumes:
+      - sqldata:/var/opt/mssql        # البيانات بتتحفظ هنا دايماً حتى لو الـ container وقع
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "WoodDecor@12345", "-Q", "SELECT 1", "-No"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # ==========================================
+  # ASP.NET Backend
+  # ==========================================
+  api:
+    build:
+      context: ./Backend         # فولدر الـ Backend
+      dockerfile: ../Dockerfile.api
+    container_name: wooddecor_api
+    ports:
+      - "5001:5000"
+    environment:
+      - ASPNETCORE_URLS=http://+:5000
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=RhinoDB;User Id=sa;Password=WoodDecor@12345;TrustServerCertificate=True
+      - Jwt__Key=6q5sW3VGNO9mIdp9vL7Ekbz12bowH/4YrVN5fj30sLFpnQNqgziS6bl6uGG/dBEBZpmUd01nOmli8Oozd7lv3A==
+      - Jwt__Issuer=API
+      - Jwt__Audience=Client
+    volumes:
+      - uploads:/app/wwwroot/uploads  # الصور بتتحفظ هنا دايماً
+    depends_on:
+      sqlserver:
+        condition: service_healthy    # مش هيشتغل غير لما الداتا بيز تجهز
+
+  # ==========================================
+  # Next.js Frontend
+  # ==========================================
+  frontend:
+    build:
+      context: ./frontend        # فولدر الـ Next.js
+      dockerfile: ../Dockerfile.frontend
+    container_name: wooddecor_frontend
+    ports:
+      - "3001:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:5001
+    depends_on:
+      - api
+
+  # ==========================================
+  # باك أب يومي تلقائي للداتا بيز
+  # ==========================================
+  backup:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: auto_backup
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    volumes:
+      - ./backups:/backups
+    entrypoint: >
+      /bin/bash -c "
+      echo 'Backup service started...';
+      while true; do
+        sleep 86400;
+        echo 'Making backup...';
+        /opt/mssql-tools18/bin/sqlcmd -S sqlserver -U sa -P 'WoodDecor@12345' -No
+        -Q \"BACKUP DATABASE [RhinoDB] TO DISK='/backups/backup_\$$(date +%Y%m%d_%H%M).bak' WITH COMPRESSION\";
+        echo 'Backup done!';
+      done"
+    restart: unless-stopped
+
+# ==========================================
+# Volumes - البيانات بتتحفظ هنا دايماً
+# ==========================================
+volumes:
+  sqldata:    # بيانات الداتا بيز
+  uploads:    # الصور والملفات

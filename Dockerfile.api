@@ -1,0 +1,33 @@
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
+WORKDIR /app
+EXPOSE 5000
+
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+
+# انسخ الـ Solution file
+COPY WebsiteBackend.slnx .
+
+# انسخ الـ .csproj لكل project
+COPY Bl/Bl.csproj Bl/
+COPY DAL/DAL.csproj DAL/
+COPY Domains/Domains.csproj Domains/
+COPY WoodDecorBackend/Apis.csproj WoodDecorBackend/
+
+# حمّل الـ packages
+RUN dotnet restore
+
+# انسخ الكود كله
+COPY . .
+
+# ابني الـ project
+RUN dotnet publish WoodDecorBackend/Apis.csproj -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=build /app/publish .
+
+# عمل فولدر الصور
+RUN mkdir -p /app/wwwroot/uploads
+
+ENTRYPOINT ["dotnet", "Apis.dll"]
