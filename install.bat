@@ -1,56 +1,56 @@
 @echo off
-title Wood Decor - Installation
+title Rhino Store - Installation
 color 0A
 chcp 65001 >nul
 
 echo.
 echo  ╔══════════════════════════════════════╗
-echo  ║     Wood Decor - جاري التثبيت       ║
+echo  ║     Rhino Store - installing       ║
 echo  ╚══════════════════════════════════════╝
 echo.
 
 :: تأكد إن Docker موجود
 docker --version >nul 2>&1
 IF %ERRORLEVEL% NEQ 0 (
-    echo  [!] Docker مش موجود على الجهاز!
-    echo  [!] بيفتح صفحة تحميل Docker...
+    echo  [!] Docker is not on this machine!
+    echo  [!] opening Docker page...
     echo.
-    echo  بعد ما تحمّل Docker Desktop:
-    echo  1. افتحه وخليه يشتغل
-    echo  2. ارجع وشغّل الملف ده تاني
+    echo  After downloading Docker Desktop:
+    echo  1. Open it and let it work
+    echo  2. Run this file again
     echo.
     start https://www.docker.com/products/docker-desktop/
     pause
     exit
 )
 
-echo  [✓] Docker موجود
+echo  [✓] Docker is here
 echo.
 
 :: تأكد إن Docker شغال
 docker info >nul 2>&1
 IF %ERRORLEVEL% NEQ 0 (
-    echo  [!] Docker موجود بس مش شغال!
-    echo  [!] افتح Docker Desktop الأول وخليه يشتغل كامل
-    echo  [!] بعدين شغّل الملف ده تاني
+    echo  [!] Docker is working but not here!
+    echo  [!] Open Docker Desktop first and let it work
+    echo  [!] Then run this file again
     echo.
     pause
     exit
 )
 
-echo  [✓] Docker شغال
+echo  [✓] Docker is working
 echo.
 
 :: ابني وشغّل كل حاجة
-echo  [→] جاري بناء وتشغيل التطبيق...
-echo  [!] أول مرة ممكن تاخد 5-10 دقايق - انتظر...
+echo  [→] Building and running the application...
+echo  [!] First time may take 5-10 minutes - wait...
 echo.
 docker compose up -d --build
 
 IF %ERRORLEVEL% NEQ 0 (
     echo.
-    echo  [✗] في مشكلة أثناء التشغيل!
-    echo  شغّل الأمر ده في CMD عشان تشوف المشكلة:
+    echo  [✗] Error while running!
+    echo  Run this command in CMD to see the error:
     echo  docker compose logs
     echo.
     pause
@@ -58,16 +58,16 @@ IF %ERRORLEVEL% NEQ 0 (
 )
 
 echo.
-echo  [✓] كل حاجة اشتغلت!
+echo  [✓] Everything is working!
 echo.
 echo  ╔══════════════════════════════════════╗
-echo  ║   افتح المتصفح على:                 ║
-echo  ║   http://localhost:3000              ║
+echo  ║   Open the browser at:                 ║
+echo  ║   http://localhost:3001                ║
 echo  ╚══════════════════════════════════════╝
 echo.
 
-:: افتح المتصفح تلقائياً
+:: Open the browser automatically
 timeout /t 3 /nobreak >nul
-start http://localhost:3000
+start http://localhost:3001
 
 pause

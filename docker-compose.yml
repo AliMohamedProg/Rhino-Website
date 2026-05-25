@@ -9,7 +9,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlserver
     environment:
-      SA_PASSWORD: "WoodDecor@12345"
+      SA_PASSWORD: "rhino@12345"
       ACCEPT_EULA: "Y"
       MSSQL_PID: "Developer"
     ports:
@@ -17,7 +17,7 @@ services:
     volumes:
       - sqldata:/var/opt/mssql        # البيانات بتتحفظ هنا دايماً حتى لو الـ container وقع
     healthcheck:
-      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "WoodDecor@12345", "-Q", "SELECT 1", "-No"]
+      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "rhino@12345", "-Q", "SELECT 1", "-No"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -30,7 +30,7 @@ services:
     build:
       context: ./Backend         # فولدر الـ Backend
       dockerfile: ../Dockerfile.api
-    container_name: wooddecor_api
+    container_name: rhino_api
     ports:
       - "5001:5000"
     environment:
@@ -53,7 +53,7 @@ services:
     build:
       context: ./frontend        # فولدر الـ Next.js
       dockerfile: ../Dockerfile.frontend
-    container_name: wooddecor_frontend
+    container_name: rhino_frontend
     ports:
       - "3001:3000"
     environment:
