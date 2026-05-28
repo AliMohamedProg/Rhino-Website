@@ -89,7 +89,6 @@ export default function CategoriesPage() {
 
       const payload = {
         name: formData.name,
-        nameAr: "",
         imageUrl: finalImageUrl,
         currentState: 1
       }
