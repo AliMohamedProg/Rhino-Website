@@ -36,7 +36,7 @@ services:
     environment:
       - ASPNETCORE_URLS=http://+:5000
       - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=RhinoDB;User Id=sa;Password=WoodDecor@12345;TrustServerCertificate=True
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=RhinoDB;User Id=sa;Password=rhino@12345;TrustServerCertificate=True
       - Jwt__Key=6q5sW3VGNO9mIdp9vL7Ekbz12bowH/4YrVN5fj30sLFpnQNqgziS6bl6uGG/dBEBZpmUd01nOmli8Oozd7lv3A==
       - Jwt__Issuer=API
       - Jwt__Audience=Client

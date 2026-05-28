@@ -58,12 +58,14 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.User.RequireUniqueEmail = true;
 }).AddEntityFrameworkStores<WoodDecorContext>();
 
-Log.Logger = new LoggerConfiguration().WriteTo.Console().WriteTo.MSSqlServer(
-    connectionString: builder.Configuration.GetConnectionString("DefaultConnection"),
-    tableName: "Log",
-    autoCreateSqlTable: true
-).CreateLogger();
-
+// Log.Logger = new LoggerConfiguration().WriteTo.Console().WriteTo.MSSqlServer(
+//     connectionString: builder.Configuration.GetConnectionString("DefaultConnection"),
+//     tableName: "Log",
+//     autoCreateSqlTable: true
+// ).CreateLogger();
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateLogger();
 builder.Services.AddHttpContextAccessor();
 
 //**************************************************************************************************************************************
@@ -157,12 +159,12 @@ if (!Directory.Exists(builder.Environment.WebRootPath))
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseHttpsRedirection();
 app.UseRouting();

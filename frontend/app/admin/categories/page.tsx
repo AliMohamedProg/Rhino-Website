@@ -35,7 +35,7 @@ import { Plus, MoreHorizontal, Pencil, Trash2, LayoutGrid } from "lucide-react"
 
 interface Category {
   id: string
-  nameEn: string
+  name: string
   imageUrl?: string
 }
 
@@ -46,7 +46,7 @@ export default function CategoriesPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [editingCategory, setEditingCategory] = useState<Category | null>(null)
   const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null)
-  const [formData, setFormData] = useState({ nameEn: "" })
+  const [formData, setFormData] = useState({ name: "" })
   const [imageUrl, setImageUrl] = useState("")
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
@@ -68,10 +68,10 @@ export default function CategoriesPage() {
 
   useEffect(() => {
     if (editingCategory) {
-      setFormData({ nameEn: editingCategory.nameEn })
+      setFormData({ name: editingCategory.name })
       setImageUrl(editingCategory.imageUrl || "")
     } else if (dialogOpen) {
-      setFormData({ nameEn: "" })
+      setFormData({ name: "" })
       setImageUrl("")
       setSelectedFile(null)
     }
@@ -88,7 +88,7 @@ export default function CategoriesPage() {
       }
 
       const payload = {
-        nameEn: formData.nameEn,
+        name: formData.name,
         nameAr: "",
         imageUrl: finalImageUrl,
         currentState: 1
@@ -99,7 +99,7 @@ export default function CategoriesPage() {
       } else {
         await ApiClient.post("api/admin/Categories/add-category", payload)
       }
-      
+
       setDialogOpen(false)
       await fetchCategories()
     } catch (err) {
@@ -125,31 +125,35 @@ export default function CategoriesPage() {
   }
 
   const columns = [
-    { key: "image", header: "Image", render: (cat: Category) => (
-      <div className="h-10 w-10 rounded-lg overflow-hidden bg-slate-100 flex items-center justify-center">
-        {cat.imageUrl ? <img src={cat.imageUrl} alt={cat.nameEn} className="h-full w-full object-cover" /> : <LayoutGrid className="h-4 w-4 text-slate-300" />}
-      </div>
-    )},
-    { key: "nameEn", header: "Category Name", render: (cat: Category) => <span className="font-bold text-[#3a2c26]">{cat.nameEn}</span> },
-    { key: "actions", header: "Actions", render: (cat: Category) => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-8 w-8">
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="bg-white rounded-xl shadow-xl">
-          <DropdownMenuItem onClick={() => { setEditingCategory(cat); setDialogOpen(true) }} className="hover:bg-[#f6eee8] cursor-pointer">
-            <Pencil className="h-4 w-4 mr-2 text-[#7B3F32]\" />
-            <span>Edit</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => { setCategoryToDelete(cat); setDeleteDialogOpen(true) }} className="hover:bg-red-50 text-red-600 cursor-pointer">
-            <Trash2 className="h-4 w-4 mr-2" />
-            <span>Delete</span>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    ), className: "w-[70px]" }
+    {
+      key: "image", header: "Image", render: (cat: Category) => (
+        <div className="h-10 w-10 rounded-lg overflow-hidden bg-slate-100 flex items-center justify-center">
+          {cat.imageUrl ? <img src={cat.imageUrl} alt={cat.name} className="h-full w-full object-cover" /> : <LayoutGrid className="h-4 w-4 text-slate-300" />}
+        </div>
+      )
+    },
+    { key: "nameEn", header: "Category Name", render: (cat: Category) => <span className="font-bold text-[#3a2c26]">{cat.name}</span> },
+    {
+      key: "actions", header: "Actions", render: (cat: Category) => (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-8 w-8">
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="bg-white rounded-xl shadow-xl">
+            <DropdownMenuItem onClick={() => { setEditingCategory(cat); setDialogOpen(true) }} className="hover:bg-[#f6eee8] cursor-pointer">
+              <Pencil className="h-4 w-4 mr-2 text-[#7B3F32]\" />
+              <span>Edit</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => { setCategoryToDelete(cat); setDeleteDialogOpen(true) }} className="hover:bg-red-50 text-red-600 cursor-pointer">
+              <Trash2 className="h-4 w-4 mr-2" />
+              <span>Delete</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ), className: "w-[70px]"
+    }
   ]
 
   return (
@@ -160,7 +164,7 @@ export default function CategoriesPage() {
           <h1 className="text-3xl font-bold tracking-tight text-[#2f2219] mt-1">Categories</h1>
           <p className="text-[#7c6f65] mt-1 text-sm font-medium">Manage high-level product categories</p>
         </div>
-        
+
         <Button onClick={() => { setEditingCategory(null); setDialogOpen(true) }} className="bg-gradient-to-r from-[#7B3F32] to-[#9e5948] text-white hover:from-[#5f3026] hover:to-[#8e4f3f] rounded-2xl shadow-lg font-bold transition-all px-5 border-0">
           <Plus className="h-4 w-4 mr-2" />Add Category
         </Button>
@@ -171,7 +175,7 @@ export default function CategoriesPage() {
           {loading && categories.length === 0 ? (
             <div className="flex justify-center items-center h-48 text-slate-500 animate-pulse">Loading categories...</div>
           ) : (
-            <DataTable data={categories} columns={columns} searchPlaceholder="Search categories..." searchKey="nameEn" />
+            <DataTable data={categories} columns={columns} searchPlaceholder="Search categories..." searchKey="name" />
           )}
         </CardContent>
       </Card>
@@ -184,8 +188,8 @@ export default function CategoriesPage() {
           </DialogHeader>
           <div className="grid gap-5 py-4">
             <div className="space-y-2">
-              <Label htmlFor="nameEn" className="text-sm font-semibold text-[#4b3d34]">Category Name</Label>
-              <Input id="nameEn" value={formData.nameEn} onChange={(e) => setFormData({ ...formData, nameEn: e.target.value })} className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 h-12 rounded-xl bg-white/50" />
+              <Label htmlFor="name" className="text-sm font-semibold text-[#4b3d34]">Category Name</Label>
+              <Input id="name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="border-[#7B3F32]/20 focus:border-[#7B3F32] focus:ring-[#7B3F32]/20 h-12 rounded-xl bg-white/50" />
             </div>
             <div className="space-y-2">
               <Label className="text-sm font-semibold text-[#4b3d34]">Category Image</Label>
@@ -212,7 +216,7 @@ export default function CategoriesPage() {
         <AlertDialogContent className="bg-white rounded-3xl border-[#7B3F32]/10 shadow-2xl">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-2xl font-bold tracking-tight text-[#2f2219]">Delete Category</AlertDialogTitle>
-            <AlertDialogDescription className="text-[#8b7d73]">Are you sure you want to delete <span className="font-semibold text-[#7B3F32]">"{categoryToDelete?.nameEn}"</span>? This action cannot be undone.</AlertDialogDescription>
+            <AlertDialogDescription className="text-[#8b7d73]">Are you sure you want to delete <span className="font-semibold text-[#7B3F32]">"{categoryToDelete?.name}"</span>? This action cannot be undone.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="mt-4">
             <AlertDialogCancel className="border-[#7B3F32]/20 text-[#4b3d34] hover:bg-[#f6eee8] rounded-xl h-11 font-medium">Cancel</AlertDialogCancel>
