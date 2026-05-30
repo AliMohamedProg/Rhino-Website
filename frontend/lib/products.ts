@@ -63,8 +63,14 @@ export function formatPrice(price: number | string): string {
   return Math.round(n || 0).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })
 }
 
-// Public Slider API
-const API_BASE_URL = ((process.env.NEXT_PUBLIC_API_URL || "https://localhost:7282").replace(/\/+$/, "")) + "/api"
+// Public Slider API — browser uses NEXT_PUBLIC_API_URL; SSR in Docker uses API_INTERNAL_URL
+function getApiBaseUrl(): string {
+  const isServer = typeof window === "undefined"
+  const baseUrl = isServer
+    ? (process.env.API_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001")
+    : (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001")
+  return baseUrl.replace(/\/+$/, "") + "/api"
+}
 
 export interface PublicSlider {
   id: string
@@ -100,10 +106,10 @@ export interface PublicProduct {
 
 async function fetchFromApi(endpoint: string) {
   try {
-    const url = `${API_BASE_URL}/${endpoint}`;
+    const url = `${getApiBaseUrl()}/${endpoint}`;
     const isServer = typeof window === "undefined";
 
-    if (isServer && url.includes("localhost")) {
+    if (isServer && url.startsWith("https://")) {
       process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     }
 

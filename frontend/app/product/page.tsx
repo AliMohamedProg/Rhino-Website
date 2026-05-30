@@ -29,10 +29,8 @@ import { ProductCard } from "@/components/ui/ProductCard"
 
 interface Item {
   id: string
-  nameAr: string
-  nameEn: string
-  descriptionAr?: string
-  descriptionEn?: string
+  name: string
+  description?: string
   price: number
   oldPrice?: number
   discountAmount: number
@@ -41,21 +39,18 @@ interface Item {
   categoryId: string
   typeId?: string
   styleId?: string
-  colorsEn?: string
-  colorsAr?: string
+  colors?: string
   mainImage?: string
 }
 
 interface StyleInfo {
   id: string
-  nameAr: string
-  nameEn: string
+  name: string
 }
 
 interface Category {
   id: string
-  nameAr: string
-  nameEn: string
+  name: string
 }
 
 interface TypeInfo {
@@ -197,11 +192,10 @@ function CategoryPage() {
         setStyles(
           (Array.isArray(stylesData) ? stylesData : []).map((s: any) => ({
             id: s.id ?? s.Id ?? "",
-            nameAr: s.nameAr ?? s.NameAr ?? "",
-            nameEn: s.nameEn ?? s.NameEn ?? "",
+            name: s.name ?? s.Name ?? "",
           })).filter((s: StyleInfo) => Boolean(s.id))
         )
-        setTypes(Array.isArray(typesData) ? typesData : [])
+        setTypes(Array.isArray(typesData) ? typesData.map((t: any) => ({ id: t.id ?? "", name: t.name ?? "" })) : [])
       } catch (err) {
         console.error(err)
       } finally {
@@ -261,7 +255,7 @@ function CategoryPage() {
   const categoryNameById = useMemo(
     () =>
       categories.reduce<Record<string, string>>((acc, cat) => {
-        acc[cat.id] = language === "ar" ? cat.nameAr : cat.nameEn
+        acc[cat.id] = cat.name
         return acc
       }, {}),
     [categories, language]
@@ -416,7 +410,7 @@ function CategoryPage() {
                             )
                           }
                         />
-                        {language === "ar" ? cat.nameAr : cat.nameEn}
+                        {cat.name}
                       </label>
                     ))}
                   </CollapsibleContent>
@@ -442,7 +436,7 @@ function CategoryPage() {
                               )
                             }
                           />
-                          {language === "ar" ? style.nameAr : style.nameEn}
+                          {style.name}
                         </label>
                       ))}
                     </CollapsibleContent>
@@ -533,11 +527,9 @@ function CategoryPage() {
                       key={product.id}
                       id={product.id}
                       category={(categoryNameById[product.categoryId] || "STYLE").toUpperCase()}
-                      title={language === "ar" ? product.nameAr : product.nameEn}
+                      title={product.name}
                       description={
-                        language === "ar"
-                          ? product.descriptionAr || product.nameAr
-                          : product.descriptionEn || product.nameEn
+                          product.description || product.name
                       }
                       price={`${formatPrice(product.price)} EGP`}
                       discountAmount={product.discountAmount || 0}
@@ -545,7 +537,7 @@ function CategoryPage() {
                       rating={reviewStatsByProductId[product.id]?.average ?? product.overallRating ?? 0}
                       reviewsCountVal={reviewStatsByProductId[product.id]?.count ?? 0}
                       mainImage={product.mainImage}
-                      colorsRaw={product.colorsEn}
+                      colorsRaw={product.colors}
                       stockNumber={product.stockNumber}
                       isWishlisted={isInWishlist(product.id)}
                       onAddToCart={async (productId, selectedColorName) => {
@@ -555,7 +547,7 @@ function CategoryPage() {
                         const originalPriceValue = getOriginalPriceValue(product.price, product.oldPrice ?? 0, product.discountAmount || 0)
                         toggleItem({
                           id: productId,
-                          name: { ar: product.nameAr, en: product.nameEn },
+                          name: product.name,
                           price: product.price,
                           originalPrice: originalPriceValue,
                           image: product.mainImage || "/placeholder.svg",

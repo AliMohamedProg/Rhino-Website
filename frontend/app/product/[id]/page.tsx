@@ -32,18 +32,14 @@ type Product = {
   id: string
   sku: string
   dimensions: string
-  nameAr: string
-  nameEn: string
-  descriptionAr: string
-  descriptionEn: string
+  name: string
+  description: string
   price: number
   oldPrice?: number
   discountAmount: number
   stockNumber: number
-  colorsEn: string
-  colorsAr: string
-  materialEn?: string
-  materialAr?: string
+  colors: string
+  material?: string
   overallRating: number
   images?: string[]
   mainImage?: string
@@ -64,15 +60,15 @@ function normalizeColorNames(value: unknown): string[] {
   return value
     .map((entry: any) => {
       if (typeof entry === "string") return entry.trim()
-      return (entry?.nameEn ?? entry?.NameEn ?? "").trim()
+      return (entry?.name ?? entry?.Name ??   "").trim()
     })
     .filter(Boolean)
 }
 
 function buildDisplayColors(product: Product, language: "ar" | "en") {
   const rawString = language === "ar"
-    ? (product.colorsAr || product.colorsEn || "")
-    : (product.colorsEn || product.colorsAr || "")
+    ? (product.colors || "")
+    : (product.colors || "")
   const parsed = parseColors(rawString)
 
   const unique = new Map<string, { name: string; hex: string }>()
@@ -241,8 +237,8 @@ export default function ProductDetailsPage() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: language === "ar" ? product?.nameAr : product?.nameEn,
-          text: language === "ar" ? product?.descriptionAr : product?.descriptionEn,
+          title: product?.name,
+          text: product?.description,
           url: window.location.href,
         })
       } catch (err) {
@@ -376,7 +372,7 @@ export default function ProductDetailsPage() {
           <span className="mx-2">/</span>
           <span>{language === "ar" ? "المنتجات" : "Products"}</span>
           <span className="mx-2">/</span>
-          <span className="text-[#3D2B1F] font-medium">{language === "ar" ? product.nameAr : product.nameEn}</span>
+          <span className="text-[#3D2B1F] font-medium">{product.name}</span>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
@@ -390,7 +386,7 @@ export default function ProductDetailsPage() {
             >
               <Image
                 src={getImageUrl(productImages[selectedImageIndex])}
-                alt={language === "ar" ? product.nameAr : product.nameEn}
+                alt={product.name}
                 fill
                 className={`object-cover transition-transform duration-300 ${isZoomed ? "scale-150" : "scale-100"}`}
               />
@@ -417,7 +413,7 @@ export default function ProductDetailsPage() {
                 >
                   <Image
                     src={getImageUrl(img)}
-                    alt={`${language === "ar" ? product.nameAr : product.nameEn} ${index + 1}`}
+                    alt={`${product.name} ${index + 1}`}
                     fill
                     className="object-cover"
                   />
@@ -431,7 +427,7 @@ export default function ProductDetailsPage() {
             {/* Title */}
             <div>
               <h1 className="text-3xl md:text-4xl font-extrabold mb-2 text-[#2f2219]">
-                {language === "ar" ? product.nameAr : product.nameEn}
+                {product.name}
               </h1>
 
               {/* Rating */}
@@ -554,12 +550,12 @@ export default function ProductDetailsPage() {
               )}
 
               {/* Material */}
-              {product.materialEn && product.materialEn.trim().length > 0 && (
+              {product.material && product.material.trim().length > 0 && (
                 <div className="mb-6">
                   <span className="text-[#6f6157] block mb-2">{t("products.material")}:</span>
                   <div className="flex flex-wrap gap-2">
                     <span className="px-4 py-2 border border-[#7B3F32]/15 rounded-full text-sm font-medium bg-white text-[#3D2B1F]">
-                      {language === "ar" ? product.materialAr : product.materialEn}
+                      {product.material}
                     </span>
                   </div>
                 </div>
@@ -629,7 +625,7 @@ export default function ProductDetailsPage() {
                   onClick={() =>
                     toggleItem({
                       id: product.id,
-                      name: { ar: product.nameAr, en: product.nameEn },
+                      name: product.name,
                       price: discountedPrice,
                       originalPrice: originalPrice > 0 ? originalPrice : undefined,
                       image: product.mainImage || "/placeholder.svg",
@@ -682,7 +678,7 @@ export default function ProductDetailsPage() {
               {/* Description */}
               <TabsContent value="description" className="pt-4">
                 <div className="bg-white/85 rounded-2xl p-6 shadow-sm border border-[#7B3F32]/10 backdrop-blur-sm">
-                  <p className="text-[#4b3d34] leading-relaxed text-lg">{language === "ar" ? product.descriptionAr : product.descriptionEn}</p>
+                  <p className="text-[#4b3d34] leading-relaxed text-lg">{product.description}</p>
                 </div>
               </TabsContent>
 
@@ -701,10 +697,10 @@ export default function ProductDetailsPage() {
                     <span className="text-[#6f6157]">{"Dimensions"}</span>
                     <span className="font-semibold">{product.dimensions}</span>
                   </div>
-                  {product.materialEn && (
+                  {product.material && (
                     <div className="flex justify-between items-center py-2 border-b border-[#7B3F32]/10">
                       <span className="text-[#6f6157]">{language === "ar" ? "الخامة" : "Material"}</span>
-                      <span className="font-semibold">{language === "ar" ? product.materialAr : product.materialEn}</span>
+                      <span className="font-semibold">{product.material}</span>
                     </div>
                   )}
                   {colors.length > 0 && (

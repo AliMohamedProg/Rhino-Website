@@ -58,6 +58,7 @@ services:
       - "3001:3000"
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:5001
+      - API_INTERNAL_URL=http://api:5000
     depends_on:
       - api
 

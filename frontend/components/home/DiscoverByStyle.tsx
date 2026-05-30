@@ -56,7 +56,7 @@ export function DiscoverByStyle({ initialStyles = [] }: DiscoverByStyleProps) {
             {styles.map((style) => (
               <Link
                 key={style.id}
-                href={styles.length > 0 ? `/category/${encodeURIComponent(style.id)}` : "/product"}
+                href={styles.length > 0 ? `/style/${encodeURIComponent(style.id)}` : "/product"}
                 className="group relative flex-shrink-0 w-[80vw] md:w-[300px] aspect-[3/5] rounded-[3rem] overflow-hidden cursor-pointer snap-center shadow-lg transition-all duration-500 hover:shadow-2xl"
               >
                 {/* Image */}

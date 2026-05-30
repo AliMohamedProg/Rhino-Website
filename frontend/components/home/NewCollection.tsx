@@ -1,8 +1,8 @@
 "use client"
 
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ProductCard } from "@/components/ui/ProductCard"
-import { type PublicProduct, formatPrice } from "@/lib/products"
+import { getPublicCollections, type PublicProduct, formatPrice } from "@/lib/products"
 import { useLanguage } from "@/context/language-context"
 import { useCart } from "@/context/cart-context"
 import { useWishlist } from "@/context/wishlist-context"
@@ -23,6 +23,27 @@ export function NewCollection({ initialProducts }: NewCollectionProps) {
     const { toggleItem, isInWishlist } = useWishlist()
     const reviewStatsByProductId: Record<string, ReviewStats> = {}
     const scrollRef = useRef<HTMLDivElement>(null)
+    const [collections, setCollections] = useState<PublicProduct[]>(initialProducts || [])
+
+    useEffect(() => {
+        if (initialProducts.length > 0) return
+        let active = true
+
+        const loadCollections = async () => {
+            try {
+                const data = await getPublicCollections()
+                if (!active) return
+                setCollections(data)
+            } catch (error) {
+                console.error("Failed to load collections:", error)
+            }
+        }
+
+        loadCollections()
+        return () => {
+            active = false
+        }
+    }, [initialProducts])
 
     return (
         <section className="py-24 px-8 bg-white min-h-screen">
@@ -39,8 +60,8 @@ export function NewCollection({ initialProducts }: NewCollectionProps) {
                 <div className="relative max-w-7xl mx-auto w-full px-4 md:px-8 overflow-hidden">
                     <ScrollArrows scrollRef={scrollRef} scrollAmount={350} />
                     <div ref={scrollRef} className="flex overflow-x-hidden pb-8 snap-x snap-mandatory w-full gap-4 md:gap-8 no-scrollbar">
-                        {(initialProducts || []).slice(0, 8).map((product, index) => (
-                            <div key={index} className="flex-shrink-0 w-[48%] md:w-[380px] snap-center">
+                        {collections.slice(0, 8).map((product) => (
+                            <div key={product.id} className="flex-shrink-0 w-[48%] md:w-[380px] snap-center">
                                 <ProductCard
                                     product={product}
                                     key={product.id}
