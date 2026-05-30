@@ -31,8 +31,7 @@ type Review = {
 interface ProductCardProps {
   product?: {
     id?: string;
-    nameAr?: string;
-    nameEn?: string;
+    name?: string;
     oldprice?: number;
     oldPrice?: number;
     price?: number;
@@ -95,7 +94,7 @@ export function ProductCard({
   const [fetchedAverageRating, setFetchedAverageRating] = useState(0)
   const [fetchedReviewsCount, setFetchedReviewsCount] = useState(0)
   const id = propId ?? product?.id
-  const title = propTitle ?? (product ? (language === "ar" ? product.nameAr : product.nameEn) ?? "" : "")
+  const title = propTitle ?? (product ? product.name ?? "" : "")
   const description = propDescription ?? title
   const price = propPrice ?? (product ? `${product.price} EGP` : "")
   const rating = propRating ?? product?.rating ?? 0
