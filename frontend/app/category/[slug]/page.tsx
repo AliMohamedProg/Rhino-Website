@@ -19,10 +19,8 @@ import { ProductCard } from "@/components/ui/ProductCard"
 
 interface Item {
   id: string
-  nameAr: string
-  nameEn: string
-  descriptionAr?: string
-  descriptionEn?: string
+  name: string
+  description?: string
   price: number
   oldPrice?: number
   discountAmount: number
@@ -30,21 +28,18 @@ interface Item {
   overallRating: number
   categoryId: string
   styleId?: string
-  colorsEn?: string
-  colorsAr?: string
+  colors?: string
   mainImage?: string
 }
 
 interface StyleInfo {
   id: string
-  nameAr: string
-  nameEn: string
+  name: string
 }
 
 interface Category {
   id: string
-  nameAr: string
-  nameEn: string
+  name: string
 }
 
 interface ReviewStats {
@@ -121,8 +116,7 @@ export default function CategoryPage() {
         const normalizedCategories = (Array.isArray(categoriesData) ? categoriesData : [])
           .map((cat) => ({
             id: cat.id ?? cat.Id ?? "",
-            nameAr: cat.nameAr ?? cat.NameAr ?? "",
-            nameEn: cat.nameEn ?? cat.NameEn ?? "",
+            name: cat.name ?? cat.Name ?? "",
           }))
           .filter((cat) => Boolean(cat.id))
 
@@ -131,8 +125,7 @@ export default function CategoryPage() {
         const normalizedStyles = (Array.isArray(stylesData) ? stylesData : [])
           .map((s) => ({
             id: s.id ?? s.Id ?? "",
-            nameAr: s.nameAr ?? s.NameAr ?? "",
-            nameEn: s.nameEn ?? s.NameEn ?? "",
+            name: s.name ?? s.Name ?? "",
           }))
           .filter((s) => Boolean(s.id))
         setStyles(normalizedStyles)
@@ -140,7 +133,7 @@ export default function CategoryPage() {
         const matchedCategory = normalizedCategories.find(
           (cat) =>
             cat.id === categoryId ||
-            cat.nameEn?.toLowerCase() === categoryId.toLowerCase()
+            cat.name?.toLowerCase() === categoryId.toLowerCase()
         )
         const targetCategoryId = matchedCategory?.id ?? categoryId
 
@@ -253,10 +246,10 @@ export default function CategoryPage() {
   const categoryNameById = useMemo(
     () =>
       categories.reduce<Record<string, string>>((acc, cat) => {
-        acc[cat.id] = language === "ar" ? cat.nameAr : cat.nameEn
+        acc[cat.id] = cat.name
         return acc
       }, {}),
-    [categories, language]
+    [categories]
   )
 
   const activeCategoryName =
@@ -353,7 +346,7 @@ export default function CategoryPage() {
                             )
                           }
                         />
-                        {language === "ar" ? cat.nameAr : cat.nameEn}
+                        {cat.name}
                       </label>
                     ))}
                   </CollapsibleContent>
@@ -378,7 +371,7 @@ export default function CategoryPage() {
                               )
                             }
                           />
-                          {language === "ar" ? style.nameAr : style.nameEn}
+                          {style.name}
                         </label>
                       ))}
                     </CollapsibleContent>
@@ -443,15 +436,15 @@ export default function CategoryPage() {
                       key={product.id}
                       id={product.id}
                       category={(categoryNameById[product.categoryId] || "FURNITURE").toUpperCase()}
-                      title={language === "ar" ? product.nameAr : product.nameEn}
-                      description={language === "ar" ? product.nameAr : product.nameEn}
+                      title={product.name}
+                      description={product.description}
                       price={`${formatPrice(product.price)} EGP`}
                       discountAmount={product.discountAmount || 0}
                       originalPrice={getOriginalPriceLabel(product.price, product.oldPrice ?? 0, product.discountAmount || 0)}
                       rating={reviewStatsByProductId[product.id]?.average ?? product.overallRating ?? 0}
                       reviewsCountVal={reviewStatsByProductId[product.id]?.count ?? 0}
                       mainImage={product.mainImage}
-                      colorsRaw={product.colorsEn}
+                      colorsRaw={product.colors}
                       stockNumber={product.stockNumber}
                       isWishlisted={isInWishlist(product.id)}
                       onAddToCart={async (productId, selectedColorName) => {
@@ -461,7 +454,7 @@ export default function CategoryPage() {
                         const originalPriceValue = getOriginalPriceValue(product.price, product.oldPrice ?? 0, product.discountAmount || 0)
                         toggleItem({
                           id: productId,
-                          name: { ar: product.nameAr, en: product.nameEn },
+                          name: product.name,
                           price: product.price,
                           originalPrice: originalPriceValue,
                           image: product.mainImage || "/placeholder.svg",

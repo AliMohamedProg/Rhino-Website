@@ -24,25 +24,27 @@ import { getImageUrl } from "@/lib/utils";
 
 interface Category {
   id: string;
-  nameAr?: string;
-  nameEn?: string;
+  name?: string;
   currentState?: number;
 }
 
 interface Style {
   id: string;
-  nameAr?: string;
-  nameEn?: string;
+  name?: string;
   imageUrl?: string;
+  currentState?: number;
+}
+
+interface Type {
+  id: string;
+  name?: string;
   currentState?: number;
 }
 
 interface SearchProduct {
   id: string;
-  nameAr: string;
-  nameEn: string;
-  descriptionAr?: string;
-  descriptionEn?: string;
+  name: string;
+  description?: string;
   sku?: string;
   price: number;
   mainImage?: string;
@@ -81,7 +83,7 @@ export function Header() {
     if (!q) return [];
     return searchProducts
       .filter((p) =>
-        [p.nameEn, p.nameAr, p.descriptionEn, p.descriptionAr, p.sku]
+        [p.name, p.description, p.sku]
           .filter(Boolean)
           .some((value) => String(value).toLowerCase().includes(q))
       )
@@ -173,15 +175,13 @@ export function Header() {
         const normalized = data
           .map((item) => ({
             id: (item.id ?? item.Id ?? "").toString(),
-            nameEn: item.nameEn ?? item.NameEn ?? "",
-            nameAr: item.nameAr ?? item.NameAr ?? "",
-            descriptionEn: item.descriptionEn ?? item.DescriptionEn ?? "",
-            descriptionAr: item.descriptionAr ?? item.DescriptionAr ?? "",
+            name: item.name ?? item.Name ?? "",
+            description: item.description ?? item.Description ?? "",
             sku: item.sku ?? item.SKU ?? "",
             price: Number(item.price ?? item.Price ?? 0),
             mainImage: item.mainImage ?? item.MainImage ?? item.image ?? item.Image ?? "",
           }))
-          .filter((item) => Boolean(item.id) && (item.nameEn || item.nameAr));
+          .filter((item) => Boolean(item.id) && item.name);
 
         setSearchProducts(normalized);
       } catch (error) {
@@ -196,7 +196,7 @@ export function Header() {
   const sortedCategories = useMemo(
     () =>
       [...categories].sort((a, b) =>
-        (a.nameEn || "").localeCompare(b.nameEn || "", "en", { sensitivity: "base" })
+        (a.name || "").localeCompare(b.name || "", "en", { sensitivity: "base" })
       ),
     [categories]
   );
@@ -204,7 +204,7 @@ export function Header() {
   const sortedStyles = useMemo(
     () =>
       [...styles].sort((a, b) =>
-        (a.nameEn || "").localeCompare(b.nameEn || "", "en", { sensitivity: "base" })
+        (a.name || "").localeCompare(b.name || "", "en", { sensitivity: "base" })
       ),
     [styles]
   );
@@ -271,14 +271,14 @@ export function Header() {
                       {style.imageUrl && (
                         <div className="w-8 h-8 rounded-lg overflow-hidden bg-blush flex-shrink-0 border border-[#7B3F32]/10">
                           <img
-                            src={style.imageUrl}
-                            alt={style.nameEn || ""}
+                            src={getImageUrl(style.imageUrl)}
+                            alt={style.name || ""}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover/item:scale-110"
                           />
                         </div>
                       )}
                       <span>
-                        {((language === "ar" ? style.nameAr : style.nameEn) || style.nameEn || style.nameAr || "STYLE").toUpperCase()}
+                        {(style.name).toUpperCase()}
                       </span>
                     </Link>
                   ))
@@ -315,7 +315,7 @@ export function Header() {
                     href={`/category/${category.id}`}
                     className="hover:text-mahogany transition-colors block text-taupe/60 text-[11px] font-bold tracking-[0.2em]"
                   >
-                    {((language === "ar" ? category.nameAr : category.nameEn) || category.nameEn || category.nameAr || "CATEGORY").toUpperCase()}
+                    {(category.name || "CATEGORY").toUpperCase()}
                   </Link>
                 ))}
 
@@ -399,10 +399,10 @@ export function Header() {
                           className="flex items-center gap-4 p-2 hover:bg-blush rounded-2xl transition-colors text-left"
                         >
                           <div className="w-12 h-12 bg-blush rounded-xl relative overflow-hidden shrink-0">
-                            <Image src={getImageUrl(product.mainImage)} fill alt={(language === "ar" ? product.nameAr : product.nameEn) || product.nameEn || product.nameAr} className="object-contain p-2" />
+                            <Image src={getImageUrl(product.mainImage)} fill alt={product.name || ""} className="object-contain p-2" />
                           </div>
                           <div className="flex-1 overflow-hidden">
-                            <p className="text-[11px] font-bold text-mahogany truncate block hover:text-clip hover:overflow-visible">{(language === "ar" ? product.nameAr : product.nameEn) || product.nameEn || product.nameAr}</p>
+                            <p className="text-[11px] font-bold text-mahogany truncate block hover:text-clip hover:overflow-visible">{product.name}</p>
                             <p className="text-[10px] text-taupe block font-medium tracking-wider">{formatPrice(product.price)} EGP</p>
                           </div>
                         </Link>
@@ -488,7 +488,7 @@ export function Header() {
                   href={`/style/${style.id}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  {((language === "ar" ? style.nameAr : style.nameEn) || style.nameEn || style.nameAr || "Style").toUpperCase()}
+                  {((style.name)).toUpperCase()}
                 </Link>
               ))}
             </div>
@@ -504,7 +504,7 @@ export function Header() {
                   href={`/category/${category.id}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  {((language === "ar" ? category.nameAr : category.nameEn) || category.nameEn || category.nameAr || "Category").toUpperCase()}
+                  {((category.name)).toUpperCase()}
                 </Link>
               ))}
             </div>
@@ -556,10 +556,10 @@ export function Header() {
                       className="flex items-center gap-4 p-3 hover:bg-blush rounded-2xl transition-colors text-left"
                     >
                       <div className="w-12 h-12 bg-blush rounded-xl relative overflow-hidden shrink-0">
-                        <Image src={getImageUrl(product.mainImage)} fill alt={(language === "ar" ? product.nameAr : product.nameEn) || product.nameEn || product.nameAr} className="object-contain p-2" />
+                        <Image src={getImageUrl(product.mainImage)} fill alt={product.name} className="object-contain p-2" />
                       </div>
                       <div className="flex-1 overflow-hidden">
-                        <p className="text-[11px] font-bold text-mahogany truncate block">{(language === "ar" ? product.nameAr : product.nameEn) || product.nameEn || product.nameAr}</p>
+                        <p className="text-[11px] font-bold text-mahogany truncate block">{product.name}</p>
                         <p className="text-[10px] text-taupe block font-medium tracking-wider">{formatPrice(product.price)} EGP</p>
                       </div>
                     </Link>
