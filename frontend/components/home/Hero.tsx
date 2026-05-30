@@ -44,7 +44,7 @@ export function Hero({ initialSliders }: { initialSliders?: PublicSlider[] }) {
     ? sliders.map((slider) => ({
       id: slider.id,
       image: slider.imageUrl,
-      title: slider.titleEn, // English only
+      title: slider.title, // English only
     }))
     : fallbackBanners
 
@@ -87,9 +87,9 @@ export function Hero({ initialSliders }: { initialSliders?: PublicSlider[] }) {
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="container mx-auto px-4 text-center">
                 <div className="max-w-4xl mx-auto">
-                    <span className="text-[10px] md:text-[12px] tracking-[0.6em] font-bold text-white uppercase mb-4 block animate-in fade-in slide-in-from-bottom-4 duration-1000">
-                        PREMIUM COLLECTION 2024
-                    </span>
+                  <span className="text-[10px] md:text-[12px] tracking-[0.6em] font-bold text-white uppercase mb-4 block animate-in fade-in slide-in-from-bottom-4 duration-1000">
+                    PREMIUM COLLECTION 2024
+                  </span>
                   <h1 className="text-5xl md:text-8xl font-serif text-white mb-8 leading-tight italic animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
                     {banner.title}
                   </h1>
