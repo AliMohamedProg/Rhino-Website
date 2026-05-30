@@ -21,11 +21,7 @@ export interface ProductDto {
   currentState?: number;
   createdDate?: string;
   name?: string | null;
-  nameAr?: string | null;
-  nameEn?: string | null;
   description?: string | null;
-  descriptionAr?: string | null;
-  descriptionEn?: string | null;
   price?: number;
   oldPrice?: number;
   discountAmount?: number;
