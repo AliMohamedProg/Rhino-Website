@@ -151,7 +151,20 @@ export function Header() {
     const fetchTypes = async () => {
       try {
         const data = await ApiClient.types.getAll();
-        setTypes(Array.isArray(data) ? data : []);
+        if (!Array.isArray(data)) {
+          setTypes([]);
+          return;
+        }
+
+        const normalized = data
+          .map((t) => ({
+            id: t.id ?? "",
+            name: t.name ?? "",
+            currentState: t.currentState ?? 1,
+          }))
+          .filter((t) => Boolean(t.id) && t.currentState > 0);
+
+        setTypes(normalized);
       } catch (error) {
         console.error("Failed to fetch types:", error);
         setTypes([]);
@@ -278,7 +291,7 @@ export function Header() {
                         </div>
                       )}
                       <span>
-                        {(style.name).toUpperCase()}
+                        {(style.name || "").toUpperCase()}
                       </span>
                     </Link>
                   ))
@@ -488,7 +501,7 @@ export function Header() {
                   href={`/style/${style.id}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  {((style.name)).toUpperCase()}
+                  {(style.name || "").toUpperCase()}
                 </Link>
               ))}
             </div>
@@ -504,7 +517,7 @@ export function Header() {
                   href={`/category/${category.id}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  {((category.name)).toUpperCase()}
+                  {(category.name || "").toUpperCase()}
                 </Link>
               ))}
             </div>
