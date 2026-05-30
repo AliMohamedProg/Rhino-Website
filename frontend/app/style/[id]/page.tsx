@@ -19,10 +19,8 @@ import { ProductCard } from "@/components/ui/ProductCard"
 
 interface Item {
   id: string
-  nameAr: string
-  nameEn: string
-  descriptionAr?: string
-  descriptionEn?: string
+  name: string
+  description?: string
   price: number
   oldPrice?: number
   discountAmount: number
@@ -30,21 +28,18 @@ interface Item {
   overallRating: number
   categoryId: string
   styleId?: string
-  colorsEn?: string
-  colorsAr?: string
+  colors?: string
   mainImage?: string
 }
 
 interface Category {
   id: string
-  nameAr: string
-  nameEn: string
+  name: string
 }
 
 interface StyleInfo {
   id: string
-  nameAr: string
-  nameEn: string
+  name: string
   imageUrl?: string
 }
 
@@ -122,8 +117,7 @@ export default function StylePage() {
         const normalizedCategories = (Array.isArray(categoriesData) ? categoriesData : [])
           .map((cat) => ({
             id: cat.id ?? cat.Id ?? "",
-            nameAr: cat.nameAr ?? cat.NameAr ?? "",
-            nameEn: cat.nameEn ?? cat.NameEn ?? "",
+            name: cat.name ?? cat.Name ?? "",
           }))
           .filter((cat) => Boolean(cat.id))
 
@@ -133,8 +127,7 @@ export default function StylePage() {
         const normalizedStyles = (Array.isArray(stylesData) ? stylesData : [])
           .map((s) => ({
             id: s.id ?? s.Id ?? "",
-            nameAr: s.nameAr ?? s.NameAr ?? "",
-            nameEn: s.nameEn ?? s.NameEn ?? "",
+            name: s.name ?? s.Name ?? "",
             imageUrl: s.imageUrl ?? s.ImageUrl ?? "",
           }))
           .filter((s) => Boolean(s.id))
@@ -142,7 +135,7 @@ export default function StylePage() {
         setAllStyles(normalizedStyles)
 
         const matchedStyle = normalizedStyles.find(
-          (s) => s.id === styleId || s.nameEn?.toLowerCase() === styleId.toLowerCase()
+          (s) => s.id === styleId || s.name?.toLowerCase() === styleId.toLowerCase()
         )
         setStyleInfo(matchedStyle || null)
 
@@ -152,10 +145,8 @@ export default function StylePage() {
         const normalized = (Array.isArray(itemsData) ? itemsData : []).map((item) => ({
           ...item,
           id: item.id ?? item.Id ?? "",
-          nameAr: item.nameAr ?? item.NameAr ?? "",
-          nameEn: item.nameEn ?? item.NameEn ?? "",
-          descriptionAr: item.descriptionAr ?? item.DescriptionAr ?? "",
-          descriptionEn: item.descriptionEn ?? item.DescriptionEn ?? "",
+          name: item.name ?? item.Name ?? "",
+          description: item.description ?? item.Description ?? "",
           price: toSafeNumber(item.price ?? item.Price),
           oldPrice: toSafeNumber(item.oldPrice ?? item.OldPrice),
           stockNumber: toSafeNumber(item.stockNumber ?? item.StockNumber),
@@ -164,8 +155,7 @@ export default function StylePage() {
           overallRating: toSafeNumber(item.overallRating ?? item.OverallRating),
           discountAmount: toSafeNumber(item.discountAmount ?? item.DiscountAmount),
           mainImage: item.mainImage ?? item.MainImage ?? item.image ?? item.Image ?? "",
-          colorsEn: item.colorsEn ?? item.ColorsEn ?? item.colors ?? item.Colors ?? "",
-          colorsAr: item.colorsAr ?? item.ColorsAr ?? item.colors ?? item.Colors ?? "",
+          colors: item.colors ?? item.Colors ?? "",
         })) as Item[]
 
         // Filter products by styleId
@@ -254,16 +244,13 @@ export default function StylePage() {
   const categoryNameById = useMemo(
     () =>
       categories.reduce<Record<string, string>>((acc, cat) => {
-        acc[cat.id] = language === "ar" ? cat.nameAr : cat.nameEn
+        acc[cat.id] = cat.name
         return acc
       }, {}),
-    [categories, language]
+    [categories]
   )
 
-  const styleName =
-    (language === "ar" ? styleInfo?.nameAr : styleInfo?.nameEn) ||
-    styleInfo?.nameEn ||
-    (language === "ar" ? "الأسلوب" : "Style")
+  const styleName = styleInfo?.name
 
   const resetFilters = () => {
     setHideOutOfStock(false)
@@ -342,11 +329,11 @@ export default function StylePage() {
                         {s.imageUrl && (
                           <img
                             src={s.imageUrl}
-                            alt={s.nameEn || ""}
+                            alt={s.name || ""}
                             className="w-4 h-4 rounded-full object-cover"
                           />
                         )}
-                        {((language === "ar" ? s.nameAr : s.nameEn) || s.nameEn || "Style")}
+                        {s.name}
                       </a>
                     ))}
                 </div>
@@ -412,7 +399,7 @@ export default function StylePage() {
                               )
                             }
                           />
-                          {language === "ar" ? cat.nameAr : cat.nameEn}
+                          {cat.name}
                         </label>
                       ))}
                     </CollapsibleContent>
@@ -482,15 +469,15 @@ export default function StylePage() {
                       key={product.id}
                       id={product.id}
                       category={(categoryNameById[product.categoryId] || "FURNITURE").toUpperCase()}
-                      title={language === "ar" ? product.nameAr : product.nameEn}
-                      description={language === "ar" ? product.nameAr : product.nameEn}
+                      title={product.name}
+                      description={product.description}
                       price={`${formatPrice(product.price)} EGP`}
                       discountAmount={product.discountAmount || 0}
                       originalPrice={getOriginalPriceLabel(product.price, product.oldPrice ?? 0, product.discountAmount || 0)}
                       rating={reviewStatsByProductId[product.id]?.average ?? product.overallRating ?? 0}
                       reviewsCountVal={reviewStatsByProductId[product.id]?.count ?? 0}
                       mainImage={product.mainImage}
-                      colorsRaw={product.colorsEn}
+                      colorsRaw={product.colors}
                       stockNumber={product.stockNumber}
                       isWishlisted={isInWishlist(product.id)}
                       onAddToCart={async (productId, selectedColorName) => {
@@ -500,7 +487,7 @@ export default function StylePage() {
                         const originalPriceValue = getOriginalPriceValue(product.price, product.oldPrice ?? 0, product.discountAmount || 0)
                         toggleItem({
                           id: productId,
-                          name: { ar: product.nameAr, en: product.nameEn },
+                          name: product.name,
                           price: product.price,
                           originalPrice: originalPriceValue,
                           image: product.mainImage || "/placeholder.svg",
