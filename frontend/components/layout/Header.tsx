@@ -110,8 +110,7 @@ export function Header() {
         const normalized = data
           .map((cat) => ({
             id: cat.id ?? cat.Id ?? "",
-            nameEn: cat.nameEn ?? cat.NameEn ?? "",
-            nameAr: cat.nameAr ?? cat.NameAr ?? "",
+            name: cat.name ?? cat.Name ?? "",
             currentState: cat.currentState ?? cat.CurrentState ?? 1,
           }))
           .filter((cat) => Boolean(cat.id) && cat.currentState > 0);
@@ -134,8 +133,7 @@ export function Header() {
         const normalized = data
           .map((s) => ({
             id: s.id ?? s.Id ?? "",
-            nameEn: s.nameEn ?? s.NameEn ?? "",
-            nameAr: s.nameAr ?? s.NameAr ?? "",
+            name: s.name ?? s.Name ?? "",
             imageUrl: s.imageUrl ?? s.ImageUrl ?? "",
             currentState: s.currentState ?? s.CurrentState ?? 1,
           }))
@@ -354,7 +352,7 @@ export function Header() {
                 {sortedTypes.map((type) => (
                   <Link
                     key={type.id}
-                    href={`/products?typeId=${type.id}`}
+                    href={`/type/${type.id}`}
                     className="hover:text-mahogany transition-colors block text-taupe/60 text-[11px] font-bold tracking-[0.2em]"
                   >
                     {(type.name || "TYPE").toUpperCase()}
@@ -530,7 +528,7 @@ export function Header() {
               {sortedTypes.map((type) => (
                 <Link
                   key={type.id}
-                  href={`/products?typeId=${type.id}`}
+                  href={`/type/${type.id}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {(type.name || "Type").toUpperCase()}
