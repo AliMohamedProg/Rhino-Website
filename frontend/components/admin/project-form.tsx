@@ -97,18 +97,18 @@ export function ProjectForm({ mode, project }: ProjectFormProps) {
 
         const normalizedAlliances = Array.isArray(alliancesData)
           ? alliancesData.map((alliance) => ({
-              id: String(alliance.id ?? alliance.Id ?? ""),
-              name: String(alliance.name ?? alliance.Name ?? ""),
-            }))
+            id: String(alliance.id ?? alliance.Id ?? ""),
+            name: String(alliance.name ?? alliance.Name ?? ""),
+          }))
           : []
 
         const normalizedProducts = Array.isArray(productsData)
           ? productsData.map((product) => ({
-              id: String(product.id ?? ""),
-              name: String(product.nameEn ?? product.nameAr ?? ""),
-              imageUrl: String(product.mainImage ?? product.images?.[0]?.imageUrl ?? ""),
-              sku: String(product.sku ?? ""),
-            }))
+            id: String(product.id ?? ""),
+            name: String(product.name),
+            imageUrl: String(product.mainImage ?? product.images?.[0]?.imageUrl ?? ""),
+            sku: String(product.sku ?? ""),
+          }))
           : []
 
         setAlliances(normalizedAlliances)

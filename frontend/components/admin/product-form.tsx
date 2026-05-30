@@ -380,7 +380,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                 <Input
                   id="nameEn"
                   value={formData.name}
-                  onChange={(e) => handleChange("nameEn", e.target.value)}
+                  onChange={(e) => handleChange("name", e.target.value)}
                   placeholder="Enter product name"
                   className="admin-input h-11"
                   required
@@ -394,7 +394,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                 <Textarea
                   id="descriptionEn"
                   value={formData.description}
-                  onChange={(e) => handleChange("descriptionEn", e.target.value)}
+                  onChange={(e) => handleChange("description", e.target.value)}
                   placeholder="Write a detailed product description"
                   className="admin-input min-h-28"
                   rows={4}
@@ -705,7 +705,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                 <Input
                   id="colorsEn"
                   value={formData.colors}
-                  onChange={(e) => handleChange("colorsEn", e.target.value)}
+                  onChange={(e) => handleChange("colors", e.target.value)}
                   placeholder="beige,black,oak"
                   aria-invalid={showColorsErrorEn}
                   className={cn("admin-input h-11", showColorsErrorEn && "border-red-500")}
@@ -726,7 +726,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
                 <Input
                   id="materialEn"
                   value={formData.material}
-                  onChange={(e) => handleChange("materialEn", e.target.value)}
+                  onChange={(e) => handleChange("material", e.target.value)}
                   placeholder="Wood, Fabric, Metal..."
                   className="admin-input h-11"
                 />
